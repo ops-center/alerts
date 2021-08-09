@@ -1,0 +1,26 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: kubedb-mongodb-{{- .Values.namespace -}}-{{- .Values.dbName }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "mongodb.labels" . | nindent 4 }}
+    {{- range $key, $val := .Values.alert.ruleSelector }}
+    {{ $key }}: {{ $val }}
+    {{- end }}
+spec:
+  groups:
+    - name: mongodb.rules
+      rules:
+      {{ if .Values.alert.rules.mongodbVirtualMemoryUsage.enabled -}}
+      - alert: MongodbVirtualMemoryUsage
+        expr: (sum(mongodb_memory{type="virtual",job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"}) BY (job) / sum(mongodb_memory{type="resident",job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"}) BY (job)) > {{- .Values.alert.rules.mongodbVirtualMemoryUsage.usage }}
+        for: {{ .Values.alert.rules.mongodbVirtualMemoryUsage.duration }}
+        labels:
+          severity: {{ .Values.alert.rules.mongodbVirtualMemoryUsage.severity }}
+          app: mongodb
+          alertname: mongodb_high_memroy_usage
+        annotations:
+          summary: MongoDB virtual memory usage (instance {{`{{`}} $labels.instance {{`}}`}})
+          description: "High memory usage\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+      {{- end }}

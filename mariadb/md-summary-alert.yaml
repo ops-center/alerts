@@ -1,0 +1,35 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    app: kube-prometheus-stack
+    app.kubernetes.io/instance: prometheus
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: kube-prometheus-stack
+    app.kubernetes.io/version: 32.2.1
+    chart: kube-prometheus-stack-32.2.1
+    heritage: Helm
+    release: prometheus
+  name: kubedb-mariadb-summary-alerts
+  namespace: monitoring
+spec:
+  groups:
+  - name: mariadb.rules
+    rules:
+    - alert: KubeDBMariaDBPhaseNotReady
+      expr: kubedb_mariadb_status_phase{phase="NotReady"} == 1
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: KubeDB MariDB Phase NotReady (mariadb {{ $labels.mariadb}})
+        description: "KubeDB MariaDB Phase not ready on {{ $labels.mariadb }}\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+    - alert: KubeDBMariaDBPhaseCritical
+      expr: kubedb_mariadb_status_phase{phase="Critical"} == 1
+      for: 15m
+      labels:
+        severity: warning
+      annotations:
+        summary: KubeDB MariDB Phase Critical (mariadb {{ $labels.mariadb}})
+        description: "KubeDB MariaDB Phase not ready on {{ $labels.mariadb }}\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+

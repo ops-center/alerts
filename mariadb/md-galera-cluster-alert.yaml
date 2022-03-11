@@ -16,7 +16,7 @@ spec:
   groups:
   - name: mariadb.rules
     rules:
-    - alert: GaleraClusterReplicationLatencyTooLong
+    - alert: GaleraReplicationLatencyTooLong
       expr: mysql_galera_evs_repl_latency_avg_seconds > 0.1
       for: 5m
       labels:

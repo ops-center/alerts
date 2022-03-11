@@ -31,5 +31,5 @@ spec:
         severity: warning
       annotations:
         summary: KubeDB MariDB Phase Critical (mariadb {{ $labels.mariadb}})
-        description: "KubeDB MariaDB Phase not ready on {{ $labels.mariadb }}\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+        description: "KubeDB MariaDB Phase Critical {{ $labels.mariadb }}\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 

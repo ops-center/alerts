@@ -74,3 +74,7 @@ spec:
         description: "MariaDB Stash restore session taking more than 30 minutes to complete (invoker_name {{ $labels.invoker_name}})\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
     
     
+
+
+# stash_backup_session_success * on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_backupconfiguration_info{target_name=~"sample-mariadb", target_kind=~"AppBinding", namespace=~"demo"}
+# stash_restore_session_success * on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_restoresession_info{target_name=~"sample-mariadb", target_kind=~"AppBinding", namespace=~"demo"}

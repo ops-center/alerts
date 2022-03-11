@@ -1,0 +1,314 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: kubedb-mariadb-{{- .Values.namespace -}}-{{- .Values.dbName }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "mariadb.labels" . | nindent 4 }}
+    {{- range $key, $val := .Values.alert.ruleSelector }}
+    {{ $key }}: {{ $val }}
+    {{- end }}
+spec:
+  groups:
+  {{- if .Values.alert.rules.database.enabled -}}
+  - name: mariadb_database_group
+    rules:
+    {{ if .Values.alert.rules.database.mySQLInstanceDown.enabled -}}
+    - alert: MySQLInstanceDown
+      expr: mysql_up{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"} == 0
+      for: {{ .Values.alert.rules.database.mySQLInstanceDown.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.database.mySQLInstanceDown.severity }}
+        app: mariadb
+        alertname: mysql_instance_down
+      annotations:
+        summary: MySQL instance down (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL instance is down on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if .Values.alert.rules.database.mySQLServiceDown.enabled -}}
+    - alert: MySQLServiceDown
+      expr: sum by (service) (mysql_up{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"}) == 0
+      for: {{ .Values.alert.rules.database.mySQLServiceDown.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.database.mySQLServiceDown.severity }}
+        app: mariadb
+        alertname: mysql_service_down
+      annotations:
+        summary: MySQL service down (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL service is down on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if .Values.alert.rules.database.mySQLTooManyConnections.enabled -}}
+    - alert: MySQLTooManyConnections
+      expr: max_over_time(mysql_global_status_threads_connected{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"}[1m]) / mysql_global_variables_max_connections{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"} * 100 > {{.Values.alert.rules.database.mySQLTooManyConnections.val}}
+      for: {{ .Values.alert.rules.database.mySQLTooManyConnections.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.database.mySQLTooManyConnections.severity }}
+        app: mariadb
+        alertname: mysql_too_many_connections
+      annotations:
+        summary: MySQL too many connections (> {{.Values.alert.rules.database.mySQLTooManyConnections.val}}%) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "More than {{.Values.alert.rules.database.mySQLTooManyConnections.val}}% of MySQL connections are in use on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if .Values.alert.rules.database.mySQLHighThreadsRunning.enabled -}}
+    - alert: MySQLHighThreadsRunning
+      expr: max_over_time(mysql_global_status_threads_running{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"}[1m]) / mysql_global_variables_max_connections{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"} * 100 > {{.Values.alert.rules.database.mySQLHighThreadsRunning.val}}
+      for: {{ .Values.alert.rules.database.mySQLHighThreadsRunning.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.database.mySQLHighThreadsRunning.severity }}
+        app: mariadb
+        alertname: mysql_high_threads_running
+      annotations:
+        summary: MySQL high threads running (> {{.Values.alert.rules.database.mySQLHighThreadsRunning.val}}%) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "More than {{.Values.alert.rules.database.mySQLHighThreadsRunning.val}}% of MySQL threads are in use on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if .Values.alert.rules.database.mySQLSlowQueries.enabled -}}
+    - alert: MySQLSlowQueries
+      expr: increase(mysql_global_status_slow_queries{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"}[1m]) > 0
+      for: {{ .Values.alert.rules.database.mySQLSlowQueries.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.database.mySQLSlowQueries.severity }}
+        app: mariadb
+        alertname: mysql_slow_queries
+      annotations:
+        summary: MySQL slow queries on (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL server mysql has some new slow query.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if .Values.alert.rules.database.mySQLInnoDBLogWaits.enabled -}}
+    - alert: MySQLInnoDBLogWaits
+      expr: rate(mysql_global_status_innodb_log_waits{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"}[15m]) > {{.Values.alert.rules.database.mySQLInnoDBLogWaits.val}}
+      for: {{ .Values.alert.rules.database.mySQLInnoDBLogWaits.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.database.mySQLInnoDBLogWaits.severity }}
+        app: mariadb
+        alertname: mysql_innodb_log_waits
+      annotations:
+        summary: MySQL InnoDB log waits (> {{.Values.alert.rules.database.mySQLInnoDBLogWaits.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL innodb log writes stalling\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if .Values.alert.rules.database.mySQLRestarted.enabled -}}
+    - alert: MySQLRestarted
+      expr: mysql_global_status_uptime{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"} < {{.Values.alert.rules.database.mySQLRestarted.val}}
+      for: {{ .Values.alert.rules.database.mySQLRestarted.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.database.mySQLRestarted.severity }}
+        app: mariadb
+        alertname: mysql_restarted
+      annotations:
+        summary: MySQL restarted ({{.Values.alert.rules.database.mySQLRestarted.val}} second ago) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL restarted\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if .Values.alert.rules.database.mySQLHighQPS.enabled -}}
+    - alert: MySQLHighQPS
+      expr: rate(mysql_global_status_queries{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"}[1m]) > {{.Values.alert.rules.database.mySQLHighQPS.val}}
+      for: {{ .Values.alert.rules.database.mySQLHighQPS.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.database.mySQLHighQPS.severity }}
+        app: mariadb
+        alertname: mysql_high_qps
+      annotations:
+        summary: MySQL has high queries per second (> {{.Values.alert.rules.database.mySQLHighQPS.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL has high QPS on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if .Values.alert.rules.database.mySQLHighIncomingBytes.enabled -}}
+    - alert: MySQLHighIncomingBytes
+      expr: rate(mysql_global_status_bytes_received{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"}[1m]) > {{.Values.alert.rules.database.mySQLHighIncomingBytes.val}}
+      for: {{ .Values.alert.rules.database.mySQLHighIncomingBytes.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.database.mySQLHighIncomingBytes.severity }}
+        app: mariadb
+        alertname: mysql_high_incoming_bytes
+      annotations:
+        summary: MySQL has high incoming bytes second (> {{.Values.alert.rules.database.mySQLHighIncomingBytes.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL has high incoming bytes per second on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if .Values.alert.rules.database.mySQLHighOutgoingBytes.enabled -}}
+    - alert: MySQLHighOutgoingBytes
+      expr: rate(mysql_global_status_bytes_sent{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"}[1m]) > {{.Values.alert.rules.database.mySQLHighOutgoingBytes.val}}
+      for: {{ .Values.alert.rules.database.mySQLHighOutgoingBytes.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.database.mySQLHighOutgoingBytes.severity }}
+        app: mariadb
+        alertname: mysql_high_outgoing_bytes
+      annotations:
+        summary: MySQL has high outgoing bytes second (> {{.Values.alert.rules.database.mySQLHighOutgoingBytes.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL has high outgoing bytes per second on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if .Values.alert.rules.database.mySQLTooManyOpenFiles.enabled -}}
+    - alert: MySQLTooManyOpenFiles
+      expr: max_over_time(mysql_global_status_open_files{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"}[1m]) / mysql_global_variables_open_files_limit{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"} * 100 > {{.Values.alert.rules.database.mySQLTooManyOpenFiles.val}}
+      for: {{ .Values.alert.rules.database.mySQLTooManyOpenFiles.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.database.mySQLTooManyOpenFiles.severity }}
+        app: mariadb
+        alertname: mysql_too_many_open_files
+      annotations:
+        summary: MySQL too many opened files (> {{.Values.alert.rules.database.mySQLTooManyOpenFiles.val}}%) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL too many opened files on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+  {{- end }}
+  {{- if .Values.alert.rules.cluster.enabled -}}
+  - name: mariadb_cluster_group
+    rules:
+    {{ if .Values.alert.rules.cluster.galeraReplicationLatencyTooLong.enabled -}}
+    - alert: GaleraReplicationLatencyTooLong
+      expr: mysql_galera_evs_repl_latency_avg_seconds{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"} > {{.Values.alert.rules.cluster.galeraReplicationLatencyTooLong.val}}
+      for: {{ .Values.alert.rules.cluster.galeraReplicationLatencyTooLong.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.cluster.galeraReplicationLatencyTooLong.severity }}
+        app: mariadb
+        alertname: galera_replication_latency_too_long
+      annotations:
+        summary: MariaDB Galera Cluster latency too long ( > {{.Values.alert.rules.cluster.galeraReplicationLatencyTooLong.val}} second,) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MariaDB Galera Cluster latency too long on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+  {{- end }}
+  {{ if .Values.alert.rules.kubedb.enabled -}}
+  - name: mariadb_kubedb_group
+    rules:
+    {{ if .Values.alert.rules.kubedb.kubeDBMariaDBPhaseNotReady.enabled -}}
+    - alert: KubeDBMariaDBPhaseNotReady
+      expr: kubedb_mariadb_status_phase{phase="NotReady",mariadb="{{- .Values.dbName -}}",namespace="{{- .Values.namespace -}}"} == 1
+      for: {{ .Values.alert.rules.kubedb.kubeDBMariaDBPhaseNotReady.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.kubedb.kubeDBMariaDBPhaseNotReady.severity }}
+        app: mariadb
+        alertname: kubedb_mariadb_phase_not_ready
+      annotations:
+        summary: KubeDB MariDB Phase NotReady (mariadb {{`{{`}} $labels.mariadb {{`}}`}})
+        description: "KubeDB MariaDB Phase not ready on {{`{{`}} $labels.mariadb {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if .Values.alert.rules.kubedb.kubeDBMariaDBPhaseCritical.enabled -}}
+    - alert: KubeDBMariaDBPhaseCritical
+      expr: kubedb_mariadb_status_phase{phase="Critical",mariadb="{{- .Values.dbName -}}",namespace="{{- .Values.namespace -}}"} == 1
+      for: {{ .Values.alert.rules.kubedb.kubeDBMariaDBPhaseCritical.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.kubedb.kubeDBMariaDBPhaseCritical.severity }}
+        app: mariadb
+        alertname: kubedb_mariadb_phase_critical
+      annotations:
+        summary: KubeDB MariDB Phase Critical (mariadb {{`{{`}} $labels.mariadb {{`}}`}})
+        description: "KubeDB MariaDB Phase Critical {{`{{`}} $labels.mariadb {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+  {{- end }}
+  {{- if .Values.alert.rules.opsrequest.enabled -}}
+  - name: mariadb_opsrequest_group
+    rules:
+    {{ if .Values.alert.rules.opsrequest.kubeDBMariaDBOpsRequestOnProgress.enabled -}}
+    - alert: KubeDBMariaDBOpsRequestOnProgress
+      expr: kubedb_mariadb_opsrequest_status_phase{phase="Progressing",databaseRef="{{- .Values.dbName -}}",namespace="{{- .Values.namespace -}}"} == 1
+      for: {{ .Values.alert.rules.opsrequest.kubeDBMariaDBOpsRequestOnProgress.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.opsrequest.kubeDBMariaDBOpsRequestOnProgress.severity }}
+        app: mariadb
+        alertname: kubedb_mariadb_opsrequest_on_progress
+      annotations:
+        summary: MariaDBOpsRequest on progress (mariadbopsrequest {{`{{`}} $labels.mariadbopsrequest {{`}}`}})
+        description: "MaraiDBOpsRequest {{`{{`}} $labels.mariadbopsrequest {{`}}`}} is in progressressing status\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if .Values.alert.rules.opsrequest.kubeDBMariaDBOpsRequestStatusProgressingToLong.enabled -}}
+    - alert: KubeDBMariaDBOpsRequestStatusProgressingToLong
+      expr: kubedb_mariadb_opsrequest_status_phase{phase="Progressing",databaseRef="{{- .Values.dbName -}}",namespace="{{- .Values.namespace -}}"} == 1
+      for: {{ .Values.alert.rules.opsrequest.kubeDBMariaDBOpsRequestStatusProgressingToLong.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.opsrequest.kubeDBMariaDBOpsRequestStatusProgressingToLong.severity }}
+        app: mariadb
+        alertname: kubedb_mariadb_opsrequest_status_progressing_to_long
+      annotations:
+        summary: MariaDBOpsRequest is in progressing status for too long (mariadbopsrequest {{`{{`}} $labels.mariadbopsrequest {{`}}`}})
+        description: "MaraiDBOpsRequest {{`{{`}} $labels.mariadbopsrequest {{`}}`}} is in progressing status for too long\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if .Values.alert.rules.opsrequest.kubeDBMariaDBOpsRequestFailed.enabled -}}
+    - alert: KubeDBMariaDBOpsRequestFailed
+      expr: kubedb_mariadb_opsrequest_status_phase{phase="Failed",databaseRef="{{- .Values.dbName -}}",namespace="{{- .Values.namespace -}}"} == 1
+      for: {{ .Values.alert.rules.opsrequest.kubeDBMariaDBOpsRequestFailed.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.opsrequest.kubeDBMariaDBOpsRequestFailed.severity }}
+        app: mariadb
+        alertname: kubedb_mariadb_opsrequest_failed
+      annotations:
+        summary: MariaDBOpsRequest failed (mariadbopsrequest {{`{{`}} $labels.mariadbopsrequest {{`}}`}})
+        description: "MaraiDBOpsRequest {{`{{`}} $labels.mariadbopsrequest {{`}}`}} failed \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+  {{- end }}
+  {{- if .Values.alert.rules.stash.enabled -}}
+  - name: mariadb_stash_group
+    rules:
+    {{ if .Values.alert.rules.stash.mariaDBStashBackupSessionFailed.enabled -}}
+    - alert: MariaDBStashBackupSessionFailed
+      expr: stash_backup_session_success * on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_backupconfiguration_info{target_name="{{- .Values.dbName -}}", target_kind="AppBinding", namespace="{{- .Values.namespace -}}"} == 0
+      for: {{ .Values.alert.rules.stash.mariaDBStashBackupSessionFailed.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.stash.mariaDBStashBackupSessionFailed.severity }}
+        app: mariadb
+        alertname: mariadb_stash_backup_session_failed
+      annotations:
+        summary: MariaDB Stash backup session failed (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "MariaDB Stash backupsession failed {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if .Values.alert.rules.stash.mariaDBStashRestoreSessionFailed.enabled -}}
+    - alert: MariaDBStashRestoreSessionFailed
+      expr: stash_restore_session_success * on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_restoresession_info{target_name="{{- .Values.dbName -}}", target_kind="AppBinding", namespace="{{- .Values.namespace -}}"} == 0
+      for: {{ .Values.alert.rules.stash.mariaDBStashRestoreSessionFailed.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.stash.mariaDBStashRestoreSessionFailed.severity }}
+        app: mariadb
+        alertname: mariadb_stash_restore_session_failed
+      annotations:
+        summary: MariaDB Stash restore session failed (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "MariaDB Stash restore session failed {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if .Values.alert.rules.stash.mariaDBStashNoBackupSessionForTooLong.enabled -}}
+    - alert: MariaDBStashNoBackupSessionForTooLong
+      expr: time() - stash_backup_last_success_time_seconds{invoker_kind="BackupConfiguration",invoker_name="{{- .Values.dbName -}}-backup",namespace="{{- .Values.namespace -}}"} > {{ .Values.alert.rules.stash.mariaDBStashNoBackupSessionForTooLong.val }}
+      expr: time() - stash_backup_last_success_time_seconds + on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_backupconfiguration_info{target_name="{{- .Values.dbName -}}", target_kind="AppBinding", namespace="{{- .Values.namespace -}}"} - 1 > {{ .Values.alert.rules.stash.mariaDBStashNoBackupSessionForTooLong.val }}
+      for: {{ .Values.alert.rules.stash.mariaDBStashNoBackupSessionForTooLong.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.stash.mariaDBStashNoBackupSessionForTooLong.severity }}
+        app: mariadb
+        alertname: mariadb_stash_backup_session_failed
+      annotations:
+        summary: MariaDB Stash no backup for last {{ .Values.alert.rules.stash.mariaDBStashNoBackupSessionForTooLong.val }} second (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "MariaDB Stash no backup for too long {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if .Values.alert.rules.stash.mariaDBStashNoBackupSessionForTooLong.enabled -}}
+    - alert: MariaDBStashNoBackupSessionForTooLong
+      expr: time() - stash_backup_last_success_time_seconds + on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_backupconfiguration_info{target_name="{{- .Values.dbName -}}", target_kind="AppBinding", namespace="{{- .Values.namespace -}}"} - 1 > {{ .Values.alert.rules.stash.mariaDBStashNoBackupSessionForTooLong.val }}
+      for: {{ .Values.alert.rules.stash.mariaDBStashNoBackupSessionForTooLong.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.stash.mariaDBStashNoBackupSessionForTooLong.severity }}
+        app: mariadb
+        alertname: mariadb_stash_backup_session_failed
+      annotations:
+        summary: MariaDB Stash no backup for last {{ .Values.alert.rules.stash.mariaDBStashNoBackupSessionForTooLong.val }} second (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "MariaDB Stash no backup for too long {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if .Values.alert.rules.stash.mariaDBStashRepositoryCorrupted.enabled -}}
+    - alert: MariaDBStashRepositoryCorrupted
+      expr: stash_repository_integrity * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_backupconfiguration_info{target_name="{{- .Values.dbName -}}", target_kind="AppBinding", namespace="{{- .Values.namespace -}}"}
+      for: {{ .Values.alert.rules.stash.mariaDBStashRepositoryCorrupted.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.stash.mariaDBStashRepositoryCorrupted.severity }}
+        app: mariadb
+        alertname: mariadb_stash_repository_corrupted
+      annotations:
+        summary: MariaDB Stash repository corrupted (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "MariaDB Stash repository corrupted {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if .Values.alert.rules.stash.mariaDBStashRepositoryStorageRunningLow.enabled -}}
+    - alert: MariaDBStashRepositoryStorageRunningLow
+      expr: stash_repository_size_bytes * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_backupconfiguration_info{target_name="{{- .Values.dbName -}}", target_kind="AppBinding", namespace="{{- .Values.namespace -}}"} > {{ .Values.alert.rules.stash.mariaDBStashRepositoryStorageRunningLow.val }}
+      for: {{ .Values.alert.rules.stash.mariaDBStashRepositoryStorageRunningLow.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.stash.mariaDBStashRepositoryStorageRunningLow.severity }}
+        app: mariadb
+        alertname: mariadb_stash_repository_storage_running_low
+      annotations:
+        summary: MariaDB Stash Repository storage more than {{ .Values.alert.rules.stash.mariaDBStashRepositoryStorageRunningLow.val }} byte. (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "MariaDB Stash Repository storage running low {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+  {{- end }}
+
+
+# stash_backup_session_success * on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_backupconfiguration_info{target_name=~"sample-mariadb", target_kind=~"AppBinding", namespace=~"demo"}
+# stash_restore_session_success * on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_restoresession_info{target_name=~"sample-mariadb", target_kind=~"AppBinding", namespace=~"demo"}
+# need to test against multiple stash instance

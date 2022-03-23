@@ -1,0 +1,381 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: kubedb-mysql-{{- .Values.namespace -}}-{{- .Values.dbName }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "mysql.labels" . | nindent 4 }}
+    {{- range $key, $val := .Values.alert.ruleSelector }}
+    {{ $key }}: {{ $val }}
+    {{- end }}
+spec:
+  groups:
+  {{ if .Values.alert.rules.database.enabled -}}
+  - name: mysql-database-{{- .Values.namespace -}}-{{- .Values.dbName }}
+    rules:
+    {{ if .Values.alert.rules.database.mySQLInstanceDown.enabled -}}
+    - alert: MySQLInstanceDown
+      expr: mysql_up{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"} == 0
+      for: {{ .Values.alert.rules.database.mySQLInstanceDown.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.database.mySQLInstanceDown.severity }}
+        app: mysql
+        alertname: mysql_instance_down
+      annotations:
+        summary: MySQL instance down (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL instance is down on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.rules.database.mySQLServiceDown.enabled -}}
+    - alert: MySQLServiceDown
+      expr: sum by (service) (mysql_up{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"}) == 0
+      for: {{ .Values.alert.rules.database.mySQLServiceDown.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.database.mySQLServiceDown.severity }}
+        app: mysql
+        alertname: mysql_service_down
+      annotations:
+        summary: MySQL service down (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL service is down on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.rules.database.mySQLTooManyConnections.enabled -}}
+    - alert: MySQLTooManyConnections
+      expr: max_over_time(mysql_global_status_threads_connected{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"}[1m]) / mysql_global_variables_max_connections{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"} * 100 > {{.Values.alert.rules.database.mySQLTooManyConnections.val}}
+      for: {{ .Values.alert.rules.database.mySQLTooManyConnections.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.database.mySQLTooManyConnections.severity }}
+        app: mysql
+        alertname: mysql_too_many_connections
+      annotations:
+        summary: MySQL too many connections (> {{.Values.alert.rules.database.mySQLTooManyConnections.val}}%) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "More than {{.Values.alert.rules.database.mySQLTooManyConnections.val}}% of MySQL connections are in use on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.rules.database.mySQLHighThreadsRunning.enabled -}}
+    - alert: MySQLHighThreadsRunning
+      expr: max_over_time(mysql_global_status_threads_running{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"}[1m]) / mysql_global_variables_max_connections{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"} * 100 > {{.Values.alert.rules.database.mySQLHighThreadsRunning.val}}
+      for: {{ .Values.alert.rules.database.mySQLHighThreadsRunning.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.database.mySQLHighThreadsRunning.severity }}
+        app: mysql
+        alertname: mysql_high_threads_running
+      annotations:
+        summary: MySQL high threads running (> {{.Values.alert.rules.database.mySQLHighThreadsRunning.val}}%) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "More than {{.Values.alert.rules.database.mySQLHighThreadsRunning.val}}% of MySQL threads are in use on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.rules.database.mySQLSlowQueries.enabled -}}
+    - alert: MySQLSlowQueries
+      expr: increase(mysql_global_status_slow_queries{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"}[1m]) > 0
+      for: {{ .Values.alert.rules.database.mySQLSlowQueries.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.database.mySQLSlowQueries.severity }}
+        app: mysql
+        alertname: mysql_slow_queries
+      annotations:
+        summary: MySQL slow queries on (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL server mysql has some new slow query.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.rules.database.mySQLInnoDBLogWaits.enabled -}}
+    - alert: MySQLInnoDBLogWaits
+      expr: rate(mysql_global_status_innodb_log_waits{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"}[15m]) > {{.Values.alert.rules.database.mySQLInnoDBLogWaits.val}}
+      for: {{ .Values.alert.rules.database.mySQLInnoDBLogWaits.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.database.mySQLInnoDBLogWaits.severity }}
+        app: mysql
+        alertname: mysql_innodb_log_waits
+      annotations:
+        summary: MySQL InnoDB log waits (> {{.Values.alert.rules.database.mySQLInnoDBLogWaits.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL innodb log writes stalling\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.rules.database.mySQLRestarted.enabled -}}
+    - alert: MySQLRestarted
+      expr: mysql_global_status_uptime{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"} < {{.Values.alert.rules.database.mySQLRestarted.val}}
+      for: {{ .Values.alert.rules.database.mySQLRestarted.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.database.mySQLRestarted.severity }}
+        app: mysql
+        alertname: mysql_restarted
+      annotations:
+        summary: MySQL restarted ({{.Values.alert.rules.database.mySQLRestarted.val}} second ago) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL restarted\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.rules.database.mySQLHighQPS.enabled -}}
+    - alert: MySQLHighQPS
+      expr: rate(mysql_global_status_queries{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"}[1m]) > {{.Values.alert.rules.database.mySQLHighQPS.val}}
+      for: {{ .Values.alert.rules.database.mySQLHighQPS.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.database.mySQLHighQPS.severity }}
+        app: mysql
+        alertname: mysql_high_qps
+      annotations:
+        summary: MySQL has high queries per second (> {{.Values.alert.rules.database.mySQLHighQPS.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL has high QPS on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.rules.database.mySQLHighIncomingBytes.enabled -}}
+    - alert: MySQLHighIncomingBytes
+      expr: rate(mysql_global_status_bytes_received{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"}[1m]) > {{.Values.alert.rules.database.mySQLHighIncomingBytes.val}}
+      for: {{ .Values.alert.rules.database.mySQLHighIncomingBytes.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.database.mySQLHighIncomingBytes.severity }}
+        app: mysql
+        alertname: mysql_high_incoming_bytes
+      annotations:
+        summary: MySQL has high incoming bytes second (> {{.Values.alert.rules.database.mySQLHighIncomingBytes.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL has high incoming bytes per second on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.rules.database.mySQLHighOutgoingBytes.enabled -}}
+    - alert: MySQLHighOutgoingBytes
+      expr: rate(mysql_global_status_bytes_sent{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"}[1m]) > {{.Values.alert.rules.database.mySQLHighOutgoingBytes.val}}
+      for: {{ .Values.alert.rules.database.mySQLHighOutgoingBytes.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.database.mySQLHighOutgoingBytes.severity }}
+        app: mysql
+        alertname: mysql_high_outgoing_bytes
+      annotations:
+        summary: MySQL has high outgoing bytes second (> {{.Values.alert.rules.database.mySQLHighOutgoingBytes.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL has high outgoing bytes per second on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.rules.database.mySQLTooManyOpenFiles.enabled -}}
+    - alert: MySQLTooManyOpenFiles
+      expr: max_over_time(mysql_global_status_open_files{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"}[1m]) / mysql_global_variables_open_files_limit{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"} * 100 > {{.Values.alert.rules.database.mySQLTooManyOpenFiles.val}}
+      for: {{ .Values.alert.rules.database.mySQLTooManyOpenFiles.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.database.mySQLTooManyOpenFiles.severity }}
+        app: mysql
+        alertname: mysql_too_many_open_files
+      annotations:
+        summary: MySQL too many opened files (> {{.Values.alert.rules.database.mySQLTooManyOpenFiles.val}}%) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL too many opened files on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+  {{- end }}
+  {{ if .Values.alert.rules.group.enabled -}}
+  - name: mysql-group-{{- .Values.namespace -}}-{{- .Values.dbName }}
+    rules:
+    {{ if .Values.alert.rules.group.mySQLHighReplicationDelay.enabled -}}
+    - alert: MySQLHighReplicationDelay
+      expr: ( max by (pod) (mysql_perf_schema_replication_group_worker_apply_time_seconds{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"}) > {{.Values.alert.rules.group.mySQLHighReplicationDelay.val}} ) < 20
+      for: {{ .Values.alert.rules.group.mySQLHighReplicationDelay.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.group.mySQLHighReplicationDelay.severity }}
+        app: mysql
+        alertname: mysql_high_replication_delay
+      annotations:
+        summary: MySQL Group Replication delay too high ( > {{.Values.alert.rules.group.mySQLHighReplicationDelay.val}} second) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL Group Replication delay too high {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.rules.group.mySQLHighReplicationTransportTime.enabled -}}
+    - alert: MySQLHighReplicationTransportTime
+      expr: ( max by (pod) (mysql_perf_schema_replication_group_worker_transport_time_seconds{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"}) > {{.Values.alert.rules.group.mySQLHighReplicationTransportTime.val}} ) < 20
+      for: {{ .Values.alert.rules.group.mySQLHighReplicationTransportTime.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.group.mySQLHighReplicationTransportTime.severity }}
+        app: mysql
+        alertname: mysql_high_replication_transport_time
+      annotations:
+        summary: MySQL Group Replication transport time too high ( > {{.Values.alert.rules.group.mySQLHighReplicationTransportTime.val}} second) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL Group Replication transport time too high {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.rules.group.mySQLHighReplicationApplyTime.enabled -}}
+    - alert: MySQLHighReplicationApplyTime
+      expr: ( max by (pod) (mysql_perf_schema_replication_group_worker_apply_time_seconds{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"}) > {{.Values.alert.rules.group.mySQLHighReplicationApplyTime.val}} ) < 20
+      for: {{ .Values.alert.rules.group.mySQLHighReplicationApplyTime.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.group.mySQLHighReplicationApplyTime.severity }}
+        app: mysql
+        alertname: mysql_high_replication_apply_time
+      annotations:
+        summary: MySQL Group Replication apply time too high ( > {{.Values.alert.rules.group.mySQLHighReplicationApplyTime.val}} second) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL Group Replication apply time too high {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.rules.group.mySQLReplicationHighTransactionTime.enabled -}}
+    - alert: MySQLReplicationHighTransactionTime
+      expr: ( max by (pod) (mysql_perf_schema_replication_group_worker_time_RL_seconds{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"}) > {{.Values.alert.rules.group.mySQLReplicationHighTransactionTime.val}} ) < 20
+      for: {{ .Values.alert.rules.group.mySQLReplicationHighTransactionTime.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.group.mySQLReplicationHighTransactionTime.severity }}
+        app: mysql
+        alertname: mysql_replication_high_transaction_time
+      annotations:
+        summary: MySQL Group Replication, Transaction time on local queue is too long ( > {{.Values.alert.rules.group.mySQLReplicationHighTransactionTime.val}} second) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL Group Replication, Transaction time on local queue is too long {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+  {{- end }}
+  {{ if .Values.alert.rules.kubedb.enabled -}}
+  - name: mysql-kubedb-{{- .Values.namespace -}}-{{- .Values.dbName }}
+    rules:
+    {{ if .Values.alert.rules.kubedb.kubeDBMySQLPhaseNotReady.enabled -}}
+    - alert: KubeDBMySQLPhaseNotReady
+      expr: kubedb_mysql_status_phase{phase="NotReady",mysql="{{- .Values.dbName -}}",namespace="{{- .Values.namespace -}}"} == 1
+      for: {{ .Values.alert.rules.kubedb.kubeDBMySQLPhaseNotReady.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.kubedb.kubeDBMySQLPhaseNotReady.severity }}
+        app: mysql
+        alertname: kubedb_mysql_phase_not_ready
+      annotations:
+        summary: KubeDB MariDB Phase NotReady (mysql {{`{{`}} $labels.mysql {{`}}`}})
+        description: "KubeDB MySQL Phase not ready on {{`{{`}} $labels.mysql {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.rules.kubedb.kubeDBMySQLPhaseCritical.enabled -}}
+    - alert: KubeDBMySQLPhaseCritical
+      expr: kubedb_mysql_status_phase{phase="Critical",mysql="{{- .Values.dbName -}}",namespace="{{- .Values.namespace -}}"} == 1
+      for: {{ .Values.alert.rules.kubedb.kubeDBMySQLPhaseCritical.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.kubedb.kubeDBMySQLPhaseCritical.severity }}
+        app: mysql
+        alertname: kubedb_mysql_phase_critical
+      annotations:
+        summary: KubeDB MariDB Phase Critical (mysql {{`{{`}} $labels.mysql {{`}}`}})
+        description: "KubeDB MySQL Phase Critical {{`{{`}} $labels.mysql {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+  {{- end }}
+  {{ if .Values.alert.rules.opsrequest.enabled -}}
+  - name: mysql-opsrequest-{{- .Values.namespace -}}-{{- .Values.dbName }}
+    rules:
+    {{ if .Values.alert.rules.opsrequest.kubeDBMySQLOpsRequestOnProgress.enabled -}}
+    - alert: KubeDBMySQLOpsRequestOnProgress
+      expr: kubedb_mysql_opsrequest_status_phase{phase="Progressing",databaseRef="{{- .Values.dbName -}}",namespace="{{- .Values.namespace -}}"} == 1
+      for: {{ .Values.alert.rules.opsrequest.kubeDBMySQLOpsRequestOnProgress.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.opsrequest.kubeDBMySQLOpsRequestOnProgress.severity }}
+        app: mysql
+        alertname: kubedb_mysql_opsrequest_on_progress
+      annotations:
+        summary: MySQLOpsRequest on progress (mysqlopsrequest {{`{{`}} $labels.mysqlopsrequest {{`}}`}})
+        description: "MaraiDBOpsRequest {{`{{`}} $labels.mysqlopsrequest {{`}}`}} is in progressressing status\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.rules.opsrequest.kubeDBMySQLOpsRequestStatusProgressingToLong.enabled -}}
+    - alert: KubeDBMySQLOpsRequestStatusProgressingToLong
+      expr: kubedb_mysql_opsrequest_status_phase{phase="Progressing",databaseRef="{{- .Values.dbName -}}",namespace="{{- .Values.namespace -}}"} == 1
+      for: {{ .Values.alert.rules.opsrequest.kubeDBMySQLOpsRequestStatusProgressingToLong.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.opsrequest.kubeDBMySQLOpsRequestStatusProgressingToLong.severity }}
+        app: mysql
+        alertname: kubedb_mysql_opsrequest_status_progressing_to_long
+      annotations:
+        summary: MySQLOpsRequest is in progressing status for too long (mysqlopsrequest {{`{{`}} $labels.mysqlopsrequest {{`}}`}})
+        description: "MaraiDBOpsRequest {{`{{`}} $labels.mysqlopsrequest {{`}}`}} is in progressing status for too long\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.rules.opsrequest.kubeDBMySQLOpsRequestFailed.enabled -}}
+    - alert: KubeDBMySQLOpsRequestFailed
+      expr: kubedb_mysql_opsrequest_status_phase{phase="Failed",databaseRef="{{- .Values.dbName -}}",namespace="{{- .Values.namespace -}}"} == 1
+      for: {{ .Values.alert.rules.opsrequest.kubeDBMySQLOpsRequestFailed.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.opsrequest.kubeDBMySQLOpsRequestFailed.severity }}
+        app: mysql
+        alertname: kubedb_mysql_opsrequest_failed
+      annotations:
+        summary: MySQLOpsRequest failed (mysqlopsrequest {{`{{`}} $labels.mysqlopsrequest {{`}}`}})
+        description: "MaraiDBOpsRequest {{`{{`}} $labels.mysqlopsrequest {{`}}`}} failed \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+  {{- end }}
+  {{ if .Values.alert.rules.stash.enabled -}}
+  - name: mysql-stash-{{- .Values.namespace -}}-{{- .Values.dbName }}
+    rules:
+    {{ if .Values.alert.rules.stash.mySQLStashBackupSessionFailed.enabled -}}
+    - alert: MySQLStashBackupSessionFailed
+      expr: stash_backup_session_success * on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_backupconfiguration_info{target_name="{{- .Values.dbName -}}", target_kind="AppBinding", namespace="{{- .Values.namespace -}}"} == 0
+      for: {{ .Values.alert.rules.stash.mySQLStashBackupSessionFailed.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.stash.mySQLStashBackupSessionFailed.severity }}
+        app: mysql
+        alertname: mysql_stash_backup_session_failed
+      annotations:
+        summary: MySQL Stash backup session failed (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "MySQL Stash backupsession failed {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.rules.stash.mySQLStashRestoreSessionFailed.enabled -}}
+    - alert: MySQLStashRestoreSessionFailed
+      expr: stash_restore_session_success * on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_restoresession_info{target_name="{{- .Values.dbName -}}", target_kind="AppBinding", namespace="{{- .Values.namespace -}}"} == 0
+      for: {{ .Values.alert.rules.stash.mySQLStashRestoreSessionFailed.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.stash.mySQLStashRestoreSessionFailed.severity }}
+        app: mysql
+        alertname: mysql_stash_restore_session_failed
+      annotations:
+        summary: MySQL Stash restore session failed (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "MySQL Stash restore session failed {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.rules.stash.mySQLStashNoBackupSessionForTooLong.enabled -}}
+    - alert: MySQLStashNoBackupSessionForTooLong
+      expr: time() - stash_backup_last_success_time_seconds{invoker_kind="BackupConfiguration",invoker_name="{{- .Values.dbName -}}-backup",namespace="{{- .Values.namespace -}}"} > {{ .Values.alert.rules.stash.mySQLStashNoBackupSessionForTooLong.val }}
+      expr: time() - stash_backup_last_success_time_seconds + on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_backupconfiguration_info{target_name="{{- .Values.dbName -}}", target_kind="AppBinding", namespace="{{- .Values.namespace -}}"} - 1 > {{ .Values.alert.rules.stash.mySQLStashNoBackupSessionForTooLong.val }}
+      for: {{ .Values.alert.rules.stash.mySQLStashNoBackupSessionForTooLong.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.stash.mySQLStashNoBackupSessionForTooLong.severity }}
+        app: mysql
+        alertname: mysql_stash_backup_session_failed
+      annotations:
+        summary: MySQL Stash no backup for last {{ .Values.alert.rules.stash.mySQLStashNoBackupSessionForTooLong.val }} second (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "MySQL Stash no backup for too long {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.rules.stash.mySQLStashNoBackupSessionForTooLong.enabled -}}
+    - alert: MySQLStashNoBackupSessionForTooLong
+      expr: time() - stash_backup_last_success_time_seconds + on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_backupconfiguration_info{target_name="{{- .Values.dbName -}}", target_kind="AppBinding", namespace="{{- .Values.namespace -}}"} - 1 > {{ .Values.alert.rules.stash.mySQLStashNoBackupSessionForTooLong.val }}
+      for: {{ .Values.alert.rules.stash.mySQLStashNoBackupSessionForTooLong.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.stash.mySQLStashNoBackupSessionForTooLong.severity }}
+        app: mysql
+        alertname: mysql_stash_backup_session_failed
+      annotations:
+        summary: MySQL Stash no backup for last {{ .Values.alert.rules.stash.mySQLStashNoBackupSessionForTooLong.val }} second (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "MySQL Stash no backup for too long {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.rules.stash.mySQLStashRepositoryCorrupted.enabled -}}
+    - alert: MySQLStashRepositoryCorrupted
+      expr: stash_repository_integrity * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_backupconfiguration_info{target_name="{{- .Values.dbName -}}", target_kind="AppBinding", namespace="{{- .Values.namespace -}}"}
+      for: {{ .Values.alert.rules.stash.mySQLStashRepositoryCorrupted.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.stash.mySQLStashRepositoryCorrupted.severity }}
+        app: mysql
+        alertname: mysql_stash_repository_corrupted
+      annotations:
+        summary: MySQL Stash repository corrupted (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "MySQL Stash repository corrupted {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.rules.stash.mySQLStashRepositoryStorageRunningLow.enabled -}}
+    - alert: MySQLStashRepositoryStorageRunningLow
+      expr: stash_repository_size_bytes * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_backupconfiguration_info{target_name="{{- .Values.dbName -}}", target_kind="AppBinding", namespace="{{- .Values.namespace -}}"} > {{ .Values.alert.rules.stash.mySQLStashRepositoryStorageRunningLow.val }}
+      for: {{ .Values.alert.rules.stash.mySQLStashRepositoryStorageRunningLow.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.stash.mySQLStashRepositoryStorageRunningLow.severity }}
+        app: mysql
+        alertname: mysql_stash_repository_storage_running_low
+      annotations:
+        summary: MySQL Stash Repository storage more than {{ .Values.alert.rules.stash.mySQLStashRepositoryStorageRunningLow.val }} byte. (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "MySQL Stash Repository storage running low {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.rules.stash.mySQLStashBackupSessionPeriodTooLong.enabled -}}
+    - alert: MySQLStashBackupSessionPeriodTooLong
+      expr: stash_backup_session_duration_seconds * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_backupconfiguration_info{target_name="{{- .Values.dbName -}}", target_kind="AppBinding", namespace="{{- .Values.namespace -}}"} > {{ .Values.alert.rules.stash.mySQLStashBackupSessionPeriodTooLong.val }}
+      for: {{ .Values.alert.rules.stash.mySQLStashBackupSessionPeriodTooLong.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.stash.mySQLStashBackupSessionPeriodTooLong.severity }}
+        app: mysql
+        alertname: mysql_stash_backup_session_period_too_long
+      annotations:
+        summary:  MySQL Stash backup session took more than {{ .Values.alert.rules.stash.mySQLStashBackupSessionPeriodTooLong.val }} second to complete. (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "MySQL Stash backup session taking to long to complete {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.rules.stash.mySQLStashBackupSessionPeriodTooLong.enabled -}}
+    - alert: MySQLStashBackupSessionPeriodTooLong
+      expr: stash_backup_session_duration_seconds * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_backupconfiguration_info{target_name="{{- .Values.dbName -}}", target_kind="AppBinding", namespace="{{- .Values.namespace -}}"} > {{ .Values.alert.rules.stash.mySQLStashBackupSessionPeriodTooLong.val }}
+      for: {{ .Values.alert.rules.stash.mySQLStashBackupSessionPeriodTooLong.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.stash.mySQLStashBackupSessionPeriodTooLong.severity }}
+        app: mysql
+        alertname: mysql_stash_backup_session_period_too_long
+      annotations:
+        summary:  MySQL Stash backup session took more than {{ .Values.alert.rules.stash.mySQLStashBackupSessionPeriodTooLong.val }} second to complete. (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "MySQL Stash backup session taking to long to complete {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.rules.stash.mySQLStashRestoreSessionPeriodTooLong.enabled -}}
+    - alert: MySQLStashRestoreSessionPeriodTooLong
+      expr: stash_restore_session_duration_seconds * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_restoresession_info{target_name="{{- .Values.dbName -}}", target_kind="AppBinding", namespace="{{- .Values.namespace -}}"} > {{ .Values.alert.rules.stash.mySQLStashRestoreSessionPeriodTooLong.val }}
+      for: {{ .Values.alert.rules.stash.mySQLStashRestoreSessionPeriodTooLong.duration }}
+      labels:
+        severity: {{ .Values.alert.rules.stash.mySQLStashRestoreSessionPeriodTooLong.severity }}
+        app: mysql
+        alertname: mysql_stash_restore_session_period_too_long
+      annotations:
+        summary:  MySQL Stash restore session took more than {{ .Values.alert.rules.stash.mySQLStashRestoreSessionPeriodTooLong.val }} second to complete. (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "MySQL Stash restore session taking to long to complete {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+  {{- end }}

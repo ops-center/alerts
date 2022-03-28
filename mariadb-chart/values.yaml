@@ -4,115 +4,120 @@ alert:
   ruleSelector:
     app: kube-prometheus-stack
     release: prometheus
-  rules:
+  groups:
     database:
-      enabled: false
-      mySQLInstanceDown:
-        enabled: true
-        duration: "0m"
-        severity: critical
-      mySQLServiceDown:
-        enabled: true
-        duration: "0m"
-        severity: critical
-      mySQLTooManyConnections:
-        enabled: true
-        duration: "2m"
-        val: 80
-        severity: warning
-      mySQLHighThreadsRunning:
-        enabled: true
-        duration: "2m"
-        val: 60
-        severity: warning
-      mySQLSlowQueries:
-        enabled: true
-        duration: "2m"
-        severity: warning
-      mySQLInnoDBLogWaits:
-        enabled: true
-        duration: "0m"
-        val: 10
-        severity: warning
-      mySQLRestarted:
-        enabled: true
-        duration: "0m"
-        val: 60
-        severity: warning
-      mySQLHighQPS:
-        enabled: true
-        duration: "0m"
-        val: 1000
-        severity: critical
-      mySQLHighIncomingBytes:
-        enabled: true
-        duration: "0m"
-        val: 1048576 # 1MB
-        severity: critical
-      mySQLHighOutgoingBytes:
-        enabled: true
-        duration: "0m"
-        val: 1048576 # 1MB
-        severity: critical
-      mySQLTooManyOpenFiles:
-        enabled: true
-        duration: "2m"
-        val: 80
-        severity: warning
+      enabled: true
+      rules:
+        mySQLInstanceDown:
+          enabled: true
+          duration: "0m"
+          severity: critical
+        mySQLServiceDown:
+          enabled: true
+          duration: "0m"
+          severity: critical
+        mySQLTooManyConnections:
+          enabled: true
+          duration: "2m"
+          val: 80
+          severity: warning
+        mySQLHighThreadsRunning:
+          enabled: true
+          duration: "2m"
+          val: 60
+          severity: warning
+        mySQLSlowQueries:
+          enabled: true
+          duration: "2m"
+          severity: warning
+        mySQLInnoDBLogWaits:
+          enabled: true
+          duration: "0m"
+          val: 10
+          severity: warning
+        mySQLRestarted:
+          enabled: true
+          duration: "0m"
+          val: 60
+          severity: warning
+        mySQLHighQPS:
+          enabled: true
+          duration: "0m"
+          val: 1000
+          severity: critical
+        mySQLHighIncomingBytes:
+          enabled: true
+          duration: "0m"
+          val: 1048576 # 1MB
+          severity: critical
+        mySQLHighOutgoingBytes:
+          enabled: true
+          duration: "0m"
+          val: 1048576 # 1MB
+          severity: critical
+        mySQLTooManyOpenFiles:
+          enabled: true
+          duration: "2m"
+          val: 80
+          severity: warning
     cluster:
-      enabled: false
-      galeraReplicationLatencyTooLong:
-        enabled: true
-        val: 0.1
-        duration: "5m"
-        severity: warning
+      enabled: true
+      rules:
+        galeraReplicationLatencyTooLong:
+          enabled: true
+          val: 0.1
+          duration: "5m"
+          severity: warning
     kubedb:
-      enabled: false
-      kubeDBMariaDBPhaseNotReady:
-        enabled: true
-        duration: "1m"
-        severity: critical
-      kubeDBMariaDBPhaseCritical:
-        enabled: true
-        duration: "15m"
-        severity: warning
+      enabled: true
+      rules:
+        kubeDBMariaDBPhaseNotReady:
+          enabled: true
+          duration: "1m"
+          severity: critical
+        kubeDBMariaDBPhaseCritical:
+          enabled: true
+          duration: "15m"
+          severity: warning
     opsrequest:
-      enabled: false
-      kubeDBMariaDBOpsRequestOnProgress:
-        enabled: true
-        duration: "0m"
-        severity: warning
-      kubeDBMariaDBOpsRequestStatusProgressingToLong:
-        enabled: true
-        duration: "30m"
-        severity: critical
-      kubeDBMariaDBOpsRequestFailed:
-        enabled: true
-        duration: "0m"
-        severity: critical
+      enabled: true
+      rules:
+        kubeDBMariaDBOpsRequestOnProgress:
+          enabled: true
+          duration: "0m"
+          severity: warning
+        kubeDBMariaDBOpsRequestStatusProgressingToLong:
+          enabled: true
+          duration: "30m"
+          severity: critical
+        kubeDBMariaDBOpsRequestFailed:
+          enabled: true
+          duration: "0m"
+          severity: critical
     stash:
       enabled: true
-      mariaDBStashBackupSessionFailed:
-        enabled: true
-        duration: "0m"
-        severity: critical
-      mariaDBStashRestoreSessionFailed:
-        enabled: true
-        duration: "0m"
-        severity: critical
-      mariaDBStashNoBackupSessionForTooLong:
-        enabled: true
-        duration: "0m"
-        val: 18000
-        severity: warning
-      mariaDBStashRepositoryCorrupted:
-        enabled: true
-        duration: "5m"
-        severity: critical
-      mariaDBStashRepositoryStorageRunningLow:
-        enabled: true
-        duration: "5m"
-        val: 10737418240 # 10GB
-        severity: waring
-      
-      
+      rules:
+        mariaDBStashBackupSessionFailed:
+          enabled: true
+          duration: "0m"
+          severity: critical
+        mariaDBStashRestoreSessionFailed:
+          enabled: true
+          duration: "0m"
+          severity: critical
+        mariaDBStashNoBackupSessionForTooLong:
+          enabled: true
+          duration: "0m"
+          val: 18000
+          severity: warning
+        mariaDBStashRepositoryCorrupted:
+          enabled: true
+          duration: "5m"
+          severity: critical
+        mariaDBStashRepositoryStorageRunningLow:
+          enabled: true
+          duration: "5m"
+          val: 10737418240 # 10GB
+          severity: waring
+        
+        

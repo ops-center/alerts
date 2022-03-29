@@ -212,7 +212,7 @@ spec:
       labels:
         severity: {{ .Values.alert.groups.opsrequest.rules.kubeDBMariaDBOpsRequestStatusProgressingToLong.severity }}
         app: mariadb
-        alertname: kubedb_mariadb_opsrequest_status_progressing_to_long
+        alertname: kubedb_mariadb_opsrequest_status_progressing_too_long
       annotations:
         summary: MariaDBOpsRequest is in progressing status for too long (mariadbopsrequest {{`{{`}} $labels.mariadbopsrequest {{`}}`}})
         description: "MaraiDBOpsRequest {{`{{`}} $labels.mariadbopsrequest {{`}}`}} is in progressing status for too long\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
@@ -305,5 +305,69 @@ spec:
       annotations:
         summary: MariaDB Stash Repository storage more than {{ .Values.alert.groups.stash.rules.mariaDBStashRepositoryStorageRunningLow.val }} byte. (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
         description: "MariaDB Stash Repository storage running low {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+  {{ end -}}
+  {{ if .Values.alert.groups.schema.enabled -}}
+  - name: mariadb-schema-{{- .Values.namespace -}}-{{- .Values.dbName }}
+    rules:
+    {{ if .Values.alert.groups.schema.rules.kubeDBMariaDBSchemaPendingForTooLong.enabled -}}
+    - alert: KubeDBMariaDBSchemaPendingForTooLong
+      expr: kubedb_mariadb_schema_status_phase{phase="Pending",serverRefName="{{- .Values.dbName -}}",serverRefNamespace="{{- .Values.namespace -}}"} == 1
+      for: {{ .Values.alert.groups.schema.rules.kubeDBMariaDBSchemaPendingForTooLong.duration }}
+      labels:
+        severity: {{ .Values.alert.groups.schema.rules.kubeDBMariaDBSchemaPendingForTooLong.severity }}
+        app: mariadb
+        alertname: kubedb_mariadb_schema_pending_for_too_long
+      annotations:
+        summary: KubeDB schema pending for too long for (mariadbdatabase {{`{{`}} $labels.mariadbdatabase {{`}}`}})
+        description: "KubeDB schema pending for too long.\n {{`{{`}} $labels.mariadbdatabase {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.groups.schema.rules.kubeDBMariaDBSchemaInProgressForTooLong.enabled -}}
+    - alert: KubeDBMariaDBSchemaInProgressForTooLong
+      expr: kubedb_mariadb_schema_status_phase{phase="InProgress",serverRefName="{{- .Values.dbName -}}",serverRefNamespace="{{- .Values.namespace -}}"} == 1
+      for: {{ .Values.alert.groups.schema.rules.kubeDBMariaDBSchemaInProgressForTooLong.duration }}
+      labels:
+        severity: {{ .Values.alert.groups.schema.rules.kubeDBMariaDBSchemaInProgressForTooLong.severity }}
+        app: mariadb
+        alertname: kubedb_mariadb_schema_inprogress_for_too_long
+      annotations:
+        summary: KubeDB schema is in progress for too long for (mariadbdatabase {{`{{`}} $labels.mariadbdatabase {{`}}`}})
+        description: "KubeDB schema is in progress for too long.\n {{`{{`}} $labels.mariadbdatabase {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.groups.schema.rules.kubeDBMariaDBSchemaTerminatingForTooLong.enabled -}}
+    - alert: KubeDBMariaDBSchemaTerminatingForTooLong
+      expr: kubedb_mariadb_schema_status_phase{phase="Terminating",serverRefName="{{- .Values.dbName -}}",serverRefNamespace="{{- .Values.namespace -}}"} == 1
+      for: {{ .Values.alert.groups.schema.rules.kubeDBMariaDBSchemaTerminatingForTooLong.duration }}
+      labels:
+        severity: {{ .Values.alert.groups.schema.rules.kubeDBMariaDBSchemaTerminatingForTooLong.severity }}
+        app: mariadb
+        alertname: kubedb_mariadb_schema_terminating_for_too_long
+      annotations:
+        summary: KubeDB schema terminating for too long for (mariadbdatabase {{`{{`}} $labels.mariadbdatabase {{`}}`}})
+        description: "KubeDB schema terminating for too long.\n {{`{{`}} $labels.mariadbdatabase {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.groups.schema.rules.kubeDBMariaDBSchemaFailed.enabled -}}
+    - alert: KubeDBMariaDBSchemaFailed
+      expr: kubedb_mariadb_schema_status_phase{phase="Failed",serverRefName="{{- .Values.dbName -}}",serverRefNamespace="{{- .Values.namespace -}}"} == 1
+      for: {{ .Values.alert.groups.schema.rules.kubeDBMariaDBSchemaFailed.duration }}
+      labels:
+        severity: {{ .Values.alert.groups.schema.rules.kubeDBMariaDBSchemaFailed.severity }}
+        app: mariadb
+        alertname: kubedb_mariadb_schema_failed
+      annotations:
+        summary: KubeDB schema failed for (mariadbdatabase {{`{{`}} $labels.mariadbdatabase {{`}}`}})
+        description: "KubeDB schema failed.\n {{`{{`}} $labels.mariadbdatabase {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.groups.schema.rules.kubeDBMariaDBSchemaExpired.enabled -}}
+    - alert: KubeDBMariaDBSchemaExpired
+      expr: kubedb_mariadb_schema_status_phase{phase="Expired",serverRefName="{{- .Values.dbName -}}",serverRefNamespace="{{- .Values.namespace -}}"} == 1
+      for: {{ .Values.alert.groups.schema.rules.kubeDBMariaDBSchemaExpired.duration }}
+      labels:
+        severity: {{ .Values.alert.groups.schema.rules.kubeDBMariaDBSchemaExpired.severity }}
+        app: mariadb
+        alertname: kubedb_mariadb_schema_expired
+      annotations:
+        summary: KubeDB schema expired for (mariadbdatabase {{`{{`}} $labels.mariadbdatabase {{`}}`}})
+        description: "KubeDB schema expired.\n {{`{{`}} $labels.mariadbdatabase {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
   {{ end -}}

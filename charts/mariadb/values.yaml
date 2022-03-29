@@ -119,5 +119,26 @@ alert:
           duration: "5m"
           val: 10737418240 # 10GB
           severity: waring
-        
-        
+    schema:
+      enabled: true
+      rules:
+        kubeDBMariaDBSchemaPendingForTooLong:
+          enabled: true
+          duration: "30m"
+          severity: warning
+        kubeDBMariaDBSchemaInProgressForTooLong:
+          enabled: true
+          duration: "30m"
+          severity: warning
+        kubeDBMariaDBSchemaTerminatingForTooLong:
+          enabled: true
+          duration: "30m"
+          severity: warning
+        kubeDBMariaDBSchemaFailed:
+          enabled: true
+          duration: "0m"
+          severity: warning
+        kubeDBMariaDBSchemaExpired:
+          enabled: true
+          duration: "0m"
+          severity: warning

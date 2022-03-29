@@ -11,7 +11,7 @@ metadata:
 spec:
   groups:
   {{ if .Values.alert.groups.database.enabled -}}
-  - name: mariadb_database_group
+  - name: mariadb-database-{{- .Values.namespace -}}-{{- .Values.dbName }}
     rules:
     {{ if .Values.alert.groups.database.rules.mySQLInstanceDown.enabled -}}
     - alert: MySQLInstanceDown
@@ -147,7 +147,7 @@ spec:
     {{- end }}
   {{ end -}}
   {{ if .Values.alert.groups.cluster.enabled -}}
-  - name: mariadb_cluster_group
+  - name: mariadb-cluster-{{- .Values.namespace -}}-{{- .Values.dbName }}
     rules:
     {{ if .Values.alert.groups.cluster.rules.galeraReplicationLatencyTooLong.enabled -}}
     - alert: GaleraReplicationLatencyTooLong
@@ -163,7 +163,7 @@ spec:
     {{- end }}
   {{ end -}}
   {{ if .Values.alert.groups.kubedb.enabled -}}
-  - name: mariadb_kubedb_group
+  - name: mariadb-kubedb-{{- .Values.namespace -}}-{{- .Values.dbName }}
     rules:
     {{ if .Values.alert.groups.kubedb.rules.kubeDBMariaDBPhaseNotReady.enabled -}}
     - alert: KubeDBMariaDBPhaseNotReady
@@ -191,7 +191,7 @@ spec:
     {{- end }}
   {{ end -}}
   {{ if .Values.alert.groups.opsrequest.enabled -}}
-  - name: mariadb_opsrequest_group
+  - name: mariadb-opsrequest-{{- .Values.namespace -}}-{{- .Values.dbName }}
     rules:
     {{ if .Values.alert.groups.opsrequest.rules.kubeDBMariaDBOpsRequestOnProgress.enabled -}}
     - alert: KubeDBMariaDBOpsRequestOnProgress
@@ -231,7 +231,7 @@ spec:
     {{- end }}
   {{ end -}}
   {{ if .Values.alert.groups.stash.enabled -}}
-  - name: mariadb_stash_group
+  - name: mariadb-stash-{{- .Values.namespace -}}-{{- .Values.dbName }}
     rules:
     {{ if .Values.alert.groups.stash.rules.mariaDBStashBackupSessionFailed.enabled -}}
     - alert: MariaDBStashBackupSessionFailed

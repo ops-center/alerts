@@ -144,5 +144,26 @@ alert:
           duration: "0m"
           val: 1800 # 30 minute
           severity: waring
-      
-      
+    schema:
+      enabled: true
+      rules:
+        kubeDBMySQLSchemaPendingForTooLong:
+          enabled: true
+          duration: "30m"
+          severity: warning
+        kubeDBMySQLSchemaInProgressForTooLong:
+          enabled: true
+          duration: "30m"
+          severity: warning
+        kubeDBMySQLSchemaTerminatingForTooLong:
+          enabled: true
+          duration: "30m"
+          severity: warning
+        kubeDBMySQLSchemaFailed:
+          enabled: true
+          duration: "0m"
+          severity: warning
+        kubeDBMySQLSchemaExpired:
+          enabled: true
+          duration: "0m"
+          severity: warning

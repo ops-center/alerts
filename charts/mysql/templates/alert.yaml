@@ -379,3 +379,67 @@ spec:
         description: "MySQL Stash restore session taking to long to complete {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
   {{ end -}}
+  {{ if .Values.alert.groups.schema.enabled -}}
+  - name: mysql-schema-{{- .Values.namespace -}}-{{- .Values.dbName }}
+    rules:
+    {{ if .Values.alert.groups.schema.rules.kubeDBMySQLSchemaPendingForTooLong.enabled -}}
+    - alert: KubeDBMySQLSchemaPendingForTooLong
+      expr: kubedb_mysql_schema_status_phase{phase="Pending",serverRefName="{{- .Values.dbName -}}",serverRefNamespace="{{- .Values.namespace -}}"} == 1
+      for: {{ .Values.alert.groups.schema.rules.kubeDBMySQLSchemaPendingForTooLong.duration }}
+      labels:
+        severity: {{ .Values.alert.groups.schema.rules.kubeDBMySQLSchemaPendingForTooLong.severity }}
+        app: mysql
+        alertname: kubedb_mysql_schema_pending_for_too_long
+      annotations:
+        summary: KubeDB schema pending for too long for (mysqldatabase {{`{{`}} $labels.mysqldatabase {{`}}`}})
+        description: "KubeDB schema pending for too long.\n {{`{{`}} $labels.mysqldatabase {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.groups.schema.rules.kubeDBMySQLSchemaInProgressForTooLong.enabled -}}
+    - alert: KubeDBMySQLSchemaInProgressForTooLong
+      expr: kubedb_mysql_schema_status_phase{phase="InProgress",serverRefName="{{- .Values.dbName -}}",serverRefNamespace="{{- .Values.namespace -}}"} == 1
+      for: {{ .Values.alert.groups.schema.rules.kubeDBMySQLSchemaInProgressForTooLong.duration }}
+      labels:
+        severity: {{ .Values.alert.groups.schema.rules.kubeDBMySQLSchemaInProgressForTooLong.severity }}
+        app: mysql
+        alertname: kubedb_mysql_schema_inprogress_for_too_long
+      annotations:
+        summary: KubeDB schema is in progress for too long for (mysqldatabase {{`{{`}} $labels.mysqldatabase {{`}}`}})
+        description: "KubeDB schema is in progress for too long.\n {{`{{`}} $labels.mysqldatabase {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.groups.schema.rules.kubeDBMySQLSchemaTerminatingForTooLong.enabled -}}
+    - alert: KubeDBMySQLSchemaTerminatingForTooLong
+      expr: kubedb_mysql_schema_status_phase{phase="Terminating",serverRefName="{{- .Values.dbName -}}",serverRefNamespace="{{- .Values.namespace -}}"} == 1
+      for: {{ .Values.alert.groups.schema.rules.kubeDBMySQLSchemaTerminatingForTooLong.duration }}
+      labels:
+        severity: {{ .Values.alert.groups.schema.rules.kubeDBMySQLSchemaTerminatingForTooLong.severity }}
+        app: mysql
+        alertname: kubedb_mysql_schema_terminating_for_too_long
+      annotations:
+        summary: KubeDB schema terminating for too long for (mysqldatabase {{`{{`}} $labels.mysqldatabase {{`}}`}})
+        description: "KubeDB schema terminating for too long.\n {{`{{`}} $labels.mysqldatabase {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.groups.schema.rules.kubeDBMySQLSchemaFailed.enabled -}}
+    - alert: KubeDBMySQLSchemaFailed
+      expr: kubedb_mysql_schema_status_phase{phase="Failed",serverRefName="{{- .Values.dbName -}}",serverRefNamespace="{{- .Values.namespace -}}"} == 1
+      for: {{ .Values.alert.groups.schema.rules.kubeDBMySQLSchemaFailed.duration }}
+      labels:
+        severity: {{ .Values.alert.groups.schema.rules.kubeDBMySQLSchemaFailed.severity }}
+        app: mysql
+        alertname: kubedb_mysql_schema_failed
+      annotations:
+        summary: KubeDB schema failed for (mysqldatabase {{`{{`}} $labels.mysqldatabase {{`}}`}})
+        description: "KubeDB schema failed.\n {{`{{`}} $labels.mysqldatabase {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.alert.groups.schema.rules.kubeDBMySQLSchemaExpired.enabled -}}
+    - alert: KubeDBMySQLSchemaExpired
+      expr: kubedb_mysql_schema_status_phase{phase="Expired",serverRefName="{{- .Values.dbName -}}",serverRefNamespace="{{- .Values.namespace -}}"} == 1
+      for: {{ .Values.alert.groups.schema.rules.kubeDBMySQLSchemaExpired.duration }}
+      labels:
+        severity: {{ .Values.alert.groups.schema.rules.kubeDBMySQLSchemaExpired.severity }}
+        app: mysql
+        alertname: kubedb_mysql_schema_expired
+      annotations:
+        summary: KubeDB schema expired for (mysqldatabase {{`{{`}} $labels.mysqldatabase {{`}}`}})
+        description: "KubeDB schema expired.\n {{`{{`}} $labels.mysqldatabase {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+  {{ end -}}

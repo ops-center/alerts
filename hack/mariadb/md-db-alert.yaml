@@ -1,0 +1,106 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    app: kube-prometheus-stack
+    app.kubernetes.io/instance: prometheus
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: kube-prometheus-stack
+    app.kubernetes.io/version: 32.2.1
+    chart: kube-prometheus-stack-32.2.1
+    heritage: Helm
+    release: prometheus
+  name: kubedb-mariadb-database-alerts
+  namespace: monitoring
+spec:
+  groups:
+  - name: mariadb.rules
+    rules:
+    - alert: MySQLInstanceDown
+      expr: mysql_up == 0
+      for: 0m
+      labels:
+        severity: critical
+      annotations:
+        summary: MySQL down (instance {{ $labels.pod}})
+        description: "MySQL instance is down on {{ $labels.pod }}\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+    - alert: MySQLServiceDown
+      expr: sum by (service) (mysql_up) == 0
+      for: 0m
+      labels:
+        severity: critical
+      annotations:
+        summary: MySQL service (instance {{ $labels.service}})
+        description: "MySQL service is down on {{ $labels.service }}\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+    - alert: MySQLTooManyConnections
+      expr: max_over_time(mysql_global_status_threads_connected[1m]) / mysql_global_variables_max_connections * 100 > 80
+      for: 2m
+      labels:
+        severity: warning
+      annotations:
+        summary: MySQL too many connections (> 80%) (instance {{ $labels.pod }})
+        description: "More than 80% of MySQL connections are in use on {{ $labels.pod }}\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+    - alert: MySQLHighThreadsRunning
+      expr: max_over_time(mysql_global_status_threads_running[1m]) / mysql_global_variables_max_connections * 100 > 60
+      for: 2m
+      labels:
+        severity: warning
+      annotations:
+        summary: MySQL high threads running (instance {{ $labels.pod }})
+        description: "More than 60% of MySQL connections are in running state on {{ $labels.pod }}\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+    - alert: MySQLSlowQueries
+      expr: increase(mysql_global_status_slow_queries[1m]) > 0
+      for: 2m
+      labels:
+        severity: warning
+      annotations:
+        summary: MySQL slow queries (instance {{ $labels.pod }})
+        description: "MySQL server mysql has some new slow query.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+    - alert: MySQLInnoDBLogWaits
+      expr: rate(mysql_global_status_innodb_log_waits[15m]) > 10
+      for: 0m
+      labels:
+        severity: warning
+      annotations:
+        summary: MySQL InnoDB log waits (instance {{ $labels.pod }})
+        description: "MySQL innodb log writes stalling\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+    - alert: MySQLRestarted
+      expr: mysql_global_status_uptime < 60
+      for: 0m
+      labels:
+        severity: info
+      annotations:
+        summary: MySQL restarted (instance {{ $labels.pod }})
+        description: "MySQL has just been restarted, less than one minute ago on {{ $labels.instance }}.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+    - alert: MySQLHighQPS
+        expr: rate(mysql_global_status_queries[1m]) > 1000
+        for: 0m
+        labels:
+          severity: critical
+        annotations:
+          summary: MySQL has high queries per second (> 1000) (instance {{ $labels.pod }})
+          description: "MySQL has more than 1000 queries per second on {{ $labels.instance }}.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+    - alert: MySQLHighIncomingBytes
+        expr: rate(mysql_global_status_bytes_received[1m]) > (1024*1024)
+        for: 0m
+        labels:
+          severity: critical
+        annotations:
+          summary: MySQL has high incoming bytes second (> 1024 * 1024) (instance {{ $labels.pod }})
+          description: "MySQL has more than (1024 * 1024) incoming bytes per second on {{ $labels.instance }}.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+    - alert: MySQLHighOutgoingBytes
+        expr: rate(mysql_global_status_bytes_sent[1m]) > (1024*1024)
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: MySQL has high outgoing bytes second (> 1024 * 1024) (instance {{ $labels.pod }})
+          description: "MySQL has more than (1024 * 1024) incoming bytes per second on {{ $labels.instance }}.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+    - alert: MySQLTooManyOpenFiles
+        expr: max_over_time(mysql_global_status_open_files[1m]) / mysql_global_variables_open_files_limit * 100 > 80
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: MySQL too many opened files (> 80%) (instance {{ $labels.pod }})
+          description: "MySQL too many opened files (> 80%) on {{ $labels.pod }}\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"

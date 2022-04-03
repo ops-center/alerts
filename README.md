@@ -1,1 +1,1 @@
-# kubedb-alert-charts
+# alerts

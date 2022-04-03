@@ -1,0 +1,608 @@
+properties:
+  alert:
+    properties:
+      groups:
+        properties:
+          database:
+            properties:
+              enabled:
+                type: boolean
+              rules:
+                properties:
+                  mySQLHighIncomingBytes:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                      val:
+                        type: integer
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    - val
+                    type: object
+                  mySQLHighOutgoingBytes:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                      val:
+                        type: integer
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    - val
+                    type: object
+                  mySQLHighQPS:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                      val:
+                        type: integer
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    - val
+                    type: object
+                  mySQLHighThreadsRunning:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                      val:
+                        type: integer
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    - val
+                    type: object
+                  mySQLInnoDBLogWaits:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                      val:
+                        type: integer
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    - val
+                    type: object
+                  mySQLInstanceDown:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    type: object
+                  mySQLRestarted:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                      val:
+                        type: integer
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    - val
+                    type: object
+                  mySQLServiceDown:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    type: object
+                  mySQLSlowQueries:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    type: object
+                  mySQLTooManyConnections:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                      val:
+                        type: integer
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    - val
+                    type: object
+                  mySQLTooManyOpenFiles:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                      val:
+                        type: integer
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    - val
+                    type: object
+                required:
+                - mySQLHighIncomingBytes
+                - mySQLHighOutgoingBytes
+                - mySQLHighQPS
+                - mySQLHighThreadsRunning
+                - mySQLInnoDBLogWaits
+                - mySQLInstanceDown
+                - mySQLRestarted
+                - mySQLServiceDown
+                - mySQLSlowQueries
+                - mySQLTooManyConnections
+                - mySQLTooManyOpenFiles
+                type: object
+            required:
+            - enabled
+            - rules
+            type: object
+          group:
+            properties:
+              enabled:
+                type: boolean
+              rules:
+                properties:
+                  mySQLHighReplicationApplyTime:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                      val:
+                        format: double
+                        type: number
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    - val
+                    type: object
+                  mySQLHighReplicationDelay:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                      val:
+                        format: double
+                        type: number
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    - val
+                    type: object
+                  mySQLHighReplicationTransportTime:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                      val:
+                        format: double
+                        type: number
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    - val
+                    type: object
+                  mySQLReplicationHighTransactionTime:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                      val:
+                        format: double
+                        type: number
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    - val
+                    type: object
+                required:
+                - mySQLHighReplicationApplyTime
+                - mySQLHighReplicationDelay
+                - mySQLHighReplicationTransportTime
+                - mySQLReplicationHighTransactionTime
+                type: object
+            required:
+            - enabled
+            - rules
+            type: object
+          kubedb:
+            properties:
+              enabled:
+                type: boolean
+              rules:
+                properties:
+                  kubeDBMySQLPhaseCritical:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    type: object
+                  kubeDBMySQLPhaseNotReady:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    type: object
+                required:
+                - kubeDBMySQLPhaseCritical
+                - kubeDBMySQLPhaseNotReady
+                type: object
+            required:
+            - enabled
+            - rules
+            type: object
+          opsrequest:
+            properties:
+              enabled:
+                type: boolean
+              rules:
+                properties:
+                  kubeDBMySQLOpsRequestFailed:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    type: object
+                  kubeDBMySQLOpsRequestOnProgress:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    type: object
+                  kubeDBMySQLOpsRequestStatusProgressingToLong:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    type: object
+                required:
+                - kubeDBMySQLOpsRequestFailed
+                - kubeDBMySQLOpsRequestOnProgress
+                - kubeDBMySQLOpsRequestStatusProgressingToLong
+                type: object
+            required:
+            - enabled
+            - rules
+            type: object
+          schema:
+            properties:
+              enabled:
+                type: boolean
+              rules:
+                properties:
+                  kubeDBMySQLSchemaExpired:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    type: object
+                  kubeDBMySQLSchemaFailed:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    type: object
+                  kubeDBMySQLSchemaInProgressForTooLong:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    type: object
+                  kubeDBMySQLSchemaPendingForTooLong:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    type: object
+                  kubeDBMySQLSchemaTerminatingForTooLong:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    type: object
+                required:
+                - kubeDBMySQLSchemaExpired
+                - kubeDBMySQLSchemaFailed
+                - kubeDBMySQLSchemaInProgressForTooLong
+                - kubeDBMySQLSchemaPendingForTooLong
+                - kubeDBMySQLSchemaTerminatingForTooLong
+                type: object
+            required:
+            - enabled
+            - rules
+            type: object
+          stash:
+            properties:
+              enabled:
+                type: boolean
+              rules:
+                properties:
+                  mySQLStashBackupSessionFailed:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    type: object
+                  mySQLStashBackupSessionPeriodTooLong:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                      val:
+                        type: integer
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    - val
+                    type: object
+                  mySQLStashNoBackupSessionForTooLong:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                      val:
+                        type: integer
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    - val
+                    type: object
+                  mySQLStashRepositoryCorrupted:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    type: object
+                  mySQLStashRepositoryStorageRunningLow:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                      val:
+                        type: integer
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    - val
+                    type: object
+                  mySQLStashRestoreSessionFailed:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    type: object
+                  mySQLStashRestoreSessionPeriodTooLong:
+                    properties:
+                      duration:
+                        type: string
+                      enabled:
+                        type: boolean
+                      severity:
+                        type: string
+                      val:
+                        type: integer
+                    required:
+                    - duration
+                    - enabled
+                    - severity
+                    - val
+                    type: object
+                required:
+                - mySQLStashBackupSessionFailed
+                - mySQLStashBackupSessionPeriodTooLong
+                - mySQLStashNoBackupSessionForTooLong
+                - mySQLStashRepositoryCorrupted
+                - mySQLStashRepositoryStorageRunningLow
+                - mySQLStashRestoreSessionFailed
+                - mySQLStashRestoreSessionPeriodTooLong
+                type: object
+            required:
+            - enabled
+            - rules
+            type: object
+        required:
+        - database
+        - group
+        - kubedb
+        - opsrequest
+        - schema
+        - stash
+        type: object
+      ruleSelector:
+        properties:
+          app:
+            type: string
+          release:
+            type: string
+        required:
+        - app
+        - release
+        type: object
+    required:
+    - groups
+    - ruleSelector
+    type: object
+  dbName:
+    type: string
+  namespace:
+    type: string
+required:
+- alert
+- dbName
+- namespace
+type: object

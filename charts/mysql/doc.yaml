@@ -1,0 +1,18 @@
+project:
+  name: MySQL alerts by AppsCode
+  shortName: MySQL alerts
+  url: https://github.com/appscode/alerts
+  description: MySQL alerts for KubeDB
+  app: MySQL alerts
+repository:
+  url: https://charts.appscode.com/stable/
+  name: appscode
+chart:
+  name: mysql
+  values: -- generate from values file --
+  valuesExample: -- generate from values file --
+prerequisites:
+- Kubernetes 1.16+
+release:
+  name: mysql
+  namespace: demo

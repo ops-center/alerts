@@ -1,0 +1,199 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: kubedb-elasticsearch-{{- .Values.namespace -}}-{{- .Values.dbName }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "elasticsearch.labels" . | nindent 4 }}
+    {{- range $key, $val := .Values.alert.ruleSelector }}
+    {{ $key }}: {{ $val }}
+    {{- end }}
+spec:
+  groups:
+  {{ if .Values.alert.groups.database.enabled -}}
+  - name: elasticsearch.database.{{- .Values.namespace -}}.{{- .Values.dbName }}.rules
+    rules:
+    {{ if .Values.alert.groups.database.rules.elasticsearchHeapUsageTooHigh.enabled -}}
+    - alert: ElasticsearchHeapUsageTooHigh
+      expr: (elasticsearch_jvm_memory_used_bytes{area="heap",job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"} / elasticsearch_jvm_memory_max_bytes{area="heap",job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"}) * 100 > {{ .Values.alert.groups.database.rules.elasticsearchHeapUsageTooHigh.val }}
+      for: {{ .Values.alert.groups.database.rules.elasticsearchHeapUsageTooHigh.duration }}
+      labels:
+        severity: {{ .Values.alert.groups.database.rules.elasticsearchHeapUsageTooHigh.severity }}
+        alertname: elasticsearch_heap_usage_too_high
+      annotations:
+        summary: Elasticsearch Heap Usage Too High (instance {{`{{`}} $labels.instance {{`}}`}})
+        description: "The heap usage is over {{ .Values.alert.groups.database.rules.elasticsearchHeapUsageTooHigh.val -}}%\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    
+    {{ if .Values.alert.groups.database.rules.elasticsearchHeapUsageWarning.enabled -}}
+    - alert: ElasticsearchHeapUsageWarning
+      expr: (elasticsearch_jvm_memory_used_bytes{area="heap",job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"} / elasticsearch_jvm_memory_max_bytes{area="heap",job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"}) * 100 > {{ .Values.alert.groups.database.rules.elasticsearchHeapUsageWarning.val }}
+      for: {{ .Values.alert.groups.database.rules.elasticsearchHeapUsageWarning.duration }}
+      labels:
+        severity: {{ .Values.alert.groups.database.rules.elasticsearchHeapUsageWarning.severity }}
+        alertname: elasticsearch_heap_usage_warning
+      annotations:
+        summary: Elasticsearch Heap Usage warning (instance {{`{{`}} $labels.instance {{`}}`}})
+        description: "The heap usage is over {{ .Values.alert.groups.database.rules.elasticsearchHeapUsageWarning.val }}%\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+
+    {{ if .Values.alert.groups.database.rules.elasticsearchDiskOutOfSpace.enabled -}}
+    - alert: ElasticsearchDiskOutOfSpace
+      expr: elasticsearch_filesystem_data_available_bytes{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"} / elasticsearch_filesystem_data_size_bytes{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"} * 100 < {{ sub 100 .Values.alert.groups.database.rules.elasticsearchDiskOutOfSpace.val }}
+      for: {{ .Values.alert.groups.database.rules.elasticsearchDiskOutOfSpace.duration }}
+      labels:
+        severity: {{ .Values.alert.groups.database.rules.elasticsearchDiskOutOfSpace.severity }}
+        alertname: elasticsearch_disk_out_of_space
+      annotations:
+        summary: Elasticsearch disk out of space (instance {{`{{`}} $labels.instance {{`}}`}})
+        description: "The disk usage is over {{ .Values.alert.groups.database.rules.elasticsearchDiskOutOfSpace.val }}%\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+
+    {{ if .Values.alert.groups.database.rules.elasticsearchDiskSpaceLow.enabled -}}
+    - alert: ElasticsearchDiskSpaceLow
+      expr: elasticsearch_filesystem_data_available_bytes{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"} / elasticsearch_filesystem_data_size_bytes{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"} * 100 < {{ sub 100 .Values.alert.groups.database.rules.elasticsearchDiskSpaceLow.val }}
+      for: {{ .Values.alert.groups.database.rules.elasticsearchDiskSpaceLow.duration }}
+      labels:
+        severity: {{ .Values.alert.groups.database.rules.elasticsearchDiskSpaceLow.severity }}
+        alertname: elasticsearch_disk_space_low
+      annotations:
+        summary: Elasticsearch disk space low (instance {{`{{`}} $labels.instance {{`}}`}})
+        description: "The disk usage is over {{ .Values.alert.groups.database.rules.elasticsearchDiskSpaceLow.val }}%\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+
+    {{ if .Values.alert.groups.database.rules.elasticsearchClusterRed.enabled -}}
+    - alert: ElasticsearchClusterRed
+      expr: elasticsearch_cluster_health_status{color="red",job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"} == 1
+      for: {{ .Values.alert.groups.database.rules.elasticsearchClusterRed.duration }}
+      labels:
+        severity: {{ .Values.alert.groups.database.rules.elasticsearchClusterRed.severity }}
+        alertname: elasticsearch_cluster_red
+      annotations:
+        summary: Elasticsearch Cluster Red (instance {{`{{`}} $labels.instance {{`}}`}})
+        description: "Elastic Cluster Red status\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    
+    {{ if .Values.alert.groups.database.rules.elasticsearchClusterYellow.enabled -}}
+    - alert: ElasticsearchClusterYellow
+      expr: elasticsearch_cluster_health_status{color="yellow",job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"} == 1
+      for: {{ .Values.alert.groups.database.rules.elasticsearchClusterYellow.duration }}
+      labels:
+        severity: {{ .Values.alert.groups.database.rules.elasticsearchClusterYellow.severity }}
+        alertname: elasticsearch_cluster_yellow
+      annotations:
+        summary: Elasticsearch Cluster Yellow (instance {{`{{`}} $labels.instance {{`}}`}})
+        description: "Elastic Cluster Yellow status\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    
+    {{ if .Values.alert.groups.database.rules.elasticsearchHealthyNodes.enabled -}}
+    - alert: ElasticsearchHealthyNodes
+      expr: elasticsearch_cluster_health_number_of_nodes{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"} < {{ .Values.alert.groups.database.rules.elasticsearchHealthyNodes.val }}
+      for: {{ .Values.alert.groups.database.rules.elasticsearchHealthyNodes.duration }}
+      labels:
+        severity: {{ .Values.alert.groups.database.rules.elasticsearchHealthyNodes.severity }}
+        alertname: elasticsearch_healthy_nodes
+      annotations:
+        summary: Elasticsearch Healthy Nodes (instance {{`{{`}} $labels.instance {{`}}`}})
+        description: "Missing node in Elasticsearch cluster\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    
+    {{ if .Values.alert.groups.database.rules.elasticsearchHealthyDataNodes.enabled -}}
+    - alert: ElasticsearchHealthyDataNodes
+      expr: elasticsearch_cluster_health_number_of_data_nodes{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"} < {{ .Values.alert.groups.database.rules.elasticsearchHealthyDataNodes.val }}
+      for: {{ .Values.alert.groups.database.rules.elasticsearchHealthyDataNodes.duration }}
+      labels:
+        severity: {{ .Values.alert.groups.database.rules.elasticsearchHealthyDataNodes.severity }}
+        alertname: elasticsearch_healthy_data_nodes
+      annotations:
+        summary: Elasticsearch Healthy Data Nodes (instance {{`{{`}} $labels.instance {{`}}`}})
+        description: "Missing data node in Elasticsearch cluster\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    
+    {{ if .Values.alert.groups.database.rules.elasticsearchRelocatingShards.enabled -}}
+    - alert: ElasticsearchRelocatingShards
+      expr: elasticsearch_cluster_health_relocating_shards{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"} > 0
+      for: {{ .Values.alert.groups.database.rules.elasticsearchRelocatingShards.duration }}
+      labels:
+        severity: {{ .Values.alert.groups.database.rules.elasticsearchRelocatingShards.severity }}
+        alertname: elasticsearch_relocating_shards
+      annotations:
+        summary: Elasticsearch relocating shards (instance {{`{{`}} $labels.instance {{`}}`}})
+        description: "Elasticsearch is relocating shards\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}} 
+    
+    {{ if .Values.alert.groups.database.rules.elasticsearchInitializingShards.enabled -}} 
+    - alert: ElasticsearchInitializingShards
+      expr: elasticsearch_cluster_health_initializing_shards{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"} > 0
+      for: {{ .Values.alert.groups.database.rules.elasticsearchInitializingShards.duration }}
+      labels:
+        severity: {{ .Values.alert.groups.database.rules.elasticsearchInitializingShards.severity }}
+        alertname: elasticsearch_initializing_shards
+      annotations:
+        summary: Elasticsearch initializing shards (instance {{`{{`}} $labels.instance {{`}}`}})
+        description: "Elasticsearch is initializing shards\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    
+    {{ if .Values.alert.groups.database.rules.elasticsearchUnassignedShards.enabled -}} 
+    - alert: ElasticsearchUnassignedShards
+      expr: elasticsearch_cluster_health_unassigned_shards{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"} > 0
+      for: {{ .Values.alert.groups.database.rules.elasticsearchUnassignedShards.duration }}
+      labels:
+        severity: {{ .Values.alert.groups.database.rules.elasticsearchUnassignedShards.severity }}
+        alertname: elasticsearch_unassigned_shards
+      annotations:
+        summary: Elasticsearch unassigned shards (instance {{`{{`}} $labels.instance {{`}}`}})
+        description: "Elasticsearch has unassigned shards\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    
+    {{ if .Values.alert.groups.database.rules.elasticsearchPendingTasks.enabled -}} 
+    - alert: ElasticsearchPendingTasks
+      expr: elasticsearch_cluster_health_number_of_pending_tasks{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"} > 0
+      for: {{ .Values.alert.groups.database.rules.elasticsearchPendingTasks.duration }}
+      labels:
+        severity: {{ .Values.alert.groups.database.rules.elasticsearchPendingTasks.severity }}
+        alertname: elasticsearch_pending_tasks
+      annotations:
+        summary: Elasticsearch pending tasks (instance {{`{{`}} $labels.instance {{`}}`}})
+        description: "Elasticsearch has pending tasks. Cluster works slowly.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+
+    {{ if .Values.alert.groups.database.rules.elasticsearchNoNewDocuments10m.enabled -}} 
+    - alert: ElasticsearchNoNewDocuments10m
+      expr: increase(elasticsearch_indices_docs{es_data_node="true",job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"}[10m]) < 1
+      for: {{ .Values.alert.groups.database.rules.elasticsearchNoNewDocuments10m.duration }}
+      labels:
+        severity: {{ .Values.alert.groups.database.rules.elasticsearchNoNewDocuments10m.severity }}
+        alertname: elasticsearch_no_new_documents_10m
+      annotations:
+        summary: Elasticsearch no new documents (instance {{`{{`}} $labels.instance {{`}}`}})
+        description: "No new documents for 10 min!\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+  {{ end -}}
+
+  {{ if .Values.alert.groups.kubedb.enabled -}}
+  - name: elasticsearch.kubedb.{{- .Values.namespace -}}.{{- .Values.dbName }}.rules
+    rules:
+    {{ if .Values.alert.groups.kubedb.rules.kubeDBElasticsearchPhaseNotReady.enabled -}}
+    - alert: KubeDBElasticsearchPhaseNotReady
+      expr: kubedb_elasticsearch_status_phase{phase="NotReady",elasticsearch="{{- .Values.dbName -}}",namespace="{{- .Values.namespace -}}"} == 1
+      for: {{ .Values.alert.groups.kubedb.rules.kubeDBElasticsearchPhaseNotReady.duration }}
+      labels:
+        severity: {{ .Values.alert.groups.kubedb.rules.kubeDBElasticsearchPhaseNotReady.severity }}
+        alertname: kubedb_elasticsearch_phase_not_ready
+      annotations:
+        summary: KubeDB Elasticsearch phase NotReady ( elasticsearch {{`{{`}} $labels.elasticsearch {{`}}`}})
+        description: "KubeDB Elasticsearch phase not ready.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+
+    {{ if .Values.alert.groups.kubedb.rules.kubeDBElasticsearchPhaseCritical.enabled -}}
+    - alert: KubeDBElasticsearchPhaseCritical
+      expr: kubedb_elasticsearch_status_phase{phase="Critical",elasticsearch="{{- .Values.dbName -}}",namespace="{{- .Values.namespace -}}"} == 1
+      for: {{ .Values.alert.groups.kubedb.rules.kubeDBElasticsearchPhaseCritical.duration }}
+      labels:
+        severity: {{ .Values.alert.groups.kubedb.rules.kubeDBElasticsearchPhaseCritical.severity }}
+        alertname: kubedb_elasticsearch_phase_critical
+      annotations:
+        summary: KubeDB Elasticsearch phase Critical ( elasticsearch {{`{{`}} $labels.elasticsearch {{`}}`}})
+        description: "KubeDB Elasticsearch phase Critical.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+  {{ end -}}

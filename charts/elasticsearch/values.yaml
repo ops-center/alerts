@@ -1,0 +1,118 @@
+namespace: demo
+dbName: es-cluster
+alert:
+  ruleSelector:
+    app: kube-prometheus-stack
+    release: kube-prometheus-stack
+  groups:
+    # rules group: database
+    database:
+      enabled: true
+      rules: 
+        # Elasticsearch Heap Usage Too High
+        elasticsearchHeapUsageTooHigh:
+          enabled: false
+          # The heap usage is over 90%
+          val: 90
+          duration: "2m"
+          severity: critical
+        
+        # Elasticsearch Heap Usage warning
+        elasticsearchHeapUsageWarning:
+          enabled: true
+          # The heap usage is over 80%
+          val: 80
+          duration: "2m"
+          severity: warning
+        
+        # Elasticsearch disk out of space
+        elasticsearchDiskOutOfSpace:
+          enabled: false
+          # The disk usage is over 90%. Value range: 0-100.
+          val: 90
+          duration: "0m"
+          severity: critical
+        
+        # Elasticsearch disk space low
+        elasticsearchDiskSpaceLow:
+          enabled: false
+          # The disk usage is over 80%. Value range: 0-100.
+          val: 80
+          duration: "2m"
+          severity: warning
+        
+        # Elastic Cluster Red status
+        elasticsearchClusterRed:
+          enabled: false
+          duration: "0m"
+          severity: critical
+        
+        # Elastic Cluster Yellow status
+        elasticsearchClusterYellow:
+          enabled: true
+          duration: "0m"
+          severity: warning
+        
+        # Minimum healthy nodes in Elasticsearch cluster
+        elasticsearchHealthyNodes:
+          enabled: true
+          # should have at least 3 healthy nodes
+          val: 3
+          duration: "0m"
+          severity: critical
+        
+        # Minimum healthy data nodes in Elasticsearch cluster
+        elasticsearchHealthyDataNodes:
+          enabled: true
+          # should have at least 3 healthy data nodes
+          val: 3
+          duration: "0m"
+          severity: critical
+        
+        # Elasticsearch relocating shards
+        elasticsearchRelocatingShards:
+          enabled: true
+          duration: "0m"
+          severity: info
+            
+        # Elasticsearch is initializing shards
+        elasticsearchInitializingShards:
+          enabled: true
+          duration: "0m"
+          severity: info
+        
+        # Elasticsearch has unassigned shards
+        elasticsearchUnassignedShards:
+          enabled: true
+          duration: "0m"
+          severity: critical
+        
+        # Elasticsearch has pending tasks. Cluster works slowly.
+        elasticsearchPendingTasks:
+          enabled: false
+          duration: "15m"
+          severity: warning
+
+        # No new documents for 10 min! 
+        elasticsearchNoNewDocuments10m:
+          enabled: false
+          duration: "0m"
+          severity: info
+    
+    kubedb:
+      enabled: true
+      rules:
+        kubeDBElasticsearchPhaseNotReady:
+          enabled: true
+          duration: "0m"
+          severity: critical
+        
+        kubeDBElasticsearchPhaseCritical:
+          enabled: true
+          duration: "15m"
+          severity: warning
+    
+    stash:
+      enabled: true
+      rules: 
+

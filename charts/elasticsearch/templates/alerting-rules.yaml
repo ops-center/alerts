@@ -173,25 +173,25 @@ spec:
   {{ if .Values.alert.groups.kubedb.enabled -}}
   - name: elasticsearch.kubedb.{{- .Values.namespace -}}.{{- .Values.dbName }}.rules
     rules:
-    {{ if .Values.alert.groups.kubedb.rules.kubeDBElasticsearchPhaseNotReady.enabled -}}
-    - alert: KubeDBElasticsearchPhaseNotReady
+    {{ if .Values.alert.groups.kubedb.rules.dbPhaseNotReady.enabled -}}
+    - alert: DBPhaseNotReady
       expr: kubedb_elasticsearch_status_phase{phase="NotReady",elasticsearch="{{- .Values.dbName -}}",namespace="{{- .Values.namespace -}}"} == 1
-      for: {{ .Values.alert.groups.kubedb.rules.kubeDBElasticsearchPhaseNotReady.duration }}
+      for: {{ .Values.alert.groups.kubedb.rules.dbPhaseNotReady.duration }}
       labels:
-        severity: {{ .Values.alert.groups.kubedb.rules.kubeDBElasticsearchPhaseNotReady.severity }}
-        alertname: kubedb_elasticsearch_phase_not_ready
+        severity: {{ .Values.alert.groups.kubedb.rules.dbPhaseNotReady.severity }}
+        alertname: db_phase_not_ready
       annotations:
         summary: KubeDB Elasticsearch phase NotReady ( elasticsearch {{`{{`}} $labels.elasticsearch {{`}}`}})
         description: "KubeDB Elasticsearch phase not ready.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
 
-    {{ if .Values.alert.groups.kubedb.rules.kubeDBElasticsearchPhaseCritical.enabled -}}
-    - alert: KubeDBElasticsearchPhaseCritical
+    {{ if .Values.alert.groups.kubedb.rules.dbPhaseCritical.enabled -}}
+    - alert: DBPhaseCritical
       expr: kubedb_elasticsearch_status_phase{phase="Critical",elasticsearch="{{- .Values.dbName -}}",namespace="{{- .Values.namespace -}}"} == 1
-      for: {{ .Values.alert.groups.kubedb.rules.kubeDBElasticsearchPhaseCritical.duration }}
+      for: {{ .Values.alert.groups.kubedb.rules.dbPhaseCritical.duration }}
       labels:
-        severity: {{ .Values.alert.groups.kubedb.rules.kubeDBElasticsearchPhaseCritical.severity }}
-        alertname: kubedb_elasticsearch_phase_critical
+        severity: {{ .Values.alert.groups.kubedb.rules.dbPhaseCritical.severity }}
+        alertname: db_phase_critical
       annotations:
         summary: KubeDB Elasticsearch phase Critical ( elasticsearch {{`{{`}} $labels.elasticsearch {{`}}`}})
         description: "KubeDB Elasticsearch phase Critical.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"

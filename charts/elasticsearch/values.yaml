@@ -102,17 +102,56 @@ alert:
     kubedb:
       enabled: true
       rules:
-        kubeDBElasticsearchPhaseNotReady:
+        dbPhaseNotReady:
           enabled: true
           duration: "0m"
           severity: critical
         
-        kubeDBElasticsearchPhaseCritical:
+        dbPhaseCritical:
           enabled: true
           duration: "15m"
           severity: warning
     
+
+    opsrequest:
+      enabled: true
+      rules:
+        dbOpsRequestInProgress:
+          enabled: true
+          duration: "0m"
+          severity: info
+        dbOpsRequestInProgressingTooLong:
+          enabled: true
+          duration: "30m"
+          severity: warning
+        dbOpsRequestFailed:
+          enabled: true
+          duration: "0m"
+          severity: critical
+
     stash:
       enabled: true
-      rules: 
+      rules:
+        mariaDBStashBackupSessionFailed:
+          enabled: true
+          duration: "0m"
+          severity: critical
+        mariaDBStashRestoreSessionFailed:
+          enabled: true
+          duration: "0m"
+          severity: critical
+        mariaDBStashNoBackupSessionForTooLong:
+          enabled: true
+          duration: "0m"
+          val: 18000
+          severity: warning
+        mariaDBStashRepositoryCorrupted:
+          enabled: true
+          duration: "5m"
+          severity: critical
+        mariaDBStashRepositoryStorageRunningLow:
+          enabled: true
+          duration: "5m"
+          val: 10737418240 # 10GB
+          severity: waring
 

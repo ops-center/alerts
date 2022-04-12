@@ -18,6 +18,7 @@ package v1alpha1
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	api "kubepack.dev/lib-app/api/v1alpha1"
 )
 
 const (
@@ -40,31 +41,37 @@ type Mysql struct {
 
 // MysqlSpec is the schema for kubedb-autoscaler chart values file
 type MysqlSpec struct {
-	Namespace string     `json:"namespace"`
-	DbName    string     `json:"dbName"`
-	Alert     MySQLAlert `json:"alert"`
+	api.Metadata `json:"metadata,omitempty"`
+	Spec         MysqlSpecSpec `json:"spec"`
+}
+
+type MysqlSpecSpec struct {
+	Alert MySQLAlert `json:"alert"`
 }
 
 type MySQLAlert struct {
-	RuleSelector AlertRuleSelector `json:"ruleSelector"`
-	Groups       MySQLAlertGroups  `json:"groups"`
+	Enabled              bool              `json:"enabled"`
+	Labels               map[string]string `json:"labels"`
+	Annotations          map[string]string `json:"annotations"`
+	AdditionalRuleLabels map[string]string `json:"additionalRuleLabels"`
+	Groups               MySQLAlertGroups  `json:"groups"`
 }
 
 type MySQLAlertGroups struct {
-	Database   MySQLDatabase   `json:"database"`
-	Group      MySQLGroup      `json:"group"`
-	Kubedb     MySQLKubedb     `json:"kubedb"`
-	Opsrequest MySQLOpsrequest `json:"opsrequest"`
-	Stash      MySQLStash      `json:"stash"`
-	Schema     MySQLSchema     `json:"schema"`
+	Database      MySQLDatabaseAlert `json:"database"`
+	Group         MySQLGroupAlert    `json:"group"`
+	Provisioner   ProvisionerAlert   `json:"provisioner"`
+	OpsManager    OpsManagerAlert    `json:"opsManager"`
+	Stash         StashAlert         `json:"stash"`
+	SchemaManager SchemaManagerAlert `json:"schemaManager"`
 }
 
-type MySQLDatabase struct {
-	Enabled bool               `json:"enabled"`
-	Rules   MySQLDatabaseRules `json:"rules"`
+type MySQLDatabaseAlert struct {
+	Enabled bool                    `json:"enabled"`
+	Rules   MySQLDatabaseAlertRules `json:"rules"`
 }
 
-type MySQLDatabaseRules struct {
+type MySQLDatabaseAlertRules struct {
 	MySQLInstanceDown       FixedAlert  `json:"mySQLInstanceDown"`
 	MySQLServiceDown        FixedAlert  `json:"mySQLServiceDown"`
 	MySQLTooManyConnections IntValAlert `json:"mySQLTooManyConnections"`
@@ -78,65 +85,16 @@ type MySQLDatabaseRules struct {
 	MySQLTooManyOpenFiles   IntValAlert `json:"mySQLTooManyOpenFiles"`
 }
 
-type MySQLGroup struct {
-	Enabled bool            `json:"enabled"`
-	Rules   MySQLGroupRules `json:"rules"`
+type MySQLGroupAlert struct {
+	Enabled bool                 `json:"enabled"`
+	Rules   MySQLGroupAlertRules `json:"rules"`
 }
 
-type MySQLGroupRules struct {
+type MySQLGroupAlertRules struct {
 	MySQLHighReplicationDelay           FloatValAlertConfig `json:"mySQLHighReplicationDelay"`
 	MySQLHighReplicationTransportTime   FloatValAlertConfig `json:"mySQLHighReplicationTransportTime"`
 	MySQLHighReplicationApplyTime       FloatValAlertConfig `json:"mySQLHighReplicationApplyTime"`
 	MySQLReplicationHighTransactionTime FloatValAlertConfig `json:"mySQLReplicationHighTransactionTime"`
-}
-
-type MySQLKubedb struct {
-	Enabled bool             `json:"enabled"`
-	Rules   MySQLKubedbRules `json:"rules"`
-}
-
-type MySQLKubedbRules struct {
-	KubeDBMySQLPhaseNotReady FixedAlert `json:"kubeDBMySQLPhaseNotReady"`
-	KubeDBMySQLPhaseCritical FixedAlert `json:"kubeDBMySQLPhaseCritical"`
-}
-
-type MySQLOpsrequest struct {
-	Enabled bool                 `json:"enabled"`
-	Rules   MySQLOpsrequestRules `json:"rules"`
-}
-
-type MySQLOpsrequestRules struct {
-	KubeDBMySQLOpsRequestOnProgress              FixedAlert `json:"kubeDBMySQLOpsRequestOnProgress"`
-	KubeDBMySQLOpsRequestStatusProgressingToLong FixedAlert `json:"kubeDBMySQLOpsRequestStatusProgressingToLong"`
-	KubeDBMySQLOpsRequestFailed                  FixedAlert `json:"kubeDBMySQLOpsRequestFailed"`
-}
-
-type MySQLStash struct {
-	Enabled bool            `json:"enabled"`
-	Rules   MySQLStashRules `json:"rules"`
-}
-
-type MySQLStashRules struct {
-	MySQLStashBackupSessionFailed         FixedAlert  `json:"mySQLStashBackupSessionFailed"`
-	MySQLStashRestoreSessionFailed        FixedAlert  `json:"mySQLStashRestoreSessionFailed"`
-	MySQLStashNoBackupSessionForTooLong   IntValAlert `json:"mySQLStashNoBackupSessionForTooLong"`
-	MySQLStashRepositoryCorrupted         FixedAlert  `json:"mySQLStashRepositoryCorrupted"`
-	MySQLStashRepositoryStorageRunningLow IntValAlert `json:"mySQLStashRepositoryStorageRunningLow"`
-	MySQLStashBackupSessionPeriodTooLong  IntValAlert `json:"mySQLStashBackupSessionPeriodTooLong"`
-	MySQLStashRestoreSessionPeriodTooLong IntValAlert `json:"mySQLStashRestoreSessionPeriodTooLong"`
-}
-
-type MySQLSchema struct {
-	Enabled bool             `json:"enabled"`
-	Rules   MySQLSchemaRules `json:"rules"`
-}
-
-type MySQLSchemaRules struct {
-	KubeDBMySQLSchemaPendingForTooLong     FixedAlert `json:"kubeDBMySQLSchemaPendingForTooLong"`
-	KubeDBMySQLSchemaInProgressForTooLong  FixedAlert `json:"kubeDBMySQLSchemaInProgressForTooLong"`
-	KubeDBMySQLSchemaTerminatingForTooLong FixedAlert `json:"kubeDBMySQLSchemaTerminatingForTooLong"`
-	KubeDBMySQLSchemaFailed                FixedAlert `json:"kubeDBMySQLSchemaFailed"`
-	KubeDBMySQLSchemaExpired               FixedAlert `json:"kubeDBMySQLSchemaExpired"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

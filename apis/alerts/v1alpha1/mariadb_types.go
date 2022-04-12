@@ -18,6 +18,7 @@ package v1alpha1
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	api "kubepack.dev/lib-app/api/v1alpha1"
 )
 
 const (
@@ -40,31 +41,37 @@ type Mariadb struct {
 
 // MariadbSpec is the schema for kubedb-autoscaler chart values file
 type MariadbSpec struct {
-	Namespace string       `json:"namespace"`
-	DbName    string       `json:"dbName"`
-	Alert     MariaDBAlert `json:"alert"`
+	api.Metadata `json:"metadata,omitempty"`
+	Spec         MariadbSpecSpec `json:"spec"`
+}
+
+type MariadbSpecSpec struct {
+	Alert MariaDBAlert `json:"alert"`
 }
 
 type MariaDBAlert struct {
-	RuleSelector AlertRuleSelector  `json:"ruleSelector"`
-	Groups       MariaDBAlertGroups `json:"groups"`
+	Enabled              bool               `json:"enabled"`
+	Labels               map[string]string  `json:"labels"`
+	Annotations          map[string]string  `json:"annotations"`
+	AdditionalRuleLabels map[string]string  `json:"additionalRuleLabels"`
+	Groups               MariaDBAlertGroups `json:"groups"`
 }
 
 type MariaDBAlertGroups struct {
-	Database   MariaDBDatabase   `json:"database"`
-	Cluster    MariaDBCluster    `json:"cluster"`
-	Kubedb     MariaDBKubedb     `json:"kubedb"`
-	Opsrequest MariaDBOpsrequest `json:"opsrequest"`
-	Stash      MariaDBStash      `json:"stash"`
-	Schema     MariaDBSchema     `json:"schema"`
+	Database      MariaDBDatabaseAlert `json:"database"`
+	Cluster       MariaDBClusterAlert  `json:"cluster"`
+	Provisioner   ProvisionerAlert     `json:"provisioner"`
+	OpsManager    OpsManagerAlert      `json:"opsManager"`
+	Stash         StashAlert           `json:"stash"`
+	SchemaManager SchemaManagerAlert   `json:"schemaManager"`
 }
 
-type MariaDBDatabase struct {
-	Enabled bool                 `json:"enabled"`
-	Rules   MariaDBDatabaseRules `json:"rules"`
+type MariaDBDatabaseAlert struct {
+	Enabled bool                      `json:"enabled"`
+	Rules   MariaDBDatabaseAlertRules `json:"rules"`
 }
 
-type MariaDBDatabaseRules struct {
+type MariaDBDatabaseAlertRules struct {
 	MySQLInstanceDown       FixedAlert  `json:"mySQLInstanceDown"`
 	MySQLServiceDown        FixedAlert  `json:"mySQLServiceDown"`
 	MySQLTooManyConnections IntValAlert `json:"mySQLTooManyConnections"`
@@ -78,60 +85,13 @@ type MariaDBDatabaseRules struct {
 	MySQLTooManyOpenFiles   IntValAlert `json:"mySQLTooManyOpenFiles"`
 }
 
-type MariaDBCluster struct {
-	Enabled bool                `json:"enabled"`
-	Rules   MariaDBClusterRules `json:"rules"`
+type MariaDBClusterAlert struct {
+	Enabled bool                     `json:"enabled"`
+	Rules   MariaDBClusterAlertRules `json:"rules"`
 }
 
-type MariaDBClusterRules struct {
+type MariaDBClusterAlertRules struct {
 	GaleraReplicationLatencyTooLong FloatValAlertConfig `json:"galeraReplicationLatencyTooLong"`
-}
-
-type MariaDBKubedb struct {
-	Enabled bool               `json:"enabled"`
-	Rules   MariaDBKubedbRules `json:"rules"`
-}
-
-type MariaDBKubedbRules struct {
-	KubeDBMariaDBPhaseNotReady FixedAlert `json:"kubeDBMariaDBPhaseNotReady"`
-	KubeDBMariaDBPhaseCritical FixedAlert `json:"kubeDBMariaDBPhaseCritical"`
-}
-
-type MariaDBOpsrequest struct {
-	Enabled bool                   `json:"enabled"`
-	Rules   MariaDBOpsrequestRules `json:"rules"`
-}
-
-type MariaDBOpsrequestRules struct {
-	KubeDBMariaDBOpsRequestOnProgress              FixedAlert `json:"kubeDBMariaDBOpsRequestOnProgress"`
-	KubeDBMariaDBOpsRequestStatusProgressingToLong FixedAlert `json:"kubeDBMariaDBOpsRequestStatusProgressingToLong"`
-	KubeDBMariaDBOpsRequestFailed                  FixedAlert `json:"kubeDBMariaDBOpsRequestFailed"`
-}
-
-type MariaDBStash struct {
-	Enabled bool              `json:"enabled"`
-	Rules   MariaDBStashRules `json:"rules"`
-}
-
-type MariaDBStashRules struct {
-	MariaDBStashBackupSessionFailed         FixedAlert  `json:"mariaDBStashBackupSessionFailed"`
-	MariaDBStashRestoreSessionFailed        FixedAlert  `json:"mariaDBStashRestoreSessionFailed"`
-	MariaDBStashNoBackupSessionForTooLong   IntValAlert `json:"mariaDBStashNoBackupSessionForTooLong"`
-	MariaDBStashRepositoryCorrupted         FixedAlert  `json:"mariaDBStashRepositoryCorrupted"`
-	MariaDBStashRepositoryStorageRunningLow IntValAlert `json:"mariaDBStashRepositoryStorageRunningLow"`
-}
-
-type MariaDBSchema struct {
-	Enabled bool               `json:"enabled"`
-	Rules   MariaDBSchemaRules `json:"rules"`
-}
-
-type MariaDBSchemaRules struct {
-	KubeDBMariaDBSchemaPendingForTooLong     FixedAlert `json:"kubeDBMariaDBSchemaPendingForTooLong"`
-	KubeDBMariaDBSchemaInProgressForTooLong  FixedAlert `json:"kubeDBMariaDBSchemaInProgressForTooLong"`
-	KubeDBMariaDBSchemaTerminatingForTooLong FixedAlert `json:"kubeDBMariaDBSchemaTerminatingForTooLong"`
-	KubeDBMariaDBSchemaFailed                FixedAlert `json:"kubeDBMariaDBSchemaFailed"`
-	KubeDBMariaDBSchemaExpired               FixedAlert `json:"kubeDBMariaDBSchemaExpired"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

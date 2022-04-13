@@ -1,211 +1,260 @@
 properties:
-  alert:
+  metadata:
     properties:
-      ruleSelector:
+      release:
         properties:
-          app:
+          name:
             type: string
-          release:
+          namespace:
             type: string
         required:
-        - app
-        - release
+        - name
+        - namespace
         type: object
-      rules:
+      resource:
+        description: ResourceID identifies a resource
         properties:
-          mongoDBDown:
-            properties:
-              duration:
-                type: string
-              enabled:
-                type: boolean
-              severity:
-                type: string
-            required:
-            - duration
-            - enabled
-            - severity
-            type: object
-          mongoDBPhaseCritical:
-            properties:
-              duration:
-                type: string
-              enabled:
-                type: boolean
-              severity:
-                type: string
-            required:
-            - duration
-            - enabled
-            - severity
-            type: object
-          mongodbCursorsTimeouts:
-            properties:
-              duration:
-                type: string
-              enabled:
-                type: boolean
-              severity:
-                type: string
-              val:
-                type: integer
-            required:
-            - duration
-            - enabled
-            - severity
-            - val
-            type: object
-          mongodbHighLatency:
-            properties:
-              duration:
-                type: string
-              enabled:
-                type: boolean
-              severity:
-                type: string
-              val:
-                type: integer
-            required:
-            - duration
-            - enabled
-            - severity
-            - val
-            type: object
-          mongodbHighTicketUtilization:
-            properties:
-              duration:
-                type: string
-              enabled:
-                type: boolean
-              severity:
-                type: string
-              val:
-                type: integer
-            required:
-            - duration
-            - enabled
-            - severity
-            - val
-            type: object
-          mongodbNumberCursorsOpen:
-            properties:
-              duration:
-                type: string
-              enabled:
-                type: boolean
-              severity:
-                type: string
-              val:
-                type: integer
-            required:
-            - duration
-            - enabled
-            - severity
-            - val
-            type: object
-          mongodbRecurrentCursorTimeout:
-            properties:
-              duration:
-                type: string
-              enabled:
-                type: boolean
-              severity:
-                type: string
-              val:
-                type: integer
-            required:
-            - duration
-            - enabled
-            - severity
-            - val
-            type: object
-          mongodbRecurrentMemoryPageFaults:
-            properties:
-              duration:
-                type: string
-              enabled:
-                type: boolean
-              severity:
-                type: string
-              val:
-                type: integer
-            required:
-            - duration
-            - enabled
-            - severity
-            - val
-            type: object
-          mongodbReplicationLag:
-            properties:
-              duration:
-                type: string
-              enabled:
-                type: boolean
-              severity:
-                type: string
-              val:
-                type: integer
-            required:
-            - duration
-            - enabled
-            - severity
-            - val
-            type: object
-          mongodbTooManyConnections:
-            properties:
-              duration:
-                type: string
-              enabled:
-                type: boolean
-              severity:
-                type: string
-              val:
-                type: integer
-            required:
-            - duration
-            - enabled
-            - severity
-            - val
-            type: object
-          mongodbVirtualMemoryUsage:
-            properties:
-              duration:
-                type: string
-              enabled:
-                type: boolean
-              severity:
-                type: string
-              val:
-                type: integer
-            required:
-            - duration
-            - enabled
-            - severity
-            - val
-            type: object
+          group:
+            type: string
+          kind:
+            description: Kind is the serialized kind of the resource.  It is normally
+              CamelCase and singular.
+            type: string
+          name:
+            description: 'Name is the plural name of the resource to serve.  It must
+              match the name of the CustomResourceDefinition-registration too: plural.group
+              and it must be all lowercase.'
+            type: string
+          scope:
+            description: ResourceScope is an enum defining the different scopes available
+              to a custom resource
+            type: string
+          version:
+            type: string
         required:
-        - mongoDBDown
-        - mongoDBPhaseCritical
-        - mongodbCursorsTimeouts
-        - mongodbHighLatency
-        - mongodbHighTicketUtilization
-        - mongodbNumberCursorsOpen
-        - mongodbRecurrentCursorTimeout
-        - mongodbRecurrentMemoryPageFaults
-        - mongodbReplicationLag
-        - mongodbTooManyConnections
-        - mongodbVirtualMemoryUsage
+        - group
+        - kind
+        - name
+        - scope
+        - version
         type: object
     required:
-    - ruleSelector
-    - rules
+    - release
+    - resource
     type: object
-  dbName:
-    type: string
-  namespace:
-    type: string
+  spec:
+    properties:
+      alert:
+        properties:
+          additionalRuleLabels:
+            additionalProperties:
+              type: string
+            type: object
+          annotations:
+            additionalProperties:
+              type: string
+            type: object
+          enabled:
+            type: boolean
+          labels:
+            additionalProperties:
+              type: string
+            type: object
+          rules:
+            properties:
+              mongoDBDown:
+                properties:
+                  duration:
+                    type: string
+                  enabled:
+                    type: boolean
+                  severity:
+                    type: string
+                required:
+                - duration
+                - enabled
+                - severity
+                type: object
+              mongoDBPhaseCritical:
+                properties:
+                  duration:
+                    type: string
+                  enabled:
+                    type: boolean
+                  severity:
+                    type: string
+                required:
+                - duration
+                - enabled
+                - severity
+                type: object
+              mongodbCursorsTimeouts:
+                properties:
+                  duration:
+                    type: string
+                  enabled:
+                    type: boolean
+                  severity:
+                    type: string
+                  val:
+                    type: integer
+                required:
+                - duration
+                - enabled
+                - severity
+                - val
+                type: object
+              mongodbHighLatency:
+                properties:
+                  duration:
+                    type: string
+                  enabled:
+                    type: boolean
+                  severity:
+                    type: string
+                  val:
+                    type: integer
+                required:
+                - duration
+                - enabled
+                - severity
+                - val
+                type: object
+              mongodbHighTicketUtilization:
+                properties:
+                  duration:
+                    type: string
+                  enabled:
+                    type: boolean
+                  severity:
+                    type: string
+                  val:
+                    type: integer
+                required:
+                - duration
+                - enabled
+                - severity
+                - val
+                type: object
+              mongodbNumberCursorsOpen:
+                properties:
+                  duration:
+                    type: string
+                  enabled:
+                    type: boolean
+                  severity:
+                    type: string
+                  val:
+                    type: integer
+                required:
+                - duration
+                - enabled
+                - severity
+                - val
+                type: object
+              mongodbRecurrentCursorTimeout:
+                properties:
+                  duration:
+                    type: string
+                  enabled:
+                    type: boolean
+                  severity:
+                    type: string
+                  val:
+                    type: integer
+                required:
+                - duration
+                - enabled
+                - severity
+                - val
+                type: object
+              mongodbRecurrentMemoryPageFaults:
+                properties:
+                  duration:
+                    type: string
+                  enabled:
+                    type: boolean
+                  severity:
+                    type: string
+                  val:
+                    type: integer
+                required:
+                - duration
+                - enabled
+                - severity
+                - val
+                type: object
+              mongodbReplicationLag:
+                properties:
+                  duration:
+                    type: string
+                  enabled:
+                    type: boolean
+                  severity:
+                    type: string
+                  val:
+                    type: integer
+                required:
+                - duration
+                - enabled
+                - severity
+                - val
+                type: object
+              mongodbTooManyConnections:
+                properties:
+                  duration:
+                    type: string
+                  enabled:
+                    type: boolean
+                  severity:
+                    type: string
+                  val:
+                    type: integer
+                required:
+                - duration
+                - enabled
+                - severity
+                - val
+                type: object
+              mongodbVirtualMemoryUsage:
+                properties:
+                  duration:
+                    type: string
+                  enabled:
+                    type: boolean
+                  severity:
+                    type: string
+                  val:
+                    type: integer
+                required:
+                - duration
+                - enabled
+                - severity
+                - val
+                type: object
+            required:
+            - mongoDBDown
+            - mongoDBPhaseCritical
+            - mongodbCursorsTimeouts
+            - mongodbHighLatency
+            - mongodbHighTicketUtilization
+            - mongodbNumberCursorsOpen
+            - mongodbRecurrentCursorTimeout
+            - mongodbRecurrentMemoryPageFaults
+            - mongodbReplicationLag
+            - mongodbTooManyConnections
+            - mongodbVirtualMemoryUsage
+            type: object
+        required:
+        - additionalRuleLabels
+        - annotations
+        - enabled
+        - labels
+        - rules
+        type: object
+    required:
+    - alert
+    type: object
 required:
-- alert
-- dbName
-- namespace
+- spec
 type: object

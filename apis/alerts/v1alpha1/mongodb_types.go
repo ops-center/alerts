@@ -18,6 +18,7 @@ package v1alpha1
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	api "kubepack.dev/lib-app/api/v1alpha1"
 )
 
 const (
@@ -40,14 +41,20 @@ type Mongodb struct {
 
 // MongodbSpec is the schema for kubedb-autoscaler chart values file
 type MongodbSpec struct {
-	Namespace string       `json:"namespace"`
-	DbName    string       `json:"dbName"`
-	Alert     MongoDBAlert `json:"alert"`
+	api.Metadata `json:"metadata,omitempty"`
+	Spec         MongodbSpecSpec `json:"spec"`
+}
+
+type MongodbSpecSpec struct {
+	Alert MongoDBAlert `json:"alert"`
 }
 
 type MongoDBAlert struct {
-	RuleSelector AlertRuleSelector `json:"ruleSelector"`
-	Rules        MongoDBAlertRules `json:"rules"`
+	Enabled              bool              `json:"enabled"`
+	Labels               map[string]string `json:"labels"`
+	Annotations          map[string]string `json:"annotations"`
+	AdditionalRuleLabels map[string]string `json:"additionalRuleLabels"`
+	Rules                MongoDBAlertRules `json:"rules"`
 }
 
 type MongoDBAlertRules struct {

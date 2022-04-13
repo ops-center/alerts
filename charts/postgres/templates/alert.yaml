@@ -1,21 +1,28 @@
+{{ $app := (include "postgres.fullname" .) }}
+
+{{ if .Values.spec.alert.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: kubedb-postgres-{{- .Values.namespace -}}-{{- .Values.dbName }}
-  namespace: {{ .Values.namespace }}
+  name: {{ $app }}
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "postgres.labels" . | nindent 4 }}
-    {{- range $key, $val := .Values.alert.ruleSelector }}
-    {{ $key }}: {{ $val }}
-    {{- end }}
+{{- if .Values.spec.alert.labels }}
+    {{- toYaml .Values.spec.alert.labels | nindent 4 }}
+{{- end }}
+{{- if .Values.spec.alert.annotations }}
+  annotations:
+    {{- toYaml .Values.spec.alert.annotations | nindent 4 }}
+{{- end }}
 spec:
   groups:
   {{ if .Values.alert.groups.database.enabled -}}
-    - name: postgres-database-{{- .Values.namespace -}}-{{- .Values.dbName }}
+    - name: postgres.database.{{ .Release.Namespace }}.{{ $app }}.rules
       rules:
       {{ if .Values.alert.groups.database.rules.postgresInstanceDown -}}
         - alert: PostgresqlDown
-          expr: pg_up{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}" == 0
+          expr: pg_up{job="{{- .Values.dbName -}}-stats",namespace="{{ .Release.Namespace }}" == 0
           for: {{ .Values.alert.groups.database.rules.postgresInstanceDown.duration }}
           labels:
             severity: {{ .Values.alert.groups.database.rules.postgresInstanceDown.severity }}
@@ -27,7 +34,7 @@ spec:
       {{end -}}
       {{ if .Values.alert.groups.database.rules.postgresTooManyConnections.enabled -}}
       - alert: PostgresTooManyConnections
-        expr: sum by (datname) (pg_stat_activity_count{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"}) > (pg_settings_max_connections{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"} * {{.Values.alert.groups.database.rules.postgresTooManyConnections.val}})
+        expr: sum by (datname) (pg_stat_activity_count{job="{{- .Values.dbName -}}-stats",namespace="{{ .Release.Namespace }}"}) > (pg_settings_max_connections{job="{{- .Values.dbName -}}-stats",namespace="{{ .Release.Namespace }}"} * {{.Values.alert.groups.database.rules.postgresTooManyConnections.val}})
         for: {{ .Values.alert.groups.database.rules.postgresTooManyConnections.duration }}
         labels:
           severity: {{ .Values.alert.groups.database.rules.postgresTooManyConnections.severity }}
@@ -39,7 +46,7 @@ spec:
       {{ end -}}
       {{ if .Values.alert.groups.database.rules.postgresSlowQueries.enabled -}}
       - alert: PostgresqlSlowQueries
-        expr: pg_slow_queries{job="{{- .Values.dbName -}}-stats",namespace="{{- .Values.namespace -}}"} > 0
+        expr: pg_slow_queries{job="{{- .Values.dbName -}}-stats",namespace="{{ .Release.Namespace }}"} > 0
         for: {{ .Values.alert.groups.database.rules.postgresSlowQueries.duration }}
         labels:
           severity: {{ .Values.alert.groups.database.rules.postgresSlowQueries.severity }}
@@ -50,199 +57,207 @@ spec:
           description: "PostgreSQL executes slow queries\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
       {{ end -}}
   {{end -}}
-  {{ if .Values.alert.groups.kubedb.enabled -}}
-    - name: postgres-kubedb-{{- .Values.namespace -}}-{{- .Values.dbName }}
-      rules:
-    {{ if .Values.alert.groups.kubedb.rules.kubeDBPostgresPhaseNotReady.enabled -}}
-        - alert: KubeDBPostgresPhaseNotReady
-          expr: kubedb_postgres_status_phase{phase="NotReady",postgres="{{- .Values.dbName -}}",namespace="{{- .Values.namespace -}}"} == 1
-          for: {{ .Values.alert.groups.kubedb.rules.kubeDBPostgresPhaseNotReady.duration }}
-          labels:
-            severity: {{ .Values.alert.groups.kubedb.rules.kubeDBPostgresPhaseNotReady.severity }}
-            app: postgres
-            alertname: kubedb_postgres_phase_not_ready
-          annotations:
-            summary: KubeDB Postgres Phase NotReady (postgres {{`{{`}} $labels.postgres {{`}}`}})
-            description: "KubeDB Postgres Phase not ready on {{`{{`}} $labels.postgres {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+  {{ if .Values.spec.alert.groups.provisioner.enabled -}}
+  - name: postgres.provisioner.{{ .Release.Namespace }}.{{ $app }}.rules
+    rules:
+    {{ if .Values.spec.alert.groups.provisioner.rules.appPhaseNotReady.enabled -}}
+    - alert: KubeDBPostgreSQLPhaseNotReady
+      expr: kubedb_postgres_status_phase{phase="NotReady",postgres="{{ $app }}",namespace="{{ .Release.Namespace }}"} == 1
+      for: {{ .Values.spec.alert.groups.provisioner.rules.appPhaseNotReady.duration }}
+      labels:
+        severity: {{ .Values.spec.alert.groups.provisioner.rules.appPhaseNotReady.severity }}
+        {{- include "postgres.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: KubeDB PostgreSQL Phase NotReady (postgres {{`{{`}} $labels.postgres {{`}}`}})
+        description: "KubeDB PostgreSQL Phase not ready on {{`{{`}} $labels.postgres {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
-    {{ if .Values.alert.groups.kubedb.rules.kubeDBPostgresPhaseCritical.enabled -}}
-        - alert: KubeDBPostgresPhaseCritical
-          expr: kubedb_postgres_status_phase{phase="Critical",postgres="{{- .Values.dbName -}}",namespace="{{- .Values.namespace -}}"} == 1
-          for: {{ .Values.alert.groups.kubedb.rules.kubeDBPostgresPhaseCritical.duration }}
-          labels:
-            severity: {{ .Values.alert.groups.kubedb.rules.kubeDBPostgresPhaseCritical.severity }}
-            app: postgres
-            alertname: kubedb_postgres_phase_critical
-          annotations:
-            summary: KubeDB Postgres Phase Critical (postgres {{`{{`}} $labels.postgres {{`}}`}})
-            description: "KubeDB Postgres Phase Critical {{`{{`}} $labels.postgres {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ if .Values.spec.alert.groups.provisioner.rules.appPhaseCritical.enabled -}}
+    - alert: KubeDBPostgreSQLPhaseCritical
+      expr: kubedb_postgres_status_phase{phase="Critical",postgres="{{ $app }}",namespace="{{ .Release.Namespace }}"} == 1
+      for: {{ .Values.spec.alert.groups.provisioner.rules.appPhaseCritical.duration }}
+      labels:
+        severity: {{ .Values.spec.alert.groups.provisioner.rules.appPhaseCritical.severity }}
+        {{- include "postgres.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: KubeDB PostgreSQL Phase Critical (postgres {{`{{`}} $labels.postgres {{`}}`}})
+        description: "KubeDB PostgreSQL Phase Critical {{`{{`}} $labels.postgres {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
   {{ end -}}
-  {{ if .Values.alert.groups.opsrequest.enabled -}}
-    - name: postgres-opsrequest-{{- .Values.namespace -}}-{{- .Values.dbName }}
-      rules:
-    {{ if .Values.alert.groups.opsrequest.rules.kubeDBPostgresOpsRequestOnProgress.enabled -}}
-        - alert: KubeDBPostgresOpsRequestOnProgress
-          expr: kubedb_postgres_opsrequest_status_phase{phase="Progressing",databaseRef="{{- .Values.dbName -}}",namespace="{{- .Values.namespace -}}"} == 1
-          for: {{ .Values.alert.groups.opsrequest.rules.kubeDBPostgresOpsRequestOnProgress.duration }}
-          labels:
-            severity: {{ .Values.alert.groups.opsrequest.rules.kubeDBPostgresOpsRequestOnProgress.severity }}
-            app: postgres
-            alertname: kubedb_postgres_opsrequest_on_progress
-          annotations:
-            summary: PostgresOpsRequest on progress (postgresopsrequest {{`{{`}} $labels.postgresopsrequest {{`}}`}})
-            description: "PostgresOpsRequest {{`{{`}} $labels.postgresopsrequest {{`}}`}} is in progressressing status\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+  {{ if .Values.spec.alert.groups.opsManager.enabled -}}
+  - name: postgres.opsManager.{{ .Release.Namespace }}.{{ $app }}.rules
+    rules:
+    {{ if .Values.spec.alert.groups.opsManager.rules.opsRequestOnProgress.enabled -}}
+    - alert: KubeDBPostgreSQLOpsRequestOnProgress
+      expr: kubedb_postgres_opsrequest_status_phase{phase="Progressing",database_ref="{{ $app }}",namespace="{{ .Release.Namespace }}"} == 1
+      for: {{ .Values.spec.alert.groups.opsManager.rules.opsRequestOnProgress.duration }}
+      labels:
+        severity: {{ .Values.spec.alert.groups.opsManager.rules.opsRequestOnProgress.severity }}
+        {{- include "postgres.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: PostgreSQLOpsRequest on progress (postgresopsrequest {{`{{`}} $labels.postgresopsrequest {{`}}`}})
+        description: "MaraiDBOpsRequest {{`{{`}} $labels.postgresopsrequest {{`}}`}} is in progressressing status\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
-    {{ if .Values.alert.groups.opsrequest.rules.kubeDBPostgresOpsRequestStatusProgressingToLong.enabled -}}
-        - alert: KubeDBPostgresOpsRequestStatusProgressingToLong
-          expr: kubedb_postgres_opsrequest_status_phase{phase="Progressing",databaseRef="{{- .Values.dbName -}}",namespace="{{- .Values.namespace -}}"} == 1
-          for: {{ .Values.alert.groups.opsrequest.rules.kubeDBPostgresOpsRequestStatusProgressingToLong.duration }}
-          labels:
-            severity: {{ .Values.alert.groups.opsrequest.rules.kubeDBPostgresOpsRequestStatusProgressingToLong.severity }}
-            app: postgres
-            alertname: kubedb_postgres_opsrequest_status_progressing_too_long
-          annotations:
-            summary: PostgresOpsRequest is in progressing status for too long (postgresopsrequest {{`{{`}} $labels.postgresopsrequest {{`}}`}})
-            description: "PostgresOpsRequest {{`{{`}} $labels.postgresopsrequest {{`}}`}} is in progressing status for too long\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ if .Values.spec.alert.groups.opsManager.rules.opsRequestStatusProgressingToLong.enabled -}}
+    - alert: KubeDBPostgreSQLOpsRequestStatusProgressingToLong
+      expr: kubedb_postgres_opsrequest_status_phase{phase="Progressing",database_ref="{{ $app }}",namespace="{{ .Release.Namespace }}"} == 1
+      for: {{ .Values.spec.alert.groups.opsManager.rules.opsRequestStatusProgressingToLong.duration }}
+      labels:
+        severity: {{ .Values.spec.alert.groups.opsManager.rules.opsRequestStatusProgressingToLong.severity }}
+        {{- include "postgres.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: PostgreSQLOpsRequest is in progressing status for too long (postgresopsrequest {{`{{`}} $labels.postgresopsrequest {{`}}`}})
+        description: "MaraiDBOpsRequest {{`{{`}} $labels.postgresopsrequest {{`}}`}} is in progressing status for too long\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
-    {{ if .Values.alert.groups.opsrequest.rules.kubeDBPostgresOpsRequestFailed.enabled -}}
-        - alert: KubeDBPostgresOpsRequestFailed
-          expr: kubedb_postgres_opsrequest_status_phase{phase="Failed",databaseRef="{{- .Values.dbName -}}",namespace="{{- .Values.namespace -}}"} == 1
-          for: {{ .Values.alert.groups.opsrequest.rules.kubeDBPostgresOpsRequestFailed.duration }}
-          labels:
-            severity: {{ .Values.alert.groups.opsrequest.rules.kubeDBPostgresOpsRequestFailed.severity }}
-            app: postgres
-            alertname: kubedb_postgres_opsrequest_failed
-          annotations:
-            summary: PostgresOpsRequest failed (postgresopsrequest {{`{{`}} $labels.postgresopsrequest {{`}}`}})
-            description: "PostgresOpsRequest {{`{{`}} $labels.postgresopsrequest {{`}}`}} failed \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ if .Values.spec.alert.groups.opsManager.rules.opsRequestFailed.enabled -}}
+    - alert: KubeDBPostgreSQLOpsRequestFailed
+      expr: kubedb_postgres_opsrequest_status_phase{phase="Failed",database_ref="{{ $app }}",namespace="{{ .Release.Namespace }}"} == 1
+      for: {{ .Values.spec.alert.groups.opsManager.rules.opsRequestFailed.duration }}
+      labels:
+        severity: {{ .Values.spec.alert.groups.opsManager.rules.opsRequestFailed.severity }}
+        {{- include "postgres.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: PostgreSQLOpsRequest failed (postgresopsrequest {{`{{`}} $labels.postgresopsrequest {{`}}`}})
+        description: "MaraiDBOpsRequest {{`{{`}} $labels.postgresopsrequest {{`}}`}} failed \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
   {{ end -}}
-  {{ if .Values.alert.groups.stash.enabled -}}
-    - name: postgres-stash-{{- .Values.namespace -}}-{{- .Values.dbName }}
-      rules:
-    {{ if .Values.alert.groups.stash.rules.postgresStashBackupSessionFailed.enabled -}}
-        - alert: PostgresStashBackupSessionFailed
-          expr: stash_backup_session_success * on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_backupconfiguration_info{target_name="{{- .Values.dbName -}}", target_kind="AppBinding", namespace="{{- .Values.namespace -}}"} == 0
-          for: {{ .Values.alert.groups.stash.rules.postgresStashBackupSessionFailed.duration }}
-          labels:
-            severity: {{ .Values.alert.groups.stash.rules.postgresStashBackupSessionFailed.severity }}
-            app: postgres
-            alertname: postgres_stash_backup_session_failed
-          annotations:
-            summary: Postgres Stash backup session failed (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
-            description: "Postgres Stash backupsession failed {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+  {{ if .Values.spec.alert.groups.stash.enabled -}}
+  - name: postgres.stash.{{ .Release.Namespace }}.{{ $app }}.rules
+    rules:
+    {{ if .Values.spec.alert.groups.stash.rules.backupSessionFailed.enabled -}}
+    - alert: PostgreSQLStashBackupSessionFailed
+      expr: stash_backup_session_success * on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} == 0
+      for: {{ .Values.spec.alert.groups.stash.rules.backupSessionFailed.duration }}
+      labels:
+        severity: {{ .Values.spec.alert.groups.stash.rules.backupSessionFailed.severity }}
+        {{- include "postgres.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: PostgreSQL Stash backup session failed (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "PostgreSQL Stash backupsession failed {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
-    {{ if .Values.alert.groups.stash.rules.postgresStashRestoreSessionFailed.enabled -}}
-        - alert: PostgresStashRestoreSessionFailed
-          expr: stash_restore_session_success * on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_restoresession_info{target_name="{{- .Values.dbName -}}", target_kind="AppBinding", namespace="{{- .Values.namespace -}}"} == 0
-          for: {{ .Values.alert.groups.stash.rules.postgresStashRestoreSessionFailed.duration }}
-          labels:
-            severity: {{ .Values.alert.groups.stash.rules.postgresStashRestoreSessionFailed.severity }}
-            app: postgres
-            alertname: postgres_stash_restore_session_failed
-          annotations:
-            summary: Postgres Stash restore session failed (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
-            description: "Postgres Stash restore session failed {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ if .Values.spec.alert.groups.stash.rules.restoreSessionFailed.enabled -}}
+    - alert: PostgreSQLStashRestoreSessionFailed
+      expr: stash_restore_session_success * on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_restoresession_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} == 0
+      for: {{ .Values.spec.alert.groups.stash.rules.restoreSessionFailed.duration }}
+      labels:
+        severity: {{ .Values.spec.alert.groups.stash.rules.restoreSessionFailed.severity }}
+        {{- include "postgres.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: PostgreSQL Stash restore session failed (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "PostgreSQL Stash restore session failed {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
-    {{ if .Values.alert.groups.stash.rules.postgresStashNoBackupSessionForTooLong.enabled -}}
-        - alert: PostgresStashNoBackupSessionForTooLong
-          expr: time() - stash_backup_last_success_time_seconds + on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_backupconfiguration_info{target_name="{{- .Values.dbName -}}", target_kind="AppBinding", namespace="{{- .Values.namespace -}}"} - 1 > {{ .Values.alert.groups.stash.rules.postgresStashNoBackupSessionForTooLong.val }}
-          for: {{ .Values.alert.groups.stash.rules.postgresStashNoBackupSessionForTooLong.duration }}
-          labels:
-            severity: {{ .Values.alert.groups.stash.rules.postgresStashNoBackupSessionForTooLong.severity }}
-            app: postgres
-            alertname: postgres_stash_backup_session_failed
-          annotations:
-            summary: Postgres Stash no backup for last {{ .Values.alert.groups.stash.rules.postgresStashNoBackupSessionForTooLong.val }} second (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
-            description: "Postgres Stash no backup for too long {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ if .Values.spec.alert.groups.stash.rules.noBackupSessionForTooLong.enabled -}}
+    - alert: PostgreSQLStashNoBackupSessionForTooLong
+      expr: time() - stash_backup_last_success_time_seconds + on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} - 1 > {{ .Values.spec.alert.groups.stash.rules.noBackupSessionForTooLong.val }}
+      for: {{ .Values.spec.alert.groups.stash.rules.noBackupSessionForTooLong.duration }}
+      labels:
+        severity: {{ .Values.spec.alert.groups.stash.rules.noBackupSessionForTooLong.severity }}
+        {{- include "postgres.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: PostgreSQL Stash no backup for last {{ .Values.spec.alert.groups.stash.rules.noBackupSessionForTooLong.val }} second (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "PostgreSQL Stash no backup for too long {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
-    {{ if .Values.alert.groups.stash.rules.postgresStashRepositoryCorrupted.enabled -}}
-        - alert: PostgresStashRepositoryCorrupted
-          expr: stash_repository_integrity * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_backupconfiguration_info{target_name="{{- .Values.dbName -}}", target_kind="AppBinding", namespace="{{- .Values.namespace -}}"}
-          for: {{ .Values.alert.groups.stash.rules.postgresStashRepositoryCorrupted.duration }}
-          labels:
-            severity: {{ .Values.alert.groups.stash.rules.postgresStashRepositoryCorrupted.severity }}
-            app: postgres
-            alertname: postgres_stash_repository_corrupted
-          annotations:
-            summary: Postgres Stash repository corrupted (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
-            description: "Postgres Stash repository corrupted {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ if .Values.spec.alert.groups.stash.rules.repositoryCorrupted.enabled -}}
+    - alert: PostgreSQLStashRepositoryCorrupted
+      expr: stash_repository_integrity * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"}
+      for: {{ .Values.spec.alert.groups.stash.rules.repositoryCorrupted.duration }}
+      labels:
+        severity: {{ .Values.spec.alert.groups.stash.rules.repositoryCorrupted.severity }}
+        {{- include "postgres.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: PostgreSQL Stash repository corrupted (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "PostgreSQL Stash repository corrupted {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
-    {{ if .Values.alert.groups.stash.rules.postgresStashRepositoryStorageRunningLow.enabled -}}
-        - alert: PostgresStashRepositoryStorageRunningLow
-          expr: stash_repository_size_bytes * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_backupconfiguration_info{target_name="{{- .Values.dbName -}}", target_kind="AppBinding", namespace="{{- .Values.namespace -}}"} > {{ .Values.alert.groups.stash.rules.postgresStashRepositoryStorageRunningLow.val }}
-          for: {{ .Values.alert.groups.stash.rules.postgresStashRepositoryStorageRunningLow.duration }}
-          labels:
-            severity: {{ .Values.alert.groups.stash.rules.postgresStashRepositoryStorageRunningLow.severity }}
-            app: postgres
-            alertname: postgres_stash_repository_storage_running_low
-          annotations:
-            summary: Postgres Stash Repository storage more than {{ .Values.alert.groups.stash.rules.postgresStashRepositoryStorageRunningLow.val }} byte. (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
-            description: "Postgres Stash Repository storage running low {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ if .Values.spec.alert.groups.stash.rules.repositoryStorageRunningLow.enabled -}}
+    - alert: PostgreSQLStashRepositoryStorageRunningLow
+      expr: stash_repository_size_bytes * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} > {{ .Values.spec.alert.groups.stash.rules.repositoryStorageRunningLow.val }}
+      for: {{ .Values.spec.alert.groups.stash.rules.repositoryStorageRunningLow.duration }}
+      labels:
+        severity: {{ .Values.spec.alert.groups.stash.rules.repositoryStorageRunningLow.severity }}
+        {{- include "postgres.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: PostgreSQL Stash Repository storage more than {{ .Values.spec.alert.groups.stash.rules.repositoryStorageRunningLow.val }} byte. (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "PostgreSQL Stash Repository storage running low {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if .Values.spec.alert.groups.stash.rules.backupSessionPeriodTooLong.enabled -}}
+    - alert: PostgreSQLStashBackupSessionPeriodTooLong
+      expr: stash_backup_session_duration_seconds * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} > {{ .Values.spec.alert.groups.stash.rules.backupSessionPeriodTooLong.val }}
+      for: {{ .Values.spec.alert.groups.stash.rules.backupSessionPeriodTooLong.duration }}
+      labels:
+        severity: {{ .Values.spec.alert.groups.stash.rules.backupSessionPeriodTooLong.severity }}
+        {{- include "postgres.alertLabels" . | nindent 8 }}
+      annotations:
+        summary:  PostgreSQL Stash backup session took more than {{ .Values.spec.alert.groups.stash.rules.backupSessionPeriodTooLong.val }} second to complete. (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "PostgreSQL Stash backup session taking to long to complete {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.spec.alert.groups.stash.rules.restoreSessionPeriodTooLong.enabled -}}
+    - alert: PostgreSQLStashRestoreSessionPeriodTooLong
+      expr: stash_restore_session_duration_seconds * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_restoresession_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} > {{ .Values.spec.alert.groups.stash.rules.restoreSessionPeriodTooLong.val }}
+      for: {{ .Values.spec.alert.groups.stash.rules.restoreSessionPeriodTooLong.duration }}
+      labels:
+        severity: {{ .Values.spec.alert.groups.stash.rules.restoreSessionPeriodTooLong.severity }}
+        {{- include "postgres.alertLabels" . | nindent 8 }}
+      annotations:
+        summary:  PostgreSQL Stash restore session took more than {{ .Values.spec.alert.groups.stash.rules.restoreSessionPeriodTooLong.val }} second to complete. (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "PostgreSQL Stash restore session taking to long to complete {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
   {{ end -}}
-  {{ if .Values.alert.groups.schema.enabled -}}
-    - name: postgres-schema-{{- .Values.namespace -}}-{{- .Values.dbName }}
-      rules:
-    {{ if .Values.alert.groups.schema.rules.kubeDBPostgresSchemaPendingForTooLong.enabled -}}
-        - alert: KubeDBPostgresSchemaPendingForTooLong
-          expr: kubedb_postgres_schema_status_phase{phase="Pending",serverRefName="{{- .Values.dbName -}}",serverRefNamespace="{{- .Values.namespace -}}"} == 1
-          for: {{ .Values.alert.groups.schema.rules.kubeDBPostgresSchemaPendingForTooLong.duration }}
-          labels:
-            severity: {{ .Values.alert.groups.schema.rules.kubeDBPostgresSchemaPendingForTooLong.severity }}
-            app: postgres
-            alertname: kubedb_postgres_schema_pending_for_too_long
-          annotations:
-            summary: KubeDB schema pending for too long for (postgresdatabase {{`{{`}} $labels.postgresdatabase {{`}}`}})
-            description: "KubeDB schema pending for too long.\n {{`{{`}} $labels.postgresdatabase {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+  {{ if .Values.spec.alert.groups.schemaManager.enabled -}}
+  - name: postgres.schemaManager.{{ .Release.Namespace }}.{{ $app }}.rules
+    rules:
+    {{ if .Values.spec.alert.groups.schemaManager.rules.schemaPendingForTooLong.enabled -}}
+    - alert: KubeDBPostgreSQLSchemaPendingForTooLong
+      expr: kubedb_postgres_schema_status_phase{phase="Pending",serverRefName="{{ $app }}",serverRefNamespace="{{ .Release.Namespace }}"} == 1
+      for: {{ .Values.spec.alert.groups.schemaManager.rules.schemaPendingForTooLong.duration }}
+      labels:
+        severity: {{ .Values.spec.alert.groups.schemaManager.rules.schemaPendingForTooLong.severity }}
+        {{- include "postgres.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: KubeDB schema pending for too long for (postgresdatabase {{`{{`}} $labels.postgresdatabase {{`}}`}})
+        description: "KubeDB schema pending for too long.\n {{`{{`}} $labels.postgresdatabase {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
-    {{ if .Values.alert.groups.schema.rules.kubeDBPostgresSchemaInProgressForTooLong.enabled -}}
-        - alert: KubeDBPostgresSchemaInProgressForTooLong
-          expr: kubedb_postgres_schema_status_phase{phase="InProgress",serverRefName="{{- .Values.dbName -}}",serverRefNamespace="{{- .Values.namespace -}}"} == 1
-          for: {{ .Values.alert.groups.schema.rules.kubeDBPostgresSchemaInProgressForTooLong.duration }}
-          labels:
-            severity: {{ .Values.alert.groups.schema.rules.kubeDBPostgresSchemaInProgressForTooLong.severity }}
-            app: postgres
-            alertname: kubedb_postgres_schema_inprogress_for_too_long
-          annotations:
-            summary: KubeDB schema is in progress for too long for (postgresdatabase {{`{{`}} $labels.postgresdatabase {{`}}`}})
-            description: "KubeDB schema is in progress for too long.\n {{`{{`}} $labels.postgresdatabase {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ if .Values.spec.alert.groups.schemaManager.rules.schemaInProgressForTooLong.enabled -}}
+    - alert: KubeDBPostgreSQLSchemaInProgressForTooLong
+      expr: kubedb_postgres_schema_status_phase{phase="InProgress",serverRefName="{{ $app }}",serverRefNamespace="{{ .Release.Namespace }}"} == 1
+      for: {{ .Values.spec.alert.groups.schemaManager.rules.schemaInProgressForTooLong.duration }}
+      labels:
+        severity: {{ .Values.spec.alert.groups.schemaManager.rules.schemaInProgressForTooLong.severity }}
+        {{- include "postgres.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: KubeDB schema is in progress for too long for (postgresdatabase {{`{{`}} $labels.postgresdatabase {{`}}`}})
+        description: "KubeDB schema is in progress for too long.\n {{`{{`}} $labels.postgresdatabase {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
-    {{ if .Values.alert.groups.schema.rules.kubeDBPostgresSchemaTerminatingForTooLong.enabled -}}
-        - alert: KubeDBPostgresSchemaTerminatingForTooLong
-          expr: kubedb_postgres_schema_status_phase{phase="Terminating",serverRefName="{{- .Values.dbName -}}",serverRefNamespace="{{- .Values.namespace -}}"} == 1
-          for: {{ .Values.alert.groups.schema.rules.kubeDBPostgresSchemaTerminatingForTooLong.duration }}
-          labels:
-            severity: {{ .Values.alert.groups.schema.rules.kubeDBPostgresSchemaTerminatingForTooLong.severity }}
-            app: postgres
-            alertname: kubedb_postgres_schema_terminating_for_too_long
-          annotations:
-            summary: KubeDB schema terminating for too long for (postgresdatabase {{`{{`}} $labels.postgresdatabase {{`}}`}})
-            description: "KubeDB schema terminating for too long.\n {{`{{`}} $labels.postgresdatabase {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ if .Values.spec.alert.groups.schemaManager.rules.schemaTerminatingForTooLong.enabled -}}
+    - alert: KubeDBPostgreSQLSchemaTerminatingForTooLong
+      expr: kubedb_postgres_schema_status_phase{phase="Terminating",serverRefName="{{ $app }}",serverRefNamespace="{{ .Release.Namespace }}"} == 1
+      for: {{ .Values.spec.alert.groups.schemaManager.rules.schemaTerminatingForTooLong.duration }}
+      labels:
+        severity: {{ .Values.spec.alert.groups.schemaManager.rules.schemaTerminatingForTooLong.severity }}
+        {{- include "postgres.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: KubeDB schema terminating for too long for (postgresdatabase {{`{{`}} $labels.postgresdatabase {{`}}`}})
+        description: "KubeDB schema terminating for too long.\n {{`{{`}} $labels.postgresdatabase {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
-    {{ if .Values.alert.groups.schema.rules.kubeDBPostgresSchemaFailed.enabled -}}
-        - alert: KubeDBPostgresSchemaFailed
-          expr: kubedb_postgres_schema_status_phase{phase="Failed",serverRefName="{{- .Values.dbName -}}",serverRefNamespace="{{- .Values.namespace -}}"} == 1
-          for: {{ .Values.alert.groups.schema.rules.kubeDBPostgresSchemaFailed.duration }}
-          labels:
-            severity: {{ .Values.alert.groups.schema.rules.kubeDBPostgresSchemaFailed.severity }}
-            app: postgres
-            alertname: kubedb_postgres_schema_failed
-          annotations:
-            summary: KubeDB schema failed for (postgresdatabase {{`{{`}} $labels.postgresdatabase {{`}}`}})
-            description: "KubeDB schema failed.\n {{`{{`}} $labels.postgresdatabase {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ if .Values.spec.alert.groups.schemaManager.rules.schemaFailed.enabled -}}
+    - alert: KubeDBPostgreSQLSchemaFailed
+      expr: kubedb_postgres_schema_status_phase{phase="Failed",serverRefName="{{ $app }}",serverRefNamespace="{{ .Release.Namespace }}"} == 1
+      for: {{ .Values.spec.alert.groups.schemaManager.rules.schemaFailed.duration }}
+      labels:
+        severity: {{ .Values.spec.alert.groups.schemaManager.rules.schemaFailed.severity }}
+        {{- include "postgres.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: KubeDB schema failed for (postgresdatabase {{`{{`}} $labels.postgresdatabase {{`}}`}})
+        description: "KubeDB schema failed.\n {{`{{`}} $labels.postgresdatabase {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
-    {{ if .Values.alert.groups.schema.rules.kubeDBPostgresSchemaExpired.enabled -}}
-        - alert: KubeDBPostgresSchemaExpired
-          expr: kubedb_postgres_schema_status_phase{phase="Expired",serverRefName="{{- .Values.dbName -}}",serverRefNamespace="{{- .Values.namespace -}}"} == 1
-          for: {{ .Values.alert.groups.schema.rules.kubeDBPostgresSchemaExpired.duration }}
-          labels:
-            severity: {{ .Values.alert.groups.schema.rules.kubeDBPostgresSchemaExpired.severity }}
-            app: postgres
-            alertname: kubedb_postgres_schema_expired
-          annotations:
-            summary: KubeDB schema expired for (postgresdatabase {{`{{`}} $labels.postgresdatabase {{`}}`}})
-            description: "KubeDB schema expired.\n {{`{{`}} $labels.postgresdatabase {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ if .Values.spec.alert.groups.schemaManager.rules.schemaExpired.enabled -}}
+    - alert: KubeDBPostgreSQLSchemaExpired
+      expr: kubedb_postgres_schema_status_phase{phase="Expired",serverRefName="{{ $app }}",serverRefNamespace="{{ .Release.Namespace }}"} == 1
+      for: {{ .Values.spec.alert.groups.schemaManager.rules.schemaExpired.duration }}
+      labels:
+        severity: {{ .Values.spec.alert.groups.schemaManager.rules.schemaExpired.severity }}
+        {{- include "postgres.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: KubeDB schema expired for (postgresdatabase {{`{{`}} $labels.postgresdatabase {{`}}`}})
+        description: "KubeDB schema expired.\n {{`{{`}} $labels.postgresdatabase {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
   {{ end -}}
+{{ end }}

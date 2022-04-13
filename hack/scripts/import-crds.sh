@@ -31,3 +31,7 @@ crd-importer \
 crd-importer \
     --input=https://github.com/prometheus-operator/prometheus-operator/raw/v0.55.1/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml \
     --out=./charts/mysql/crds
+
+crd-importer \
+    --input=https://github.com/prometheus-operator/prometheus-operator/raw/v0.55.1/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml \
+    --out=./charts/postgres/crds

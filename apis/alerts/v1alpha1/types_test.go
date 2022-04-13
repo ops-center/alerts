@@ -31,6 +31,7 @@ func TestDefaultValues(t *testing.T) {
 		v1alpha1.MariadbSpec{},
 		v1alpha1.MongodbSpec{},
 		v1alpha1.MysqlSpec{},
+		v1alpha1.PostgresSpec{},
 	)
 	checker.TestAll(t)
 }

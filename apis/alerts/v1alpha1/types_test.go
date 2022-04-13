@@ -27,6 +27,7 @@ import (
 
 func TestDefaultValues(t *testing.T) {
 	checker := schemachecker.New(os.DirFS("../../.."),
+		v1alpha1.ElasticsearchSpec{},
 		v1alpha1.MariadbSpec{},
 		v1alpha1.MongodbSpec{},
 		v1alpha1.MysqlSpec{},

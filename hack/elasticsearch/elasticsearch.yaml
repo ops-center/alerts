@@ -1,0 +1,45 @@
+apiVersion: kubedb.com/v1alpha2
+kind: Elasticsearch
+metadata:
+  name: es-cluster
+  namespace: demo
+spec:
+  monitor:
+    agent: prometheus.io/operator
+    prometheus:
+      serviceMonitor:
+        labels:
+          release: kube-prometheus-stack
+  enableSSL: true
+  topology:
+    data:
+      replicas: 2
+      storage:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: standard
+      suffix: data
+    ingest:
+      replicas: 1
+      storage:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: standard
+      suffix: ingest
+    master:
+      replicas: 1
+      storage:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: standard
+      suffix: master
+  version: xpack-7.14.0

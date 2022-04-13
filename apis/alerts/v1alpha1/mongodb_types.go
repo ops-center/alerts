@@ -50,14 +50,27 @@ type MongodbSpecSpec struct {
 }
 
 type MongoDBAlert struct {
-	Enabled              bool              `json:"enabled"`
-	Labels               map[string]string `json:"labels"`
-	Annotations          map[string]string `json:"annotations"`
-	AdditionalRuleLabels map[string]string `json:"additionalRuleLabels"`
-	Rules                MongoDBAlertRules `json:"rules"`
+	Enabled              bool               `json:"enabled"`
+	Labels               map[string]string  `json:"labels"`
+	Annotations          map[string]string  `json:"annotations"`
+	AdditionalRuleLabels map[string]string  `json:"additionalRuleLabels"`
+	Groups               MongoDBAlertGroups `json:"groups"`
 }
 
-type MongoDBAlertRules struct {
+type MongoDBAlertGroups struct {
+	Database      MongoDBDatabaseAlert `json:"database"`
+	Provisioner   ProvisionerAlert     `json:"provisioner"`
+	OpsManager    OpsManagerAlert      `json:"opsManager"`
+	Stash         StashAlert           `json:"stash"`
+	SchemaManager SchemaManagerAlert   `json:"schemaManager"`
+}
+
+type MongoDBDatabaseAlert struct {
+	Enabled bool                      `json:"enabled"`
+	Rules   MongoDBDatabaseAlertRules `json:"rules"`
+}
+
+type MongoDBDatabaseAlertRules struct {
 	MongodbVirtualMemoryUsage        IntValAlert `json:"mongodbVirtualMemoryUsage"`
 	MongodbReplicationLag            IntValAlert `json:"mongodbReplicationLag"`
 	MongodbNumberCursorsOpen         IntValAlert `json:"mongodbNumberCursorsOpen"`

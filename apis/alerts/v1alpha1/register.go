@@ -64,6 +64,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&MysqlList{},
 		&Postgres{},
 		&PostgresList{},
+		&Redis{},
+		&RedisList{},
 	)
 
 	scheme.AddKnownTypes(SchemeGroupVersion,

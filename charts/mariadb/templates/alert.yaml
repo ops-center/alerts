@@ -18,7 +18,7 @@ metadata:
 spec:
   groups:
   {{ if .Values.spec.alert.groups.database.enabled -}}
-  - name: mariadb-database-{{ .Release.Namespace }}-{{ $app }}
+  - name: mariadb.database.{{ .Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if .Values.spec.alert.groups.database.rules.mySQLInstanceDown.enabled -}}
     - alert: MySQLInstanceDown
@@ -143,7 +143,7 @@ spec:
     {{- end }}
   {{ end -}}
   {{ if .Values.spec.alert.groups.cluster.enabled -}}
-  - name: mariadb-cluster-{{ .Release.Namespace }}-{{ $app }}
+  - name: mariadb.cluster.{{ .Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if .Values.spec.alert.groups.cluster.rules.galeraReplicationLatencyTooLong.enabled -}}
     - alert: GaleraReplicationLatencyTooLong
@@ -158,7 +158,7 @@ spec:
     {{- end }}
   {{ end -}}
   {{ if .Values.spec.alert.groups.provisioner.enabled -}}
-  - name: mariadb-kubedb-{{ .Release.Namespace }}-{{ $app }}
+  - name: mariadb.provisioner.{{ .Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if .Values.spec.alert.groups.provisioner.rules.appPhaseNotReady.enabled -}}
     - alert: KubeDBMariaDBPhaseNotReady
@@ -168,7 +168,7 @@ spec:
         severity: {{ .Values.spec.alert.groups.provisioner.rules.appPhaseNotReady.severity }}
         {{- include "mariadb.alertLabels" . | nindent 8 }}
       annotations:
-        summary: KubeDB MariDB Phase NotReady (mariadb {{`{{`}} $labels.mariadb {{`}}`}})
+        summary: KubeDB MariaDB Phase NotReady (mariadb {{`{{`}} $labels.mariadb {{`}}`}})
         description: "KubeDB MariaDB Phase not ready on {{`{{`}} $labels.mariadb {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if .Values.spec.alert.groups.provisioner.rules.appPhaseCritical.enabled -}}
@@ -179,12 +179,12 @@ spec:
         severity: {{ .Values.spec.alert.groups.provisioner.rules.appPhaseCritical.severity }}
         {{- include "mariadb.alertLabels" . | nindent 8 }}
       annotations:
-        summary: KubeDB MariDB Phase Critical (mariadb {{`{{`}} $labels.mariadb {{`}}`}})
+        summary: KubeDB MariaDB Phase Critical (mariadb {{`{{`}} $labels.mariadb {{`}}`}})
         description: "KubeDB MariaDB Phase Critical {{`{{`}} $labels.mariadb {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
   {{ end -}}
   {{ if .Values.spec.alert.groups.opsManager.enabled -}}
-  - name: mariadb-opsrequest-{{ .Release.Namespace }}-{{ $app }}
+  - name: mariadb.opsManager.{{ .Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if .Values.spec.alert.groups.opsManager.rules.opsRequestOnProgress.enabled -}}
     - alert: KubeDBMariaDBOpsRequestOnProgress
@@ -221,7 +221,7 @@ spec:
     {{- end }}
   {{ end -}}
   {{ if .Values.spec.alert.groups.stash.enabled -}}
-  - name: mariadb-stash-{{ .Release.Namespace }}-{{ $app }}
+  - name: mariadb.stash.{{ .Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if .Values.spec.alert.groups.stash.rules.backupSessionFailed.enabled -}}
     - alert: MariaDBStashBackupSessionFailed
@@ -302,7 +302,7 @@ spec:
     {{- end }}
   {{ end -}}
   {{ if .Values.spec.alert.groups.schemaManager.enabled -}}
-  - name: mariadb-schema-{{ .Release.Namespace }}-{{ $app }}
+  - name: mariadb.schemaManager.{{ .Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if .Values.spec.alert.groups.schemaManager.rules.schemaPendingForTooLong.enabled -}}
     - alert: KubeDBMariaDBSchemaPendingForTooLong

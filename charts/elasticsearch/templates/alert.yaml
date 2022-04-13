@@ -1,4 +1,4 @@
-{{ $app := (include "mariadb.fullname" .) }}
+{{ $app := (include "elasticsearch.fullname" .) }}
 
 {{ if .Values.spec.alert.enabled }}
 apiVersion: monitoring.coreos.com/v1
@@ -7,7 +7,7 @@ metadata:
   name: {{ $app }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "mariadb.labels" . | nindent 4 }}
+    {{- include "elasticsearch.labels" . | nindent 4 }}
 {{- if .Values.spec.alert.labels }}
     {{- toYaml .Values.spec.alert.labels | nindent 4 }}
 {{- end }}
@@ -177,7 +177,7 @@ spec:
     {{- end }}
   {{ end -}}
   {{ if .Values.spec.alert.groups.provisioner.enabled -}}
-  - name: elasticsearch-kubedb-{{ .Release.Namespace }}-{{ $app }}
+  - name: elasticsearch.provisioner.{{ .Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if .Values.spec.alert.groups.provisioner.rules.appPhaseNotReady.enabled -}}
     - alert: KubeDBElasticsearchPhaseNotReady
@@ -203,7 +203,7 @@ spec:
     {{- end }}
   {{ end -}}
   {{ if .Values.spec.alert.groups.opsManager.enabled -}}
-  - name: elasticsearch-opsrequest-{{ .Release.Namespace }}-{{ $app }}
+  - name: elasticsearch.opsManager.{{ .Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if .Values.spec.alert.groups.opsManager.rules.opsRequestOnProgress.enabled -}}
     - alert: KubeDBElasticsearchOpsRequestOnProgress
@@ -240,7 +240,7 @@ spec:
     {{- end }}
   {{ end -}}
   {{ if .Values.spec.alert.groups.stash.enabled -}}
-  - name: elasticsearch-stash-{{ .Release.Namespace }}-{{ $app }}
+  - name: elasticsearch.stash.{{ .Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if .Values.spec.alert.groups.stash.rules.backupSessionFailed.enabled -}}
     - alert: ElasticsearchStashBackupSessionFailed

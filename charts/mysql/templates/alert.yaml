@@ -18,7 +18,7 @@ metadata:
 spec:
   groups:
   {{ if .Values.spec.alert.groups.database.enabled -}}
-  - name: mysql-database-{{ .Release.Namespace }}-{{ $app }}
+  - name: mysql.database.{{ .Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if .Values.spec.alert.groups.database.rules.mySQLInstanceDown.enabled -}}
     - alert: MySQLInstanceDown
@@ -143,7 +143,7 @@ spec:
     {{- end }}
   {{ end -}}
   {{ if .Values.spec.alert.groups.group.enabled -}}
-  - name: mysql-group-{{ .Release.Namespace }}-{{ $app }}
+  - name: mysql.group.{{ .Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if .Values.spec.alert.groups.group.rules.mySQLHighReplicationDelay.enabled -}}
     - alert: MySQLHighReplicationDelay
@@ -191,7 +191,7 @@ spec:
     {{- end }}
   {{ end -}}
   {{ if .Values.spec.alert.groups.provisioner.enabled -}}
-  - name: mysql-kubedb-{{ .Release.Namespace }}-{{ $app }}
+  - name: mysql.provisioner.{{ .Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if .Values.spec.alert.groups.provisioner.rules.appPhaseNotReady.enabled -}}
     - alert: KubeDBMySQLPhaseNotReady
@@ -201,7 +201,7 @@ spec:
         severity: {{ .Values.spec.alert.groups.provisioner.rules.appPhaseNotReady.severity }}
         {{- include "mysql.alertLabels" . | nindent 8 }}
       annotations:
-        summary: KubeDB MariDB Phase NotReady (mysql {{`{{`}} $labels.mysql {{`}}`}})
+        summary: KubeDB MySQL Phase NotReady (mysql {{`{{`}} $labels.mysql {{`}}`}})
         description: "KubeDB MySQL Phase not ready on {{`{{`}} $labels.mysql {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if .Values.spec.alert.groups.provisioner.rules.appPhaseCritical.enabled -}}
@@ -212,12 +212,12 @@ spec:
         severity: {{ .Values.spec.alert.groups.provisioner.rules.appPhaseCritical.severity }}
         {{- include "mysql.alertLabels" . | nindent 8 }}
       annotations:
-        summary: KubeDB MariDB Phase Critical (mysql {{`{{`}} $labels.mysql {{`}}`}})
+        summary: KubeDB MySQL Phase Critical (mysql {{`{{`}} $labels.mysql {{`}}`}})
         description: "KubeDB MySQL Phase Critical {{`{{`}} $labels.mysql {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
   {{ end -}}
   {{ if .Values.spec.alert.groups.opsManager.enabled -}}
-  - name: mysql-opsrequest-{{ .Release.Namespace }}-{{ $app }}
+  - name: mysql.opsManager.{{ .Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if .Values.spec.alert.groups.opsManager.rules.opsRequestOnProgress.enabled -}}
     - alert: KubeDBMySQLOpsRequestOnProgress
@@ -254,7 +254,7 @@ spec:
     {{- end }}
   {{ end -}}
   {{ if .Values.spec.alert.groups.stash.enabled -}}
-  - name: mysql-stash-{{ .Release.Namespace }}-{{ $app }}
+  - name: mysql.stash.{{ .Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if .Values.spec.alert.groups.stash.rules.backupSessionFailed.enabled -}}
     - alert: MySQLStashBackupSessionFailed
@@ -335,7 +335,7 @@ spec:
     {{- end }}
   {{ end -}}
   {{ if .Values.spec.alert.groups.schemaManager.enabled -}}
-  - name: mysql-schema-{{ .Release.Namespace }}-{{ $app }}
+  - name: mysql.schemaManager.{{ .Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if .Values.spec.alert.groups.schemaManager.rules.schemaPendingForTooLong.enabled -}}
     - alert: KubeDBMySQLSchemaPendingForTooLong

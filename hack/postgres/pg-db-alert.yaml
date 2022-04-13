@@ -1,0 +1,90 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    app: kube-prometheus-stack
+    app.kubernetes.io/instance: prometheus
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: kube-prometheus-stack
+    app.kubernetes.io/version: 32.2.1
+    chart: kube-prometheus-stack-32.2.1
+    heritage: Helm
+    release: prometheus
+  name: kubedb-postgres-database-alerts
+  namespace: monitoring
+spec:
+  groups:
+    - name: postgres.rules
+      rules:
+        - alert: PostgresqlDown
+          expr: pg_up == 0
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: Postgresql down (instance {{ $labels.instance }})
+            description: "Postgresql instance is down\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+        - alert: PostgresqlRestarted
+          expr: time() - pg_postmaster_start_time_seconds < 60
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: Postgresql restarted (instance {{ $labels.instance }})
+            description: "Postgresql restarted\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+        - alert: PostgresqlTooManyConnections
+          expr: sum by (datname) (pg_stat_activity_count{datname!~"template.*"}) > (pg_settings_max_connections * 0.8)
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: Postgresql too many connections (instance {{ $labels.instance }})
+            description: "PostgreSQL instance has too many connections (> 80%).\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+        - alert: PostgresqlNotEnoughConnections
+          expr: sum by (datname) (pg_stat_activity_count{datname!~"template.*|postgres"}) < 5
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: Postgresql not enough connections (instance {{ $labels.instance }})
+            description: "PostgreSQL instance should have more connections (> 5)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+        - alert: PostgresqlSlowQueries
+          expr: pg_slow_queries > 0
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: Postgresql slow queries (instance {{ $labels.instance }})
+            description: "PostgreSQL executes slow queries\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+        - alert: PostgresqlReplicationLag
+          expr: pg_replication_lag > 30 and ON(instance) pg_replication_is_replica == 1
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: Postgresql replication lag (instance {{ $labels.instance }})
+            description: "PostgreSQL replication lag is going up (> 30s)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+        - alert: PostgresqlHighRollbackRate
+          expr: rate(pg_stat_database_xact_rollback{datname!~"template.*"}[3m]) / rate(pg_stat_database_xact_commit{datname!~"template.*"}[3m]) > 0.02
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            summary: Postgresql high rollback rate (instance {{ $labels.instance }})
+            description: "Ratio of transactions being aborted compared to committed is > 2 %\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+        - alert: PostgresqlSplitBrain
+          expr: count(pg_replication_is_replica == 0) != 1
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: Postgresql split brain (instance {{ $labels.instance }})
+            description: "Split Brain, too many primary Postgresql databases in read-write mode\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+        - alert: PostgresqlTooManyLocksAcquired
+          expr: ((sum (pg_locks_count)) / (pg_settings_max_locks_per_transaction * pg_settings_max_connections)) > 0.20
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: Postgresql too many locks acquired (instance {{ $labels.instance }})
+            description: "Too many locks acquired on the database. If this alert happens frequently, we may need to increase the postgres setting max_locks_per_transaction.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"

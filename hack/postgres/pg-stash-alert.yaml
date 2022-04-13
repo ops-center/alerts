@@ -1,0 +1,80 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    app: kube-prometheus-stack
+    app.kubernetes.io/instance: prometheus
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: kube-prometheus-stack
+    app.kubernetes.io/version: 32.2.1
+    chart: kube-prometheus-stack-32.2.1
+    heritage: Helm
+    release: prometheus
+  name: kubedb-postgres-stash-alerts
+  namespace: monitoring
+spec:
+  groups:
+  - name: postgres.rules
+    rules:
+    - alert: PostgresStashBackupSessionFailed
+      expr: stash_backup_session_success == 0
+      for: 0m
+      labels:
+        severity: critical
+      annotations:
+        summary: Postgres Stash backup session failed (invoker_name {{ $labels.invoker_name}})
+        description: "Postgres Stash backup-session failed (invoker_name {{ $labels.invoker_name}})\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+    - alert: PostgresStashRestoreSessionFailed
+      expr: stash_restore_session_success == 0
+      for: 0m
+      labels:
+        severity: critical
+      annotations:
+        summary: Postgres Stash restore session failed (invoker_name {{ $labels.invoker_name}})
+        description: "Postgres Stash backup-session failed (invoker_name {{ $labels.invoker_name}})\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+    - alert: PostgresStashNoBackupSessionForTooLong
+      expr: time() - stash_backup_last_success_time_seconds > 18000
+      for: 0m
+      labels:
+        severity: warning
+      annotations:
+        summary: Postgres Stash no backup for last 5 hours (invoker_name {{ $labels.invoker_name}})
+        description: "Postgres Stash no backup for last 5 hours (invoker_name {{ $labels.invoker_name}})\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+    - alert: PostgresStashRepositoryCorrupted
+      expr: stash_repository_integrity == 0
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: Postgres Stash repository corrupted (invoker_name {{ $labels.invoker_name}})
+        description: "Postgres Stash repository corrupted (invoker_name {{ $labels.invoker_name}})\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+    - alert: PostgresStashRepositoryStorageRunningLow
+      expr: stash_repository_size_bytes > 10737418240
+      for: 5m
+      labels:
+        severity: waring
+      annotations:
+        summary: Postgres Stash Repository storage more than 10 GB (invoker_name {{ $labels.invoker_name}})
+        description: "Postgres Stash Repository storage more than 10 GB (invoker_name {{ $labels.invoker_name}})\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+    - alert: PostgresStashBackupSessionPeriodTooLong
+      expr: stash_backup_session_duration_seconds > 1800
+      for: 0m
+      labels:
+        severity: warning
+      annotations:
+        summary: Postgres Stash backup session taking more than 30 minutes to complete (invoker_name {{ $labels.invoker_name}})
+        description: "Postgres Stash backup session taking more than 30 minutes to complete (invoker_name {{ $labels.invoker_name}})\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+    - alert: PostgresStashRestoreSessionPeriodTooLong
+      expr: stash_restore_session_duration_seconds > 1800
+      for: 0m
+      labels:
+        severity: warning
+      annotations:
+        summary: Postgres Stash restore session taking more than 30 minutes to complete (invoker_name {{ $labels.invoker_name}})
+        description: "Postgres Stash restore session taking more than 30 minutes to complete (invoker_name {{ $labels.invoker_name}})\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+    
+    
+
+
+# stash_backup_session_success * on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_backupconfiguration_info{target_name=~"sample-postgres", target_kind=~"AppBinding", namespace=~"demo"}
+# stash_restore_session_success * on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_restoresession_info{target_name=~"sample-postgres", target_kind=~"AppBinding", namespace=~"demo"}

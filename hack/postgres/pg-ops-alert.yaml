@@ -1,0 +1,42 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    app: kube-prometheus-stack
+    app.kubernetes.io/instance: prometheus
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: kube-prometheus-stack
+    app.kubernetes.io/version: 32.2.1
+    chart: kube-prometheus-stack-32.2.1
+    heritage: Helm
+    release: prometheus
+  name: kubedb-postgres-opsrequest-alerts
+  namespace: monitoring
+spec:
+  groups:
+    - name: postgres.rules
+      rules:
+        - alert: KubeDBPostgresOpsRequestOnProgress
+          expr: kubedb_postgres_opsrequest_status_phase{phase='Progressing'} == 1
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            summary: PostgresOpsRequest on progress (postgresopsrequest {{ $labels.postgresopsrequest}})
+            description: "PostgresOpsRequest {{ $labels.postgresopsrequest }} is in progressing status\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+        - alert: KubeDBPostgresOpsRequestStatusProgressingToLong
+          expr: kubedb_postgres_opsrequest_status_phase{phase='Progressing'} == 1
+          for: 10m
+          labels:
+            severity: critical
+          annotations:
+            summary: PostgresOpsRequest is in progressing status for too long (postgresopsrequest {{ $labels.postgresopsrequest}})
+            description: "PostgresOpsRequest {{ $labels.postgresopsrequest }} is in progressing status for too long\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+        - alert: KubeDBPostgresOpsRequestFailed
+          expr: kubedb_postgres_opsrequest_status_phase{phase='Failed'} == 1
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: PostgresOpsRequest failed (postgresopsrequest {{ $labels.postgresopsrequest}})
+            description: "PostgresOpsRequest {{ $labels.postgresopsrequest }} failed status\n VALUE = {{ $value }}\n  LABELS = {{ $labels }}"

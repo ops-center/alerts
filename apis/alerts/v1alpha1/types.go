@@ -22,6 +22,13 @@ type FixedAlert struct {
 	Severity string `json:"severity"`
 }
 
+type StringValAlert struct {
+	Enabled  bool   `json:"enabled"`
+	Duration string `json:"duration"`
+	Val      string `json:"val"`
+	Severity string `json:"severity"`
+}
+
 type IntValAlert struct {
 	Enabled  bool   `json:"enabled"`
 	Duration string `json:"duration"`

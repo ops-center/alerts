@@ -101,7 +101,7 @@ The following table lists the configurable parameters of the `postgres` chart an
 | spec.alert.groups.opsManager.enabled                                          |                                               | <code>true</code>                                |
 | spec.alert.groups.opsManager.rules.opsRequestOnProgress.enabled               |                                               | <code>true</code>                                |
 | spec.alert.groups.opsManager.rules.opsRequestOnProgress.duration              |                                               | <code>"0m"</code>                                |
-| spec.alert.groups.opsManager.rules.opsRequestOnProgress.severity              |                                               | <code>warning</code>                             |
+| spec.alert.groups.opsManager.rules.opsRequestOnProgress.severity              |                                               | <code>info</code>                                |
 | spec.alert.groups.opsManager.rules.opsRequestStatusProgressingToLong.enabled  |                                               | <code>true</code>                                |
 | spec.alert.groups.opsManager.rules.opsRequestStatusProgressingToLong.duration |                                               | <code>"30m"</code>                               |
 | spec.alert.groups.opsManager.rules.opsRequestStatusProgressingToLong.severity |                                               | <code>critical</code>                            |

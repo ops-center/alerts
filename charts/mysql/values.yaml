@@ -125,7 +125,7 @@ spec:
           opsRequestOnProgress:
             enabled: true
             duration: "0m"
-            severity: warning
+            severity: info
           opsRequestStatusProgressingToLong:
             enabled: true
             duration: "30m"

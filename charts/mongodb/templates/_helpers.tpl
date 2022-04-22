@@ -44,11 +44,11 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Alert labels
 */}}
 {{- define "mongodb.alertLabels" -}}
-k8s-group: {{ .Values.metadata.resource.group }}
-k8s-kind: {{ .Values.metadata.resource.kind }}
-k8s-resource: {{ .Values.metadata.resource.name }}
-k8s-name: {{ include "mongodb.fullname" . }}
-k8s-namespace: {{ .Release.Namespace }}
+k8s_group: {{ .Values.metadata.resource.group }}
+k8s_kind: {{ .Values.metadata.resource.kind }}
+k8s_resource: {{ .Values.metadata.resource.name }}
+k8s_name: {{ include "mongodb.fullname" . }}
+k8s_namespace: {{ .Release.Namespace }}
 {{- if .Values.spec.alert.additionalRuleLabels }}
 {{- toYaml .Values.spec.alert.additionalRuleLabels }}
 {{- end }}

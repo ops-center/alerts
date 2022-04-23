@@ -62,7 +62,7 @@ spec:
     rules:
     {{ if .Values.spec.alert.groups.provisioner.rules.appPhaseNotReady.enabled -}}
     - alert: KubeDBPostgreSQLPhaseNotReady
-      expr: kubedb_postgres_status_phase{phase="NotReady",postgres="{{ $app }}",namespace="{{ .Release.Namespace }}"} == 1
+      expr: kubedb_com_postgres_status_phase{phase="NotReady",app="{{ $app }}",namespace="{{ .Release.Namespace }}"} == 1
       for: {{ .Values.spec.alert.groups.provisioner.rules.appPhaseNotReady.duration }}
       labels:
         severity: {{ .Values.spec.alert.groups.provisioner.rules.appPhaseNotReady.severity }}
@@ -73,7 +73,7 @@ spec:
     {{ end -}}
     {{ if .Values.spec.alert.groups.provisioner.rules.appPhaseCritical.enabled -}}
     - alert: KubeDBPostgreSQLPhaseCritical
-      expr: kubedb_postgres_status_phase{phase="Critical",postgres="{{ $app }}",namespace="{{ .Release.Namespace }}"} == 1
+      expr: kubedb_com_postgres_status_phase{phase="Critical",app="{{ $app }}",namespace="{{ .Release.Namespace }}"} == 1
       for: {{ .Values.spec.alert.groups.provisioner.rules.appPhaseCritical.duration }}
       labels:
         severity: {{ .Values.spec.alert.groups.provisioner.rules.appPhaseCritical.severity }}
@@ -88,7 +88,7 @@ spec:
     rules:
     {{ if .Values.spec.alert.groups.opsManager.rules.opsRequestOnProgress.enabled -}}
     - alert: KubeDBPostgreSQLOpsRequestOnProgress
-      expr: kubedb_postgres_opsrequest_status_phase{phase="Progressing",database_ref="{{ $app }}",namespace="{{ .Release.Namespace }}"} == 1
+      expr: ops_kubedb_com_postgresopsrequest_status_phase{phase="Progressing",app="{{ $app }}",namespace="{{ .Release.Namespace }}"} == 1
       for: {{ .Values.spec.alert.groups.opsManager.rules.opsRequestOnProgress.duration }}
       labels:
         severity: {{ .Values.spec.alert.groups.opsManager.rules.opsRequestOnProgress.severity }}
@@ -99,7 +99,7 @@ spec:
     {{ end -}}
     {{ if .Values.spec.alert.groups.opsManager.rules.opsRequestStatusProgressingToLong.enabled -}}
     - alert: KubeDBPostgreSQLOpsRequestStatusProgressingToLong
-      expr: kubedb_postgres_opsrequest_status_phase{phase="Progressing",database_ref="{{ $app }}",namespace="{{ .Release.Namespace }}"} == 1
+      expr: ops_kubedb_com_postgresopsrequest_status_phase{phase="Progressing",app="{{ $app }}",namespace="{{ .Release.Namespace }}"} == 1
       for: {{ .Values.spec.alert.groups.opsManager.rules.opsRequestStatusProgressingToLong.duration }}
       labels:
         severity: {{ .Values.spec.alert.groups.opsManager.rules.opsRequestStatusProgressingToLong.severity }}
@@ -110,7 +110,7 @@ spec:
     {{ end -}}
     {{ if .Values.spec.alert.groups.opsManager.rules.opsRequestFailed.enabled -}}
     - alert: KubeDBPostgreSQLOpsRequestFailed
-      expr: kubedb_postgres_opsrequest_status_phase{phase="Failed",database_ref="{{ $app }}",namespace="{{ .Release.Namespace }}"} == 1
+      expr: ops_kubedb_com_postgresopsrequest_status_phase{phase="Failed",app="{{ $app }}",namespace="{{ .Release.Namespace }}"} == 1
       for: {{ .Values.spec.alert.groups.opsManager.rules.opsRequestFailed.duration }}
       labels:
         severity: {{ .Values.spec.alert.groups.opsManager.rules.opsRequestFailed.severity }}
@@ -125,7 +125,7 @@ spec:
     rules:
     {{ if .Values.spec.alert.groups.stash.rules.backupSessionFailed.enabled -}}
     - alert: PostgreSQLStashBackupSessionFailed
-      expr: stash_backup_session_success * on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} == 0
+      expr: stash_backup_session_success * on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_appscode_com_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} == 0
       for: {{ .Values.spec.alert.groups.stash.rules.backupSessionFailed.duration }}
       labels:
         severity: {{ .Values.spec.alert.groups.stash.rules.backupSessionFailed.severity }}
@@ -136,7 +136,7 @@ spec:
     {{ end -}}
     {{ if .Values.spec.alert.groups.stash.rules.restoreSessionFailed.enabled -}}
     - alert: PostgreSQLStashRestoreSessionFailed
-      expr: stash_restore_session_success * on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_restoresession_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} == 0
+      expr: stash_restore_session_success * on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_appscode_com_restoresession_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} == 0
       for: {{ .Values.spec.alert.groups.stash.rules.restoreSessionFailed.duration }}
       labels:
         severity: {{ .Values.spec.alert.groups.stash.rules.restoreSessionFailed.severity }}
@@ -147,7 +147,7 @@ spec:
     {{ end -}}
     {{ if .Values.spec.alert.groups.stash.rules.noBackupSessionForTooLong.enabled -}}
     - alert: PostgreSQLStashNoBackupSessionForTooLong
-      expr: time() - stash_backup_last_success_time_seconds + on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} - 1 > {{ .Values.spec.alert.groups.stash.rules.noBackupSessionForTooLong.val }}
+      expr: time() - stash_backup_last_success_time_seconds + on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_appscode_com_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} - 1 > {{ .Values.spec.alert.groups.stash.rules.noBackupSessionForTooLong.val }}
       for: {{ .Values.spec.alert.groups.stash.rules.noBackupSessionForTooLong.duration }}
       labels:
         severity: {{ .Values.spec.alert.groups.stash.rules.noBackupSessionForTooLong.severity }}
@@ -158,7 +158,7 @@ spec:
     {{ end -}}
     {{ if .Values.spec.alert.groups.stash.rules.repositoryCorrupted.enabled -}}
     - alert: PostgreSQLStashRepositoryCorrupted
-      expr: stash_repository_integrity * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"}
+      expr: stash_repository_integrity * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_appscode_com_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"}
       for: {{ .Values.spec.alert.groups.stash.rules.repositoryCorrupted.duration }}
       labels:
         severity: {{ .Values.spec.alert.groups.stash.rules.repositoryCorrupted.severity }}
@@ -169,7 +169,7 @@ spec:
     {{ end -}}
     {{ if .Values.spec.alert.groups.stash.rules.repositoryStorageRunningLow.enabled -}}
     - alert: PostgreSQLStashRepositoryStorageRunningLow
-      expr: stash_repository_size_bytes * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} > {{ .Values.spec.alert.groups.stash.rules.repositoryStorageRunningLow.val }}
+      expr: stash_repository_size_bytes * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_appscode_com_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} > {{ .Values.spec.alert.groups.stash.rules.repositoryStorageRunningLow.val }}
       for: {{ .Values.spec.alert.groups.stash.rules.repositoryStorageRunningLow.duration }}
       labels:
         severity: {{ .Values.spec.alert.groups.stash.rules.repositoryStorageRunningLow.severity }}
@@ -180,7 +180,7 @@ spec:
     {{- end }}
     {{ if .Values.spec.alert.groups.stash.rules.backupSessionPeriodTooLong.enabled -}}
     - alert: PostgreSQLStashBackupSessionPeriodTooLong
-      expr: stash_backup_session_duration_seconds * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} > {{ .Values.spec.alert.groups.stash.rules.backupSessionPeriodTooLong.val }}
+      expr: stash_backup_session_duration_seconds * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_appscode_com_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} > {{ .Values.spec.alert.groups.stash.rules.backupSessionPeriodTooLong.val }}
       for: {{ .Values.spec.alert.groups.stash.rules.backupSessionPeriodTooLong.duration }}
       labels:
         severity: {{ .Values.spec.alert.groups.stash.rules.backupSessionPeriodTooLong.severity }}
@@ -191,7 +191,7 @@ spec:
     {{ end -}}
     {{ if .Values.spec.alert.groups.stash.rules.restoreSessionPeriodTooLong.enabled -}}
     - alert: PostgreSQLStashRestoreSessionPeriodTooLong
-      expr: stash_restore_session_duration_seconds * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_restoresession_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} > {{ .Values.spec.alert.groups.stash.rules.restoreSessionPeriodTooLong.val }}
+      expr: stash_restore_session_duration_seconds * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_appscode_com_restoresession_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} > {{ .Values.spec.alert.groups.stash.rules.restoreSessionPeriodTooLong.val }}
       for: {{ .Values.spec.alert.groups.stash.rules.restoreSessionPeriodTooLong.duration }}
       labels:
         severity: {{ .Values.spec.alert.groups.stash.rules.restoreSessionPeriodTooLong.severity }}
@@ -206,7 +206,7 @@ spec:
     rules:
     {{ if .Values.spec.alert.groups.schemaManager.rules.schemaPendingForTooLong.enabled -}}
     - alert: KubeDBPostgreSQLSchemaPendingForTooLong
-      expr: kubedb_postgres_schema_status_phase{phase="Pending",serverRefName="{{ $app }}",serverRefNamespace="{{ .Release.Namespace }}"} == 1
+      expr: schema_kubedb_com_postgresdatabase_status_phase{phase="Pending",app="{{ $app }}",app_namespace="{{ .Release.Namespace }}"} == 1
       for: {{ .Values.spec.alert.groups.schemaManager.rules.schemaPendingForTooLong.duration }}
       labels:
         severity: {{ .Values.spec.alert.groups.schemaManager.rules.schemaPendingForTooLong.severity }}
@@ -217,7 +217,7 @@ spec:
     {{ end -}}
     {{ if .Values.spec.alert.groups.schemaManager.rules.schemaInProgressForTooLong.enabled -}}
     - alert: KubeDBPostgreSQLSchemaInProgressForTooLong
-      expr: kubedb_postgres_schema_status_phase{phase="InProgress",serverRefName="{{ $app }}",serverRefNamespace="{{ .Release.Namespace }}"} == 1
+      expr: schema_kubedb_com_postgresdatabase_status_phase{phase="InProgress",app="{{ $app }}",app_namespace="{{ .Release.Namespace }}"} == 1
       for: {{ .Values.spec.alert.groups.schemaManager.rules.schemaInProgressForTooLong.duration }}
       labels:
         severity: {{ .Values.spec.alert.groups.schemaManager.rules.schemaInProgressForTooLong.severity }}
@@ -228,7 +228,7 @@ spec:
     {{ end -}}
     {{ if .Values.spec.alert.groups.schemaManager.rules.schemaTerminatingForTooLong.enabled -}}
     - alert: KubeDBPostgreSQLSchemaTerminatingForTooLong
-      expr: kubedb_postgres_schema_status_phase{phase="Terminating",serverRefName="{{ $app }}",serverRefNamespace="{{ .Release.Namespace }}"} == 1
+      expr: schema_kubedb_com_postgresdatabase_status_phase{phase="Terminating",app="{{ $app }}",app_namespace="{{ .Release.Namespace }}"} == 1
       for: {{ .Values.spec.alert.groups.schemaManager.rules.schemaTerminatingForTooLong.duration }}
       labels:
         severity: {{ .Values.spec.alert.groups.schemaManager.rules.schemaTerminatingForTooLong.severity }}
@@ -239,7 +239,7 @@ spec:
     {{ end -}}
     {{ if .Values.spec.alert.groups.schemaManager.rules.schemaFailed.enabled -}}
     - alert: KubeDBPostgreSQLSchemaFailed
-      expr: kubedb_postgres_schema_status_phase{phase="Failed",serverRefName="{{ $app }}",serverRefNamespace="{{ .Release.Namespace }}"} == 1
+      expr: schema_kubedb_com_postgresdatabase_status_phase{phase="Failed",app="{{ $app }}",app_namespace="{{ .Release.Namespace }}"} == 1
       for: {{ .Values.spec.alert.groups.schemaManager.rules.schemaFailed.duration }}
       labels:
         severity: {{ .Values.spec.alert.groups.schemaManager.rules.schemaFailed.severity }}
@@ -250,7 +250,7 @@ spec:
     {{ end -}}
     {{ if .Values.spec.alert.groups.schemaManager.rules.schemaExpired.enabled -}}
     - alert: KubeDBPostgreSQLSchemaExpired
-      expr: kubedb_postgres_schema_status_phase{phase="Expired",serverRefName="{{ $app }}",serverRefNamespace="{{ .Release.Namespace }}"} == 1
+      expr: schema_kubedb_com_postgresdatabase_status_phase{phase="Expired",app="{{ $app }}",app_namespace="{{ .Release.Namespace }}"} == 1
       for: {{ .Values.spec.alert.groups.schemaManager.rules.schemaExpired.duration }}
       labels:
         severity: {{ .Values.spec.alert.groups.schemaManager.rules.schemaExpired.severity }}

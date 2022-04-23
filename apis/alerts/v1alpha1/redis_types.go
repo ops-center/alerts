@@ -42,10 +42,10 @@ type Redis struct {
 // RedisSpec is the schema for kubedb-autoscaler chart values file
 type RedisSpec struct {
 	api.Metadata `json:"metadata,omitempty"`
-	Spec         RedisSpecSpec `json:"spec"`
+	Form         RedisSpecForm `json:"form"`
 }
 
-type RedisSpecSpec struct {
+type RedisSpecForm struct {
 	Alert RedisAlert `json:"alert"`
 }
 

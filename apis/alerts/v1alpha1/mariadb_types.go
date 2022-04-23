@@ -42,10 +42,10 @@ type Mariadb struct {
 // MariadbSpec is the schema for kubedb-autoscaler chart values file
 type MariadbSpec struct {
 	api.Metadata `json:"metadata,omitempty"`
-	Spec         MariadbSpecSpec `json:"spec"`
+	Form         MariadbSpecForm `json:"form"`
 }
 
-type MariadbSpecSpec struct {
+type MariadbSpecForm struct {
 	Alert MariaDBAlert `json:"alert"`
 }
 

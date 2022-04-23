@@ -11,7 +11,7 @@ metadata:
     # Release namespace
     namespace: ""
 
-spec:
+form:
   alert:
     ## Enable PrometheusRule alerts
     enabled: true

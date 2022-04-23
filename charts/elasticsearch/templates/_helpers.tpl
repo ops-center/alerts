@@ -49,7 +49,7 @@ k8s_kind: {{ .Values.metadata.resource.kind }}
 k8s_resource: {{ .Values.metadata.resource.name }}
 app: {{ include "elasticsearch.fullname" . }}
 app_namespace: {{ .Release.Namespace }}
-{{- if .Values.spec.alert.additionalRuleLabels }}
-{{- toYaml .Values.spec.alert.additionalRuleLabels }}
+{{- if .Values.form.alert.additionalRuleLabels }}
+{{- toYaml .Values.form.alert.additionalRuleLabels }}
 {{- end }}
 {{- end }}

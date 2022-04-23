@@ -257,7 +257,7 @@ spec:
     rules:
     {{ if .Values.spec.alert.groups.stash.rules.backupSessionFailed.enabled -}}
     - alert: ElasticsearchStashBackupSessionFailed
-      expr: stash_backup_session_success * on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} == 0
+      expr: stash_backup_session_success * on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_appscode_com_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} == 0
       for: {{ .Values.spec.alert.groups.stash.rules.backupSessionFailed.duration }}
       labels:
         severity: {{ .Values.spec.alert.groups.stash.rules.backupSessionFailed.severity }}
@@ -268,7 +268,7 @@ spec:
     {{ end -}}
     {{ if .Values.spec.alert.groups.stash.rules.restoreSessionFailed.enabled -}}
     - alert: ElasticsearchStashRestoreSessionFailed
-      expr: stash_restore_session_success * on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_restoresession_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} == 0
+      expr: stash_restore_session_success * on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_appscode_com_restoresession_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} == 0
       for: {{ .Values.spec.alert.groups.stash.rules.restoreSessionFailed.duration }}
       labels:
         severity: {{ .Values.spec.alert.groups.stash.rules.restoreSessionFailed.severity }}
@@ -279,7 +279,7 @@ spec:
     {{ end -}}
     {{ if .Values.spec.alert.groups.stash.rules.noBackupSessionForTooLong.enabled -}}
     - alert: ElasticsearchStashNoBackupSessionForTooLong
-      expr: time() - stash_backup_last_success_time_seconds + on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} - 1 > {{ .Values.spec.alert.groups.stash.rules.noBackupSessionForTooLong.val }}
+      expr: time() - stash_backup_last_success_time_seconds + on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_appscode_com_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} - 1 > {{ .Values.spec.alert.groups.stash.rules.noBackupSessionForTooLong.val }}
       for: {{ .Values.spec.alert.groups.stash.rules.noBackupSessionForTooLong.duration }}
       labels:
         severity: {{ .Values.spec.alert.groups.stash.rules.noBackupSessionForTooLong.severity }}
@@ -290,7 +290,7 @@ spec:
     {{ end -}}
     {{ if .Values.spec.alert.groups.stash.rules.repositoryCorrupted.enabled -}}
     - alert: ElasticsearchStashRepositoryCorrupted
-      expr: stash_repository_integrity * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"}
+      expr: stash_repository_integrity * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_appscode_com_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"}
       for: {{ .Values.spec.alert.groups.stash.rules.repositoryCorrupted.duration }}
       labels:
         severity: {{ .Values.spec.alert.groups.stash.rules.repositoryCorrupted.severity }}
@@ -301,7 +301,7 @@ spec:
     {{ end -}}
     {{ if .Values.spec.alert.groups.stash.rules.repositoryStorageRunningLow.enabled -}}
     - alert: ElasticsearchStashRepositoryStorageRunningLow
-      expr: stash_repository_size_bytes * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} > {{ .Values.spec.alert.groups.stash.rules.repositoryStorageRunningLow.val }}
+      expr: stash_repository_size_bytes * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_appscode_com_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} > {{ .Values.spec.alert.groups.stash.rules.repositoryStorageRunningLow.val }}
       for: {{ .Values.spec.alert.groups.stash.rules.repositoryStorageRunningLow.duration }}
       labels:
         severity: {{ .Values.spec.alert.groups.stash.rules.repositoryStorageRunningLow.severity }}
@@ -312,7 +312,7 @@ spec:
     {{- end }}
     {{ if .Values.spec.alert.groups.stash.rules.backupSessionPeriodTooLong.enabled -}}
     - alert: ElasticsearchStashBackupSessionPeriodTooLong
-      expr: stash_backup_session_duration_seconds * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} > {{ .Values.spec.alert.groups.stash.rules.backupSessionPeriodTooLong.val }}
+      expr: stash_backup_session_duration_seconds * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_appscode_com_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} > {{ .Values.spec.alert.groups.stash.rules.backupSessionPeriodTooLong.val }}
       for: {{ .Values.spec.alert.groups.stash.rules.backupSessionPeriodTooLong.duration }}
       labels:
         severity: {{ .Values.spec.alert.groups.stash.rules.backupSessionPeriodTooLong.severity }}
@@ -323,7 +323,7 @@ spec:
     {{ end -}}
     {{ if .Values.spec.alert.groups.stash.rules.restoreSessionPeriodTooLong.enabled -}}
     - alert: ElasticsearchStashRestoreSessionPeriodTooLong
-      expr: stash_restore_session_duration_seconds * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_restoresession_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} > {{ .Values.spec.alert.groups.stash.rules.restoreSessionPeriodTooLong.val }}
+      expr: stash_restore_session_duration_seconds * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_appscode_com_restoresession_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} > {{ .Values.spec.alert.groups.stash.rules.restoreSessionPeriodTooLong.val }}
       for: {{ .Values.spec.alert.groups.stash.rules.restoreSessionPeriodTooLong.duration }}
       labels:
         severity: {{ .Values.spec.alert.groups.stash.rules.restoreSessionPeriodTooLong.severity }}

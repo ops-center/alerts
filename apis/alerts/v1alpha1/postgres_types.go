@@ -42,10 +42,10 @@ type Postgres struct {
 // PostgresSpec is the schema for kubedb-autoscaler chart values file
 type PostgresSpec struct {
 	api.Metadata `json:"metadata,omitempty"`
-	Spec         PostgresSpecSpec `json:"spec"`
+	Form         PostgresSpecForm `json:"form"`
 }
 
-type PostgresSpecSpec struct {
+type PostgresSpecForm struct {
 	Alert PostgresAlert `json:"alert"`
 }
 

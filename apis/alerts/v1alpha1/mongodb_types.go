@@ -42,10 +42,10 @@ type Mongodb struct {
 // MongodbSpec is the schema for kubedb-autoscaler chart values file
 type MongodbSpec struct {
 	api.Metadata `json:"metadata,omitempty"`
-	Spec         MongodbSpecSpec `json:"spec"`
+	Form         MongodbSpecForm `json:"form"`
 }
 
-type MongodbSpecSpec struct {
+type MongodbSpecForm struct {
 	Alert MongoDBAlert `json:"alert"`
 }
 

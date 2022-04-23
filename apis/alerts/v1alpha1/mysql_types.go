@@ -42,10 +42,10 @@ type Mysql struct {
 // MysqlSpec is the schema for kubedb-autoscaler chart values file
 type MysqlSpec struct {
 	api.Metadata `json:"metadata,omitempty"`
-	Spec         MysqlSpecSpec `json:"spec"`
+	Form         MysqlSpecForm `json:"form"`
 }
 
-type MysqlSpecSpec struct {
+type MysqlSpecForm struct {
 	Alert MySQLAlert `json:"alert"`
 }
 

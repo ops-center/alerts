@@ -42,10 +42,10 @@ type Elasticsearch struct {
 // ElasticsearchSpec is the schema for kubedb-autoscaler chart values file
 type ElasticsearchSpec struct {
 	api.Metadata `json:"metadata,omitempty"`
-	Spec         ElasticsearchSpecSpec `json:"spec"`
+	Form         ElasticsearchSpecForm `json:"form"`
 }
 
-type ElasticsearchSpecSpec struct {
+type ElasticsearchSpecForm struct {
 	Alert ElasticsearchAlert `json:"alert"`
 }
 

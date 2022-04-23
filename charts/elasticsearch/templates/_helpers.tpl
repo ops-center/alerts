@@ -47,8 +47,8 @@ Alert labels
 k8s_group: {{ .Values.metadata.resource.group }}
 k8s_kind: {{ .Values.metadata.resource.kind }}
 k8s_resource: {{ .Values.metadata.resource.name }}
-k8s_name: {{ include "elasticsearch.fullname" . }}
-k8s_namespace: {{ .Release.Namespace }}
+app: {{ include "elasticsearch.fullname" . }}
+app_namespace: {{ .Release.Namespace }}
 {{- if .Values.spec.alert.additionalRuleLabels }}
 {{- toYaml .Values.spec.alert.additionalRuleLabels }}
 {{- end }}

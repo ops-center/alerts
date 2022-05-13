@@ -1083,6 +1083,7 @@ func (in *PostgresDatabaseAlertRules) DeepCopyInto(out *PostgresDatabaseAlertRul
 	*out = *in
 	out.PostgresInstanceDown = in.PostgresInstanceDown
 	out.PostgresRestarted = in.PostgresRestarted
+	out.PostgresqlExporterError = in.PostgresqlExporterError
 	out.PostgresTooManyConnections = in.PostgresTooManyConnections
 	out.PostgresqlNotEnoughConnections = in.PostgresqlNotEnoughConnections
 	out.PostgresSlowQueries = in.PostgresSlowQueries

@@ -64,7 +64,11 @@ The following table lists the configurable parameters of the `postgres` chart an
 | form.alert.groups.database.rules.postgresInstanceDown.severity                |                                               | <code>critical</code>                            |
 | form.alert.groups.database.rules.postgresRestarted.enabled                    |                                               | <code>true</code>                                |
 | form.alert.groups.database.rules.postgresRestarted.duration                   |                                               | <code>"0m"</code>                                |
+| form.alert.groups.database.rules.postgresRestarted.val                        |                                               | <code>60</code>                                  |
 | form.alert.groups.database.rules.postgresRestarted.severity                   |                                               | <code>critical</code>                            |
+| form.alert.groups.database.rules.postgresqlExporterError.enabled              |                                               | <code>true</code>                                |
+| form.alert.groups.database.rules.postgresqlExporterError.duration             |                                               | <code>"5m"</code>                                |
+| form.alert.groups.database.rules.postgresqlExporterError.severity             |                                               | <code>warning</code>                             |
 | form.alert.groups.database.rules.postgresTooManyConnections.enabled           |                                               | <code>true</code>                                |
 | form.alert.groups.database.rules.postgresTooManyConnections.duration          |                                               | <code>"2m"</code>                                |
 | form.alert.groups.database.rules.postgresTooManyConnections.val               |                                               | <code>80</code>                                  |

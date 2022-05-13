@@ -39,8 +39,8 @@ form:
             severity: critical
           postgresRestarted:
             enabled: true
-            Val: 60
             duration: "0m"
+            val: 60
             severity: critical
           postgresqlExporterError:
             enabled: true

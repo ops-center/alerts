@@ -58,7 +58,7 @@ spec:
     {{end -}}
     {{ if .Values.form.alert.groups.database.rules.postgresRestarted.enabled -}}
     - alert: PostgresqlRestarted
-      expr: time() - pg_postmaster_start_time_seconds{job="{{- $app -}}-stats",namespace="{{ .Release.Namespace }}"} < {{ .Values.form.alert.groups.database.rules.postgresRestarted.Val }}
+      expr: time() - pg_postmaster_start_time_seconds{job="{{- $app -}}-stats",namespace="{{ .Release.Namespace }}"} < {{ .Values.form.alert.groups.database.rules.postgresRestarted.val }}
       for: {{ .Values.form.alert.groups.database.rules.postgresRestarted.duration }}
       labels:
         severity: {{ .Values.form.alert.groups.database.rules.postgresRestarted.severity }}

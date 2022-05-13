@@ -32,6 +32,7 @@ func TestDefaultValues(t *testing.T) {
 		v1alpha1.MongodbSpec{},
 		v1alpha1.MysqlSpec{},
 		v1alpha1.PostgresSpec{},
+		v1alpha1.RedisSpec{},
 	)
 	checker.TestAll(t)
 }

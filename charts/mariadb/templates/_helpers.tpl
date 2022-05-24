@@ -50,6 +50,6 @@ k8s_resource: {{ .Values.metadata.resource.name }}
 app: {{ include "mariadb.fullname" . }}
 app_namespace: {{ .Release.Namespace }}
 {{- if .Values.form.alert.additionalRuleLabels }}
-{{- toYaml .Values.form.alert.additionalRuleLabels }}
+{{ toYaml .Values.form.alert.additionalRuleLabels }}
 {{- end }}
 {{- end }}

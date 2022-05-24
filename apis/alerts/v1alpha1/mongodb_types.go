@@ -50,9 +50,11 @@ type MongodbSpecForm struct {
 }
 
 type MongoDBAlert struct {
-	Enabled              bool               `json:"enabled"`
-	Labels               map[string]string  `json:"labels"`
-	Annotations          map[string]string  `json:"annotations"`
+	Enabled bool              `json:"enabled"`
+	Labels  map[string]string `json:"labels"`
+	// +optional
+	Annotations map[string]string `json:"annotations"`
+	// +optional
 	AdditionalRuleLabels map[string]string  `json:"additionalRuleLabels"`
 	Groups               MongoDBAlertGroups `json:"groups"`
 }

@@ -20,7 +20,7 @@ BIN      := alerts
 
 CRD_OPTIONS          ?= "crd:allowDangerousTypes=true"
 # https://github.com/appscodelabs/gengo-builder
-CODE_GENERATOR_IMAGE ?= appscode/gengo:release-1.21
+CODE_GENERATOR_IMAGE ?= appscode/gengo:release-1.24
 API_GROUPS           ?= alerts:v1alpha1
 
 # This version-strategy uses git tags to set the version string

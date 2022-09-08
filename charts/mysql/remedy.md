@@ -3,7 +3,7 @@
 ### Database Alerts
 
 - #### MySQLInstanceDown
-  - Describe the `MySQL` CR and check the reason and try restarting the pods
+  - Describe the `MySQL` CR, check the reason from conditions and try restarting the pods
   - Contact AppsCode team
 - #### MySQLServiceDown
   - Describe the `MySQL` CR and Try restarting all the pods

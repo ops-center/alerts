@@ -53,25 +53,38 @@
 
 ### Stash Alerts
 - #### BackupSessionFailed
-  - Troubleshoot Stash [Backup Failed](https://stash.run/docs/v2022.07.09/guides/troubleshooting/how-to-troubleshoot/#backup-failed)
-  - Check the Job created by `backupsession`
-  - Check if the `INTEGRITY` of `repository` is true
+  - [Describe the BackupSession](https://stash.run/docs/latest/guides/troubleshooting/how-to-troubleshoot/#describe-the-backupsession)
+  - Check the conditions in the BackupSession
+  - Check the reasons of the `false` conditions (if any)
+  - Check the events of the BackupSession
+  - [View the Backup Job/Sidecar log](https://stash.run/docs/latest/guides/troubleshooting/how-to-troubleshoot/#view-backup-jobsidecar-log)
+  - Check if the `INTEGRITY` of Repository is true
+  - [Check the Stash operator log](https://stash.run/docs/latest/guides/troubleshooting/how-to-troubleshoot/#check-stash-operator-log)
   - Contact AppsCode team
 - #### RestoreSessionFailed
-  - Troubleshoot Stash [Restore Failed](https://stash.run/docs/v2022.07.09/guides/troubleshooting/how-to-troubleshoot/#restore-failed)
-  - Check the Job created by `restoresession`
+  - [Describe the RestoreSession](https://stash.run/docs/latest/guides/troubleshooting/how-to-troubleshoot/#describe-the-restoresession)
+  - Check the conditions in the RestoreSession
+  - Check the reasons of the `false` conditions (if any)
+  - Check the events of the RestoreSession
+  - [View the Restore Job/Init-Container log](https://stash.run/docs/latest/guides/troubleshooting/how-to-troubleshoot/#view-restore-jobinit-container-log)
+  - Check if the `INTEGRITY` of Repository is true
+  - [Check the Stash operator log](https://stash.run/docs/latest/guides/troubleshooting/how-to-troubleshoot/#check-stash-operator-log)
   - Contact AppsCode team
 - #### NoBackupSessionForTooLong
-  - Check if the `backupconfiguration` is not paused
-  - Check the Job created by `backupsession`
+  - Check if the BackupConfiguration is not `Paused`
+  - Check if the BackupConfiguration is in `Not Ready` or `Invalid` Phase
+  - [Describe the BackupConfiguration](https://stash.run/docs/latest/guides/troubleshooting/how-to-troubleshoot/#backupconfiguration-notready)
+  - Check the conditions of BackupConfiguration
+  - Check the reasons of the `false` conditions (if any)
+  - [Check the Stash operator log](https://stash.run/docs/latest/guides/troubleshooting/how-to-troubleshoot/#check-stash-operator-log)
   - Contact AppsCode team
 - #### RepositoryCorrupted
   - Check if the `INTEGRITY` of `repository` is true
   - Contact AppsCode team
 - #### RepositoryStorageRunningLow
   - Increase the volume size of `repository` backend
+  - Update RetentionPolicy of the BackupConfiguration to free up storage
 - #### BackupSessionPeriodTooLong | RestoreSessionPeriodTooLong
   - Check if the `INTEGRITY` of `repository` is true
   - Check the `MySQL` CRs status
   - Contact AppsCode team
-

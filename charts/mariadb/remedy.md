@@ -3,10 +3,10 @@
 ### Database Alerts
 
 - #### MySQLInstanceDown
-  - Describe the `MySQL` CR, check the reason from conditions and try restarting the pods
+  - Describe the `MariaDB` CR, check the reason from conditions and try restarting the pods
   - Contact AppsCode team
 - #### MySQLServiceDown
-  - Describe the `MySQL` CR and Try restarting all the pods
+  - Describe the `MariaDB` CR check the conditions
   - Contact AppsCode team
 - #### MySQLTooManyConnections
   - Increase mysql variable `max_connections`
@@ -19,17 +19,17 @@
   - Reason for alert: [Innodb_log_waits](https://dev.mysql.com/doc/refman/8.0/en/server-status-variables.html#statvar_Innodb_log_waits)
   - Try reconfiguring [innodb_log_buffer_size](https://dev.mysql.com/doc/refman/8.0/en/innodb-parameters.html#sysvar_innodb_log_buffer_size)
 - #### MySQLRestarted
-  - Check if `MySQL` CR is in Ready status
+  - Check if `MariaDB` CR is in Ready status
   - Contact AppsCode team if status is not updated.
 - #### MySQLHighQPS | MySQLHighIncomingBytes | MySQLHighOutgoingBytes
-  - Scale MySQL using [KubeDB](https://kubedb.com/docs/latest/guides/mysql/) Scaling OpsRequest
+  - Scale MariaDB using [KubeDB](https://kubedb.com/docs/latest/guides/mariadb/) Scaling OpsRequest
 - #### MySQLTooManyOpenFiles
   - Increase mysql variable `open_files_limit`
 
-### Group Replication Alerts
+### MariaDB Cluster Alerts
 
-- #### MySQLHighReplicationDelay | MySQLHighReplicationTransportTime | MySQLHighReplicationApplyTime | MySQLReplicationHighTransactionTime
-  - Try scale MySQL using [KubeDB](https://kubedb.com/docs/latest/guides/mysql/) Scaling OpsRequest
+- #### GaleraReplicationLatencyTooLong
+  - Try scale MariaDB using [KubeDB](https://kubedb.com/docs/latest/guides/mariadb/) Scaling OpsRequest
   - Contact AppsCode team
 
 ### KubeDB Provisioner
@@ -37,8 +37,8 @@
 - #### AppPhaseNotReady
   - Contact AppsCode team
 - #### AppPhaseCritical
-  - If any `MySQLOpsRequest` is ongoing on same database, Wait until it completes.
-  - If some nodes of the MySQL group are not `Up`, Try restarting those nodes one at a time.
+  - If any `MariaDBOpsRequest` is ongoing on same database, Wait until it completes.
+  - If some nodes of the MariaDB Cluster are not `Up`, Try restarting those nodes one at a time.
   - Contact AppsCode team if this persists for more than 30 minutes.
 
 ### KubeDB OpsManager
@@ -46,7 +46,7 @@
 - #### OpsRequestOnProgress
   - Just a reminder, nothing to worry about.
 - #### OpsRequestStatusProgressingToLong
-  - If any `MySQLOpsRequest` is ongoing on same database, Wait until it completes.
+  - If any `MariaDBSQLOpsRequest` is ongoing on same database, Wait until it completes.
   - Contact AppsCode team
 - #### OpsRequestFailed
   - Contact AppsCode team
@@ -86,5 +86,5 @@
   - Update RetentionPolicy of the BackupConfiguration to free up storage
 - #### BackupSessionPeriodTooLong | RestoreSessionPeriodTooLong
   - Check if the `INTEGRITY` of `repository` is true
-  - Check the `MySQL` CRs status
+  - Check the `MariaDB` CRs status
   - Contact AppsCode team

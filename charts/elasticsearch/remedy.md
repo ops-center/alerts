@@ -1,4 +1,4 @@
-## TODOs on MySQL Critical Alerts
+## TODOs on Elasticsearch Critical Alerts
 
 ### Database Alerts
 

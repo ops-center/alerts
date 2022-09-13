@@ -22,7 +22,7 @@
   - Check for slow queries using `db.currentOp()` command
   - Check database pod logs
   - Check for network and disk performance
-  - Contact AppsCode team if this issue persists for a long time
+  - Contact AppsCode team if this issue persists for more than a day
 
 ### KubeDB Provisioner
 
@@ -61,7 +61,7 @@
   - Check if the `INTEGRITY` of Repository is true
   - [Check the Stash operator log](https://stash.run/docs/latest/guides/troubleshooting/how-to-troubleshoot/#check-stash-operator-log)
   - Contact AppsCode team
-- #### RestoreSessionFailed
+- #### MongoDBStashRestoreSessionFailed
   - [Describe the RestoreSession](https://stash.run/docs/latest/guides/troubleshooting/how-to-troubleshoot/#describe-the-restoresession)
   - Check the conditions in the RestoreSession
   - Check the reasons of the `false` conditions (if any)

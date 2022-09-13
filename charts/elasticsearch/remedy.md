@@ -52,8 +52,8 @@
 - #### AppPhaseNotReady
   - Contact AppsCode team
 - #### AppPhaseCritical
-  - If any `MariaDBOpsRequest` is ongoing on same database, Wait until it completes.
-  - If some nodes of the MariaDB Cluster are not `Up`, Try restarting those nodes one at a time.
+  - If any `ElasticsearchOpsRequest` is ongoing on same database, Wait until it completes.
+  - If some nodes of the Elasticsearch Cluster are not `Up`, Try restarting those nodes one at a time.
   - Contact AppsCode team if this persists for more than 30 minutes.
 
 ### KubeDB OpsManager
@@ -61,7 +61,7 @@
 - #### OpsRequestOnProgress
   - Just a reminder, nothing to worry about.
 - #### OpsRequestStatusProgressingToLong
-  - If any `MariaDBSQLOpsRequest` is ongoing on same database, Wait until it completes.
+  - If any `ElasticsearchOpsRequest` is ongoing on same database, Wait until it completes.
   - Contact AppsCode team
 - #### OpsRequestFailed
   - Contact AppsCode team
@@ -101,5 +101,5 @@
   - Update RetentionPolicy of the BackupConfiguration to free up storage
 - #### BackupSessionPeriodTooLong | RestoreSessionPeriodTooLong
   - Check if the `INTEGRITY` of `repository` is true
-  - Check the `MariaDB` CRs status
+  - Check the `Elasticsearch` CRs status
   - Contact AppsCode team

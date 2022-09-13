@@ -13,14 +13,11 @@
   - Contact AppsCode team
 - #### ElasticsearchDiskOutOfSpace
   - Reconfigure storage capacity to your cluster -
-    - [Horizontally Scale](https://kubedb.com/docs/v2022.08.08/guides/elasticsearch/concepts/elasticsearch-ops-request/#spechorizontalscaling) up your data nodes with `ElasticsearchOpsRequest`
-    - [Vertically Scale](https://kubedb.com/docs/v2022.08.08/guides/elasticsearch/concepts/elasticsearch-ops-request/#specverticalscaling) up your data nodes with `ElasticsearchOpsRequest`
-  - [Reduce replicas per shard](https://www.elastic.co/guide/en/elasticsearch/reference/current/size-your-shards.html)
+    - Expand the storage of the Elasticsearch nodes using [volumeExpansion](https://kubedb.com/docs/v2022.08.08/guides/elasticsearch/concepts/elasticsearch-ops-request/#specvolumeexpansion) `ElasticsearchOpsRequest`.
   - Contact AppsCode team
 - #### ElasticsearchDiskSpaceLow
   - Reconfigure storage capacity to your cluster -
-    - [Horizontally Scale](https://kubedb.com/docs/v2022.08.08/guides/elasticsearch/concepts/elasticsearch-ops-request/#spechorizontalscaling) up your data nodes with `ElasticsearchOpsRequest`
-    - [Vertically Scale](https://kubedb.com/docs/v2022.08.08/guides/elasticsearch/concepts/elasticsearch-ops-request/#specverticalscaling) up your data nodes with `ElasticsearchOpsRequest`
+    - Expand the storage of the Elasticsearch nodes using [volumeExpansion](https://kubedb.com/docs/v2022.08.08/guides/elasticsearch/concepts/elasticsearch-ops-request/#specvolumeexpansion) `ElasticsearchOpsRequest`.
   - [Reduce replicas per shard](https://www.elastic.co/guide/en/elasticsearch/reference/current/size-your-shards.html)
   - Contact AppsCode team
 - #### ElasticsearchClusterRed

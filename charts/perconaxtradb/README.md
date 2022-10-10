@@ -48,8 +48,8 @@ The following table lists the configurable parameters of the `perconaxtradb` cha
 |                                   Parameter                                   |                  Description                  |                     Default                      |
 |-------------------------------------------------------------------------------|-----------------------------------------------|--------------------------------------------------|
 | metadata.resource.group                                                       |                                               | <code>kubedb.com</code>                          |
-| metadata.resource.kind                                                        |                                               | <code>PerconaXtraDB</code>                             |
-| metadata.resource.name                                                        |                                               | <code>perconaxtradbs</code>                            |
+| metadata.resource.kind                                                        |                                               | <code>PerconaXtraDB</code>                       |
+| metadata.resource.name                                                        |                                               | <code>perconaxtradbs</code>                      |
 | metadata.resource.scope                                                       |                                               | <code>Namespaced</code>                          |
 | metadata.resource.version                                                     |                                               | <code>v1alpha2</code>                            |
 | metadata.release.name                                                         | Release name                                  | <code>""</code>                                  |
@@ -122,7 +122,7 @@ The following table lists the configurable parameters of the `perconaxtradb` cha
 | form.alert.groups.opsManager.rules.opsRequestFailed.enabled                   |                                               | <code>true</code>                                |
 | form.alert.groups.opsManager.rules.opsRequestFailed.duration                  |                                               | <code>"0m"</code>                                |
 | form.alert.groups.opsManager.rules.opsRequestFailed.severity                  |                                               | <code>critical</code>                            |
-| form.alert.groups.stash.enabled                                               |                                               | <code>true</code>                                |
+| form.alert.groups.stash.enabled                                               |                                               | <code>false</code>                               |
 | form.alert.groups.stash.rules.backupSessionFailed.enabled                     |                                               | <code>true</code>                                |
 | form.alert.groups.stash.rules.backupSessionFailed.duration                    |                                               | <code>"0m"</code>                                |
 | form.alert.groups.stash.rules.backupSessionFailed.severity                    |                                               | <code>critical</code>                            |
@@ -148,7 +148,7 @@ The following table lists the configurable parameters of the `perconaxtradb` cha
 | form.alert.groups.stash.rules.restoreSessionPeriodTooLong.duration            |                                               | <code>"0m"</code>                                |
 | form.alert.groups.stash.rules.restoreSessionPeriodTooLong.val                 |                                               | <code>1800 # 30 minute</code>                    |
 | form.alert.groups.stash.rules.restoreSessionPeriodTooLong.severity            |                                               | <code>warning</code>                             |
-| form.alert.groups.schemaManager.enabled                                       |                                               | <code>true</code>                                |
+| form.alert.groups.schemaManager.enabled                                       |                                               | <code>false</code>                               |
 | form.alert.groups.schemaManager.rules.schemaPendingForTooLong.enabled         |                                               | <code>true</code>                                |
 | form.alert.groups.schemaManager.rules.schemaPendingForTooLong.duration        |                                               | <code>"30m"</code>                               |
 | form.alert.groups.schemaManager.rules.schemaPendingForTooLong.severity        |                                               | <code>warning</code>                             |

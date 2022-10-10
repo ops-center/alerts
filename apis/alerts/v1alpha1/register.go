@@ -62,6 +62,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&MongodbList{},
 		&Mysql{},
 		&MysqlList{},
+		&Perconaxtradb{},
+		&PerconaxtradbList{},
 		&Postgres{},
 		&PostgresList{},
 		&Redis{},

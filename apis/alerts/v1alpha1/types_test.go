@@ -22,17 +22,18 @@ import (
 
 	"go.appscode.dev/alerts/apis/alerts/v1alpha1"
 
-	schemachecker "kmodules.xyz/schema-checker"
+	sc "kmodules.xyz/schema-checker"
 )
 
 func TestDefaultValues(t *testing.T) {
-	checker := schemachecker.New(os.DirFS("../../.."),
-		v1alpha1.ElasticsearchSpec{},
-		v1alpha1.MariadbSpec{},
-		v1alpha1.MongodbSpec{},
-		v1alpha1.MysqlSpec{},
-		v1alpha1.PostgresSpec{},
-		v1alpha1.RedisSpec{},
+	checker := sc.New(os.DirFS("../../.."),
+		sc.TestCase{Obj: v1alpha1.ElasticsearchSpec{}},
+		sc.TestCase{Obj: v1alpha1.MariadbSpec{}},
+		sc.TestCase{Obj: v1alpha1.MongodbSpec{}},
+		sc.TestCase{Obj: v1alpha1.MysqlSpec{}},
+		sc.TestCase{Obj: v1alpha1.PerconaxtradbSpec{}},
+		sc.TestCase{Obj: v1alpha1.PostgresSpec{}},
+		sc.TestCase{Obj: v1alpha1.RedisSpec{}},
 	)
 	checker.TestAll(t)
 }

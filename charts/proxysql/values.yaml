@@ -78,7 +78,7 @@ form:
       cluster:
         enabled: true
         rules:
-          proxysqlCLusterSyncFailure: #todo proxysql cluster
+          proxysqlCLusterSyncFailure:
             enabled: true
             val: 0.1
             duration: "5m"

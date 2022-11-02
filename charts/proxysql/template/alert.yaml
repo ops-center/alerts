@@ -20,7 +20,7 @@ spec:
   {{ if .Values.form.alert.groups.database.enabled -}}
   - name: proxysql.database.{{ .Release.Namespace }}.{{ $app }}.rules
     rules:
-    {{ if .Values.form.alert.groups.database.rules.proxysqlSQLInstanceDown.enabled -}}
+    {{ if .Values.form.alert.groups.database.rules.proxySQLInstanceDown.enabled -}}
     - alert: ProxySQLInstanceDown
       expr: proxysql_uptime_seconds_total{job="{{ $app }}-stats",namespace="{{ .Release.Namespace }}"} == 0
       for: {{ .Values.form.alert.groups.database.rules.proxySQLInstanceDown.duration }}
@@ -97,17 +97,17 @@ spec:
         summary: ProxySQL restarted ({{.Values.form.alert.groups.database.rules.proxySQLRestarted.val}} second ago) (instance {{`{{`}} $labels.pod {{`}}`}})
         description: "ProxySQL restarted\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
-    {{ if .Values.form.alert.groups.database.rules.proxySQLHighQPS.enabled -}}
-    - alert: ProxySQLHighQPS
-      expr: rate(mysql_global_status_queries{job="{{ $app }}-stats",namespace="{{ .Release.Namespace }}"}[1m]) > {{.Values.form.alert.groups.database.rules.proxySQLHighQPS.val}}
-      for: {{ .Values.form.alert.groups.database.rules.proxySQLHighQPS.duration }}
-      labels:
-        severity: {{ .Values.form.alert.groups.database.rules.proxySQLHighQPS.severity }}
-        {{- include "proxysql.alertLabels" . | nindent 8 }}
-      annotations:
-        summary: ProxySQL has high queries per second (> {{.Values.form.alert.groups.database.rules.proxySQLHighQPS.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
-        description: "ProxySQL has high QPS on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-    {{ end -}}
+#    {{ if .Values.form.alert.groups.database.rules.proxySQLHighQPS.enabled -}}
+#    - alert: ProxySQLHighQPS
+#      expr: rate(mysql_global_status_queries{job="{{ $app }}-stats",namespace="{{ .Release.Namespace }}"}[1m]) > {{.Values.form.alert.groups.database.rules.proxySQLHighQPS.val}}
+#      for: {{ .Values.form.alert.groups.database.rules.proxySQLHighQPS.duration }}
+#      labels:
+#        severity: {{ .Values.form.alert.groups.database.rules.proxySQLHighQPS.severity }}
+#        {{- include "proxysql.alertLabels" . | nindent 8 }}
+#      annotations:
+#        summary: ProxySQL has high queries per second (> {{.Values.form.alert.groups.database.rules.proxySQLHighQPS.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
+#        description: "ProxySQL has high QPS on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+#    {{ end -}}
     {{ if .Values.form.alert.groups.database.rules.proxySQLHighIncomingBytes.enabled -}}
     - alert: ProxySQLHighIncomingBytes
       expr: rate(proxysql_queries_frontends_bytes_total{job="{{ $app }}-stats",namespace="{{ .Release.Namespace }}",traffic_flow="received"}[1m]) > {{.Values.form.alert.groups.database.rules.proxySQLHighIncomingBytes.val}}
@@ -146,14 +146,14 @@ spec:
   - name: proxysql.cluster.{{ .Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if .Values.form.alert.groups.cluster.rules.proxysqlCLusterSyncFailure.enabled -}}
-    - alert: GaleraReplicationLatencyTooLong
+    - alert: ProxySQLCLusterSyncFailure
       expr: sum by(job) (rate(proxysql_cluster_syn_conflict_total{job="{{ $app }}-stats",namespace="{{ .Release.Namespace }}"}[1m])) > {{.Values.form.alert.groups.cluster.rules.proxysqlCLusterSyncFailure.val}}
       for: {{ .Values.form.alert.groups.cluster.rules.proxysqlCLusterSyncFailure.duration }}
       labels:
         severity: {{ .Values.form.alert.groups.cluster.rules.proxysqlCLusterSyncFailure.severity }}
         {{- include "proxysql.alertLabels" . | nindent 8 }}
       annotations:
-        summary: ProxySQL Galera Cluster latency too long ( > {{.Values.form.alert.groups.cluster.rules.proxysqlCLusterSyncFailure.val}} second,) (instance {{`{{`}} $labels.pod {{`}}`}})
+        summary: ProxySQL Cluster Sync Failed ( > {{.Values.form.alert.groups.cluster.rules.proxysqlCLusterSyncFailure.val}} second,) (instance {{`{{`}} $labels.pod {{`}}`}})
         description: "ProxySQL Cluster Sync Failed for {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
   {{ end -}}
@@ -195,7 +195,7 @@ spec:
         {{- include "proxysql.alertLabels" . | nindent 8 }}
       annotations:
         summary: ProxySQLOpsRequest on progress (proxysqlopsrequest {{`{{`}} $labels.proxysqlopsrequest {{`}}`}})
-        description: "MaraiDBOpsRequest {{`{{`}} $labels.proxysqlopsrequest {{`}}`}} is in progressressing status\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "ProxySQLOpsRequest {{`{{`}} $labels.proxysqlopsrequest {{`}}`}} is in progressressing status\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if .Values.form.alert.groups.opsManager.rules.opsRequestStatusProgressingToLong.enabled -}}
     - alert: KubeDBProxySQLOpsRequestStatusProgressingToLong
@@ -206,7 +206,7 @@ spec:
         {{- include "proxysql.alertLabels" . | nindent 8 }}
       annotations:
         summary: ProxySQLOpsRequest is in progressing status for too long (proxysqlopsrequest {{`{{`}} $labels.proxysqlopsrequest {{`}}`}})
-        description: "MaraiDBOpsRequest {{`{{`}} $labels.proxysqlopsrequest {{`}}`}} is in progressing status for too long\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "ProxySQLOpsRequest {{`{{`}} $labels.proxysqlopsrequest {{`}}`}} is in progressing status for too long\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if .Values.form.alert.groups.opsManager.rules.opsRequestFailed.enabled -}}
     - alert: KubeDBProxySQLOpsRequestFailed
@@ -217,7 +217,7 @@ spec:
         {{- include "proxysql.alertLabels" . | nindent 8 }}
       annotations:
         summary: ProxySQLOpsRequest failed (proxysqlopsrequest {{`{{`}} $labels.proxysqlopsrequest {{`}}`}})
-        description: "MaraiDBOpsRequest {{`{{`}} $labels.proxysqlopsrequest {{`}}`}} failed \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "ProxySQLOpsRequest {{`{{`}} $labels.proxysqlopsrequest {{`}}`}} failed \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
   {{ end -}}
   {{ end }}

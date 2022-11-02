@@ -195,7 +195,7 @@ spec:
         {{- include "mariadb.alertLabels" . | nindent 8 }}
       annotations:
         summary: MariaDBOpsRequest on progress (mariadbopsrequest {{`{{`}} $labels.mariadbopsrequest {{`}}`}})
-        description: "MaraiDBOpsRequest {{`{{`}} $labels.mariadbopsrequest {{`}}`}} is in progressressing status\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "MariaDBOpsRequest {{`{{`}} $labels.mariadbopsrequest {{`}}`}} is in progressressing status\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if .Values.form.alert.groups.opsManager.rules.opsRequestStatusProgressingToLong.enabled -}}
     - alert: KubeDBMariaDBOpsRequestStatusProgressingToLong
@@ -206,7 +206,7 @@ spec:
         {{- include "mariadb.alertLabels" . | nindent 8 }}
       annotations:
         summary: MariaDBOpsRequest is in progressing status for too long (mariadbopsrequest {{`{{`}} $labels.mariadbopsrequest {{`}}`}})
-        description: "MaraiDBOpsRequest {{`{{`}} $labels.mariadbopsrequest {{`}}`}} is in progressing status for too long\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "MariaDBOpsRequest {{`{{`}} $labels.mariadbopsrequest {{`}}`}} is in progressing status for too long\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if .Values.form.alert.groups.opsManager.rules.opsRequestFailed.enabled -}}
     - alert: KubeDBMariaDBOpsRequestFailed
@@ -217,7 +217,7 @@ spec:
         {{- include "mariadb.alertLabels" . | nindent 8 }}
       annotations:
         summary: MariaDBOpsRequest failed (mariadbopsrequest {{`{{`}} $labels.mariadbopsrequest {{`}}`}})
-        description: "MaraiDBOpsRequest {{`{{`}} $labels.mariadbopsrequest {{`}}`}} failed \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "MariaDBOpsRequest {{`{{`}} $labels.mariadbopsrequest {{`}}`}} failed \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
   {{ end -}}
   {{ if .Values.form.alert.groups.stash.enabled -}}

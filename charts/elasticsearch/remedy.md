@@ -48,6 +48,11 @@
 - #### ElasticsearchHealthyNodes
   - Elasticsearch cluster should have at least 3 healthy nodes. Check cluster health with [_cluster/health](https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-health.html#cluster-health-api-example) API.
   - You can set query parameters on `_cluster/health` to fetch health status from master node. Use `_cluster/health?local=true` to retrieve information from the local node only. Follow this link for details - [cluster-health-api-response-body](https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-health.html#cluster-health-api-response-body)
+  - Here is the [KubeDB / Elasticsearch / Database](https://github.com/appscode/grafana-dashboards/blob/master/elasticsearch/elasticsearch_database_dashboard.json)  dashboard. There are panels called `Cluster Status` , `Nodes in Cluster`, `Active Data Nodes`, `Pending Tasks`, `Active Shards`, `Active Primary Shards`, `Initializing Shards` , `Relocating Shards`, `Unassigned Shards` and `Delayed Unassigned Shards` which will show you database health metrics.
+  - [![KubeDB / Elasticsearch / Database](/charts/elasticsearch/images/kubedb-elasticsearch-database.png)](https://github.com/appscode/grafana-dashboards/blob/master/elasticsearch/elasticsearch_database_dashboard.json)
+  - Here is the [KubeDB / Elasticsearch / Pods](https://github.com/appscode/grafana-dashboards/blob/master/elasticsearch/elasticsearch_pod_dashboard.json) dashboard 
+  - There is a panel called `Node Status` which will show you specific node health status. Other graph panels like `Open File Count` , `Pending Tasks`, `Connected Nodes` and `Connected Active Data Nodes` will show you node states.
+  - [![KubeDB / Elasticsearch / Pods](/charts/elasticsearch/images/kubedb-elasticsearch-pod.png)](https://github.com/appscode/grafana-dashboards/blob/master/elasticsearch/elasticsearch_pod_dashboard.json)
 - #### ElasticsearchHealthyDataNodes
   - Elasticsearch cluster should have at least 3 healthy data nodes. Check cluster health with [_cluster/health](https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-health.html#cluster-health-api-example) API.
 - #### ElasticsearchRelocatingShards

@@ -49,7 +49,7 @@ The following table lists the configurable parameters of the `proxysql` chart an
 |-------------------------------------------------------------------------------|-----------------------------------------------|--------------------------------------------------|
 | metadata.resource.group                                                       |                                               | <code>kubedb.com</code>                          |
 | metadata.resource.kind                                                        |                                               | <code>ProxySQL</code>                            |
-| metadata.resource.name                                                        |                                               | <code>proxysqls</code>                           |
+| metadata.resource.name                                                        |                                               | <code>proxysql</code>                            |
 | metadata.resource.scope                                                       |                                               | <code>Namespaced</code>                          |
 | metadata.resource.version                                                     |                                               | <code>v1alpha2</code>                            |
 | metadata.release.name                                                         | Release name                                  | <code>""</code>                                  |

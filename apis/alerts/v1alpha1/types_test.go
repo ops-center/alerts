@@ -33,6 +33,7 @@ func TestDefaultValues(t *testing.T) {
 		sc.TestCase{Obj: v1alpha1.MysqlSpec{}},
 		sc.TestCase{Obj: v1alpha1.PerconaxtradbSpec{}},
 		sc.TestCase{Obj: v1alpha1.PostgresSpec{}},
+		sc.TestCase{Obj: v1alpha1.ProxysqlSpec{}},
 		sc.TestCase{Obj: v1alpha1.RedisSpec{}},
 	)
 	checker.TestAll(t)

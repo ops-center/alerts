@@ -66,6 +66,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&PerconaxtradbList{},
 		&Postgres{},
 		&PostgresList{},
+		&Proxysql{},
+		&ProxysqlList{},
 		&Redis{},
 		&RedisList{},
 	)

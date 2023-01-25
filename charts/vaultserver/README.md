@@ -1,19 +1,19 @@
-# Redis alerts
+# VaultServer alerts
 
-[Redis alerts by AppsCode](https://github.com/appscode/alerts) - Redis alerts for KubeDB
+[VaultServer alerts by AppsCode](https://github.com/appscode/alerts) - VaultServer alerts for KubeVault
 
 ## TL;DR;
 
 ```bash
 $ helm repo add appscode https://charts.appscode.com/stable/
 $ helm repo update
-$ helm search repo appscode/redis --version=v0.1.0
-$ helm upgrade -i redis appscode/redis -n demo --create-namespace --version=v0.1.0
+$ helm search repo appscode/vaultserver --version=v0.1.0
+$ helm upgrade -i vaultserver appscode/vaultserver -n demo --create-namespace --version=v0.1.0
 ```
 
 ## Introduction
 
-This chart deploys Redis alerts on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart deploys VaultServer alerts on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
 
@@ -21,35 +21,35 @@ This chart deploys Redis alerts on a [Kubernetes](http://kubernetes.io) cluster 
 
 ## Installing the Chart
 
-To install/upgrade the chart with the release name `redis`:
+To install/upgrade the chart with the release name `vaultserver`:
 
 ```bash
-$ helm upgrade -i redis appscode/redis -n demo --create-namespace --version=v0.1.0
+$ helm upgrade -i vaultserver appscode/vaultserver -n demo --create-namespace --version=v0.1.0
 ```
 
-The command deploys Redis alerts on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+The command deploys VaultServer alerts on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
 ## Uninstalling the Chart
 
-To uninstall the `redis`:
+To uninstall the `vaultserver`:
 
 ```bash
-$ helm uninstall redis -n demo
+$ helm uninstall vaultserver -n demo
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
 ## Configuration
 
-The following table lists the configurable parameters of the `redis` chart and their default values.
+The following table lists the configurable parameters of the `vaultserver` chart and their default values.
 
 |                                   Parameter                                   |                  Description                  |                Default                |
 |-------------------------------------------------------------------------------|-----------------------------------------------|---------------------------------------|
-| metadata.resource.group                                                       |                                               | <code>kubedb.com</code>               |
-| metadata.resource.kind                                                        |                                               | <code>Redis</code>                    |
-| metadata.resource.name                                                        |                                               | <code>redises</code>                  |
+| metadata.resource.group                                                       |                                               | <code>kubevault.com</code>            |
+| metadata.resource.kind                                                        |                                               | <code>VaultServer</code>              |
+| metadata.resource.name                                                        |                                               | <code>vaultserver</code>              |
 | metadata.resource.scope                                                       |                                               | <code>Namespaced</code>               |
 | metadata.resource.version                                                     |                                               | <code>v1alpha2</code>                 |
 | metadata.release.name                                                         | Release name                                  | <code>""</code>                       |
@@ -58,37 +58,45 @@ The following table lists the configurable parameters of the `redis` chart and t
 | form.alert.labels                                                             | # Labels for default rules                    | <code>{"release":"prometheus"}</code> |
 | form.alert.annotations                                                        | # Annotations for default rules               | <code>{}</code>                       |
 | form.alert.additionalRuleLabels                                               | # Additional labels for PrometheusRule alerts | <code>{}</code>                       |
-| form.alert.groups.database.enabled                                            |                                               | <code>true</code>                     |
-| form.alert.groups.database.rules.redisDown.enabled                            |                                               | <code>true</code>                     |
-| form.alert.groups.database.rules.redisDown.duration                           |                                               | <code>"0m"</code>                     |
-| form.alert.groups.database.rules.redisDown.severity                           |                                               | <code>critical</code>                 |
-| form.alert.groups.database.rules.redisMissingMaster.enabled                   |                                               | <code>true</code>                     |
-| form.alert.groups.database.rules.redisMissingMaster.duration                  |                                               | <code>"0m"</code>                     |
-| form.alert.groups.database.rules.redisMissingMaster.val                       |                                               | <code>1</code>                        |
-| form.alert.groups.database.rules.redisMissingMaster.severity                  |                                               | <code>critical</code>                 |
-| form.alert.groups.database.rules.redisTooManyMasters.enabled                  |                                               | <code>true</code>                     |
-| form.alert.groups.database.rules.redisTooManyMasters.duration                 |                                               | <code>"2m"</code>                     |
-| form.alert.groups.database.rules.redisTooManyMasters.val                      |                                               | <code>1</code>                        |
-| form.alert.groups.database.rules.redisTooManyMasters.severity                 |                                               | <code>critical</code>                 |
-| form.alert.groups.database.rules.redisDisconnectedSlaves.enabled              |                                               | <code>true</code>                     |
-| form.alert.groups.database.rules.redisDisconnectedSlaves.duration             |                                               | <code>"2m"</code>                     |
-| form.alert.groups.database.rules.redisDisconnectedSlaves.val                  |                                               | <code>1</code>                        |
-| form.alert.groups.database.rules.redisDisconnectedSlaves.severity             |                                               | <code>warning</code>                  |
-| form.alert.groups.database.rules.redisTooManyConnections.enabled              |                                               | <code>true</code>                     |
-| form.alert.groups.database.rules.redisTooManyConnections.duration             |                                               | <code>"2m"</code>                     |
-| form.alert.groups.database.rules.redisTooManyConnections.val                  |                                               | <code>100</code>                      |
-| form.alert.groups.database.rules.redisTooManyConnections.severity             |                                               | <code>warning</code>                  |
-| form.alert.groups.database.rules.redisRejectedConnections.enabled             |                                               | <code>true</code>                     |
-| form.alert.groups.database.rules.redisRejectedConnections.duration            |                                               | <code>"0m"</code>                     |
-| form.alert.groups.database.rules.redisRejectedConnections.val                 |                                               | <code>0</code>                        |
-| form.alert.groups.database.rules.redisRejectedConnections.severity            |                                               | <code>warning</code>                  |
-| form.alert.groups.provisioner.enabled                                         |                                               | <code>true</code>                     |
-| form.alert.groups.provisioner.rules.appPhaseNotReady.enabled                  |                                               | <code>true</code>                     |
-| form.alert.groups.provisioner.rules.appPhaseNotReady.duration                 |                                               | <code>"1m"</code>                     |
-| form.alert.groups.provisioner.rules.appPhaseNotReady.severity                 |                                               | <code>critical</code>                 |
-| form.alert.groups.provisioner.rules.appPhaseCritical.enabled                  |                                               | <code>true</code>                     |
-| form.alert.groups.provisioner.rules.appPhaseCritical.duration                 |                                               | <code>"15m"</code>                    |
-| form.alert.groups.provisioner.rules.appPhaseCritical.severity                 |                                               | <code>warning</code>                  |
+| form.alert.groups.vault.enabled                                               |                                               | <code>true</code>                     |
+| form.alert.groups.vault.rules.vaultDown.enabled                               |                                               | <code>true</code>                     |
+| form.alert.groups.vault.rules.vaultDown.duration                              |                                               | <code>"0m"</code>                     |
+| form.alert.groups.vault.rules.vaultDown.severity                              |                                               | <code>critical</code>                 |
+| form.alert.groups.vault.rules.vaultSealed.enabled                             |                                               | <code>true</code>                     |
+| form.alert.groups.vault.rules.vaultSealed.duration                            |                                               | <code>"0m"</code>                     |
+| form.alert.groups.vault.rules.vaultSealed.severity                            |                                               | <code>critical</code>                 |
+| form.alert.groups.vault.rules.vaultAutoPilotNodeUnhealthy.enabled             |                                               | <code>true</code>                     |
+| form.alert.groups.vault.rules.vaultAutoPilotNodeUnhealthy.duration            |                                               | <code>"1m"</code>                     |
+| form.alert.groups.vault.rules.vaultAutoPilotNodeUnhealthy.severity            |                                               | <code>critical</code>                 |
+| form.alert.groups.vault.rules.vaultLeadershipLoss.enabled                     |                                               | <code>true</code>                     |
+| form.alert.groups.vault.rules.vaultLeadershipLoss.duration                    |                                               | <code>"1m"</code>                     |
+| form.alert.groups.vault.rules.vaultLeadershipLoss.val                         |                                               | <code>5</code>                        |
+| form.alert.groups.vault.rules.vaultLeadershipLoss.severity                    |                                               | <code>critical</code>                 |
+| form.alert.groups.vault.rules.vaultLeadershipStepsDowns.enabled               |                                               | <code>true</code>                     |
+| form.alert.groups.vault.rules.vaultLeadershipStepsDowns.duration              |                                               | <code>"1m"</code>                     |
+| form.alert.groups.vault.rules.vaultLeadershipStepsDowns.val                   |                                               | <code>5</code>                        |
+| form.alert.groups.vault.rules.vaultLeadershipStepsDowns.severity              |                                               | <code>critical</code>                 |
+| form.alert.groups.vault.rules.vaultLeadershipSetupFailures.enabled            |                                               | <code>true</code>                     |
+| form.alert.groups.vault.rules.vaultLeadershipSetupFailures.duration           |                                               | <code>"1m"</code>                     |
+| form.alert.groups.vault.rules.vaultLeadershipSetupFailures.val                |                                               | <code>5</code>                        |
+| form.alert.groups.vault.rules.vaultLeadershipSetupFailures.severity           |                                               | <code>critical</code>                 |
+| form.alert.groups.vault.rules.vaultRequestFailures.enabled                    |                                               | <code>true</code>                     |
+| form.alert.groups.vault.rules.vaultRequestFailures.duration                   |                                               | <code>"15m"</code>                    |
+| form.alert.groups.vault.rules.vaultRequestFailures.severity                   |                                               | <code>critical</code>                 |
+| form.alert.groups.vault.rules.vaultResponseFailures.enabled                   |                                               | <code>true</code>                     |
+| form.alert.groups.vault.rules.vaultResponseFailures.duration                  |                                               | <code>"15m"</code>                    |
+| form.alert.groups.vault.rules.vaultResponseFailures.severity                  |                                               | <code>critical</code>                 |
+| form.alert.groups.vault.rules.vaultTooManyInfinityTokens.enabled              |                                               | <code>true</code>                     |
+| form.alert.groups.vault.rules.vaultTooManyInfinityTokens.duration             |                                               | <code>"5m"</code>                     |
+| form.alert.groups.vault.rules.vaultTooManyInfinityTokens.val                  |                                               | <code>3</code>                        |
+| form.alert.groups.vault.rules.vaultTooManyInfinityTokens.severity             |                                               | <code>warning</code>                  |
+| form.alert.groups.operator.enabled                                            |                                               | <code>true</code>                     |
+| form.alert.groups.operator.rules.appPhaseNotReady.enabled                     |                                               | <code>true</code>                     |
+| form.alert.groups.operator.rules.appPhaseNotReady.duration                    |                                               | <code>"5m"</code>                     |
+| form.alert.groups.operator.rules.appPhaseNotReady.severity                    |                                               | <code>critical</code>                 |
+| form.alert.groups.operator.rules.appPhaseCritical.enabled                     |                                               | <code>true</code>                     |
+| form.alert.groups.operator.rules.appPhaseCritical.duration                    |                                               | <code>"15m"</code>                    |
+| form.alert.groups.operator.rules.appPhaseCritical.severity                    |                                               | <code>warning</code>                  |
 | form.alert.groups.opsManager.enabled                                          |                                               | <code>true</code>                     |
 | form.alert.groups.opsManager.rules.opsRequestOnProgress.enabled               |                                               | <code>true</code>                     |
 | form.alert.groups.opsManager.rules.opsRequestOnProgress.duration              |                                               | <code>"0m"</code>                     |
@@ -130,12 +138,12 @@ The following table lists the configurable parameters of the `redis` chart and t
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm upgrade -i`. For example:
 
 ```bash
-$ helm upgrade -i redis appscode/redis -n demo --create-namespace --version=v0.1.0 --set metadata.resource.group=kubedb.com
+$ helm upgrade -i vaultserver appscode/vaultserver -n demo --create-namespace --version=v0.1.0 --set metadata.resource.group=kubevault.com
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while
 installing the chart. For example:
 
 ```bash
-$ helm upgrade -i redis appscode/redis -n demo --create-namespace --version=v0.1.0 --values values.yaml
+$ helm upgrade -i vaultserver appscode/vaultserver -n demo --create-namespace --version=v0.1.0 --values values.yaml
 ```

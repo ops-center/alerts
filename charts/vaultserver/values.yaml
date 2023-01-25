@@ -1,8 +1,8 @@
 metadata:
   resource:
-    group: kubedb.com
-    kind: Redis
-    name: redises
+    group: kubevault.com
+    kind: VaultServer
+    name: vaultserver
     scope: Namespaced
     version: v1alpha2
   release:
@@ -30,44 +30,55 @@ form:
     # runbookUrl: "https://runbooks.prometheus-operator.dev/runbooks"
 
     groups:
-      database:
+      vault:
         enabled: true
         rules:
-          redisDown:
+          vaultDown:
             enabled: true
             duration: "0m"
             severity: critical
-          redisMissingMaster:
+          vaultSealed:
             enabled: true
             duration: "0m"
-            val: 1
             severity: critical
-          redisTooManyMasters:
+          vaultAutoPilotNodeUnhealthy:
             enabled: true
-            duration: "2m"
-            val: 1
+            duration: "1m"
             severity: critical
-          redisDisconnectedSlaves:
+          vaultLeadershipLoss:
             enabled: true
-            duration: "2m"
-            val: 1
-            severity: warning
-          redisTooManyConnections:
+            duration: "1m"
+            val: 5
+            severity: critical
+          vaultLeadershipStepsDowns:
             enabled: true
-            duration: "2m"
-            val: 100
-            severity: warning
-          redisRejectedConnections:
+            duration: "1m"
+            val: 5
+            severity: critical
+          vaultLeadershipSetupFailures:
             enabled: true
-            duration: "0m"
-            val: 0
+            duration: "1m"
+            val: 5
+            severity: critical
+          vaultRequestFailures:
+            enabled: true
+            duration: "15m"
+            severity: critical
+          vaultResponseFailures:
+            enabled: true
+            duration: "15m"
+            severity: critical
+          vaultTooManyInfinityTokens:
+            enabled: true
+            duration: "5m"
+            val: 3
             severity: warning
-      provisioner:
+      operator:
         enabled: true
         rules:
           appPhaseNotReady:
             enabled: true
-            duration: "1m"
+            duration: "5m"
             severity: critical
           appPhaseCritical:
             enabled: true

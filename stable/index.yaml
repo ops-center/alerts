@@ -1,0 +1,147 @@
+apiVersion: v1
+entries:
+  elasticsearch:
+  - apiVersion: v2
+    appVersion: v0.1.0
+    created: "2023-01-26T16:38:50.237547278Z"
+    description: A Helm chart for Elasticsearch Alert by AppsCode
+    digest: 78d52a9b4528aca9e8344a07c2b3370d38e1c0ab2146012a1a1cd6d618268494
+    home: https://github.com/appscode/alerts
+    icon: https://cdn.appscode.com/images/products/kubedb/kubedb-icon.png
+    maintainers:
+    - email: support@appscode.com
+      name: appscode
+    name: elasticsearch
+    sources:
+    - https://github.com/appscode/alerts
+    type: application
+    urls:
+    - https://raw.githubusercontent.com/bytebuilders/ui-wizards/master/stable/elasticsearch/elasticsearch-v0.1.0.tgz
+    version: v0.1.0
+  mariadb:
+  - apiVersion: v2
+    appVersion: v0.1.0
+    created: "2023-01-26T16:38:50.23870089Z"
+    description: A Helm chart for MariaDB Alert by AppsCode
+    digest: 55138650164b48b5fc8683d90f0e982260a3ab3352c3c0513713f9e6b96d2bb8
+    home: https://github.com/appscode/alerts
+    icon: https://cdn.appscode.com/images/products/kubedb/kubedb-icon.png
+    maintainers:
+    - email: support@appscode.com
+      name: appscode
+    name: mariadb
+    sources:
+    - https://github.com/appscode/alerts
+    type: application
+    urls:
+    - https://raw.githubusercontent.com/bytebuilders/ui-wizards/master/stable/mariadb/mariadb-v0.1.0.tgz
+    version: v0.1.0
+  mongodb:
+  - apiVersion: v2
+    appVersion: v0.1.0
+    created: "2023-01-26T16:38:50.240390009Z"
+    description: A Helm chart for MongoDB Alert by AppsCode
+    digest: 68fc387605c18c8c4b1f1a51062f4948197397e8a31ea70b3306d0446251a453
+    home: https://github.com/appscode/alerts
+    icon: https://cdn.appscode.com/images/products/kubedb/kubedb-icon.png
+    maintainers:
+    - email: support@appscode.com
+      name: appscode
+    name: mongodb
+    sources:
+    - https://github.com/appscode/alerts
+    type: application
+    urls:
+    - https://raw.githubusercontent.com/bytebuilders/ui-wizards/master/stable/mongodb/mongodb-v0.1.0.tgz
+    version: v0.1.0
+  mysql:
+  - apiVersion: v2
+    appVersion: v0.1.0
+    created: "2023-01-26T16:38:50.241532821Z"
+    description: A Helm chart for MySQL Alert by AppsCode
+    digest: 88f0df99b84a43d61aea3253bc9d87567b9682526d36fbe583d3aa013105bd4b
+    home: https://github.com/appscode/alerts
+    icon: https://cdn.appscode.com/images/products/kubedb/kubedb-icon.png
+    maintainers:
+    - email: support@appscode.com
+      name: appscode
+    name: mysql
+    sources:
+    - https://github.com/appscode/alerts
+    type: application
+    urls:
+    - https://raw.githubusercontent.com/bytebuilders/ui-wizards/master/stable/mysql/mysql-v0.1.0.tgz
+    version: v0.1.0
+  perconaxtradb:
+  - apiVersion: v2
+    appVersion: v0.1.0
+    created: "2023-01-26T16:38:50.242625333Z"
+    description: A Helm chart for PerconaXtraDB Alert by AppsCode
+    digest: 1197fd700237b40b4cab1c89d6d1c5f9a86a5607f037804b35d4dfe66070e9db
+    home: https://github.com/appscode/alerts
+    icon: https://cdn.appscode.com/images/products/kubedb/kubedb-icon.png
+    maintainers:
+    - email: support@appscode.com
+      name: appscode
+    name: perconaxtradb
+    sources:
+    - https://github.com/appscode/alerts
+    type: application
+    urls:
+    - https://raw.githubusercontent.com/bytebuilders/ui-wizards/master/stable/perconaxtradb/perconaxtradb-v0.1.0.tgz
+    version: v0.1.0
+  postgres:
+  - apiVersion: v2
+    appVersion: v0.1.0
+    created: "2023-01-26T16:38:50.243658344Z"
+    description: A Helm chart for Postgres Alert by AppsCode
+    digest: bf6c4c6b0704996fd62514b2442ec01f1e53cd0e707107a2a89bbc6fc8cb3b62
+    home: https://github.com/appscode/alerts
+    icon: https://cdn.appscode.com/images/products/kubedb/kubedb-icon.png
+    maintainers:
+    - email: support@appscode.com
+      name: appscode
+    name: postgres
+    sources:
+    - https://github.com/appscode/alerts
+    type: application
+    urls:
+    - https://raw.githubusercontent.com/bytebuilders/ui-wizards/master/stable/postgres/postgres-v0.1.0.tgz
+    version: v0.1.0
+  proxysql:
+  - apiVersion: v2
+    appVersion: v0.1.0
+    created: "2023-01-26T16:38:50.24509156Z"
+    description: A Helm chart for ProxySQL Alert by AppsCode
+    digest: a9275f7e51afc00ac535b3c7b0d03d7ef2c022cb8e4adea7b346dc02035758ff
+    home: https://github.com/appscode/alerts
+    icon: https://cdn.appscode.com/images/products/kubedb/kubedb-icon.png
+    maintainers:
+    - email: support@appscode.com
+      name: appscode
+    name: proxysql
+    sources:
+    - https://github.com/appscode/alerts
+    type: application
+    urls:
+    - https://raw.githubusercontent.com/bytebuilders/ui-wizards/master/stable/proxysql/proxysql-v0.1.0.tgz
+    version: v0.1.0
+  redis:
+  - apiVersion: v2
+    appVersion: v0.1.0
+    created: "2023-01-26T16:38:50.246426774Z"
+    description: A Helm chart for Redis Alert by AppsCode
+    digest: 5fd1f6e3434b599e8a8a3df4250de44a545cecefaeef2fe867405115a9563b58
+    home: https://github.com/appscode/alerts
+    icon: https://cdn.appscode.com/images/products/kubedb/kubedb-icon.png
+    maintainers:
+    - email: support@appscode.com
+      name: appscode
+    name: redis
+    sources:
+    - https://github.com/appscode/alerts
+    type: application
+    urls:
+    - https://raw.githubusercontent.com/bytebuilders/ui-wizards/master/stable/redis/redis-v0.1.0.tgz
+    version: v0.1.0
+generated: "2023-01-26T16:38:50.230365Z"

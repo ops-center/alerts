@@ -2,13 +2,13 @@ This template is designed to contact with AppsCode with troubleshooting and supp
 
 Let's say you have XtraDB database in namespace demo.Please refer to [KubeDB Docs](https://kubedb.com/docs/v2023.01.31/guides/xtradb/) for more about KubeDB.
 ```bash
-Kubectl get xtradb <ns>     // wiil list all the database in a namesapce  
+Kubectl get xtradb -n  <ns>     // will list all the database in a namesapce  
 $ kubectl get xtradb -n demo
   NAME    VERSION   STATUS   AGE
   xtradb   8.0.28    Ready    6h51m
 ```
 There are four different db phase you may see in KubeDB managed Database.
-``Ready`` ``Provisioning`` ``critical`` ``NotReady``
+``Ready`` ``Provisioning`` ``Critical`` ``NotReady``
 
 **Ready:** KubeDB Managed Database phase becomes Ready when every database server is in the cluster and working properly. There's nothing to worry about.
 
@@ -24,11 +24,11 @@ You can contact to AppsCode with the following things attached,
     ```
 - Describe the XtraDB object:
     ```bash
-      kubectl describe xtradb -n <ns> <xtradb-ojbect-Name> 
+      kubectl describe xtradb -n <ns> <xtradb-object-Name> 
     ```
 - Describe the StatefulSet object:
     ```bash
-      kubectl describe sts -n <ns> <xtradb-ojbect-Name>
+      kubectl describe sts -n <ns> <xtradb-object-Name>
     ```
 - Describe the pods: If there are multiple pods describe all of them
     ```bash
@@ -62,11 +62,11 @@ You can contact to AppsCode with the following things attached,
     ```
 - Describe the XtraDB object
     ```bash
-      kubectl describe xtradb -n <ns> <xtradb-ojbect-Name> 
+      kubectl describe xtradb -n <ns> <xtradb-object-Name> 
     ```
 - Describe the StatefulSet object
     ```bash
-      kubectl describe sts -n <ns> <xtradb-ojbect-Name>
+      kubectl describe sts -n <ns> <xtradb-object-Name>
     ```
 - Describe the pods: if there are multiple pods describe all of them
     ```bash
@@ -97,11 +97,11 @@ In that case please contact AppsCode with the following information.
     ```
 - Describe the XtraDB object
     ```bash
-      kubectl describe xtradb -n <ns> <xtradb-ojbect-Name> 
+      kubectl describe xtradb -n <ns> <xtradb-object-Name> 
     ```
 - Describe the StatefulSet object
     ```bash
-      kubectl describe sts -n <ns> <xtradb-ojbect-Name>
+      kubectl describe sts -n <ns> <xtradb-object-Name>
     ```
 - Describe the pods: if there are multiple pods describe all of them
     ```bash

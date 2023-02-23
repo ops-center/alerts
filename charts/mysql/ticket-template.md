@@ -2,13 +2,13 @@ This template is designed to contact with AppsCode with troubleshooting and supp
 
 Let's say you have MySQL database in namespace demo.Please refer to [KubeDB Docs](https://kubedb.com/docs/v2023.01.31/guides/mysql/) for more about KubeDB.
 ```bash
-Kubectl get mysql <ns>     // wiil list all the database in a namesapce  
+Kubectl get mysql -n <ns>     // will list all the database in a namesapce  
 $ kubectl get mysql -n demo
   NAME    VERSION   STATUS   AGE
   mysql   8.0.31    Ready    6h51m
 ```
 There are four different db phase you may see in KubeDB managed Database.
-``Ready`` ``Provisioning`` ``critical`` ``NotReady``
+``Ready`` ``Provisioning`` ``Critical`` ``NotReady``
 
 **Ready:** KubeDB Managed Database phase becomes Ready when every database server is in the cluster and working properly. There's nothing to worry about.
 
@@ -24,11 +24,11 @@ You can contact to AppsCode with the following things attached,
     ```
 - Describe the MySQL object:
     ```bash
-      kubectl describe mysql -n <ns> <mysql-ojbect-Name> 
+      kubectl describe mysql -n <ns> <mysql-object-Name> 
     ```
 - Describe the StatefulSet object:
     ```bash
-      kubectl describe sts -n <ns> <mysql-ojbect-Name>
+      kubectl describe sts -n <ns> <mysql-object-Name>
     ```
 - Describe the pods: If there are multiple pods describe all of them
     ```bash
@@ -62,11 +62,11 @@ You can contact to AppsCode with the following things attached,
     ```
 - Describe the MySQL object
     ```bash
-      kubectl describe mysql -n <ns> <mysql-ojbect-Name> 
+      kubectl describe mysql -n <ns> <mysql-object-Name> 
     ```
 - Describe the StatefulSet object
     ```bash
-      kubectl describe sts -n <ns> <mysql-ojbect-Name>
+      kubectl describe sts -n <ns> <mysql-object-Name>
     ```
 - Describe the pods: if there are multiple pods describe all of them
     ```bash
@@ -97,11 +97,11 @@ In that case please contact AppsCode with the following information.
     ```
 - Describe the MySQL object
     ```bash
-      kubectl describe mysql -n <ns> <mysql-ojbect-Name> 
+      kubectl describe mysql -n <ns> <mysql-object-Name> 
     ```
 - Describe the StatefulSet object
     ```bash
-      kubectl describe sts -n <ns> <mysql-ojbect-Name>
+      kubectl describe sts -n <ns> <mysql-object-Name>
     ```
 - Describe the pods: if there are multiple pods describe all of them
     ```bash

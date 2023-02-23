@@ -4,13 +4,13 @@ This template is designed to contact with AppsCode with troubleshooting and supp
 
 Let's say you have a KubeDB provisioned ProxySQL running in namespace demo.
 ```bash
-Kubectl get proxysql <ns>     // wiil list all the proxysql in a namesapce  
+Kubectl get proxysql -n <ns>     // will list all the proxysql in a namesapce  
 $ kubectl get proxysql -n demo
   NAME            VERSION         STATUS   AGE
   demo-proxysql   2.3.2-debian    Ready    6h51m
 ```
 There are four different phases for a KubeDB managed ProxySQL object.
-``Ready`` ``Provisioning`` ``critical`` ``NotReady``
+``Ready`` ``Provisioning`` ``Critical`` ``NotReady``
 
 **Ready:** KubeDB Managed ProxySQL phase becomes Ready when every proxysql server is connected with the cluster and working properly. There's nothing to worry about.
 
@@ -26,11 +26,11 @@ You can contact to AppsCode with the following things attached,
     ```
 - Describe the ProxySQL object:
     ```bash
-      kubectl describe proxysql -n <ns> <proxysql-ojbect-Name> 
+      kubectl describe proxysql -n <ns> <proxysql-object-Name> 
     ```
 - Describe the StatefulSet object:
     ```bash
-      kubectl describe sts -n <ns> <proxysql-ojbect-Name>
+      kubectl describe sts -n <ns> <proxysql-object-Name>
     ```
 - Describe the pods. If there are multiple pods describe all of them:
     ```bash
@@ -63,11 +63,11 @@ You can contact to AppsCode with the following things attached,
     ```
 - Describe the ProxySQL object:
     ```bash
-      kubectl describe proxysql -n <ns> <proxysql-ojbect-Name> 
+      kubectl describe proxysql -n <ns> <proxysql-object-Name> 
     ```
 - Describe the StatefulSet object:
     ```bash
-      kubectl describe sts -n <ns> <proxysql-ojbect-Name>
+      kubectl describe sts -n <ns> <proxysql-object-Name>
     ```
 - Describe the pods. If there are multiple pods describe all of them:
     ```bash
@@ -97,11 +97,11 @@ In that case please contact AppsCode with the following information.
     ```
 - Describe the ProxySQL object:
     ```bash
-      kubectl describe proxysql -n <ns> <proxysql-ojbect-Name> 
+      kubectl describe proxysql -n <ns> <proxysql-object-Name> 
     ```
 - Describe the StatefulSet object:
     ```bash
-      kubectl describe sts -n <ns> <proxysql-ojbect-Name>
+      kubectl describe sts -n <ns> <proxysql-object-Name>
     ```
 - Describe the pods, if there are multiple pods describe all of them:
     ```bash

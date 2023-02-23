@@ -5,7 +5,7 @@ Let's say you have MariaDB database in namespace demo.Please refer to [KubeDB Do
 Kubectl get mariadb <ns>     // wiil list all the database in a namesapce  
 $ kubectl get mariadb -n demo
   NAME    VERSION   STATUS   AGE
-  mariadb   8.0.31    Ready    6h51m
+  mariadb   10.5.8    Ready    6h51m
 ```
 There are four different db phase you may see in KubeDB managed Database.
 ``Ready`` ``Provisioning`` ``critical`` ``NotReady``

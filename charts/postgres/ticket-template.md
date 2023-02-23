@@ -5,7 +5,7 @@ Let's say you have PostgreSQL database in namespace demo.Please refer to [KubeDB
 Kubectl get postgres <ns>     // wiil list all the database in a namesapce  
 $ kubectl get postgres -n demo
   NAME    VERSION   STATUS   AGE
-  postgres   8.0.31    Ready    6h51m
+  postgres   13.2    Ready    6h51m
 ```
 There are four different db phase you may see in KubeDB managed Database.
 ``Ready`` ``Provisioning`` ``critical`` ``NotReady``

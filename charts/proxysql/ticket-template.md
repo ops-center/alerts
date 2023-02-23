@@ -1,6 +1,6 @@
 This template is designed to contact with AppsCode with troubleshooting and support in general. You will find all the KubeDB Managed servers follow similar pattern. To troubleshoot and find what to do let's look into the following doc.
 
-> Please refer to [KubeDB Docs](https://kubedb.com/docs/v2023.01.31/guides/proxysql/) for more about KubeDB ProxySQL.
+> Please refer to [KubeDB Docs](https://kubedb.com/docs/latest/guides/proxysql/) for more about KubeDB ProxySQL.
 
 Let's say you have a KubeDB provisioned ProxySQL running in namespace demo.
 ```bash

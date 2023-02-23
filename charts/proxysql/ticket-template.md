@@ -12,13 +12,11 @@ $ kubectl get proxysql -n demo
 There are four different phases for a KubeDB managed ProxySQL object.
 ``Ready`` ``Provisioning`` ``critical`` ``NotReady``
 
-Below we have discussed what the phases actually mean and what we recommend to do while contacting us with your issues.  
-
 **Ready:** KubeDB Managed ProxySQL phase becomes Ready when every proxysql server is connected with the cluster and working properly. There's nothing to worry about.
 
-**Provisioning:** Usually, the ProxySQL phase is set to `Provisioning` while bootstrapping for the first time. If you find the proxysql phase is stuck in the provisional state for a long time,
+**Provisioning:** Usually, the ProxySQL phase is set to `Provisioning` while bootstrapping for the first time. If you find the proxysql phase is stuck in the provisioning state for a long time,
 there may be some misconfiguration, lack of k8s resources, or miscellaneous issues.
-To step ahead for solution, first we need to observe the whole situation. For this purpose we need to describe the proxysql, check the configuration, get the operator and pod logs and find the reason.
+A recommended approach is to describe the ProxySQL object, check the configuration, operator, and pod logs and find the reason.
 
 You can contact to AppsCode with the following things attached,
 - Get the ProxySQL object:
@@ -49,12 +47,12 @@ You can contact to AppsCode with the following things attached,
 - Get the operator logs:
     ```bash
     kubectl logs -n <kubedb-ns> <provisioner-pod-name>
-    kubectl logs -n <kubedb-ns> <opsmaneger-pod-name>
+    kubectl logs -n <kubedb-ns> <opsmanager-pod-name>
     ```
 
-**Critical:** ProxySQL Phase Critical means some proxysql server/pod is not joined with the cluster or failing synchronization with it.
+**Critical:** ProxySQL Phase  Critical means some server/pods is not in the cluster or failing synchronization with the database cluster
 The reasons could be that some proxysql server left the cluster for a restart. Or replication errors or unexpected kills or an ops-request might have caused a reload.
-To step ahead for a solution, first we need to observe the whole situation. For this purpose we should get the log of troubling pod/server, describe it,  by checking the logs, describing the proxysql object, or maybe querying in the working proxysql server.
+To resolve this, we need to observe the whole situation. For this purpose we should get the log of troubling pod/server, describe it,  by checking the logs, describing the proxysql object, or maybe querying in the working proxysql server.
 
 You can contact to AppsCode with the following things attached,
 
@@ -82,7 +80,7 @@ You can contact to AppsCode with the following things attached,
 - Get the operator logs:
     ```bash
     kubectl logs -n <kubedb-ns> <provisioner-pod-name>
-    kubectl logs -n <kubedb-ns> <opsmaneger-pod-name>
+    kubectl logs -n <kubedb-ns> <opsmanager-pod-name>
     ```
 
 **NotReady:** ProxySQL Phase Not Ready means none of the proxysql servers are working properly. There are several possible reasons for that. Maybe something is misconfigured,
@@ -116,6 +114,6 @@ In that case please contact AppsCode with the following information.
 - Get the operator logs:
     ```bash
     kubectl logs -n <kubedb-ns> <provisioner-pod-name>
-    kubectl logs -n <kubedb-ns> <opsmaneger-pod-name>
+    kubectl logs -n <kubedb-ns> <opsmanager-pod-name>
     ```
   

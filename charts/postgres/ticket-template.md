@@ -2,13 +2,13 @@ This template is designed to contact with AppsCode with troubleshooting and supp
 
 Let's say you have PostgreSQL database in namespace demo.Please refer to [KubeDB Docs](https://kubedb.com/docs/v2023.01.31/guides/postgres/) for more about KubeDB.
 ```bash
-Kubectl get postgres <ns>     // wiil list all the database in a namesapce  
+Kubectl get postgres -n <ns>     // wiil list all the database in a namesapce  
 $ kubectl get postgres -n demo
   NAME    VERSION   STATUS   AGE
   postgres   13.2    Ready    6h51m
 ```
 There are four different db phase you may see in KubeDB managed Database.
-``Ready`` ``Provisioning`` ``critical`` ``NotReady``
+``Ready`` ``Provisioning`` ``Critical`` ``NotReady``
 
 **Ready:** KubeDB Managed Database phase becomes Ready when every database server is in the cluster and working properly. There's nothing to worry about.
 
@@ -24,11 +24,11 @@ You can contact to AppsCode with the following things attached,
     ```
 - Describe the PostgreSQL object:
     ```bash
-      kubectl describe postgres -n <ns> <postgres-ojbect-Name> 
+      kubectl describe postgres -n <ns> <postgres-object-Name> 
     ```
 - Describe the StatefulSet object:
     ```bash
-      kubectl describe sts -n <ns> <postgres-ojbect-Name>
+      kubectl describe sts -n <ns> <postgres-object-Name>
     ```
 - Describe the pods: If there are multiple pods describe all of them
     ```bash
@@ -62,11 +62,11 @@ You can contact to AppsCode with the following things attached,
     ```
 - Describe the PostgreSQL object
     ```bash
-      kubectl describe postgres -n <ns> <postgres-ojbect-Name> 
+      kubectl describe postgres -n <ns> <postgres-object-Name> 
     ```
 - Describe the StatefulSet object
     ```bash
-      kubectl describe sts -n <ns> <postgres-ojbect-Name>
+      kubectl describe sts -n <ns> <postgres-object-Name>
     ```
 - Describe the pods: if there are multiple pods describe all of them
     ```bash
@@ -97,11 +97,11 @@ In that case please contact AppsCode with the following information.
     ```
 - Describe the PostgreSQL object
     ```bash
-      kubectl describe postgres -n <ns> <postgres-ojbect-Name> 
+      kubectl describe postgres -n <ns> <postgres-object-Name> 
     ```
 - Describe the StatefulSet object
     ```bash
-      kubectl describe sts -n <ns> <postgres-ojbect-Name>
+      kubectl describe sts -n <ns> <postgres-object-Name>
     ```
 - Describe the pods: if there are multiple pods describe all of them
     ```bash

@@ -10,7 +10,7 @@ $ kubectl get elasticsearch -n demo
   demo-elasticsearch   xpack-8.5.2    Ready    6h51m
 ```
 There are four different phases for a KubeDB managed Elasticsearch object.
-``Ready`` ``Provisioning`` ``critical`` ``NotReady``
+``Ready`` ``Provisioning`` ``Critical`` ``NotReady``
 
 Below we have discussed what the phases actually mean and what we recommend to do while contacting us with your issues.
 
@@ -27,11 +27,11 @@ You can contact to AppsCode team with the following things attached,
     ```
 - Describe the Elasticsearch object:
     ```bash
-      kubectl describe es -n <ns> <elasticsearch-ojbect-Name> 
+      kubectl describe es -n <ns> <elasticsearch-object-Name> 
     ```
 - Describe the StatefulSet object:
     ```bash
-      kubectl describe sts -n <ns> <elasticsearch-ojbect-Name>
+      kubectl describe sts -n <ns> <elasticsearch-object-Name>
     ```
 - Describe the pods. If there are multiple pods describe all of them:
     ```bash
@@ -64,11 +64,11 @@ You can contact to AppsCode team with the following things attached,
     ```
 - Describe the Elasticsearch object:
     ```bash
-      kubectl describe es -n <ns> <elasticsearch-ojbect-Name> 
+      kubectl describe es -n <ns> <elasticsearch-object-Name> 
     ```
 - Describe the StatefulSet object:
     ```bash
-      kubectl describe sts -n <ns> <elasticsearch-ojbect-Name>
+      kubectl describe sts -n <ns> <elasticsearch-object-Name>
     ```
 - Describe the pods. If there are multiple pods describe all of them:
     ```bash
@@ -97,11 +97,11 @@ In that case please contact AppsCode team with the following information.
     ```
 - Describe the Elasticsearch object:
     ```bash
-      kubectl describe es -n <ns> <elasticsearch-ojbect-Name> 
+      kubectl describe es -n <ns> <elasticsearch-object-Name> 
     ```
 - Describe the StatefulSet object:
     ```bash
-      kubectl describe sts -n <ns> <elasticsearch-ojbect-Name>
+      kubectl describe sts -n <ns> <elasticsearch-object-Name>
     ```
 - Describe the pods, if there are multiple pods describe all of them:
     ```bash

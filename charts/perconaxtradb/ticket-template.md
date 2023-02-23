@@ -1,11 +1,11 @@
 This template is designed to contact with AppsCode with troubleshooting and support in general. You will find all the KubeDB Managed database follows similar pattern. To troubleshoot and find what to do let's get started with the database phase.
 
-Let's say you have MySQL database in namespace demo.Please refer to [KubeDB Docs](https://kubedb.com/docs/v2023.01.31/guides/mysql/) for more about KubeDB.
+Let's say you have XtraDB database in namespace demo.Please refer to [KubeDB Docs](https://kubedb.com/docs/v2023.01.31/guides/xtradb/) for more about KubeDB.
 ```bash
-Kubectl get mysql <ns>     // wiil list all the database in a namesapce  
-$ kubectl get mysql -n demo
+Kubectl get xtradb <ns>     // wiil list all the database in a namesapce  
+$ kubectl get xtradb -n demo
   NAME    VERSION   STATUS   AGE
-  mysql   8.0.31    Ready    6h51m
+  xtradb   8.0.31    Ready    6h51m
 ```
 There are four different db phase you may see in KubeDB managed Database.
 ``Ready`` ``Provisioning`` ``critical`` ``NotReady``
@@ -14,21 +14,21 @@ There are four different db phase you may see in KubeDB managed Database.
 
 **Provisioning:** Usually, the Database Phase is set to `Provisioning` while bootstrapping for the first time. If you find the database phase is stuck in the provisioning state,
 there may be some misconfiguration, lack of k8s resources, or miscellaneous issues.
-A recommended approach is to describe the MySQL object, check the configuration, operator, and pod logs and find the reason.
+A recommended approach is to describe the XtraDB object, check the configuration, operator, and pod logs and find the reason.
 
 You can contact to AppsCode with the following things attached,
-- Get the MySQL object:
+- Get the XtraDB object:
     ```bash
-    kubectl get mysql -n <ns> <mysql-object-name> -oyaml
+    kubectl get xtradb -n <ns> <xtradb-object-name> -oyaml
     Kubectl get pod -n <demo> <pod-name> -oyaml 
     ```
-- Describe the MySQL object:
+- Describe the XtraDB object:
     ```bash
-      kubectl describe mysql -n <ns> <mysql-ojbect-Name> 
+      kubectl describe xtradb -n <ns> <xtradb-ojbect-Name> 
     ```
 - Describe the StatefulSet object:
     ```bash
-      kubectl describe sts -n <ns> <mysql-ojbect-Name>
+      kubectl describe sts -n <ns> <xtradb-ojbect-Name>
     ```
 - Describe the pods: If there are multiple pods describe all of them
     ```bash
@@ -36,12 +36,12 @@ You can contact to AppsCode with the following things attached,
     ```
 - Check the stateful and secret is created:
     ```bash
-    kubectl get secret -n <ns> | grep <mysql-object-name>
+    kubectl get secret -n <ns> | grep <xtradb-object-name>
     ```
-- Pod logs: If there are multiple pods, log all of them. stand alone mysql doesn't contain the `mysql-coordinator` container
+- Pod logs: If there are multiple pods, log all of them. stand alone xtradb doesn't contain the `xtradb-coordinator` container
     ```bash
-    kubectl logs -n <ns> <pod-name> -c mysql
-    kubectl logs -n <ns> <pod-name> -c mysql-coordinator  
+    kubectl logs -n <ns> <pod-name> -c xtradb
+    kubectl logs -n <ns> <pod-name> -c xtradb-coordinator  
     ```
 - Operator logs:
     ```bash
@@ -55,27 +55,27 @@ To resolve this , we need to  find out which servers/pod that is not in the clus
 
 You can contact to AppsCode with the following things attached,
 
-- MySQL object:
+- XtraDB object:
     ```bash
-    kubectl get mysql -n <ns> <mysql-object-name> -oyaml
+    kubectl get xtradb -n <ns> <xtradb-object-name> -oyaml
     Kubectl get pod -n <demo> <pod-name> -oyaml 
     ```
-- Describe the MySQL object
+- Describe the XtraDB object
     ```bash
-      kubectl describe mysql -n <ns> <mysql-ojbect-Name> 
+      kubectl describe xtradb -n <ns> <xtradb-ojbect-Name> 
     ```
 - Describe the StatefulSet object
     ```bash
-      kubectl describe sts -n <ns> <mysql-ojbect-Name>
+      kubectl describe sts -n <ns> <xtradb-ojbect-Name>
     ```
 - Describe the pods: if there are multiple pods describe all of them
     ```bash
        kubectl describe pod -n <ns> <podName> 
     ```
-- Pod logs:  if there are multiple pods, log all of them. stand alone mysql doesn't contain the `mysql-coordinator` container.
+- Pod logs:  if there are multiple pods, log all of them. stand alone xtradb doesn't contain the `xtradb-coordinator` container.
     ```bash
-    kubectl logs -n <ns> <pod-name> -c mysql
-    kubectl logs -n <ns> <pod-name> -c mysql-coordinator  
+    kubectl logs -n <ns> <pod-name> -c xtradb
+    kubectl logs -n <ns> <pod-name> -c xtradb-coordinator  
     ```
 - Operator logs:
     ```bash
@@ -85,32 +85,32 @@ You can contact to AppsCode with the following things attached,
 
 **NotReady:** Database Phase Not Ready means none of the database servers are working properly. There could several possible reasons for that, maybe something is misconfigured,
 maybe the database server is Killed, Replication errors, or something miscellaneous.
-To resolve this, first we need to know what exactly happened. Checking the logs from operator and pod containers, describing the MySQL object and pods is a recommended way to start debugging. Restarting the pod might sometime solve the issue. But, before forcing a cluster fail-over and recover,
+To resolve this, first we need to know what exactly happened. Checking the logs from operator and pod containers, describing the XtraDB object and pods is a recommended way to start debugging. Restarting the pod might sometime solve the issue. But, before forcing a cluster fail-over and recover,
 there might be a need for human intervention to know what will be the best way to resolve it.
 
 In that case please contact AppsCode with the following information.
 
-- MySQL object:
+- XtraDB object:
     ```bash
-    kubectl get mysql -n <ns> <mysql-object-name> -oyaml
+    kubectl get xtradb -n <ns> <xtradb-object-name> -oyaml
     Kubectl get pod -n <demo> <pod-name> -oyaml 
     ```
-- Describe the MySQL object
+- Describe the XtraDB object
     ```bash
-      kubectl describe mysql -n <ns> <mysql-ojbect-Name> 
+      kubectl describe xtradb -n <ns> <xtradb-ojbect-Name> 
     ```
 - Describe the StatefulSet object
     ```bash
-      kubectl describe sts -n <ns> <mysql-ojbect-Name>
+      kubectl describe sts -n <ns> <xtradb-ojbect-Name>
     ```
 - Describe the pods: if there are multiple pods describe all of them
     ```bash
        kubectl describe pod -n <ns> <podName> 
     ```
-- Pod logs:  if there are multiple pods, log all of them. stand alone mysql doesn't contain the `mysql-coordinator` container.Include exporter log if it's enabled
+- Pod logs:  if there are multiple pods, log all of them. stand alone xtradb doesn't contain the `xtradb-coordinator` container.Include exporter log if it's enabled
     ```bash
-    kubectl logs -n <ns> <pod-name> -c mysql
-    kubectl logs -n <ns> <pod-name> -c mysql-coordinator
+    kubectl logs -n <ns> <pod-name> -c xtradb
+    kubectl logs -n <ns> <pod-name> -c xtradb-coordinator
     ```
 - Operator logs:
     ```bash

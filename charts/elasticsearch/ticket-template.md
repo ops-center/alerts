@@ -1,10 +1,10 @@
 This template is designed to contact with AppsCode with troubleshooting and support in general. You will find all the KubeDB Managed servers follow similar pattern. To troubleshoot and find what to do let's look into the following doc.
 
-> Please refer to [KubeDB Docs](https://kubedb.com/docs/v2023.01.31/guides/elasticsearch/) for more about KubeDB Elasticsearch. This documentation is applicable for both Opensearch and Elasticsearch as KueDB manages both of these databases with the same Controller CRD.
+> Please refer to [KubeDB Docs](https://kubedb.com/docs/latest/guides/elasticsearch/) for more about KubeDB Elasticsearch. This documentation is applicable for both Opensearch and Elasticsearch as KueDB manages both of these databases with the same Controller CRD.
 
 Let's say you have a KubeDB provisioned Elasticsearch running in namespace demo.
 ```bash
-Kubectl get elasticsearch -n <ns>     // wiil list all the elasticsearch in a namesapce  
+kubectl get elasticsearch -n <ns>     // will list all the elasticsearch in a namesapce  
 $ kubectl get elasticsearch -n demo
   NAME                 VERSION        STATUS   AGE
   demo-elasticsearch   xpack-8.5.2    Ready    6h51m

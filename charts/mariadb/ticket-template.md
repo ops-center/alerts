@@ -1,8 +1,8 @@
 This template is designed to contact with AppsCode with troubleshooting and support in general. You will find all the KubeDB Managed database follows similar pattern. To troubleshoot and find what to do let's get started with the database phase.
 
-Let's say you have MariaDB database in namespace demo.Please refer to [KubeDB Docs](https://kubedb.com/docs/v2023.01.31/guides/mariadb/) for more about KubeDB.
+Let's say you have MariaDB database in namespace demo.Please refer to [KubeDB Docs](https://kubedb.com/docs/latest/guides/mariadb/) for more about KubeDB.
 ```bash
-Kubectl get mariadb -n <ns>     // wiil list all the database in a namesapce  
+kubectl get mariadb -n <ns>     // wlil list all the database in a namesapce  
 $ kubectl get mariadb -n demo
   NAME    VERSION   STATUS   AGE
   mariadb   10.5.8    Ready    6h51m

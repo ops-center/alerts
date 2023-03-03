@@ -60,7 +60,7 @@ type VaultServerAlert struct {
 }
 
 type VaultServerAlertGroups struct {
-	Database    VaultServerVaultAlert `json:"vault"`
+	Vault       VaultServerVaultAlert `json:"vault"`
 	Provisioner ProvisionerAlert      `json:"provisioner"`
 	OpsManager  OpsManagerAlert       `json:"opsManager"`
 	Stash       StashAlert            `json:"stash"`

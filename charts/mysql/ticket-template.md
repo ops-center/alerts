@@ -20,7 +20,7 @@ You can contact to AppsCode with the following things attached,
 - Get the MySQL object:
     ```bash
     kubectl get mysql -n <ns> <mysql-object-name> -oyaml
-    Kubectl get pod -n <demo> <pod-name> -oyaml 
+    Kubectl get pod -n <ns> <pod-name> -oyaml 
     ```
 - Describe the MySQL object:
     ```bash
@@ -58,7 +58,7 @@ You can contact to AppsCode with the following things attached,
 - MySQL object:
     ```bash
     kubectl get mysql -n <ns> <mysql-object-name> -oyaml
-    Kubectl get pod -n <demo> <pod-name> -oyaml 
+    Kubectl get pod -n <ns> <pod-name> -oyaml 
     ```
 - Describe the MySQL object
     ```bash
@@ -93,7 +93,7 @@ In that case please contact AppsCode with the following information.
 - MySQL object:
     ```bash
     kubectl get mysql -n <ns> <mysql-object-name> -oyaml
-    Kubectl get pod -n <demo> <pod-name> -oyaml 
+    Kubectl get pod -n <ns> <pod-name> -oyaml 
     ```
 - Describe the MySQL object
     ```bash

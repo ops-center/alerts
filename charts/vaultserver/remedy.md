@@ -31,17 +31,17 @@
     - Revoke the unused Tokens
     - Check if Any instance creating more tokens than necessary.
 
-### KubeVault Operator
+### KubeVault Operator Alerts
 
 - #### AppPhaseNotReady
     - Contact AppsCode team
 - #### AppPhaseCritical
     - If any `VaultOpsRequest` is ongoing on same database, Wait until it completes.
-    - check for `vault` container's logs on the node to see if anything unusual.
+    - Check for `vault` container's logs on the node to see if anything unusual.
     - If some nodes of the Vault Cluster are not `Up`, Try restarting those nodes one at a time.
     - Contact AppsCode team if this persists for more than 30 minutes.
 
-### OpsManager
+### OpsManager Alerts
 
 - #### OpsRequestOnProgress
     - Just a reminder, nothing to worry about.

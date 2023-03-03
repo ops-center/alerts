@@ -3,9 +3,9 @@ entries:
   elasticsearch:
   - apiVersion: v2
     appVersion: v0.1.0
-    created: "2023-03-03T09:08:53.748036728Z"
+    created: "2023-03-03T10:09:12.89572985Z"
     description: A Helm chart for Elasticsearch Alert by AppsCode
-    digest: 8c7a78b5a606a04fd8c9f282ffa9a4e2345e750f46a0b81b51d5ad30cf50e713
+    digest: 1d925f008746921c00e8fcbe90103f85007db7421f8f0359ff1a3db5e9d85f19
     home: https://github.com/appscode/alerts
     icon: https://cdn.appscode.com/images/products/kubedb/kubedb-icon.png
     maintainers:
@@ -21,9 +21,9 @@ entries:
   mariadb:
   - apiVersion: v2
     appVersion: v0.1.0
-    created: "2023-03-03T09:08:53.749335924Z"
+    created: "2023-03-03T10:09:12.896887462Z"
     description: A Helm chart for MariaDB Alert by AppsCode
-    digest: de07413ca37f44983e98cdc54a9bb384b0bdb3efbf49448f5e9b88516dfdabb3
+    digest: b6a14efa4d6bf2b2247e18a4df27eb054d3cea2658777b3ed74d71821d841f1d
     home: https://github.com/appscode/alerts
     icon: https://cdn.appscode.com/images/products/kubedb/kubedb-icon.png
     maintainers:
@@ -39,7 +39,7 @@ entries:
   mongodb:
   - apiVersion: v2
     appVersion: v0.1.0
-    created: "2023-03-03T09:08:53.75053952Z"
+    created: "2023-03-03T10:09:12.898028474Z"
     description: A Helm chart for MongoDB Alert by AppsCode
     digest: e4fef76c98ee08341b120b0896178f3abfc05d01983148e1be2d9ba090c24a5e
     home: https://github.com/appscode/alerts
@@ -57,9 +57,9 @@ entries:
   mysql:
   - apiVersion: v2
     appVersion: v0.1.0
-    created: "2023-03-03T09:08:53.751833615Z"
+    created: "2023-03-03T10:09:12.900120695Z"
     description: A Helm chart for MySQL Alert by AppsCode
-    digest: 75b41d49ca77cd5cb4a2347ea55ad13c327dae96093a1477fac740a34a263369
+    digest: 335634bfc9cc4e7c3949ec702b0304a874fb660fb04ee8802e911475bde707d2
     home: https://github.com/appscode/alerts
     icon: https://cdn.appscode.com/images/products/kubedb/kubedb-icon.png
     maintainers:
@@ -75,9 +75,9 @@ entries:
   perconaxtradb:
   - apiVersion: v2
     appVersion: v0.1.0
-    created: "2023-03-03T09:08:53.753400009Z"
+    created: "2023-03-03T10:09:12.90158061Z"
     description: A Helm chart for PerconaXtraDB Alert by AppsCode
-    digest: 41b56ab36bb908d8e13b050a081dad6f1ac2598f6761613adb2e65a380df8f8a
+    digest: 5edd3d1a899867c34ef29bb5fc5a5e3c563c5770f082791fc4182e95c2b8bcfc
     home: https://github.com/appscode/alerts
     icon: https://cdn.appscode.com/images/products/kubedb/kubedb-icon.png
     maintainers:
@@ -93,9 +93,9 @@ entries:
   postgres:
   - apiVersion: v2
     appVersion: v0.1.0
-    created: "2023-03-03T09:08:53.754509406Z"
+    created: "2023-03-03T10:09:12.902684421Z"
     description: A Helm chart for Postgres Alert by AppsCode
-    digest: afa188e00130e548b7611835f1d840b05648e3c50b0280354d7bea42755c7662
+    digest: b15dbd96e385efee73750895fa81d734d6c3285dae6d1a1f66d70ea56fc76ca4
     home: https://github.com/appscode/alerts
     icon: https://cdn.appscode.com/images/products/kubedb/kubedb-icon.png
     maintainers:
@@ -111,9 +111,9 @@ entries:
   proxysql:
   - apiVersion: v2
     appVersion: v0.1.0
-    created: "2023-03-03T09:08:53.755347103Z"
+    created: "2023-03-03T10:09:12.903519029Z"
     description: A Helm chart for ProxySQL Alert by AppsCode
-    digest: f29640218ed15009df1a6648bf71f1d0db126ac9de297ce5683f4ce96de32606
+    digest: 706348b561f71122edd4feaad6f157c9da797cdee91a9c88759d269e1fece674
     home: https://github.com/appscode/alerts
     icon: https://cdn.appscode.com/images/products/kubedb/kubedb-icon.png
     maintainers:
@@ -129,9 +129,9 @@ entries:
   redis:
   - apiVersion: v2
     appVersion: v0.1.0
-    created: "2023-03-03T09:08:53.756305199Z"
+    created: "2023-03-03T10:09:12.904475239Z"
     description: A Helm chart for Redis Alert by AppsCode
-    digest: 15abc97e4bee85cc19d95072db9c238e513bee95e9dde7c90936ef78cdaef4a4
+    digest: 7be6532ec3dd625c23a5ade55b64d11b84c7fbe30aae9bd3e8c0e10cb4bb6d3e
     home: https://github.com/appscode/alerts
     icon: https://cdn.appscode.com/images/products/kubedb/kubedb-icon.png
     maintainers:
@@ -144,4 +144,22 @@ entries:
     urls:
     - https://raw.githubusercontent.com/bytebuilders/ui-wizards/master/stable/redis/redis-v0.1.0.tgz
     version: v0.1.0
-generated: "2023-03-03T09:08:53.740054557Z"
+  vaultserver:
+  - apiVersion: v2
+    appVersion: v0.1.0
+    created: "2023-03-03T10:09:12.905465649Z"
+    description: A Helm chart for VaultServer Alert by AppsCode
+    digest: 9884268a0beda32b644bccbbfe31d30a98705c63035a8348592f841ba8ba115b
+    home: https://github.com/appscode/alerts
+    icon: https://cdn.appscode.com/images/products/kubevault/kubevault-icon.png
+    maintainers:
+    - email: support@appscode.com
+      name: appscode
+    name: vaultserver
+    sources:
+    - https://github.com/appscode/alerts
+    type: application
+    urls:
+    - https://raw.githubusercontent.com/bytebuilders/ui-wizards/master/stable/vaultserver/vaultserver-v0.1.0.tgz
+    version: v0.1.0
+generated: "2023-03-03T10:09:12.888657679Z"

@@ -20,7 +20,7 @@ You can contact to AppsCode with the following things attached,
 - Get the PostgreSQL object:
     ```bash
     kubectl get postgres -n <ns> <postgres-object-name> -oyaml
-    Kubectl get pod -n <demo> <pod-name> -oyaml 
+    Kubectl get pod -n <ns> <pod-name> -oyaml 
     ```
 - Describe the PostgreSQL object:
     ```bash
@@ -58,7 +58,7 @@ You can contact to AppsCode with the following things attached,
 - PostgreSQL object:
     ```bash
     kubectl get postgres -n <ns> <postgres-object-name> -oyaml
-    Kubectl get pod -n <demo> <pod-name> -oyaml 
+    Kubectl get pod -n <ns> <pod-name> -oyaml 
     ```
 - Describe the PostgreSQL object
     ```bash
@@ -93,7 +93,7 @@ In that case please contact AppsCode with the following information.
 - PostgreSQL object:
     ```bash
     kubectl get postgres -n <ns> <postgres-object-name> -oyaml
-    Kubectl get pod -n <demo> <pod-name> -oyaml 
+    Kubectl get pod -n <ns> <pod-name> -oyaml 
     ```
 - Describe the PostgreSQL object
     ```bash

@@ -60,7 +60,7 @@ You can contact to AppsCode team with the following things attached,
 - Get the Elasticsearch object yaml:
     ```bash
     kubectl get es -n <ns> <elasticsearch-object-name> -oyaml
-    Kubectl get pod -n <demo> <pod-name> -oyaml 
+    Kubectl get pod -n <ns> <pod-name> -oyaml 
     ```
 - Describe the Elasticsearch object:
     ```bash
@@ -93,7 +93,7 @@ In that case please contact AppsCode team with the following information.
 - Get the Elasticsearch object yaml:
     ```bash
     kubectl get es -n <ns> <elasticsearch-object-name> -oyaml
-    Kubectl get pod -n <demo> <pod-name> -oyaml
+    Kubectl get pod -n <ns> <pod-name> -oyaml
     ```
 - Describe the Elasticsearch object:
     ```bash

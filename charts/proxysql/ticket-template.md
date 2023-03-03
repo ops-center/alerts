@@ -59,7 +59,7 @@ You can contact to AppsCode with the following things attached,
 - Get the ProxySQL object:
     ```bash
     kubectl get proxysql -n <ns> <proxysql-object-name> -oyaml
-    Kubectl get pod -n <demo> <pod-name> -oyaml 
+    Kubectl get pod -n <ns> <pod-name> -oyaml 
     ```
 - Describe the ProxySQL object:
     ```bash
@@ -93,7 +93,7 @@ In that case please contact AppsCode with the following information.
 - Get the ProxySQL object:
     ```bash
     kubectl get proxysql -n <ns> <proxysql-object-name> -oyaml
-    Kubectl get pod -n <demo> <pod-name> -oyaml 
+    Kubectl get pod -n <ns> <pod-name> -oyaml 
     ```
 - Describe the ProxySQL object:
     ```bash

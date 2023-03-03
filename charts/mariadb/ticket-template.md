@@ -20,7 +20,7 @@ You can contact to AppsCode with the following things attached,
 - Get the MariaDB object:
     ```bash
     kubectl get mariadb -n <ns> <mariadb-object-name> -oyaml
-    Kubectl get pod -n <demo> <pod-name> -oyaml 
+    Kubectl get pod -n <ns> <pod-name> -oyaml 
     ```
 - Describe the MariaDB object:
     ```bash
@@ -58,7 +58,7 @@ You can contact to AppsCode with the following things attached,
 - MariaDB object:
     ```bash
     kubectl get mariadb -n <ns> <mariadb-object-name> -oyaml
-    Kubectl get pod -n <demo> <pod-name> -oyaml 
+    Kubectl get pod -n <ns> <pod-name> -oyaml 
     ```
 - Describe the MariaDB object
     ```bash
@@ -93,7 +93,7 @@ In that case please contact AppsCode with the following information.
 - MariaDB object:
     ```bash
     kubectl get mariadb -n <ns> <mariadb-object-name> -oyaml
-    Kubectl get pod -n <demo> <pod-name> -oyaml 
+    Kubectl get pod -n <ns> <pod-name> -oyaml 
     ```
 - Describe the MariaDB object
     ```bash

@@ -1,5 +1,5 @@
 apiVersion: v2
-name: postgres
+name: postgres-alerts
 description: A Helm chart for Postgres Alert by AppsCode
 type: application
 version: v2023.04.10

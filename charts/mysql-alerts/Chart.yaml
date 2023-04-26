@@ -1,5 +1,5 @@
 apiVersion: v2
-name: mysql
+name: mysql-alerts
 description: A Helm chart for MySQL Alert by AppsCode
 type: application
 version: v2023.04.10

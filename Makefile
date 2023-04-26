@@ -251,22 +251,9 @@ contents-%:
 	@yq -y --indentless -i '.repository.url="$(CHART_REGISTRY_URL)"' ./charts/$*/doc.yaml
 	@if [ -n "$(CHART_VERSION)" ]; then \
 	  yq -y --indentless -i '.version="$(CHART_VERSION)"' ./charts/$*/Chart.yaml; \
-	  yq -y --indentless -i '.dependencies |= map(select(.name == "$*").version="$(CHART_VERSION)")' ./charts/kubedb/Chart.yaml; \
-	  yq -y --indentless -i '.dependencies |= map(select(.name == "$*").version="$(CHART_VERSION)")' ./charts/kubedb-opscenter/Chart.yaml; \
 	fi
-	@if [ ! -z "$(APP_VERSION)" ]; then                                               \
-		yq -y --indentless -i '.appVersion="$(APP_VERSION)"' ./charts/$*/Chart.yaml;    \
-		case "$*" in                                                                    \
-		  kubedb-provisioner | kubedb-ops-manager | kubedb-autoscaler | kubedb-dashboard | kubedb-schema-manager) \
-		    yqq w -i ./charts/$*/values.yaml operator.tag --tag '!!str' $(APP_VERSION); \
-		    ;;                                                                          \
-		  kubedb-ui-server)                                                             \
-		    yqq w -i ./charts/$*/values.yaml image.tag --tag '!!str' $(APP_VERSION);    \
-		    ;;                                                                          \
-		  kubedb-webhook-server)                                                        \
-		    yqq w -i ./charts/$*/values.yaml server.tag --tag '!!str' $(APP_VERSION);   \
-		    ;;                                                                          \
-		esac;                                                                           \
+	@if [ ! -z "$(APP_VERSION)" ]; then \
+		yq -y --indentless -i '.appVersion="$(APP_VERSION)"' ./charts/$*/Chart.yaml; \
 	fi
 
 fmt: $(BUILD_DIRS)

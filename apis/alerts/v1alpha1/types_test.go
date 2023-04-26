@@ -27,14 +27,15 @@ import (
 
 func TestDefaultValues(t *testing.T) {
 	checker := sc.New(os.DirFS("../../.."),
-		sc.TestCase{Obj: v1alpha1.ElasticsearchSpec{}},
-		sc.TestCase{Obj: v1alpha1.MariadbSpec{}},
-		sc.TestCase{Obj: v1alpha1.MongodbSpec{}},
-		sc.TestCase{Obj: v1alpha1.MysqlSpec{}},
-		sc.TestCase{Obj: v1alpha1.PerconaxtradbSpec{}},
-		sc.TestCase{Obj: v1alpha1.PostgresSpec{}},
-		sc.TestCase{Obj: v1alpha1.ProxysqlSpec{}},
-		sc.TestCase{Obj: v1alpha1.RedisSpec{}},
+		sc.TestCase{Obj: v1alpha1.ElasticsearchAlertsSpec{}},
+		sc.TestCase{Obj: v1alpha1.MariadbAlertsSpec{}},
+		sc.TestCase{Obj: v1alpha1.MongodbAlertsSpec{}},
+		sc.TestCase{Obj: v1alpha1.MysqlAlertsSpec{}},
+		sc.TestCase{Obj: v1alpha1.PerconaxtradbAlertsSpec{}},
+		sc.TestCase{Obj: v1alpha1.PostgresAlertsSpec{}},
+		sc.TestCase{Obj: v1alpha1.ProxysqlAlertsSpec{}},
+		sc.TestCase{Obj: v1alpha1.RedisAlertsSpec{}},
+		sc.TestCase{Obj: v1alpha1.VaultserverAlertsSpec{}},
 	)
 	checker.TestAll(t)
 }

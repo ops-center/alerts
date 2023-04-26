@@ -17,25 +17,25 @@
 set -eou pipefail
 
 crd-importer \
-    --input=https://github.com/prometheus-operator/prometheus-operator/raw/v0.55.1/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml \
-    --out=./charts/elasticsearch/crds
+    --input=https://github.com/prometheus-operator/prometheus-operator/raw/v0.59.1/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml \
+    --out=./charts/elasticsearch-alerts/crds
 
 crd-importer \
-    --input=https://github.com/prometheus-operator/prometheus-operator/raw/v0.55.1/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml \
-    --out=./charts/mariadb/crds
+    --input=https://github.com/prometheus-operator/prometheus-operator/raw/v0.59.1/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml \
+    --out=./charts/mariadb-alerts/crds
 
 crd-importer \
-    --input=https://github.com/prometheus-operator/prometheus-operator/raw/v0.55.1/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml \
-    --out=./charts/mongodb/crds
+    --input=https://github.com/prometheus-operator/prometheus-operator/raw/v0.59.1/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml \
+    --out=./charts/mongodb-alerts/crds
 
 crd-importer \
-    --input=https://github.com/prometheus-operator/prometheus-operator/raw/v0.55.1/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml \
-    --out=./charts/mysql/crds
+    --input=https://github.com/prometheus-operator/prometheus-operator/raw/v0.59.1/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml \
+    --out=./charts/mysql-alerts/crds
 
 crd-importer \
-    --input=https://github.com/prometheus-operator/prometheus-operator/raw/v0.55.1/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml \
-    --out=./charts/postgres/crds
+    --input=https://github.com/prometheus-operator/prometheus-operator/raw/v0.59.1/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml \
+    --out=./charts/postgres-alerts/crds
 
 crd-importer \
-    --input=https://github.com/prometheus-operator/prometheus-operator/raw/v0.55.1/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml \
-    --out=./charts/redis/crds
+    --input=https://github.com/prometheus-operator/prometheus-operator/raw/v0.59.1/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml \
+    --out=./charts/redis-alerts/crds

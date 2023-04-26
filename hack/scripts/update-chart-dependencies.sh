@@ -14,12 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -eou pipefail
+set -e
 
-for dir in charts/*/; do
-    dir=${dir%*/}
-    dir=${dir##*/}
-    num_files=$(find charts/${dir}/templates -type f | wc -l)
-    echo $dir
-    make ct TEST_CHARTS=charts/$dir
-done
+helm repo add appscode https://charts.appscode.com/stable/ || true

@@ -1,0 +1,18 @@
+project:
+  name: MariaDB alerts by AppsCode
+  shortName: MariaDB alerts
+  url: https://github.com/appscode/alerts
+  description: MariaDB alerts for KubeDB
+  app: MariaDB alerts
+repository:
+  url: https://charts.appscode.com/stable/
+  name: appscode
+chart:
+  name: mariadb
+  values: -- generate from values file --
+  valuesExample: -- generate from values file --
+prerequisites:
+- Kubernetes 1.19+
+release:
+  name: mariadb
+  namespace: demo

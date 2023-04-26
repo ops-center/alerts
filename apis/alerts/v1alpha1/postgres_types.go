@@ -22,30 +22,30 @@ import (
 )
 
 const (
-	ResourceKindPostgres = "Postgres"
-	ResourcePostgres     = "postgres"
-	ResourcePostgress    = "postgress"
+	ResourceKindPostgresAlerts = "PostgresAlerts"
+	ResourcePostgresAlerts     = "postgresalerts"
+	ResourcePostgresAlertss    = "postgresalertss"
 )
 
-// Postgres defines the schama for KubeDB Ops Manager Operator Installer.
+// PostgresAlerts defines the schama for KubeDB Ops Manager Operator Installer.
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // +kubebuilder:object:root=true
-// +kubebuilder:resource:path=postgress,singular=postgres,categories={kubedb,appscode}
-type Postgres struct {
+// +kubebuilder:resource:path=postgresalertss,singular=postgresalerts,categories={kubedb,appscode}
+type PostgresAlerts struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              PostgresSpec `json:"spec,omitempty"`
+	Spec              PostgresAlertsSpec `json:"spec,omitempty"`
 }
 
-// PostgresSpec is the schema for kubedb-autoscaler chart values file
-type PostgresSpec struct {
+// PostgresAlertsSpec is the schema for kubedb-autoscaler chart values file
+type PostgresAlertsSpec struct {
 	api.Metadata `json:"metadata,omitempty"`
-	Form         PostgresSpecForm `json:"form"`
+	Form         PostgresAlertsSpecForm `json:"form"`
 }
 
-type PostgresSpecForm struct {
+type PostgresAlertsSpecForm struct {
 	Alert PostgresAlert `json:"alert"`
 }
 
@@ -73,24 +73,24 @@ type PostgresDatabaseAlert struct {
 }
 
 type PostgresDatabaseAlertRules struct {
-	PostgresInstanceDown           FixedAlert          `json:"postgresInstanceDown"`
-	PostgresRestarted              IntValAlert         `json:"postgresRestarted"`
-	PostgresqlExporterError        FixedAlert          `json:"postgresqlExporterError"`
-	PostgresTooManyConnections     IntValAlert         `json:"postgresTooManyConnections"`
-	PostgresqlNotEnoughConnections IntValAlert         `json:"postgresqlNotEnoughConnections"`
-	PostgresSlowQueries            FixedAlert          `json:"postgresSlowQueries"`
-	PostgresqlReplicationLag       StringValAlert      `json:"postgresqlReplicationLag"`
-	PostgresqlHighRollbackRate     FloatValAlertConfig `json:"postgresqlHighRollbackRate"`
-	PostgresqlSplitBrain           FixedAlert          `json:"postgresqlSplitBrain"`
-	PostgresqlTooManyLocksAcquired FloatValAlertConfig `json:"postgresqlTooManyLocksAcquired"`
+	PostgresInstanceDown         FixedAlert          `json:"postgresInstanceDown"`
+	PostgresRestarted            IntValAlert         `json:"postgresRestarted"`
+	PostgresExporterError        FixedAlert          `json:"postgresExporterError"`
+	PostgresTooManyConnections   IntValAlert         `json:"postgresTooManyConnections"`
+	PostgresNotEnoughConnections IntValAlert         `json:"postgresNotEnoughConnections"`
+	PostgresSlowQueries          FixedAlert          `json:"postgresSlowQueries"`
+	PostgresReplicationLag       StringValAlert      `json:"postgresReplicationLag"`
+	PostgresHighRollbackRate     FloatValAlertConfig `json:"postgresHighRollbackRate"`
+	PostgresSplitBrain           FixedAlert          `json:"postgresSplitBrain"`
+	PostgresTooManyLocksAcquired FloatValAlertConfig `json:"postgresTooManyLocksAcquired"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
-// PostgresList is a list of Postgress
-type PostgresList struct {
+// PostgresAlertsList is a list of PostgresAlertss
+type PostgresAlertsList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	// Items is a list of Postgres CRD objects
-	Items []Postgres `json:"items,omitempty"`
+	// Items is a list of PostgresAlerts CRD objects
+	Items []PostgresAlerts `json:"items,omitempty"`
 }

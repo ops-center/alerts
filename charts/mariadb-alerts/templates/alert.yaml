@@ -1,0 +1,363 @@
+{{ $app := (include "mariadb-alerts.fullname" .) }}
+
+{{ if .Values.form.alert.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ $app }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "mariadb-alerts.labels" . | nindent 4 }}
+{{- if .Values.form.alert.labels }}
+    {{- toYaml .Values.form.alert.labels | nindent 4 }}
+{{- end }}
+{{- if .Values.form.alert.annotations }}
+  annotations:
+    {{- toYaml .Values.form.alert.annotations | nindent 4 }}
+{{- end }}
+spec:
+  groups:
+  {{ if .Values.form.alert.groups.database.enabled -}}
+  - name: mariadb.database.{{ .Release.Namespace }}.{{ $app }}.rules
+    rules:
+    {{ if .Values.form.alert.groups.database.rules.mysqlInstanceDown.enabled -}}
+    - alert: MySQLInstanceDown
+      expr: mysql_up{job="{{ $app }}-stats",namespace="{{ .Release.Namespace }}"} == 0
+      for: {{ .Values.form.alert.groups.database.rules.mysqlInstanceDown.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.database.rules.mysqlInstanceDown.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: MySQL instance down (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL instance is down on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.form.alert.groups.database.rules.mysqlServiceDown.enabled -}}
+    - alert: MySQLServiceDown
+      expr: sum by (service) (mysql_up{job="{{ $app }}-stats",namespace="{{ .Release.Namespace }}"}) == 0
+      for: {{ .Values.form.alert.groups.database.rules.mysqlServiceDown.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.database.rules.mysqlServiceDown.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: MySQL service down (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL service is down on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.form.alert.groups.database.rules.mysqlTooManyConnections.enabled -}}
+    - alert: MySQLTooManyConnections
+      expr: max_over_time(mysql_global_status_threads_connected{job="{{ $app }}-stats",namespace="{{ .Release.Namespace }}"}[1m]) / mysql_global_variables_max_connections{job="{{ $app }}-stats",namespace="{{ .Release.Namespace }}"} * 100 > {{.Values.form.alert.groups.database.rules.mysqlTooManyConnections.val}}
+      for: {{ .Values.form.alert.groups.database.rules.mysqlTooManyConnections.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.database.rules.mysqlTooManyConnections.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: MySQL too many connections (> {{.Values.form.alert.groups.database.rules.mysqlTooManyConnections.val}}%) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "More than {{.Values.form.alert.groups.database.rules.mysqlTooManyConnections.val}}% of MySQL connections are in use on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.form.alert.groups.database.rules.mysqlHighThreadsRunning.enabled -}}
+    - alert: MySQLHighThreadsRunning
+      expr: max_over_time(mysql_global_status_threads_running{job="{{ $app }}-stats",namespace="{{ .Release.Namespace }}"}[1m]) / mysql_global_variables_max_connections{job="{{ $app }}-stats",namespace="{{ .Release.Namespace }}"} * 100 > {{.Values.form.alert.groups.database.rules.mysqlHighThreadsRunning.val}}
+      for: {{ .Values.form.alert.groups.database.rules.mysqlHighThreadsRunning.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.database.rules.mysqlHighThreadsRunning.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: MySQL high threads running (> {{.Values.form.alert.groups.database.rules.mysqlHighThreadsRunning.val}}%) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "More than {{.Values.form.alert.groups.database.rules.mysqlHighThreadsRunning.val}}% of MySQL threads are in use on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.form.alert.groups.database.rules.mysqlSlowQueries.enabled -}}
+    - alert: MySQLSlowQueries
+      expr: increase(mysql_global_status_slow_queries{job="{{ $app }}-stats",namespace="{{ .Release.Namespace }}"}[1m]) > 0
+      for: {{ .Values.form.alert.groups.database.rules.mysqlSlowQueries.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.database.rules.mysqlSlowQueries.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: MySQL slow queries on (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL server mysql has some new slow query.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.form.alert.groups.database.rules.mysqlInnoDBLogWaits.enabled -}}
+    - alert: MySQLInnoDBLogWaits
+      expr: rate(mysql_global_status_innodb_log_waits{job="{{ $app }}-stats",namespace="{{ .Release.Namespace }}"}[15m]) > {{.Values.form.alert.groups.database.rules.mysqlInnoDBLogWaits.val}}
+      for: {{ .Values.form.alert.groups.database.rules.mysqlInnoDBLogWaits.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.database.rules.mysqlInnoDBLogWaits.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: MySQL InnoDB log waits (> {{.Values.form.alert.groups.database.rules.mysqlInnoDBLogWaits.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL innodb log writes stalling\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.form.alert.groups.database.rules.mysqlRestarted.enabled -}}
+    - alert: MySQLRestarted
+      expr: mysql_global_status_uptime{job="{{ $app }}-stats",namespace="{{ .Release.Namespace }}"} < {{.Values.form.alert.groups.database.rules.mysqlRestarted.val}}
+      for: {{ .Values.form.alert.groups.database.rules.mysqlRestarted.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.database.rules.mysqlRestarted.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: MySQL restarted ({{.Values.form.alert.groups.database.rules.mysqlRestarted.val}} second ago) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL restarted\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.form.alert.groups.database.rules.mysqlHighQPS.enabled -}}
+    - alert: MySQLHighQPS
+      expr: rate(mysql_global_status_queries{job="{{ $app }}-stats",namespace="{{ .Release.Namespace }}"}[1m]) > {{.Values.form.alert.groups.database.rules.mysqlHighQPS.val}}
+      for: {{ .Values.form.alert.groups.database.rules.mysqlHighQPS.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.database.rules.mysqlHighQPS.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: MySQL has high queries per second (> {{.Values.form.alert.groups.database.rules.mysqlHighQPS.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL has high QPS on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.form.alert.groups.database.rules.mysqlHighIncomingBytes.enabled -}}
+    - alert: MySQLHighIncomingBytes
+      expr: rate(mysql_global_status_bytes_received{job="{{ $app }}-stats",namespace="{{ .Release.Namespace }}"}[1m]) > {{.Values.form.alert.groups.database.rules.mysqlHighIncomingBytes.val}}
+      for: {{ .Values.form.alert.groups.database.rules.mysqlHighIncomingBytes.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.database.rules.mysqlHighIncomingBytes.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: MySQL has high incoming bytes second (> {{.Values.form.alert.groups.database.rules.mysqlHighIncomingBytes.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL has high incoming bytes per second on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.form.alert.groups.database.rules.mysqlHighOutgoingBytes.enabled -}}
+    - alert: MySQLHighOutgoingBytes
+      expr: rate(mysql_global_status_bytes_sent{job="{{ $app }}-stats",namespace="{{ .Release.Namespace }}"}[1m]) > {{.Values.form.alert.groups.database.rules.mysqlHighOutgoingBytes.val}}
+      for: {{ .Values.form.alert.groups.database.rules.mysqlHighOutgoingBytes.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.database.rules.mysqlHighOutgoingBytes.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: MySQL has high outgoing bytes second (> {{.Values.form.alert.groups.database.rules.mysqlHighOutgoingBytes.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL has high outgoing bytes per second on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.form.alert.groups.database.rules.mysqlTooManyOpenFiles.enabled -}}
+    - alert: MySQLTooManyOpenFiles
+      expr: max_over_time(mysql_global_status_open_files{job="{{ $app }}-stats",namespace="{{ .Release.Namespace }}"}[1m]) / mysql_global_variables_open_files_limit{job="{{ $app }}-stats",namespace="{{ .Release.Namespace }}"} * 100 > {{.Values.form.alert.groups.database.rules.mysqlTooManyOpenFiles.val}}
+      for: {{ .Values.form.alert.groups.database.rules.mysqlTooManyOpenFiles.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.database.rules.mysqlTooManyOpenFiles.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: MySQL too many opened files (> {{.Values.form.alert.groups.database.rules.mysqlTooManyOpenFiles.val}}%) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MySQL too many opened files on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+  {{ end -}}
+  {{ if .Values.form.alert.groups.cluster.enabled -}}
+  - name: mariadb.cluster.{{ .Release.Namespace }}.{{ $app }}.rules
+    rules:
+    {{ if .Values.form.alert.groups.cluster.rules.galeraReplicationLatencyTooLong.enabled -}}
+    - alert: GaleraReplicationLatencyTooLong
+      expr: mysql_galera_evs_repl_latency_avg_seconds{job="{{ $app }}-stats",namespace="{{ .Release.Namespace }}"} > {{.Values.form.alert.groups.cluster.rules.galeraReplicationLatencyTooLong.val}}
+      for: {{ .Values.form.alert.groups.cluster.rules.galeraReplicationLatencyTooLong.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.cluster.rules.galeraReplicationLatencyTooLong.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: MariaDB Galera Cluster latency too long ( > {{.Values.form.alert.groups.cluster.rules.galeraReplicationLatencyTooLong.val}} second,) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MariaDB Galera Cluster latency too long on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+  {{ end -}}
+  {{ if .Values.form.alert.groups.provisioner.enabled -}}
+  - name: mariadb.provisioner.{{ .Release.Namespace }}.{{ $app }}.rules
+    rules:
+    {{ if .Values.form.alert.groups.provisioner.rules.appPhaseNotReady.enabled -}}
+    - alert: KubeDBMariaDBPhaseNotReady
+      expr: kubedb_com_mariadb_status_phase{phase="NotReady",app="{{ $app }}",namespace="{{ .Release.Namespace }}"} == 1
+      for: {{ .Values.form.alert.groups.provisioner.rules.appPhaseNotReady.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.provisioner.rules.appPhaseNotReady.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: KubeDB MariaDB Phase NotReady (mariadb {{`{{`}} $labels.mariadb {{`}}`}})
+        description: "KubeDB MariaDB Phase not ready on {{`{{`}} $labels.mariadb {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.form.alert.groups.provisioner.rules.appPhaseCritical.enabled -}}
+    - alert: KubeDBMariaDBPhaseCritical
+      expr: kubedb_com_mariadb_status_phase{phase="Critical",app="{{ $app }}",namespace="{{ .Release.Namespace }}"} == 1
+      for: {{ .Values.form.alert.groups.provisioner.rules.appPhaseCritical.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.provisioner.rules.appPhaseCritical.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: KubeDB MariaDB Phase Critical (mariadb {{`{{`}} $labels.mariadb {{`}}`}})
+        description: "KubeDB MariaDB Phase Critical {{`{{`}} $labels.mariadb {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+  {{ end -}}
+  {{ if .Values.form.alert.groups.opsManager.enabled -}}
+  - name: mariadb.opsManager.{{ .Release.Namespace }}.{{ $app }}.rules
+    rules:
+    {{ if .Values.form.alert.groups.opsManager.rules.opsRequestOnProgress.enabled -}}
+    - alert: KubeDBMariaDBOpsRequestOnProgress
+      expr: ops_kubedb_com_mariadbopsrequest_status_phase{phase="Progressing",app="{{ $app }}",namespace="{{ .Release.Namespace }}"} == 1
+      for: {{ .Values.form.alert.groups.opsManager.rules.opsRequestOnProgress.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.opsManager.rules.opsRequestOnProgress.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: MariaDBOpsRequest on progress (mariadbopsrequest {{`{{`}} $labels.mariadbopsrequest {{`}}`}})
+        description: "MariaDBOpsRequest {{`{{`}} $labels.mariadbopsrequest {{`}}`}} is in progressressing status\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.form.alert.groups.opsManager.rules.opsRequestStatusProgressingToLong.enabled -}}
+    - alert: KubeDBMariaDBOpsRequestStatusProgressingToLong
+      expr: ops_kubedb_com_mariadbopsrequest_status_phase{phase="Progressing",app="{{ $app }}",namespace="{{ .Release.Namespace }}"} == 1
+      for: {{ .Values.form.alert.groups.opsManager.rules.opsRequestStatusProgressingToLong.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.opsManager.rules.opsRequestStatusProgressingToLong.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: MariaDBOpsRequest is in progressing status for too long (mariadbopsrequest {{`{{`}} $labels.mariadbopsrequest {{`}}`}})
+        description: "MariaDBOpsRequest {{`{{`}} $labels.mariadbopsrequest {{`}}`}} is in progressing status for too long\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.form.alert.groups.opsManager.rules.opsRequestFailed.enabled -}}
+    - alert: KubeDBMariaDBOpsRequestFailed
+      expr: ops_kubedb_com_mariadbopsrequest_status_phase{phase="Failed",app="{{ $app }}",namespace="{{ .Release.Namespace }}"} == 1
+      for: {{ .Values.form.alert.groups.opsManager.rules.opsRequestFailed.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.opsManager.rules.opsRequestFailed.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: MariaDBOpsRequest failed (mariadbopsrequest {{`{{`}} $labels.mariadbopsrequest {{`}}`}})
+        description: "MariaDBOpsRequest {{`{{`}} $labels.mariadbopsrequest {{`}}`}} failed \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+  {{ end -}}
+  {{ if .Values.form.alert.groups.stash.enabled -}}
+  - name: mariadb.stash.{{ .Release.Namespace }}.{{ $app }}.rules
+    rules:
+    {{ if .Values.form.alert.groups.stash.rules.backupSessionFailed.enabled -}}
+    - alert: MariaDBStashBackupSessionFailed
+      expr: stash_backup_session_success * on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_appscode_com_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} == 0
+      for: {{ .Values.form.alert.groups.stash.rules.backupSessionFailed.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.stash.rules.backupSessionFailed.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: MariaDB Stash backup session failed (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "MariaDB Stash backupsession failed {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.form.alert.groups.stash.rules.restoreSessionFailed.enabled -}}
+    - alert: MariaDBStashRestoreSessionFailed
+      expr: stash_restore_session_success * on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_appscode_com_restoresession_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} == 0
+      for: {{ .Values.form.alert.groups.stash.rules.restoreSessionFailed.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.stash.rules.restoreSessionFailed.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: MariaDB Stash restore session failed (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "MariaDB Stash restore session failed {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.form.alert.groups.stash.rules.noBackupSessionForTooLong.enabled -}}
+    - alert: MariaDBStashNoBackupSessionForTooLong
+      expr: time() - stash_backup_last_success_time_seconds + on(invoker_name, invoker_kind) group_left(target_name, target_kind) stash_appscode_com_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} - 1 > {{ .Values.form.alert.groups.stash.rules.noBackupSessionForTooLong.val }}
+      for: {{ .Values.form.alert.groups.stash.rules.noBackupSessionForTooLong.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.stash.rules.noBackupSessionForTooLong.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: MariaDB Stash no backup for last {{ .Values.form.alert.groups.stash.rules.noBackupSessionForTooLong.val }} second (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "MariaDB Stash no backup for too long {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.form.alert.groups.stash.rules.repositoryCorrupted.enabled -}}
+    - alert: MariaDBStashRepositoryCorrupted
+      expr: stash_repository_integrity * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_appscode_com_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"}
+      for: {{ .Values.form.alert.groups.stash.rules.repositoryCorrupted.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.stash.rules.repositoryCorrupted.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: MariaDB Stash repository corrupted (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "MariaDB Stash repository corrupted {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.form.alert.groups.stash.rules.repositoryStorageRunningLow.enabled -}}
+    - alert: MariaDBStashRepositoryStorageRunningLow
+      expr: stash_repository_size_bytes * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_appscode_com_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} > {{ .Values.form.alert.groups.stash.rules.repositoryStorageRunningLow.val }}
+      for: {{ .Values.form.alert.groups.stash.rules.repositoryStorageRunningLow.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.stash.rules.repositoryStorageRunningLow.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: MariaDB Stash Repository storage more than {{ .Values.form.alert.groups.stash.rules.repositoryStorageRunningLow.val }} byte. (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "MariaDB Stash Repository storage running low {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if .Values.form.alert.groups.stash.rules.backupSessionPeriodTooLong.enabled -}}
+    - alert: MariaDBStashBackupSessionPeriodTooLong
+      expr: stash_backup_session_duration_seconds * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_appscode_com_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} > {{ .Values.form.alert.groups.stash.rules.backupSessionPeriodTooLong.val }}
+      for: {{ .Values.form.alert.groups.stash.rules.backupSessionPeriodTooLong.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.stash.rules.backupSessionPeriodTooLong.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary:  MariaDB Stash backup session took more than {{ .Values.form.alert.groups.stash.rules.backupSessionPeriodTooLong.val }} second to complete. (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "MariaDB Stash backup session taking to long to complete {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.form.alert.groups.stash.rules.restoreSessionPeriodTooLong.enabled -}}
+    - alert: MariaDBStashRestoreSessionPeriodTooLong
+      expr: stash_restore_session_duration_seconds * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_appscode_com_restoresession_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ .Release.Namespace }}"} > {{ .Values.form.alert.groups.stash.rules.restoreSessionPeriodTooLong.val }}
+      for: {{ .Values.form.alert.groups.stash.rules.restoreSessionPeriodTooLong.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.stash.rules.restoreSessionPeriodTooLong.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary:  MariaDB Stash restore session took more than {{ .Values.form.alert.groups.stash.rules.restoreSessionPeriodTooLong.val }} second to complete. (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "MariaDB Stash restore session taking to long to complete {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+  {{ end -}}
+  {{ if .Values.form.alert.groups.schemaManager.enabled -}}
+  - name: mariadb.schemaManager.{{ .Release.Namespace }}.{{ $app }}.rules
+    rules:
+    {{ if .Values.form.alert.groups.schemaManager.rules.schemaPendingForTooLong.enabled -}}
+    - alert: KubeDBMariaDBSchemaPendingForTooLong
+      expr: schema_kubedb_com_mariadbdatabase_status_phase{phase="Pending",app="{{ $app }}",app_namespace="{{ .Release.Namespace }}"} == 1
+      for: {{ .Values.form.alert.groups.schemaManager.rules.schemaPendingForTooLong.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.schemaManager.rules.schemaPendingForTooLong.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: KubeDB schema pending for too long for (mariadbdatabase {{`{{`}} $labels.mariadbdatabase {{`}}`}})
+        description: "KubeDB schema pending for too long.\n {{`{{`}} $labels.mariadbdatabase {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.form.alert.groups.schemaManager.rules.schemaInProgressForTooLong.enabled -}}
+    - alert: KubeDBMariaDBSchemaInProgressForTooLong
+      expr: schema_kubedb_com_mariadbdatabase_status_phase{phase="InProgress",app="{{ $app }}",app_namespace="{{ .Release.Namespace }}"} == 1
+      for: {{ .Values.form.alert.groups.schemaManager.rules.schemaInProgressForTooLong.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.schemaManager.rules.schemaInProgressForTooLong.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: KubeDB schema is in progress for too long for (mariadbdatabase {{`{{`}} $labels.mariadbdatabase {{`}}`}})
+        description: "KubeDB schema is in progress for too long.\n {{`{{`}} $labels.mariadbdatabase {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.form.alert.groups.schemaManager.rules.schemaTerminatingForTooLong.enabled -}}
+    - alert: KubeDBMariaDBSchemaTerminatingForTooLong
+      expr: schema_kubedb_com_mariadbdatabase_status_phase{phase="Terminating",app="{{ $app }}",app_namespace="{{ .Release.Namespace }}"} == 1
+      for: {{ .Values.form.alert.groups.schemaManager.rules.schemaTerminatingForTooLong.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.schemaManager.rules.schemaTerminatingForTooLong.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: KubeDB schema terminating for too long for (mariadbdatabase {{`{{`}} $labels.mariadbdatabase {{`}}`}})
+        description: "KubeDB schema terminating for too long.\n {{`{{`}} $labels.mariadbdatabase {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.form.alert.groups.schemaManager.rules.schemaFailed.enabled -}}
+    - alert: KubeDBMariaDBSchemaFailed
+      expr: schema_kubedb_com_mariadbdatabase_status_phase{phase="Failed",app="{{ $app }}",app_namespace="{{ .Release.Namespace }}"} == 1
+      for: {{ .Values.form.alert.groups.schemaManager.rules.schemaFailed.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.schemaManager.rules.schemaFailed.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: KubeDB schema failed for (mariadbdatabase {{`{{`}} $labels.mariadbdatabase {{`}}`}})
+        description: "KubeDB schema failed.\n {{`{{`}} $labels.mariadbdatabase {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if .Values.form.alert.groups.schemaManager.rules.schemaExpired.enabled -}}
+    - alert: KubeDBMariaDBSchemaExpired
+      expr: schema_kubedb_com_mariadbdatabase_status_phase{phase="Expired",app="{{ $app }}",app_namespace="{{ .Release.Namespace }}"} == 1
+      for: {{ .Values.form.alert.groups.schemaManager.rules.schemaExpired.duration }}
+      labels:
+        severity: {{ .Values.form.alert.groups.schemaManager.rules.schemaExpired.severity }}
+        {{- include "mariadb-alerts.alertLabels" . | nindent 8 }}
+      annotations:
+        summary: KubeDB schema expired for (mariadbdatabase {{`{{`}} $labels.mariadbdatabase {{`}}`}})
+        description: "KubeDB schema expired.\n {{`{{`}} $labels.mariadbdatabase {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+  {{ end -}}
+{{ end }}

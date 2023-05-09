@@ -54,11 +54,11 @@ The following table lists the configurable parameters of the `vaultserver-alerts
 | metadata.resource.version                                                     |                                               | <code>v1alpha2</code>                 |
 | metadata.release.name                                                         | Release name                                  | <code>""</code>                       |
 | metadata.release.namespace                                                    | Release namespace                             | <code>""</code>                       |
-| form.alert.enabled                                                            | # Enable PrometheusRule alerts                | <code>true</code>                     |
+| form.alert.enabled                                                            | # Enable PrometheusRule alerts                | <code>warning</code>                  |
 | form.alert.labels                                                             | # Labels for default rules                    | <code>{"release":"prometheus"}</code> |
 | form.alert.annotations                                                        | # Annotations for default rules               | <code>{}</code>                       |
 | form.alert.additionalRuleLabels                                               | # Additional labels for PrometheusRule alerts | <code>{}</code>                       |
-| form.alert.groups.vault.enabled                                               |                                               | <code>true</code>                     |
+| form.alert.groups.vault.enabled                                               |                                               | <code>warning</code>                  |
 | form.alert.groups.vault.rules.vaultDown.enabled                               |                                               | <code>true</code>                     |
 | form.alert.groups.vault.rules.vaultDown.duration                              |                                               | <code>"0m"</code>                     |
 | form.alert.groups.vault.rules.vaultDown.severity                              |                                               | <code>critical</code>                 |
@@ -90,14 +90,14 @@ The following table lists the configurable parameters of the `vaultserver-alerts
 | form.alert.groups.vault.rules.vaultTooManyInfinityTokens.duration             |                                               | <code>"5m"</code>                     |
 | form.alert.groups.vault.rules.vaultTooManyInfinityTokens.val                  |                                               | <code>3</code>                        |
 | form.alert.groups.vault.rules.vaultTooManyInfinityTokens.severity             |                                               | <code>warning</code>                  |
-| form.alert.groups.operator.enabled                                            |                                               | <code>true</code>                     |
+| form.alert.groups.operator.enabled                                            |                                               | <code>warning</code>                  |
 | form.alert.groups.operator.rules.appPhaseNotReady.enabled                     |                                               | <code>true</code>                     |
 | form.alert.groups.operator.rules.appPhaseNotReady.duration                    |                                               | <code>"5m"</code>                     |
 | form.alert.groups.operator.rules.appPhaseNotReady.severity                    |                                               | <code>critical</code>                 |
 | form.alert.groups.operator.rules.appPhaseCritical.enabled                     |                                               | <code>true</code>                     |
 | form.alert.groups.operator.rules.appPhaseCritical.duration                    |                                               | <code>"15m"</code>                    |
 | form.alert.groups.operator.rules.appPhaseCritical.severity                    |                                               | <code>warning</code>                  |
-| form.alert.groups.opsManager.enabled                                          |                                               | <code>true</code>                     |
+| form.alert.groups.opsManager.enabled                                          |                                               | <code>warning</code>                  |
 | form.alert.groups.opsManager.rules.opsRequestOnProgress.enabled               |                                               | <code>true</code>                     |
 | form.alert.groups.opsManager.rules.opsRequestOnProgress.duration              |                                               | <code>"0m"</code>                     |
 | form.alert.groups.opsManager.rules.opsRequestOnProgress.severity              |                                               | <code>info</code>                     |
@@ -107,7 +107,7 @@ The following table lists the configurable parameters of the `vaultserver-alerts
 | form.alert.groups.opsManager.rules.opsRequestFailed.enabled                   |                                               | <code>true</code>                     |
 | form.alert.groups.opsManager.rules.opsRequestFailed.duration                  |                                               | <code>"0m"</code>                     |
 | form.alert.groups.opsManager.rules.opsRequestFailed.severity                  |                                               | <code>critical</code>                 |
-| form.alert.groups.stash.enabled                                               |                                               | <code>true</code>                     |
+| form.alert.groups.stash.enabled                                               |                                               | <code>warning</code>                  |
 | form.alert.groups.stash.rules.backupSessionFailed.enabled                     |                                               | <code>true</code>                     |
 | form.alert.groups.stash.rules.backupSessionFailed.duration                    |                                               | <code>"0m"</code>                     |
 | form.alert.groups.stash.rules.backupSessionFailed.severity                    |                                               | <code>critical</code>                 |

@@ -14,7 +14,7 @@ metadata:
 form:
   alert:
     ## Enable PrometheusRule alerts
-    enabled: true
+    enabled: warning
 
     ## Labels for default rules
     labels: # +doc-gen:break
@@ -31,7 +31,7 @@ form:
 
     groups:
       vault:
-        enabled: true
+        enabled: warning
         rules:
           vaultDown:
             enabled: true
@@ -74,7 +74,7 @@ form:
             val: 3
             severity: warning
       operator:
-        enabled: true
+        enabled: warning
         rules:
           appPhaseNotReady:
             enabled: true
@@ -85,7 +85,7 @@ form:
             duration: "15m"
             severity: warning
       opsManager:
-        enabled: true
+        enabled: warning
         rules:
           opsRequestOnProgress:
             enabled: true
@@ -100,7 +100,7 @@ form:
             duration: "0m"
             severity: critical
       stash:
-        enabled: true
+        enabled: warning
         rules:
           backupSessionFailed:
             enabled: true

@@ -54,11 +54,11 @@ The following table lists the configurable parameters of the `proxysql-alerts` c
 | metadata.resource.version                                                     |                                               | <code>v1alpha2</code>                            |
 | metadata.release.name                                                         | Release name                                  | <code>""</code>                                  |
 | metadata.release.namespace                                                    | Release namespace                             | <code>""</code>                                  |
-| form.alert.enabled                                                            | # Enable PrometheusRule alerts                | <code>true</code>                                |
+| form.alert.enabled                                                            | # Enable PrometheusRule alerts                | <code>warning</code>                             |
 | form.alert.labels                                                             | # Labels for default rules                    | <code>{"release":"kube-prometheus-stack"}</code> |
 | form.alert.annotations                                                        | # Annotations for default rules               | <code>{}</code>                                  |
 | form.alert.additionalRuleLabels                                               | # Additional labels for PrometheusRule alerts | <code>{}</code>                                  |
-| form.alert.groups.database.enabled                                            |                                               | <code>true</code>                                |
+| form.alert.groups.database.enabled                                            |                                               | <code>warning</code>                             |
 | form.alert.groups.database.rules.proxysqlInstanceDown.enabled                 |                                               | <code>true</code>                                |
 | form.alert.groups.database.rules.proxysqlInstanceDown.duration                |                                               | <code>"0m"</code>                                |
 | form.alert.groups.database.rules.proxysqlInstanceDown.severity                |                                               | <code>critical</code>                            |
@@ -92,19 +92,19 @@ The following table lists the configurable parameters of the `proxysql-alerts` c
 | form.alert.groups.database.rules.proxysqlHighOutgoingBytes.duration           |                                               | <code>"0m"</code>                                |
 | form.alert.groups.database.rules.proxysqlHighOutgoingBytes.val                |                                               | <code>1048576 # 1MB</code>                       |
 | form.alert.groups.database.rules.proxysqlHighOutgoingBytes.severity           |                                               | <code>critical</code>                            |
-| form.alert.groups.cluster.enabled                                             |                                               | <code>true</code>                                |
+| form.alert.groups.cluster.enabled                                             |                                               | <code>warning</code>                             |
 | form.alert.groups.cluster.rules.proxysqlClusterSyncFailure.enabled            |                                               | <code>true</code>                                |
 | form.alert.groups.cluster.rules.proxysqlClusterSyncFailure.val                |                                               | <code>0.1</code>                                 |
 | form.alert.groups.cluster.rules.proxysqlClusterSyncFailure.duration           |                                               | <code>"5m"</code>                                |
 | form.alert.groups.cluster.rules.proxysqlClusterSyncFailure.severity           |                                               | <code>warning</code>                             |
-| form.alert.groups.provisioner.enabled                                         |                                               | <code>true</code>                                |
+| form.alert.groups.provisioner.enabled                                         |                                               | <code>warning</code>                             |
 | form.alert.groups.provisioner.rules.appPhaseNotReady.enabled                  |                                               | <code>true</code>                                |
 | form.alert.groups.provisioner.rules.appPhaseNotReady.duration                 |                                               | <code>"1m"</code>                                |
 | form.alert.groups.provisioner.rules.appPhaseNotReady.severity                 |                                               | <code>critical</code>                            |
 | form.alert.groups.provisioner.rules.appPhaseCritical.enabled                  |                                               | <code>true</code>                                |
 | form.alert.groups.provisioner.rules.appPhaseCritical.duration                 |                                               | <code>"15m"</code>                               |
 | form.alert.groups.provisioner.rules.appPhaseCritical.severity                 |                                               | <code>warning</code>                             |
-| form.alert.groups.opsManager.enabled                                          |                                               | <code>true</code>                                |
+| form.alert.groups.opsManager.enabled                                          |                                               | <code>warning</code>                             |
 | form.alert.groups.opsManager.rules.opsRequestOnProgress.enabled               |                                               | <code>true</code>                                |
 | form.alert.groups.opsManager.rules.opsRequestOnProgress.duration              |                                               | <code>"0m"</code>                                |
 | form.alert.groups.opsManager.rules.opsRequestOnProgress.severity              |                                               | <code>info</code>                                |

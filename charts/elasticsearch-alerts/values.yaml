@@ -14,7 +14,7 @@ metadata:
 form:
   alert:
     ## Enable PrometheusRule alerts
-    enabled: true
+    enabled: warning
 
     ## Labels for default rules
     labels: # +doc-gen:break
@@ -31,7 +31,7 @@ form:
 
     groups:
       database:
-        enabled: true
+        enabled: warning
         rules:
           # Elasticsearch Heap Usage Too High
           elasticsearchHeapUsageTooHigh:
@@ -123,7 +123,7 @@ form:
             duration: "0m"
             severity: info
       provisioner:
-        enabled: true
+        enabled: warning
         rules:
           appPhaseNotReady:
             enabled: true
@@ -134,7 +134,7 @@ form:
             duration: "15m"
             severity: warning
       opsManager:
-        enabled: true
+        enabled: warning
         rules:
           opsRequestOnProgress:
             enabled: true
@@ -149,7 +149,7 @@ form:
             duration: "0m"
             severity: critical
       stash:
-        enabled: true
+        enabled: warning
         rules:
           backupSessionFailed:
             enabled: true

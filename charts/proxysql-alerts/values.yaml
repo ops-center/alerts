@@ -14,7 +14,7 @@ metadata:
 form:
   alert:
     ## Enable PrometheusRule alerts
-    enabled: true
+    enabled: warning
 
     ## Labels for default rules
     labels: # +doc-gen:break
@@ -31,7 +31,7 @@ form:
 
     groups:
       database:
-        enabled: true
+        enabled: warning
         rules:
           proxysqlInstanceDown:
             enabled: true
@@ -76,7 +76,7 @@ form:
             val: 1048576 # 1MB
             severity: critical
       cluster:
-        enabled: true
+        enabled: warning
         rules:
           proxysqlClusterSyncFailure:
             enabled: true
@@ -84,7 +84,7 @@ form:
             duration: "5m"
             severity: warning
       provisioner:
-        enabled: true
+        enabled: warning
         rules:
           appPhaseNotReady:
             enabled: true
@@ -95,7 +95,7 @@ form:
             duration: "15m"
             severity: warning
       opsManager:
-        enabled: true
+        enabled: warning
         rules:
           opsRequestOnProgress:
             enabled: true

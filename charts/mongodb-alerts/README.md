@@ -54,11 +54,11 @@ The following table lists the configurable parameters of the `mongodb-alerts` ch
 | metadata.resource.version                                                     |                                               | <code>v1alpha2</code>                            |
 | metadata.release.name                                                         | Release name                                  | <code>""</code>                                  |
 | metadata.release.namespace                                                    | Release namespace                             | <code>""</code>                                  |
-| form.alert.enabled                                                            | # Enable PrometheusRule alerts                | <code>true</code>                                |
+| form.alert.enabled                                                            | # Enable PrometheusRule alerts                | <code>warning</code>                             |
 | form.alert.labels                                                             | # Labels for default rules                    | <code>{"release":"kube-prometheus-stack"}</code> |
 | form.alert.annotations                                                        | # Annotations for default rules               | <code>{}</code>                                  |
 | form.alert.additionalRuleLabels                                               | # Additional labels for PrometheusRule alerts | <code>{}</code>                                  |
-| form.alert.groups.database.enabled                                            |                                               | <code>true</code>                                |
+| form.alert.groups.database.enabled                                            |                                               | <code>warning</code>                             |
 | form.alert.groups.database.rules.mongodbVirtualMemoryUsage.enabled            |                                               | <code>true</code>                                |
 | form.alert.groups.database.rules.mongodbVirtualMemoryUsage.val                |                                               | <code>2097152 # 2GB</code>                       |
 | form.alert.groups.database.rules.mongodbVirtualMemoryUsage.duration           |                                               | <code>"1m"</code>                                |
@@ -101,14 +101,14 @@ The following table lists the configurable parameters of the `mongodb-alerts` ch
 | form.alert.groups.database.rules.mongodbRecurrentMemoryPageFaults.val         |                                               | <code>0</code>                                   |
 | form.alert.groups.database.rules.mongodbRecurrentMemoryPageFaults.duration    |                                               | <code>"30m"</code>                               |
 | form.alert.groups.database.rules.mongodbRecurrentMemoryPageFaults.severity    |                                               | <code>warning</code>                             |
-| form.alert.groups.provisioner.enabled                                         |                                               | <code>true</code>                                |
+| form.alert.groups.provisioner.enabled                                         |                                               | <code>warning</code>                             |
 | form.alert.groups.provisioner.rules.appPhaseNotReady.enabled                  |                                               | <code>true</code>                                |
 | form.alert.groups.provisioner.rules.appPhaseNotReady.duration                 |                                               | <code>"1m"</code>                                |
 | form.alert.groups.provisioner.rules.appPhaseNotReady.severity                 |                                               | <code>critical</code>                            |
 | form.alert.groups.provisioner.rules.appPhaseCritical.enabled                  |                                               | <code>true</code>                                |
 | form.alert.groups.provisioner.rules.appPhaseCritical.duration                 |                                               | <code>"15m"</code>                               |
 | form.alert.groups.provisioner.rules.appPhaseCritical.severity                 |                                               | <code>warning</code>                             |
-| form.alert.groups.opsManager.enabled                                          |                                               | <code>true</code>                                |
+| form.alert.groups.opsManager.enabled                                          |                                               | <code>warning</code>                             |
 | form.alert.groups.opsManager.rules.opsRequestOnProgress.enabled               |                                               | <code>true</code>                                |
 | form.alert.groups.opsManager.rules.opsRequestOnProgress.duration              |                                               | <code>"0m"</code>                                |
 | form.alert.groups.opsManager.rules.opsRequestOnProgress.severity              |                                               | <code>info</code>                                |
@@ -118,7 +118,7 @@ The following table lists the configurable parameters of the `mongodb-alerts` ch
 | form.alert.groups.opsManager.rules.opsRequestFailed.enabled                   |                                               | <code>true</code>                                |
 | form.alert.groups.opsManager.rules.opsRequestFailed.duration                  |                                               | <code>"0m"</code>                                |
 | form.alert.groups.opsManager.rules.opsRequestFailed.severity                  |                                               | <code>critical</code>                            |
-| form.alert.groups.stash.enabled                                               |                                               | <code>true</code>                                |
+| form.alert.groups.stash.enabled                                               |                                               | <code>warning</code>                             |
 | form.alert.groups.stash.rules.backupSessionFailed.enabled                     |                                               | <code>true</code>                                |
 | form.alert.groups.stash.rules.backupSessionFailed.duration                    |                                               | <code>"0m"</code>                                |
 | form.alert.groups.stash.rules.backupSessionFailed.severity                    |                                               | <code>critical</code>                            |
@@ -144,7 +144,7 @@ The following table lists the configurable parameters of the `mongodb-alerts` ch
 | form.alert.groups.stash.rules.restoreSessionPeriodTooLong.duration            |                                               | <code>"0m"</code>                                |
 | form.alert.groups.stash.rules.restoreSessionPeriodTooLong.val                 |                                               | <code>1800 # 30 minute</code>                    |
 | form.alert.groups.stash.rules.restoreSessionPeriodTooLong.severity            |                                               | <code>warning</code>                             |
-| form.alert.groups.schemaManager.enabled                                       |                                               | <code>true</code>                                |
+| form.alert.groups.schemaManager.enabled                                       |                                               | <code>warning</code>                             |
 | form.alert.groups.schemaManager.rules.schemaPendingForTooLong.enabled         |                                               | <code>true</code>                                |
 | form.alert.groups.schemaManager.rules.schemaPendingForTooLong.duration        |                                               | <code>"30m"</code>                               |
 | form.alert.groups.schemaManager.rules.schemaPendingForTooLong.severity        |                                               | <code>warning</code>                             |

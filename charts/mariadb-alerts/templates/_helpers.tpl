@@ -48,8 +48,33 @@ k8s_group: {{ .Values.metadata.resource.group }}
 k8s_kind: {{ .Values.metadata.resource.kind }}
 k8s_resource: {{ .Values.metadata.resource.name }}
 app: {{ include "mariadb-alerts.fullname" . }}
-app_namespace: {{ .Release.Namespace }}
+app_namespace: {{ $.Release.Namespace }}
 {{- if .Values.form.alert.additionalRuleLabels }}
 {{ toYaml .Values.form.alert.additionalRuleLabels }}
 {{- end }}
+{{- end }}
+
+{{/*
+Alert Group Enabled
+*/}}
+{{- define "mariadb-alerts.alertGroupEnabled" -}}
+{{- $ranks := dict "critical" 1 "warning" 2 "info" 3 -}}
+{{- $result := dig . 0 $ranks -}}
+{{- if $result -}}{{ . }}{{- end -}}
+{{- end }}
+
+{{/*
+Alert Enabled
+*/}}
+{{- define "mariadb-alerts.alertEnabled" -}}
+{{- $ranks := dict "critical" 1 "warning" 2 "info" 3 -}}
+{{- $sev := dig (mustLast .) 0 $ranks -}}
+{{- $flags := mustInitial . -}}
+{{- $enabled := mustLast $flags -}}
+{{- $flags = mustInitial $flags -}}
+{{- $result := 3 -}}
+{{- range $x := $flags -}}
+{{- $result = min $result (dig $x 0 $ranks) -}}
+{{- end -}}
+{{- if (and (le $sev $result) $enabled) -}}{{ (mustLast .) }}{{- end -}}
 {{- end }}

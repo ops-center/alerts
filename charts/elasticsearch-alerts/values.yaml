@@ -14,7 +14,7 @@ metadata:
 form:
   alert:
     ## Enable PrometheusRule alerts
-    enabled: true
+    enabled: warning
 
     ## Labels for default rules
     labels: # +doc-gen:break
@@ -31,11 +31,11 @@ form:
 
     groups:
       database:
-        enabled: true
+        enabled: critical
         rules:
           # Elasticsearch Heap Usage Too High
           elasticsearchHeapUsageTooHigh:
-            enabled: false
+            enabled: true
             # The heap usage is over 90%
             val: 90
             duration: "2m"
@@ -51,7 +51,7 @@ form:
 
           # Elasticsearch disk out of space
           elasticsearchDiskOutOfSpace:
-            enabled: false
+            enabled: true
             # The disk usage is over 90%. Value range: 0-100.
             val: 90
             duration: "0m"
@@ -59,7 +59,7 @@ form:
 
           # Elasticsearch disk space low
           elasticsearchDiskSpaceLow:
-            enabled: false
+            enabled: true
             # The disk usage is over 80%. Value range: 0-100.
             val: 80
             duration: "2m"
@@ -67,7 +67,7 @@ form:
 
           # Elastic Cluster Red status
           elasticsearchClusterRed:
-            enabled: false
+            enabled: true
             duration: "0m"
             severity: critical
 
@@ -113,7 +113,7 @@ form:
 
           # Elasticsearch has pending tasks. Cluster works slowly.
           elasticsearchPendingTasks:
-            enabled: false
+            enabled: true
             duration: "15m"
             severity: warning
 
@@ -123,7 +123,7 @@ form:
             duration: "0m"
             severity: info
       provisioner:
-        enabled: true
+        enabled: warning
         rules:
           appPhaseNotReady:
             enabled: true
@@ -134,7 +134,7 @@ form:
             duration: "15m"
             severity: warning
       opsManager:
-        enabled: true
+        enabled: warning
         rules:
           opsRequestOnProgress:
             enabled: true
@@ -149,7 +149,7 @@ form:
             duration: "0m"
             severity: critical
       stash:
-        enabled: true
+        enabled: warning
         rules:
           backupSessionFailed:
             enabled: true

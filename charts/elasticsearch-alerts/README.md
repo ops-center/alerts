@@ -54,12 +54,12 @@ The following table lists the configurable parameters of the `elasticsearch-aler
 | metadata.resource.version                                                     |                                                 | <code>v1alpha2</code>                            |
 | metadata.release.name                                                         | Release name                                    | <code>""</code>                                  |
 | metadata.release.namespace                                                    | Release namespace                               | <code>""</code>                                  |
-| form.alert.enabled                                                            | # Enable PrometheusRule alerts                  | <code>true</code>                                |
+| form.alert.enabled                                                            | # Enable PrometheusRule alerts                  | <code>warning</code>                             |
 | form.alert.labels                                                             | # Labels for default rules                      | <code>{"release":"kube-prometheus-stack"}</code> |
 | form.alert.annotations                                                        | # Annotations for default rules                 | <code>{}</code>                                  |
 | form.alert.additionalRuleLabels                                               | # Additional labels for PrometheusRule alerts   | <code>{}</code>                                  |
-| form.alert.groups.database.enabled                                            |                                                 | <code>true</code>                                |
-| form.alert.groups.database.rules.elasticsearchHeapUsageTooHigh.enabled        |                                                 | <code>false</code>                               |
+| form.alert.groups.database.enabled                                            |                                                 | <code>critical</code>                            |
+| form.alert.groups.database.rules.elasticsearchHeapUsageTooHigh.enabled        |                                                 | <code>true</code>                                |
 | form.alert.groups.database.rules.elasticsearchHeapUsageTooHigh.val            | The heap usage is over 90%                      | <code>90</code>                                  |
 | form.alert.groups.database.rules.elasticsearchHeapUsageTooHigh.duration       |                                                 | <code>"2m"</code>                                |
 | form.alert.groups.database.rules.elasticsearchHeapUsageTooHigh.severity       |                                                 | <code>critical</code>                            |
@@ -67,15 +67,15 @@ The following table lists the configurable parameters of the `elasticsearch-aler
 | form.alert.groups.database.rules.elasticsearchHeapUsageWarning.val            | The heap usage is over 80%                      | <code>80</code>                                  |
 | form.alert.groups.database.rules.elasticsearchHeapUsageWarning.duration       |                                                 | <code>"2m"</code>                                |
 | form.alert.groups.database.rules.elasticsearchHeapUsageWarning.severity       |                                                 | <code>warning</code>                             |
-| form.alert.groups.database.rules.elasticsearchDiskOutOfSpace.enabled          |                                                 | <code>false</code>                               |
+| form.alert.groups.database.rules.elasticsearchDiskOutOfSpace.enabled          |                                                 | <code>true</code>                                |
 | form.alert.groups.database.rules.elasticsearchDiskOutOfSpace.val              | The disk usage is over 90%. Value range: 0-100. | <code>90</code>                                  |
 | form.alert.groups.database.rules.elasticsearchDiskOutOfSpace.duration         |                                                 | <code>"0m"</code>                                |
 | form.alert.groups.database.rules.elasticsearchDiskOutOfSpace.severity         |                                                 | <code>critical</code>                            |
-| form.alert.groups.database.rules.elasticsearchDiskSpaceLow.enabled            |                                                 | <code>false</code>                               |
+| form.alert.groups.database.rules.elasticsearchDiskSpaceLow.enabled            |                                                 | <code>true</code>                                |
 | form.alert.groups.database.rules.elasticsearchDiskSpaceLow.val                | The disk usage is over 80%. Value range: 0-100. | <code>80</code>                                  |
 | form.alert.groups.database.rules.elasticsearchDiskSpaceLow.duration           |                                                 | <code>"2m"</code>                                |
 | form.alert.groups.database.rules.elasticsearchDiskSpaceLow.severity           |                                                 | <code>warning</code>                             |
-| form.alert.groups.database.rules.elasticsearchClusterRed.enabled              |                                                 | <code>false</code>                               |
+| form.alert.groups.database.rules.elasticsearchClusterRed.enabled              |                                                 | <code>true</code>                                |
 | form.alert.groups.database.rules.elasticsearchClusterRed.duration             |                                                 | <code>"0m"</code>                                |
 | form.alert.groups.database.rules.elasticsearchClusterRed.severity             |                                                 | <code>critical</code>                            |
 | form.alert.groups.database.rules.elasticsearchClusterYellow.enabled           |                                                 | <code>true</code>                                |
@@ -98,20 +98,20 @@ The following table lists the configurable parameters of the `elasticsearch-aler
 | form.alert.groups.database.rules.elasticsearchUnassignedShards.enabled        |                                                 | <code>true</code>                                |
 | form.alert.groups.database.rules.elasticsearchUnassignedShards.duration       |                                                 | <code>"0m"</code>                                |
 | form.alert.groups.database.rules.elasticsearchUnassignedShards.severity       |                                                 | <code>critical</code>                            |
-| form.alert.groups.database.rules.elasticsearchPendingTasks.enabled            |                                                 | <code>false</code>                               |
+| form.alert.groups.database.rules.elasticsearchPendingTasks.enabled            |                                                 | <code>true</code>                                |
 | form.alert.groups.database.rules.elasticsearchPendingTasks.duration           |                                                 | <code>"15m"</code>                               |
 | form.alert.groups.database.rules.elasticsearchPendingTasks.severity           |                                                 | <code>warning</code>                             |
 | form.alert.groups.database.rules.elasticsearchNoNewDocuments10m.enabled       |                                                 | <code>false</code>                               |
 | form.alert.groups.database.rules.elasticsearchNoNewDocuments10m.duration      |                                                 | <code>"0m"</code>                                |
 | form.alert.groups.database.rules.elasticsearchNoNewDocuments10m.severity      |                                                 | <code>info</code>                                |
-| form.alert.groups.provisioner.enabled                                         |                                                 | <code>true</code>                                |
+| form.alert.groups.provisioner.enabled                                         |                                                 | <code>warning</code>                             |
 | form.alert.groups.provisioner.rules.appPhaseNotReady.enabled                  |                                                 | <code>true</code>                                |
 | form.alert.groups.provisioner.rules.appPhaseNotReady.duration                 |                                                 | <code>"1m"</code>                                |
 | form.alert.groups.provisioner.rules.appPhaseNotReady.severity                 |                                                 | <code>critical</code>                            |
 | form.alert.groups.provisioner.rules.appPhaseCritical.enabled                  |                                                 | <code>true</code>                                |
 | form.alert.groups.provisioner.rules.appPhaseCritical.duration                 |                                                 | <code>"15m"</code>                               |
 | form.alert.groups.provisioner.rules.appPhaseCritical.severity                 |                                                 | <code>warning</code>                             |
-| form.alert.groups.opsManager.enabled                                          |                                                 | <code>true</code>                                |
+| form.alert.groups.opsManager.enabled                                          |                                                 | <code>warning</code>                             |
 | form.alert.groups.opsManager.rules.opsRequestOnProgress.enabled               |                                                 | <code>true</code>                                |
 | form.alert.groups.opsManager.rules.opsRequestOnProgress.duration              |                                                 | <code>"0m"</code>                                |
 | form.alert.groups.opsManager.rules.opsRequestOnProgress.severity              |                                                 | <code>info</code>                                |
@@ -121,7 +121,7 @@ The following table lists the configurable parameters of the `elasticsearch-aler
 | form.alert.groups.opsManager.rules.opsRequestFailed.enabled                   |                                                 | <code>true</code>                                |
 | form.alert.groups.opsManager.rules.opsRequestFailed.duration                  |                                                 | <code>"0m"</code>                                |
 | form.alert.groups.opsManager.rules.opsRequestFailed.severity                  |                                                 | <code>critical</code>                            |
-| form.alert.groups.stash.enabled                                               |                                                 | <code>true</code>                                |
+| form.alert.groups.stash.enabled                                               |                                                 | <code>warning</code>                             |
 | form.alert.groups.stash.rules.backupSessionFailed.enabled                     |                                                 | <code>true</code>                                |
 | form.alert.groups.stash.rules.backupSessionFailed.duration                    |                                                 | <code>"0m"</code>                                |
 | form.alert.groups.stash.rules.backupSessionFailed.severity                    |                                                 | <code>critical</code>                            |

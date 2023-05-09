@@ -101,7 +101,7 @@ The following table lists the configurable parameters of the `mariadb-alerts` ch
 | form.alert.groups.database.rules.mysqlTooManyOpenFiles.val                    |                                               | <code>80</code>                                  |
 | form.alert.groups.database.rules.mysqlTooManyOpenFiles.severity               |                                               | <code>warning</code>                             |
 | form.alert.groups.cluster.enabled                                             |                                               | <code>warning</code>                             |
-| form.alert.groups.cluster.rules.galeraReplicationLatencyTooLong.enabled       |                                               | <code>warning</code>                             |
+| form.alert.groups.cluster.rules.galeraReplicationLatencyTooLong.enabled       |                                               | <code>true</code>                                |
 | form.alert.groups.cluster.rules.galeraReplicationLatencyTooLong.val           |                                               | <code>0.1</code>                                 |
 | form.alert.groups.cluster.rules.galeraReplicationLatencyTooLong.duration      |                                               | <code>"5m"</code>                                |
 | form.alert.groups.cluster.rules.galeraReplicationLatencyTooLong.severity      |                                               | <code>warning</code>                             |

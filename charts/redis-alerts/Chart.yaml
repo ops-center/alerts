@@ -2,8 +2,8 @@ apiVersion: v2
 name: redis-alerts
 description: A Helm chart for Redis Alert by AppsCode
 type: application
-version: v2023.04.10
-appVersion: v0.1.0
+version: v2023.05.09
+appVersion: v0.2.0
 home: https://github.com/appscode/alerts
 icon: https://cdn.appscode.com/images/products/kubedb/kubedb-icon.png
 sources:

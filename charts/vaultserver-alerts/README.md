@@ -7,8 +7,8 @@
 ```bash
 $ helm repo add appscode https://charts.appscode.com/stable/
 $ helm repo update
-$ helm search repo appscode/vaultserver-alerts --version=v2023.04.10
-$ helm upgrade -i vaultserver appscode/vaultserver-alerts -n demo --create-namespace --version=v2023.04.10
+$ helm search repo appscode/vaultserver-alerts --version=v2023.05.09
+$ helm upgrade -i vaultserver appscode/vaultserver-alerts -n demo --create-namespace --version=v2023.05.09
 ```
 
 ## Introduction
@@ -24,7 +24,7 @@ This chart deploys VaultServer alerts on a [Kubernetes](http://kubernetes.io) cl
 To install/upgrade the chart with the release name `vaultserver`:
 
 ```bash
-$ helm upgrade -i vaultserver appscode/vaultserver-alerts -n demo --create-namespace --version=v2023.04.10
+$ helm upgrade -i vaultserver appscode/vaultserver-alerts -n demo --create-namespace --version=v2023.05.09
 ```
 
 The command deploys VaultServer alerts on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -138,12 +138,12 @@ The following table lists the configurable parameters of the `vaultserver-alerts
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm upgrade -i`. For example:
 
 ```bash
-$ helm upgrade -i vaultserver appscode/vaultserver-alerts -n demo --create-namespace --version=v2023.04.10 --set metadata.resource.group=kubevault.com
+$ helm upgrade -i vaultserver appscode/vaultserver-alerts -n demo --create-namespace --version=v2023.05.09 --set metadata.resource.group=kubevault.com
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while
 installing the chart. For example:
 
 ```bash
-$ helm upgrade -i vaultserver appscode/vaultserver-alerts -n demo --create-namespace --version=v2023.04.10 --values values.yaml
+$ helm upgrade -i vaultserver appscode/vaultserver-alerts -n demo --create-namespace --version=v2023.05.09 --values values.yaml
 ```

@@ -1,6 +1,6 @@
 {{ $app := (include "perconaxtradb-alerts.fullname" .) }}
 
-{{ if (include "perconaxtradb-alerts.alertGroupEnabled" .Values.form.alert.enabled) }}
+{{ if (include "perconaxtradb-alerts.alertsEnabled" .Values.form.alert.enabled) }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
@@ -18,7 +18,7 @@ metadata:
 spec:
   groups:
   {{ with .Values.form.alert.groups.database -}}
-  {{ if (include "perconaxtradb-alerts.alertGroupEnabled" .enabled) -}}
+  {{ if (include "perconaxtradb-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
   - name: perconaxtradb.database.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if (include "perconaxtradb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.mysqlInstanceDown.enabled .rules.mysqlInstanceDown.severity)) -}}
@@ -147,7 +147,7 @@ spec:
 
 
   {{ with .Values.form.alert.groups.cluster -}}
-  {{ if (include "perconaxtradb-alerts.alertGroupEnabled" .enabled) -}}
+  {{ if (include "perconaxtradb-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
   - name: perconaxtradb.cluster.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if (include "perconaxtradb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.galeraReplicationLatencyTooLong.enabled .rules.galeraReplicationLatencyTooLong.severity)) -}}
@@ -166,7 +166,7 @@ spec:
 
 
   {{ with .Values.form.alert.groups.provisioner -}}
-  {{ if (include "perconaxtradb-alerts.alertGroupEnabled" .enabled) -}}
+  {{ if (include "perconaxtradb-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
   - name: perconaxtradb.provisioner.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if (include "perconaxtradb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.appPhaseNotReady.enabled .rules.appPhaseNotReady.severity)) -}}
@@ -196,7 +196,7 @@ spec:
 
 
   {{ with .Values.form.alert.groups.opsManager -}}
-  {{ if (include "perconaxtradb-alerts.alertGroupEnabled" .enabled) -}}
+  {{ if (include "perconaxtradb-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
   - name: perconaxtradb.opsManager.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if (include "perconaxtradb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.opsRequestOnProgress.enabled .rules.opsRequestOnProgress.severity)) -}}
@@ -237,7 +237,7 @@ spec:
 
 
   {{ with .Values.form.alert.groups.stash -}}
-  {{ if (include "perconaxtradb-alerts.alertGroupEnabled" .enabled) -}}
+  {{ if (include "perconaxtradb-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
   - name: perconaxtradb.stash.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if (include "perconaxtradb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.backupSessionFailed.enabled .rules.backupSessionFailed.severity)) -}}
@@ -322,7 +322,7 @@ spec:
 
 
   {{ with .Values.form.alert.groups.schemaManager -}}
-  {{ if (include "perconaxtradb-alerts.alertGroupEnabled" .enabled) -}}
+  {{ if (include "perconaxtradb-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
   - name: perconaxtradb.schemaManager.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if (include "perconaxtradb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.schemaPendingForTooLong.enabled .rules.schemaPendingForTooLong.severity)) -}}

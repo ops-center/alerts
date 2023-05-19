@@ -1,6 +1,6 @@
 {{ $app := (include "proxysql-alerts.fullname" .) }}
 
-{{ if (include "proxysql-alerts.alertGroupEnabled" .Values.form.alert.enabled) }}
+{{ if (include "proxysql-alerts.alertsEnabled" .Values.form.alert.enabled) }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
@@ -18,7 +18,7 @@ annotations:
 spec:
   groups:
   {{ with .Values.form.alert.groups.database -}}
-  {{ if (include "proxysql-alerts.alertGroupEnabled" .enabled) -}}
+  {{ if (include "proxysql-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
   - name: proxysql.database.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if (include "proxysql-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.proxysqlInstanceDown.enabled .rules.proxysqlInstanceDown.severity)) -}}
@@ -103,7 +103,7 @@ spec:
 
 
   {{ with .Values.form.alert.groups.cluster -}}
-  {{ if (include "proxysql-alerts.alertGroupEnabled" .enabled) -}}
+  {{ if (include "proxysql-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
   - name: proxysql.cluster.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if (include "proxysql-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.proxysqlClusterSyncFailure.enabled .rules.proxysqlClusterSyncFailure.severity)) -}}
@@ -122,7 +122,7 @@ spec:
 
 
   {{ with .Values.form.alert.groups.provisioner -}}
-  {{ if (include "proxysql-alerts.alertGroupEnabled" .enabled) -}}
+  {{ if (include "proxysql-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
   - name: proxysql.provisioner.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if (include "proxysql-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.appPhaseNotReady.enabled .rules.appPhaseNotReady.severity)) -}}
@@ -152,7 +152,7 @@ spec:
 
 
   {{ with .Values.form.alert.groups.opsManager -}}
-  {{ if (include "proxysql-alerts.alertGroupEnabled" .enabled) -}}
+  {{ if (include "proxysql-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
   - name: proxysql.opsManager.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if (include "proxysql-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.opsRequestOnProgress.enabled .rules.opsRequestOnProgress.severity)) -}}

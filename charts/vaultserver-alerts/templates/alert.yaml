@@ -1,6 +1,6 @@
 {{ $app := (include "vaultserver-alerts.fullname" .) }}
 
-{{ if (include "vaultserver-alerts.alertGroupEnabled" .Values.form.alert.enabled) }}
+{{ if (include "vaultserver-alerts.alertsEnabled" .Values.form.alert.enabled) }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
@@ -18,7 +18,7 @@ metadata:
 spec:
   groups:
   {{ with .Values.form.alert.groups.vault -}}
-  {{ if (include "vaultserver-alerts.alertGroupEnabled" .enabled) -}}
+  {{ if (include "vaultserver-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
   - name: vaultserver.vault.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if (include "vaultserver-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.vaultDown.enabled .rules.vaultDown.severity)) -}}
@@ -125,7 +125,7 @@ spec:
 
 
   {{ with .Values.form.alert.groups.operator -}}
-  {{ if (include "vaultserver-alerts.alertGroupEnabled" .enabled) -}}
+  {{ if (include "vaultserver-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
   - name: vaultserver.operator.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if (include "vaultserver-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.appPhaseNotReady.enabled .rules.appPhaseNotReady.severity)) -}}
@@ -155,7 +155,7 @@ spec:
 
 
   {{ with .Values.form.alert.groups.opsManager -}}
-  {{ if (include "vaultserver-alerts.alertGroupEnabled" .enabled) -}}
+  {{ if (include "vaultserver-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
   - name: vaultserver.opsManager.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if (include "vaultserver-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.opsRequestOnProgress.enabled .rules.opsRequestOnProgress.severity)) -}}
@@ -196,7 +196,7 @@ spec:
 
 
   {{ with .Values.form.alert.groups.stash -}}
-  {{ if (include "vaultserver-alerts.alertGroupEnabled" .enabled) -}}
+  {{ if (include "vaultserver-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
   - name: vaultserver.stash.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if (include "vaultserver-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.backupSessionFailed.enabled .rules.backupSessionFailed.severity)) -}}

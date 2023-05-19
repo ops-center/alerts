@@ -1,6 +1,6 @@
 {{ $app := (include "mongodb-alerts.fullname" .) }}
 
-{{ if (include "mongodb-alerts.alertGroupEnabled" .Values.form.alert.enabled) }}
+{{ if (include "mongodb-alerts.alertsEnabled" .Values.form.alert.enabled) }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
@@ -18,7 +18,7 @@ metadata:
 spec:
   groups:
   {{ with .Values.form.alert.groups.database -}}
-  {{ if (include "mongodb-alerts.alertGroupEnabled" .enabled) -}}
+  {{ if (include "mongodb-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
   - name: mongodb.database.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if (include "mongodb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.mongodbVirtualMemoryUsage.enabled .rules.mongodbVirtualMemoryUsage.severity)) -}}
@@ -152,7 +152,7 @@ spec:
 
 
   {{ with .Values.form.alert.groups.provisioner -}}
-  {{ if (include "mongodb-alerts.alertGroupEnabled" .enabled) -}}
+  {{ if (include "mongodb-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
   - name: mongodb.provisioner.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if (include "mongodb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.appPhaseNotReady.enabled .rules.appPhaseNotReady.severity)) -}}
@@ -182,7 +182,7 @@ spec:
 
 
   {{ with .Values.form.alert.groups.opsManager -}}
-  {{ if (include "mongodb-alerts.alertGroupEnabled" .enabled) -}}
+  {{ if (include "mongodb-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
   - name: mongodb.opsManager.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if (include "mongodb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.opsRequestOnProgress.enabled .rules.opsRequestOnProgress.severity)) -}}
@@ -223,7 +223,7 @@ spec:
 
 
   {{ with .Values.form.alert.groups.stash -}}
-  {{ if (include "mongodb-alerts.alertGroupEnabled" .enabled) -}}
+  {{ if (include "mongodb-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
   - name: mongodb.stash.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if (include "mongodb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.backupSessionFailed.enabled .rules.backupSessionFailed.severity)) -}}
@@ -308,7 +308,7 @@ spec:
 
 
   {{ with .Values.form.alert.groups.schemaManager -}}
-  {{ if (include "mongodb-alerts.alertGroupEnabled" .enabled) -}}
+  {{ if (include "mongodb-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
   - name: mongodb.schemaManager.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if (include "mongodb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.schemaPendingForTooLong.enabled .rules.schemaPendingForTooLong.severity)) -}}

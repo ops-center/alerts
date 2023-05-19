@@ -1,6 +1,6 @@
 {{ $app := (include "redis-alerts.fullname" .) }}
 
-{{ if (include "redis-alerts.alertGroupEnabled" .Values.form.alert.enabled) }}
+{{ if (include "redis-alerts.alertsEnabled" .Values.form.alert.enabled) }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
@@ -18,7 +18,7 @@ metadata:
 spec:
   groups:
   {{ with .Values.form.alert.groups.database -}}
-  {{ if (include "redis-alerts.alertGroupEnabled" .enabled) -}}
+  {{ if (include "redis-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
   - name: redis.database.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if (include "redis-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.redisDown.enabled .rules.redisDown.severity)) -}}
@@ -81,7 +81,7 @@ spec:
 
 
   {{ with .Values.form.alert.groups.provisioner -}}
-  {{ if (include "redis-alerts.alertGroupEnabled" .enabled) -}}
+  {{ if (include "redis-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
   - name: redis.provisioner.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if (include "redis-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.appPhaseNotReady.enabled .rules.appPhaseNotReady.severity)) -}}
@@ -111,7 +111,7 @@ spec:
 
 
   {{ with .Values.form.alert.groups.opsManager -}}
-  {{ if (include "redis-alerts.alertGroupEnabled" .enabled) -}}
+  {{ if (include "redis-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
   - name: redis.opsManager.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if (include "redis-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.opsRequestOnProgress.enabled .rules.opsRequestOnProgress.severity)) -}}
@@ -152,7 +152,7 @@ spec:
 
 
   {{ with .Values.form.alert.groups.stash -}}
-  {{ if (include "redis-alerts.alertGroupEnabled" .enabled) -}}
+  {{ if (include "redis-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
   - name: redis.stash.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if (include "redis-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.backupSessionFailed.enabled .rules.backupSessionFailed.severity)) -}}

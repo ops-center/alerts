@@ -44,6 +44,7 @@ type MongodbAlerts struct {
 type MongodbAlertsSpec struct {
 	api.Metadata `json:"metadata,omitempty"`
 	Form         MongodbAlertsSpecForm `json:"form"`
+	Grafana      Grafana               `json:"grafana"`
 }
 
 type MongodbAlertsSpecForm struct {
@@ -85,6 +86,14 @@ type MongoDBDatabaseAlertRules struct {
 	MongodbHighTicketUtilization     IntValAlert `json:"mongodbHighTicketUtilization"`
 	MongodbRecurrentCursorTimeout    IntValAlert `json:"mongodbRecurrentCursorTimeout"`
 	MongodbRecurrentMemoryPageFaults IntValAlert `json:"mongodbRecurrentMemoryPageFaults"`
+}
+
+type Grafana struct {
+	Enabled bool   `json:"enabled"`
+	Version string `json:"version"`
+	JobName string `json:"jobName"`
+	URL     string `json:"url"`
+	ApiKey  string `json:"apikey"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

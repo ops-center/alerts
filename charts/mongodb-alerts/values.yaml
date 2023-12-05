@@ -181,3 +181,11 @@ form:
             enabled: true
             duration: "0m"
             severity: warning
+
+
+grafana:
+  enabled: false
+  version: 8.2.3
+  jobName: kubedb-databases
+  url: ""
+  apikey: ""

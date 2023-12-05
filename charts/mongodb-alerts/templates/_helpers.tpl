@@ -94,3 +94,4 @@ Alert Enabled
 {{- end -}}
 {{- if (and $sev (le $sev $result) $enabled) -}}{{ (mustLast .) }}{{- end -}}
 {{- end }}
+

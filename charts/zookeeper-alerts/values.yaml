@@ -1,0 +1,100 @@
+metadata:
+  resource:
+    group: kubedb.com
+    kind: ZooKeeper
+    name: zookeepers
+    scope: Namespaced
+    version: v1alpha2
+  release:
+    # Release name
+    name: ""
+    # Release namespace
+    namespace: ""
+
+form:
+  alert:
+    ## Enable PrometheusRule alerts
+    enabled: warning
+
+    ## Labels for default rules
+    labels: # +doc-gen:break
+      release: prometheus
+
+    ## Annotations for default rules
+    annotations: {}
+
+    ## Additional labels for PrometheusRule alerts
+    additionalRuleLabels: {}
+
+    ## Prefix for runbook URLs. Use this to override the first part of the runbookURLs that is common to all rules.
+    # runbookUrl: "https://runbooks.prometheus-operator.dev/runbooks"
+
+    groups:
+      database:
+        enabled: warning
+        rules:
+          zookeeperDown:
+            enabled: true
+            duration: "0m"
+            severity: critical
+          zookeeperTooManyNodes:
+            enabled: true
+            duration: "0m"
+            val: 1000000
+            severity: warning
+          zookeeperTooBigMemory:
+            enabled: true
+            duration: "2m"
+            val: 1
+            severity: warning
+          zookeeperTooManyWatch:
+            enabled: true
+            duration: "2m"
+            val: 10000
+            severity: warning
+          zookeeperTooManyConnections:
+            enabled: true
+            duration: "2m"
+            val: 50
+            severity: warning
+          zookeeperLeaderElection:
+            enabled: true
+            duration: "1m"
+            val: 0
+            severity: warning
+          zookeeperTooManyOpenFiles:
+            enabled: true
+            duration: "1m"
+            val: 300
+            severity: warning
+          zookeeperTooLongFsyncTime:
+            enabled: true
+            duration: "1m"
+            val: 100
+            severity: warning
+          zookeeperTooLongSnapshotTime:
+            enabled: true
+            duration: "1m"
+            val: 100
+            severity: warning
+          zookeeperTooHighAvgLatency:
+            enabled: true
+            duration: "1m"
+            val: 100
+            severity: warning
+          zookeeperJvmMemoryFilingUp:
+            enabled: true
+            duration: "1m"
+            val: 0.8
+            severity: warning
+      provisioner:
+        enabled: warning
+        rules:
+          appPhaseNotReady:
+            enabled: true
+            duration: "1m"
+            severity: critical
+          appPhaseCritical:
+            enabled: true
+            duration: "15m"
+            severity: warning

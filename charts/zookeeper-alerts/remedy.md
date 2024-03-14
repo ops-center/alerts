@@ -22,8 +22,7 @@
 - #### AppPhaseNotReady
     - Contact AppsCode team
 - #### AppPhaseCritical
-    - If any `ZooKeeperOpsRequest` is ongoing on same database, Wait until it completes.
-    - check for `redis` container's logs on the node that is not connected with `Primary` node.
+    - check for `zookeeper` container's logs on the node that is not connected with `Primary` node.
     - If some nodes of the ZooKeeper Cluster are not `Up`, Try restarting those nodes one at a time.
     - Contact AppsCode team if this persists for more than 30 minutes.
 

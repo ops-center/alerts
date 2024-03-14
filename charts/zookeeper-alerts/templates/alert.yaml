@@ -76,17 +76,17 @@ spec:
         summary: Too many watch is set (instance {{`{{`}} $labels.pod {{`}}`}})
         description: "Too many watch is set .\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
-    {{ if (include "zookeeper-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.zookeeperLeaderElection.enabled .rules.zookeeperLeaderElection.severity)) - } }
+    {{ if (include "zookeeper-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.zookeeperLeaderElection.enabled .rules.zookeeperLeaderElection.severity)) -}}
     - alert: ZooKeeperLeaderElection
       expr:  increase(election_time_count{job="{{- $app -}}-stats",namespace="{{ $.Release.Namespace }}"}[5m]) > {{.rules.zookeeperLeaderElection.val}}
       for: {{ .rules.zookeeperLeaderElection.duration }}
       labels:
         severity: {{ .rules.zookeeperLeaderElection.severity }}
-        {{ - include "zookeeper-alerts.alertLabels" $ | nindent 8 }}
+        {{- include "zookeeper-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: A leader election happened (instance {{`{{`}} $labels.pod {{`}}`}})
         description: "A leader election happened.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-    {{ - end }}
+    {{- end }}
     {{ if (include "zookeeper-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.zookeeperTooManyOpenFiles.enabled .rules.zookeeperTooManyOpenFiles.severity)) -}}
     - alert: ZooKeeperTooManyOpenFiles
       expr: open_file_descriptor_count{job="{{- $app -}}-stats",namespace="{{ $.Release.Namespace }}"} > {{.rules.zookeeperTooManyOpenFiles.val}}

@@ -14,5 +14,5 @@ chart:
 prerequisites:
 - Kubernetes 1.19+
 release:
-  name: redis
+  name: zookeeper
   namespace: demo

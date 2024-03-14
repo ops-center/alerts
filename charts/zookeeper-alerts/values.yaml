@@ -35,27 +35,27 @@ form:
         rules:
           zookeeperDown:
             enabled: true
-            duration: "0m"
+            duration: "1m"
             severity: critical
           zookeeperTooManyNodes:
             enabled: true
-            duration: "0m"
+            duration: "1m"
             val: 1000000
             severity: warning
           zookeeperTooBigMemory:
             enabled: true
-            duration: "2m"
+            duration: "1m"
             val: 1
             severity: warning
           zookeeperTooManyWatch:
             enabled: true
-            duration: "2m"
+            duration: "1m"
             val: 10000
             severity: warning
           zookeeperTooManyConnections:
             enabled: true
-            duration: "2m"
-            val: 50
+            duration: "1m"
+            val: 60
             severity: warning
           zookeeperLeaderElection:
             enabled: true

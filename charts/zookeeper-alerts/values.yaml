@@ -18,7 +18,7 @@ form:
 
     ## Labels for default rules
     labels: # +doc-gen:break
-      release: prometheus
+      release: kube-prometheus-stack
 
     ## Annotations for default rules
     annotations: {}
@@ -33,55 +33,66 @@ form:
       database:
         enabled: warning
         rules:
+          # ZooKeeper is down
           zookeeperDown:
             enabled: true
             duration: "1m"
             severity: critical
+          # ZooKeeper has way too nodes. Consider scaling up.
           zookeeperTooManyNodes:
             enabled: true
             duration: "1m"
             val: 1000000
             severity: warning
+          # ZooKeeper is allocated too big memory
           zookeeperTooBigMemory:
             enabled: true
             duration: "1m"
             val: 1
             severity: warning
+          # ZooKeeper is watching many nodes
           zookeeperTooManyWatch:
             enabled: true
             duration: "1m"
             val: 10000
             severity: warning
+          # ZooKeeper has created too many connections
           zookeeperTooManyConnections:
             enabled: true
             duration: "1m"
             val: 60
             severity: warning
+          # ZooKeeper leader election happened
           zookeeperLeaderElection:
             enabled: true
             duration: "1m"
             val: 0
             severity: warning
+          # Openfile count in zookeeper is more than 300
           zookeeperTooManyOpenFiles:
             enabled: true
             duration: "1m"
             val: 300
             severity: warning
+          # ZooKeeper is taking more time to sync
           zookeeperTooLongFsyncTime:
             enabled: true
             duration: "1m"
             val: 100
             severity: warning
+          # ZooKeeper is taking more time when taking snapshots
           zookeeperTooLongSnapshotTime:
             enabled: true
             duration: "1m"
             val: 100
             severity: warning
+          # Average latency is too high
           zookeeperTooHighAvgLatency:
             enabled: true
             duration: "1m"
             val: 100
             severity: warning
+          # ZooKeeper jvm memory is filling up
           zookeeperJvmMemoryFilingUp:
             enabled: true
             duration: "1m"

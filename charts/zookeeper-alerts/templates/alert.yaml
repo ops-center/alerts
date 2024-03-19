@@ -110,7 +110,7 @@ spec:
         description: "Too long fsync time .\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
     {{ if (include "zookeeper-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.zookeeperTooLongSnapshotTime.enabled .rules.zookeeperTooLongSnapshotTime.severity)) -}}
-    - alert: ZooKeeperTooLongFsyncTime
+    - alert: ZooKeeperTooLongSnapshotTime
       expr: rate(snapshottime_sum{job="{{- $app -}}-stats",namespace="{{ $.Release.Namespace }}"}[5m]) > {{.rules.zookeeperTooLongSnapshotTime.val}}
       for: {{ .rules.zookeeperTooLongSnapshotTime.duration }}
       labels:
@@ -121,7 +121,7 @@ spec:
         description: "Too long snapshot time .\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
     {{ if (include "zookeeper-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.zookeeperTooHighAvgLatency.enabled .rules.zookeeperTooHighAvgLatency.severity)) -}}
-    - alert: ZooKeeperTooLongFsyncTime
+    - alert: ZooKeeperTooHighAvgLatency
       expr: avg_latency{job="{{- $app -}}-stats",namespace="{{ $.Release.Namespace }}"} > {{.rules.zookeeperTooHighAvgLatency.val}}
       for: {{ .rules.zookeeperTooHighAvgLatency.duration }}
       labels:
@@ -132,7 +132,7 @@ spec:
         description: "Average Latency is too high .\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
     {{ if (include "zookeeper-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.zookeeperJvmMemoryFilingUp.enabled .rules.zookeeperJvmMemoryFilingUp.severity)) -}}
-    - alert: ZooKeeperTooLongFsyncTime
+    - alert: ZooKeeperJvmMemoryFilingUp
       expr: jvm_memory_bytes_used{job="{{- $app -}}-stats",namespace="{{ $.Release.Namespace }}"} / jvm_memory_bytes_max{area="heap",job="{{- $app -}}-stats",namespace="{{ $.Release.Namespace }}"}  > {{.rules.zookeeperJvmMemoryFilingUp.val}}
       for: {{ .rules.zookeeperJvmMemoryFilingUp.duration }}
       labels:

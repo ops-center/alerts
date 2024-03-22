@@ -42,7 +42,6 @@ form:
           # Specifies the alert configuration for exporter scrape error.
           pgpoolExporterLastScrapeError:
             enabled: true
-            val: 10
             duration: "0m"
             severity: warning
           # Specifies the alert configuration for pgpool instance down.
@@ -93,8 +92,8 @@ form:
             severity: warning
 
 grafana:
-  enabled: false
-  version: 8.2.3
-  jobName: kubedb-databases
+  enabled: true
+  version: 7.5.5
+  jobName: pgpool-monitoring-stats
   url: ""
   apikey: ""

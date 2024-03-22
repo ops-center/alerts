@@ -3,9 +3,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "mongodb-alerts.fullname" . }}-configmap
+  name: {{ include "pgpool-alerts.fullname" . }}-configmap
   labels:
-    {{- include "mongodb-alerts.labels" . | nindent 4 }}
+    {{- include "pgpool-alerts.labels" . | nindent 4 }}
 data:
   grafana-json.json: |-
     {
@@ -41,11 +41,11 @@ data:
         "editable": true,
         "gnetId": null,
         "graphTooltip": 0,
-        "id": null,
+        "id": 31,
         "links": [],
         "panels": [
           {
-            "collapsed": true,
+            "collapsed": false,
             "datasource": null,
             "gridPos": {
               "h": 1,
@@ -53,1863 +53,1444 @@ data:
               "x": 0,
               "y": 0
             },
-            "id": 28,
-            "panels": [
-              {
-                "alert": {
-                  "alertRuleTags": {},
-                  "conditions": [
-                    {
-                      "evaluator": {
-                        "params": [
-                          0
-                        ],
-                        "type": "gt"
-                      },
-                      "operator": {
-                        "type": "and"
-                      },
-                      "query": {
-                        "params": [
-                          "A",
-                          "1h",
-                          "now"
-                        ]
-                      },
-                      "reducer": {
-                        "params": [],
-                        "type": "last"
-                      },
-                      "type": "query"
-                    }
-                  ],
-                  "executionErrorState": "alerting",
-                  "for": "10s",
-                  "frequency": "10s",
-                  "handler": 1,
-                  "name": "MongoDB Down alert",
-                  "noDataState": "no_data",
-                  "notifications": []
-                },
-                "aliasColors": {},
-                "bars": false,
-                "dashLength": 10,
-                "dashes": false,
-                "datasource": null,
-                "fieldConfig": {
-                  "defaults": {},
-                  "overrides": []
-                },
-                "fill": 1,
-                "fillGradient": 0,
-                "gridPos": {
-                  "h": 8,
-                  "w": 12,
-                  "x": 0,
-                  "y": 1
-                },
-                "hiddenSeries": false,
-                "id": 14,
-                "legend": {
-                  "avg": false,
-                  "current": false,
-                  "max": false,
-                  "min": false,
-                  "show": true,
-                  "total": false,
-                  "values": false
-                },
-                "lines": true,
-                "linewidth": 1,
-                "nullPointMode": "null",
-                "options": {
-                  "alertThreshold": true
-                },
-                "percentage": false,
-                "pluginVersion": "{{ .Values.grafana.version }}",
-                "pointradius": 2,
-                "points": false,
-                "renderer": "flot",
-                "seriesOverrides": [],
-                "spaceLength": 10,
-                "stack": false,
-                "steppedLine": false,
-                "targets": [
-                  {
-                    "exemplar": true,
-                    "expr": "kubedb_com_mongodb_status_phase{app=\"{{ .Release.Name }}\",namespace=\"{{ .Release.Namespace }}\",phase=\"NotReady\"}",
-                    "interval": "",
-                    "legendFormat": "",
-                    "refId": "A"
-                  }
-                ],
-                "thresholds": [
-                  {
-                    "colorMode": "critical",
-                    "fill": true,
-                    "line": true,
-                    "op": "gt",
-                    "value": 0,
-                    "visible": true
-                  }
-                ],
-                "timeFrom": null,
-                "timeRegions": [],
-                "timeShift": null,
-                "title": "MongoDB Down",
-                "tooltip": {
-                  "shared": true,
-                  "sort": 0,
-                  "value_type": "individual"
-                },
-                "type": "graph",
-                "xaxis": {
-                  "buckets": null,
-                  "mode": "time",
-                  "name": null,
-                  "show": true,
-                  "values": []
-                },
-                "yaxes": [
-                  {
-                    "$$hashKey": "object:88",
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                  },
-                  {
-                    "$$hashKey": "object:89",
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                  }
-                ],
-                "yaxis": {
-                  "align": false,
-                  "alignLevel": null
-                }
-              },
-              {
-                "alert": {
-                  "alertRuleTags": {
-                    "kdb": ""
-                  },
-                  "conditions": [
-                    {
-                      "evaluator": {
-                        "params": [
-                          0
-                        ],
-                        "type": "gt"
-                      },
-                      "operator": {
-                        "type": "and"
-                      },
-                      "query": {
-                        "params": [
-                          "A",
-                          "1h",
-                          "now"
-                        ]
-                      },
-                      "reducer": {
-                        "params": [],
-                        "type": "last"
-                      },
-                      "type": "query"
-                    }
-                  ],
-                  "executionErrorState": "alerting",
-                  "for": "10s",
-                  "frequency": "10s",
-                  "handler": 1,
-                  "name": "MongoDBPhaseCritical",
-                  "noDataState": "no_data",
-                  "notifications": []
-                },
-                "aliasColors": {},
-                "bars": false,
-                "dashLength": 10,
-                "dashes": false,
-                "datasource": null,
-                "fieldConfig": {
-                  "defaults": {},
-                  "overrides": []
-                },
-                "fill": 1,
-                "fillGradient": 0,
-                "gridPos": {
-                  "h": 8,
-                  "w": 12,
-                  "x": 12,
-                  "y": 1
-                },
-                "hiddenSeries": false,
-                "id": 2,
-                "legend": {
-                  "avg": false,
-                  "current": false,
-                  "max": false,
-                  "min": false,
-                  "show": true,
-                  "total": false,
-                  "values": false
-                },
-                "lines": true,
-                "linewidth": 1,
-                "nullPointMode": "null",
-                "options": {
-                  "alertThreshold": true
-                },
-                "percentage": false,
-                "pluginVersion": "{{ .Values.grafana.version }}",
-                "pointradius": 2,
-                "points": false,
-                "renderer": "flot",
-                "seriesOverrides": [],
-                "spaceLength": 10,
-                "stack": false,
-                "steppedLine": false,
-                "targets": [
-                  {
-                    "exemplar": true,
-                    "expr": "kubedb_com_mongodb_status_phase{app=\"{{ .Release.Name }}\",namespace=\"{{ .Release.Namespace }}\",phase=\"Critical\"}",
-                    "interval": "",
-                    "legendFormat": "",
-                    "refId": "A"
-                  }
-                ],
-                "thresholds": [
-                  {
-                    "colorMode": "critical",
-                    "fill": true,
-                    "line": true,
-                    "op": "gt",
-                    "value": 0,
-                    "visible": true
-                  }
-                ],
-                "timeFrom": null,
-                "timeRegions": [],
-                "timeShift": null,
-                "title": "MongoDB Critical Phase",
-                "tooltip": {
-                  "shared": true,
-                  "sort": 0,
-                  "value_type": "individual"
-                },
-                "type": "graph",
-                "xaxis": {
-                  "buckets": null,
-                  "mode": "time",
-                  "name": null,
-                  "show": true,
-                  "values": []
-                },
-                "yaxes": [
-                  {
-                    "$$hashKey": "object:70",
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                  },
-                  {
-                    "$$hashKey": "object:71",
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                  }
-                ],
-                "yaxis": {
-                  "align": false,
-                  "alignLevel": null
-                }
-              }
-            ],
-            "title": "MongoDB Phase",
+            "id": 2,
+            "panels": [],
+            "title": "Pgpool Phase",
             "type": "row"
           },
           {
-            "collapsed": true,
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      0
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "2m",
+              "frequency": "5m",
+              "handler": 1,
+              "name": "KubeDBPgpoolPhaseNotReady",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
             "datasource": null,
+            "description": "Trigger alert if phase is not ready",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
             "gridPos": {
-              "h": 1,
-              "w": 24,
+              "h": 8,
+              "w": 12,
               "x": 0,
               "y": 1
             },
-            "id": 32,
-            "panels": [
+            "hiddenSeries": false,
+            "id": 4,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
               {
-                "alert": {
-                  "alertRuleTags": {},
-                  "conditions": [
-                    {
-                      "evaluator": {
-                        "params": [
-                          80
-                        ],
-                        "type": "gt"
-                      },
-                      "operator": {
-                        "type": "and"
-                      },
-                      "query": {
-                        "params": [
-                          "A",
-                          "1h",
-                          "now"
-                        ]
-                      },
-                      "reducer": {
-                        "params": [],
-                        "type": "last"
-                      },
-                      "type": "query"
-                    }
-                  ],
-                  "executionErrorState": "alerting",
-                  "for": "10s",
-                  "frequency": "10s",
-                  "handler": 1,
-                  "name": "MongoDB Too Many Connections alert",
-                  "noDataState": "no_data",
-                  "notifications": []
-                },
-                "aliasColors": {},
-                "bars": false,
-                "dashLength": 10,
-                "dashes": false,
-                "datasource": null,
-                "fieldConfig": {
-                  "defaults": {},
-                  "overrides": []
-                },
-                "fill": 1,
-                "fillGradient": 0,
-                "gridPos": {
-                  "h": 8,
-                  "w": 12,
-                  "x": 0,
-                  "y": 2
-                },
-                "hiddenSeries": false,
-                "id": 12,
-                "legend": {
-                  "avg": false,
-                  "current": false,
-                  "max": false,
-                  "min": false,
-                  "show": true,
-                  "total": false,
-                  "values": false
-                },
-                "lines": true,
-                "linewidth": 1,
-                "nullPointMode": "null",
-                "options": {
-                  "alertThreshold": true
-                },
-                "percentage": false,
-                "pluginVersion": "{{ .Values.grafana.version }}",
-                "pointradius": 2,
-                "points": false,
-                "renderer": "flot",
-                "seriesOverrides": [],
-                "spaceLength": 10,
-                "stack": false,
-                "steppedLine": false,
-                "targets": [
-                  {
-                    "exemplar": true,
-                    "expr": "avg by (instance) (rate(mongodb_ss_connections{conn_type=\"current\",job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\"}[1m])) / avg by (instance) (sum by (instance) (mongodb_ss_connections)) * 100",
-                    "interval": "",
-                    "legendFormat": "",
-                    "refId": "A"
-                  }
-                ],
-                "thresholds": [
-                  {
-                    "colorMode": "critical",
-                    "fill": true,
-                    "line": true,
-                    "op": "gt",
-                    "value": 80,
-                    "visible": true
-                  }
-                ],
-                "timeFrom": null,
-                "timeRegions": [],
-                "timeShift": null,
-                "title": "MongoDB Too Many Connections",
-                "tooltip": {
-                  "shared": true,
-                  "sort": 0,
-                  "value_type": "individual"
-                },
-                "type": "graph",
-                "xaxis": {
-                  "buckets": null,
-                  "mode": "time",
-                  "name": null,
-                  "show": true,
-                  "values": []
-                },
-                "yaxes": [
-                  {
-                    "$$hashKey": "object:84",
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                  },
-                  {
-                    "$$hashKey": "object:85",
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                  }
-                ],
-                "yaxis": {
-                  "align": false,
-                  "alignLevel": null
-                }
-              },
-              {
-                "alert": {
-                  "alertRuleTags": {},
-                  "conditions": [
-                    {
-                      "evaluator": {
-                        "params": [
-                          10
-                        ],
-                        "type": "gt"
-                      },
-                      "operator": {
-                        "type": "and"
-                      },
-                      "query": {
-                        "params": [
-                          "A",
-                          "1h",
-                          "now"
-                        ]
-                      },
-                      "reducer": {
-                        "params": [],
-                        "type": "last"
-                      },
-                      "type": "query"
-                    }
-                  ],
-                  "executionErrorState": "alerting",
-                  "for": "10s",
-                  "frequency": "10s",
-                  "handler": 1,
-                  "name": "Mongodb Replication Lag alert",
-                  "noDataState": "no_data",
-                  "notifications": []
-                },
-                "aliasColors": {},
-                "bars": false,
-                "dashLength": 10,
-                "dashes": false,
-                "datasource": null,
-                "fieldConfig": {
-                  "defaults": {},
-                  "overrides": []
-                },
-                "fill": 1,
-                "fillGradient": 0,
-                "gridPos": {
-                  "h": 8,
-                  "w": 12,
-                  "x": 12,
-                  "y": 2
-                },
-                "hiddenSeries": false,
-                "id": 6,
-                "legend": {
-                  "avg": false,
-                  "current": false,
-                  "max": false,
-                  "min": false,
-                  "show": true,
-                  "total": false,
-                  "values": false
-                },
-                "lines": true,
-                "linewidth": 1,
-                "nullPointMode": "null",
-                "options": {
-                  "alertThreshold": true
-                },
-                "percentage": false,
-                "pluginVersion": "{{ .Values.grafana.version }}",
-                "pointradius": 2,
-                "points": false,
-                "renderer": "flot",
-                "seriesOverrides": [],
-                "spaceLength": 10,
-                "stack": false,
-                "steppedLine": false,
-                "targets": [
-                  {
-                    "exemplar": true,
-                    "expr": "sum by (set) (mongodb_mongod_replset_member_replication_lag{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"})",
-                    "interval": "",
-                    "legendFormat": "",
-                    "refId": "A"
-                  }
-                ],
-                "thresholds": [
-                  {
-                    "colorMode": "critical",
-                    "fill": true,
-                    "line": true,
-                    "op": "gt",
-                    "value": 10,
-                    "visible": true
-                  }
-                ],
-                "timeFrom": null,
-                "timeRegions": [],
-                "timeShift": null,
-                "title": "Mongodb Replication Lag",
-                "tooltip": {
-                  "shared": true,
-                  "sort": 0,
-                  "value_type": "individual"
-                },
-                "type": "graph",
-                "xaxis": {
-                  "buckets": null,
-                  "mode": "time",
-                  "name": null,
-                  "show": true,
-                  "values": []
-                },
-                "yaxes": [
-                  {
-                    "$$hashKey": "object:77",
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                  },
-                  {
-                    "$$hashKey": "object:78",
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                  }
-                ],
-                "yaxis": {
-                  "align": false,
-                  "alignLevel": null
-                }
-              },
-              {
-                "alert": {
-                  "alertRuleTags": {},
-                  "conditions": [
-                    {
-                      "evaluator": {
-                        "params": [
-                          10000
-                        ],
-                        "type": "gt"
-                      },
-                      "operator": {
-                        "type": "and"
-                      },
-                      "query": {
-                        "params": [
-                          "A",
-                          "1h",
-                          "now"
-                        ]
-                      },
-                      "reducer": {
-                        "params": [],
-                        "type": "last"
-                      },
-                      "type": "query"
-                    }
-                  ],
-                  "executionErrorState": "alerting",
-                  "for": "10s",
-                  "frequency": "10s",
-                  "handler": 1,
-                  "name": "Mongodb Number Cursors Open alert",
-                  "noDataState": "no_data",
-                  "notifications": []
-                },
-                "aliasColors": {},
-                "bars": false,
-                "dashLength": 10,
-                "dashes": false,
-                "datasource": null,
-                "fieldConfig": {
-                  "defaults": {},
-                  "overrides": []
-                },
-                "fill": 1,
-                "fillGradient": 0,
-                "gridPos": {
-                  "h": 8,
-                  "w": 12,
-                  "x": 0,
-                  "y": 10
-                },
-                "hiddenSeries": false,
-                "id": 8,
-                "legend": {
-                  "avg": false,
-                  "current": false,
-                  "max": false,
-                  "min": false,
-                  "show": true,
-                  "total": false,
-                  "values": false
-                },
-                "lines": true,
-                "linewidth": 1,
-                "nullPointMode": "null",
-                "options": {
-                  "alertThreshold": true
-                },
-                "percentage": false,
-                "pluginVersion": "{{ .Values.grafana.version }}",
-                "pointradius": 2,
-                "points": false,
-                "renderer": "flot",
-                "seriesOverrides": [],
-                "spaceLength": 10,
-                "stack": false,
-                "steppedLine": false,
-                "targets": [
-                  {
-                    "exemplar": true,
-                    "expr": "sum(mongodb_ss_metrics_cursor_open{csr_type=\"total\",job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"})",
-                    "interval": "",
-                    "legendFormat": "",
-                    "refId": "A"
-                  }
-                ],
-                "thresholds": [
-                  {
-                    "colorMode": "critical",
-                    "fill": true,
-                    "line": true,
-                    "op": "gt",
-                    "value": 10000,
-                    "visible": true
-                  }
-                ],
-                "timeFrom": null,
-                "timeRegions": [],
-                "timeShift": null,
-                "title": "Mongodb Number Cursors Open",
-                "tooltip": {
-                  "shared": true,
-                  "sort": 0,
-                  "value_type": "individual"
-                },
-                "type": "graph",
-                "xaxis": {
-                  "buckets": null,
-                  "mode": "time",
-                  "name": null,
-                  "show": true,
-                  "values": []
-                },
-                "yaxes": [
-                  {
-                    "$$hashKey": "object:751",
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                  },
-                  {
-                    "$$hashKey": "object:752",
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                  }
-                ],
-                "yaxis": {
-                  "align": false,
-                  "alignLevel": null
-                }
-              },
-              {
-                "alert": {
-                  "alertRuleTags": {},
-                  "conditions": [
-                    {
-                      "evaluator": {
-                        "params": [
-                          0
-                        ],
-                        "type": "gt"
-                      },
-                      "operator": {
-                        "type": "and"
-                      },
-                      "query": {
-                        "params": [
-                          "A",
-                          "1h",
-                          "now"
-                        ]
-                      },
-                      "reducer": {
-                        "params": [],
-                        "type": "last"
-                      },
-                      "type": "query"
-                    }
-                  ],
-                  "executionErrorState": "alerting",
-                  "for": "10s",
-                  "frequency": "10s",
-                  "handler": 1,
-                  "name": "MongoDB Recurrent Cursor Timeout alert",
-                  "noDataState": "no_data",
-                  "notifications": []
-                },
-                "aliasColors": {},
-                "bars": false,
-                "dashLength": 10,
-                "dashes": false,
-                "datasource": null,
-                "fieldConfig": {
-                  "defaults": {},
-                  "overrides": []
-                },
-                "fill": 1,
-                "fillGradient": 0,
-                "gridPos": {
-                  "h": 8,
-                  "w": 12,
-                  "x": 12,
-                  "y": 10
-                },
-                "hiddenSeries": false,
-                "id": 20,
-                "legend": {
-                  "avg": false,
-                  "current": false,
-                  "max": false,
-                  "min": false,
-                  "show": true,
-                  "total": false,
-                  "values": false
-                },
-                "lines": true,
-                "linewidth": 1,
-                "nullPointMode": "null",
-                "options": {
-                  "alertThreshold": true
-                },
-                "percentage": false,
-                "pluginVersion": "{{ .Values.grafana.version }}",
-                "pointradius": 2,
-                "points": false,
-                "renderer": "flot",
-                "seriesOverrides": [],
-                "spaceLength": 10,
-                "stack": false,
-                "steppedLine": false,
-                "targets": [
-                  {
-                    "exemplar": true,
-                    "expr": "rate(mongodb_ss_metrics_cursor_timedOut{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}[5m])",
-                    "interval": "",
-                    "legendFormat": "",
-                    "refId": "A"
-                  }
-                ],
-                "thresholds": [
-                  {
-                    "colorMode": "critical",
-                    "fill": true,
-                    "line": true,
-                    "op": "gt",
-                    "value": 0,
-                    "visible": true
-                  }
-                ],
-                "timeFrom": null,
-                "timeRegions": [],
-                "timeShift": null,
-                "title": "MongoDB Recurrent Cursor Timeout",
-                "tooltip": {
-                  "shared": true,
-                  "sort": 0,
-                  "value_type": "individual"
-                },
-                "type": "graph",
-                "xaxis": {
-                  "buckets": null,
-                  "mode": "time",
-                  "name": null,
-                  "show": true,
-                  "values": []
-                },
-                "yaxes": [
-                  {
-                    "$$hashKey": "object:100",
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                  },
-                  {
-                    "$$hashKey": "object:101",
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                  }
-                ],
-                "yaxis": {
-                  "align": false,
-                  "alignLevel": null
-                }
-              },
-              {
-                "alert": {
-                  "alertRuleTags": {},
-                  "conditions": [
-                    {
-                      "evaluator": {
-                        "params": [
-                          100
-                        ],
-                        "type": "gt"
-                      },
-                      "operator": {
-                        "type": "and"
-                      },
-                      "query": {
-                        "params": [
-                          "A",
-                          "1h",
-                          "now"
-                        ]
-                      },
-                      "reducer": {
-                        "params": [],
-                        "type": "last"
-                      },
-                      "type": "query"
-                    }
-                  ],
-                  "executionErrorState": "alerting",
-                  "for": "10s",
-                  "frequency": "10s",
-                  "handler": 1,
-                  "name": "MongoDB Cursors Timeouts alert",
-                  "noDataState": "no_data",
-                  "notifications": []
-                },
-                "aliasColors": {},
-                "bars": false,
-                "dashLength": 10,
-                "dashes": false,
-                "datasource": null,
-                "fieldConfig": {
-                  "defaults": {},
-                  "overrides": []
-                },
-                "fill": 1,
-                "fillGradient": 0,
-                "gridPos": {
-                  "h": 8,
-                  "w": 12,
-                  "x": 0,
-                  "y": 18
-                },
-                "hiddenSeries": false,
-                "id": 10,
-                "legend": {
-                  "avg": false,
-                  "current": false,
-                  "max": false,
-                  "min": false,
-                  "show": true,
-                  "total": false,
-                  "values": false
-                },
-                "lines": true,
-                "linewidth": 1,
-                "nullPointMode": "null",
-                "options": {
-                  "alertThreshold": true
-                },
-                "percentage": false,
-                "pluginVersion": "{{ .Values.grafana.version }}",
-                "pointradius": 2,
-                "points": false,
-                "renderer": "flot",
-                "seriesOverrides": [],
-                "spaceLength": 10,
-                "stack": false,
-                "steppedLine": false,
-                "targets": [
-                  {
-                    "exemplar": true,
-                    "expr": "sum(increase(mongodb_ss_metrics_cursor_timedOut{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}[1m]))",
-                    "interval": "",
-                    "legendFormat": "",
-                    "refId": "A"
-                  }
-                ],
-                "thresholds": [
-                  {
-                    "colorMode": "critical",
-                    "fill": true,
-                    "line": true,
-                    "op": "gt",
-                    "value": 100,
-                    "visible": true
-                  }
-                ],
-                "timeFrom": null,
-                "timeRegions": [],
-                "timeShift": null,
-                "title": "MongoDB Cursors Timeouts",
-                "tooltip": {
-                  "shared": true,
-                  "sort": 0,
-                  "value_type": "individual"
-                },
-                "type": "graph",
-                "xaxis": {
-                  "buckets": null,
-                  "mode": "time",
-                  "name": null,
-                  "show": true,
-                  "values": []
-                },
-                "yaxes": [
-                  {
-                    "$$hashKey": "object:572",
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                  },
-                  {
-                    "$$hashKey": "object:573",
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                  }
-                ],
-                "yaxis": {
-                  "align": false,
-                  "alignLevel": null
-                }
-              },
-              {
-                "alert": {
-                  "alertRuleTags": {},
-                  "conditions": [
-                    {
-                      "evaluator": {
-                        "params": [
-                          2097152
-                        ],
-                        "type": "gt"
-                      },
-                      "operator": {
-                        "type": "and"
-                      },
-                      "query": {
-                        "params": [
-                          "A",
-                          "1h",
-                          "now"
-                        ]
-                      },
-                      "reducer": {
-                        "params": [],
-                        "type": "last"
-                      },
-                      "type": "query"
-                    }
-                  ],
-                  "executionErrorState": "alerting",
-                  "for": "10s",
-                  "frequency": "10s",
-                  "handler": 1,
-                  "name": "Mongodb Virtual Memory Usage alert",
-                  "noDataState": "no_data",
-                  "notifications": []
-                },
-                "aliasColors": {},
-                "bars": false,
-                "dashLength": 10,
-                "dashes": false,
-                "datasource": null,
-                "fieldConfig": {
-                  "defaults": {},
-                  "overrides": []
-                },
-                "fill": 1,
-                "fillGradient": 0,
-                "gridPos": {
-                  "h": 8,
-                  "w": 12,
-                  "x": 12,
-                  "y": 18
-                },
-                "hiddenSeries": false,
-                "id": 4,
-                "legend": {
-                  "avg": false,
-                  "current": false,
-                  "max": false,
-                  "min": false,
-                  "show": true,
-                  "total": false,
-                  "values": false
-                },
-                "lines": true,
-                "linewidth": 1,
-                "nullPointMode": "null",
-                "options": {
-                  "alertThreshold": true
-                },
-                "percentage": false,
-                "pluginVersion": "{{ .Values.grafana.version }}",
-                "pointradius": 2,
-                "points": false,
-                "renderer": "flot",
-                "seriesOverrides": [],
-                "spaceLength": 10,
-                "stack": false,
-                "steppedLine": false,
-                "targets": [
-                  {
-                    "exemplar": true,
-                    "expr": "sum by(job) (mongodb_ss_mem_virtual{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"})",
-                    "interval": "",
-                    "legendFormat": "",
-                    "refId": "A"
-                  }
-                ],
-                "thresholds": [
-                  {
-                    "colorMode": "critical",
-                    "fill": true,
-                    "line": true,
-                    "op": "gt",
-                    "value": 2097152,
-                    "visible": true
-                  }
-                ],
-                "timeFrom": null,
-                "timeRegions": [],
-                "timeShift": null,
-                "title": "Mongodb Virtual Memory Usage",
-                "tooltip": {
-                  "shared": true,
-                  "sort": 0,
-                  "value_type": "individual"
-                },
-                "type": "graph",
-                "xaxis": {
-                  "buckets": null,
-                  "mode": "time",
-                  "name": null,
-                  "show": true,
-                  "values": []
-                },
-                "yaxes": [
-                  {
-                    "$$hashKey": "object:403",
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                  },
-                  {
-                    "$$hashKey": "object:404",
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                  }
-                ],
-                "yaxis": {
-                  "align": false,
-                  "alignLevel": null
-                }
-              },
-              {
-                "alert": {
-                  "alertRuleTags": {},
-                  "conditions": [
-                    {
-                      "evaluator": {
-                        "params": [
-                          250000
-                        ],
-                        "type": "gt"
-                      },
-                      "operator": {
-                        "type": "and"
-                      },
-                      "query": {
-                        "params": [
-                          "A",
-                          "1h",
-                          "now"
-                        ]
-                      },
-                      "reducer": {
-                        "params": [],
-                        "type": "last"
-                      },
-                      "type": "query"
-                    }
-                  ],
-                  "executionErrorState": "alerting",
-                  "for": "10s",
-                  "frequency": "10s",
-                  "handler": 1,
-                  "name": "MongoDB High Latency alert",
-                  "noDataState": "no_data",
-                  "notifications": []
-                },
-                "aliasColors": {},
-                "bars": false,
-                "dashLength": 10,
-                "dashes": false,
-                "datasource": null,
-                "fieldConfig": {
-                  "defaults": {},
-                  "overrides": []
-                },
-                "fill": 1,
-                "fillGradient": 0,
-                "gridPos": {
-                  "h": 8,
-                  "w": 12,
-                  "x": 0,
-                  "y": 26
-                },
-                "hiddenSeries": false,
-                "id": 16,
-                "legend": {
-                  "avg": false,
-                  "current": false,
-                  "max": false,
-                  "min": false,
-                  "show": true,
-                  "total": false,
-                  "values": false
-                },
-                "lines": true,
-                "linewidth": 1,
-                "nullPointMode": "null",
-                "options": {
-                  "alertThreshold": true
-                },
-                "percentage": false,
-                "pluginVersion": "{{ .Values.grafana.version }}",
-                "pointradius": 2,
-                "points": false,
-                "renderer": "flot",
-                "seriesOverrides": [],
-                "spaceLength": 10,
-                "stack": false,
-                "steppedLine": false,
-                "targets": [
-                  {
-                    "exemplar": true,
-                    "expr": "rate(mongodb_ss_opLatencies_latency{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}[5m]) / rate(mongodb_ss_opLatencies_ops{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}[5m])",
-                    "interval": "",
-                    "legendFormat": "",
-                    "refId": "A"
-                  }
-                ],
-                "thresholds": [
-                  {
-                    "colorMode": "critical",
-                    "fill": true,
-                    "line": true,
-                    "op": "gt",
-                    "value": 250000,
-                    "visible": true
-                  }
-                ],
-                "timeFrom": null,
-                "timeRegions": [],
-                "timeShift": null,
-                "title": "MongoDB High Latency",
-                "tooltip": {
-                  "shared": true,
-                  "sort": 0,
-                  "value_type": "individual"
-                },
-                "type": "graph",
-                "xaxis": {
-                  "buckets": null,
-                  "mode": "time",
-                  "name": null,
-                  "show": true,
-                  "values": []
-                },
-                "yaxes": [
-                  {
-                    "$$hashKey": "object:96",
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                  },
-                  {
-                    "$$hashKey": "object:97",
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                  }
-                ],
-                "yaxis": {
-                  "align": false,
-                  "alignLevel": null
-                }
-              },
-              {
-                "alert": {
-                  "alertRuleTags": {},
-                  "conditions": [
-                    {
-                      "evaluator": {
-                        "params": [
-                          75
-                        ],
-                        "type": "gt"
-                      },
-                      "operator": {
-                        "type": "and"
-                      },
-                      "query": {
-                        "params": [
-                          "A",
-                          "1h",
-                          "now"
-                        ]
-                      },
-                      "reducer": {
-                        "params": [],
-                        "type": "last"
-                      },
-                      "type": "query"
-                    }
-                  ],
-                  "executionErrorState": "alerting",
-                  "for": "10s",
-                  "frequency": "10s",
-                  "handler": 1,
-                  "name": "MongoDB High Ticket Utilization alert",
-                  "noDataState": "no_data",
-                  "notifications": []
-                },
-                "aliasColors": {},
-                "bars": false,
-                "dashLength": 10,
-                "dashes": false,
-                "datasource": null,
-                "fieldConfig": {
-                  "defaults": {},
-                  "overrides": []
-                },
-                "fill": 1,
-                "fillGradient": 0,
-                "gridPos": {
-                  "h": 8,
-                  "w": 12,
-                  "x": 12,
-                  "y": 26
-                },
-                "hiddenSeries": false,
-                "id": 18,
-                "legend": {
-                  "avg": false,
-                  "current": false,
-                  "max": false,
-                  "min": false,
-                  "show": true,
-                  "total": false,
-                  "values": false
-                },
-                "lines": true,
-                "linewidth": 1,
-                "nullPointMode": "null",
-                "options": {
-                  "alertThreshold": true
-                },
-                "percentage": false,
-                "pluginVersion": "{{ .Values.grafana.version }}",
-                "pointradius": 2,
-                "points": false,
-                "renderer": "flot",
-                "seriesOverrides": [],
-                "spaceLength": 10,
-                "stack": false,
-                "steppedLine": false,
-                "targets": [
-                  {
-                    "exemplar": true,
-                    "expr": "(mongodb_ss_wt_concurrentTransactions_out{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"} / mongodb_ss_wt_concurrentTransactions_totalTickets{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}) * 100",
-                    "interval": "",
-                    "legendFormat": "",
-                    "refId": "A"
-                  }
-                ],
-                "thresholds": [
-                  {
-                    "colorMode": "critical",
-                    "fill": true,
-                    "line": true,
-                    "op": "gt",
-                    "value": 75,
-                    "visible": true
-                  }
-                ],
-                "timeFrom": null,
-                "timeRegions": [],
-                "timeShift": null,
-                "title": "MongoDB High Ticket Utilization",
-                "tooltip": {
-                  "shared": true,
-                  "sort": 0,
-                  "value_type": "individual"
-                },
-                "type": "graph",
-                "xaxis": {
-                  "buckets": null,
-                  "mode": "time",
-                  "name": null,
-                  "show": true,
-                  "values": []
-                },
-                "yaxes": [
-                  {
-                    "$$hashKey": "object:96",
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                  },
-                  {
-                    "$$hashKey": "object:97",
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                  }
-                ],
-                "yaxis": {
-                  "align": false,
-                  "alignLevel": null
-                }
-              },
-              {
-                "alert": {
-                  "alertRuleTags": {},
-                  "conditions": [
-                    {
-                      "evaluator": {
-                        "params": [
-                          0
-                        ],
-                        "type": "gt"
-                      },
-                      "operator": {
-                        "type": "and"
-                      },
-                      "query": {
-                        "params": [
-                          "A",
-                          "1h",
-                          "now"
-                        ]
-                      },
-                      "reducer": {
-                        "params": [],
-                        "type": "last"
-                      },
-                      "type": "query"
-                    }
-                  ],
-                  "executionErrorState": "alerting",
-                  "for": "10s",
-                  "frequency": "10s",
-                  "handler": 1,
-                  "name": "MongoDB Recurrent Memory Page Faults alert",
-                  "noDataState": "no_data",
-                  "notifications": []
-                },
-                "aliasColors": {},
-                "bars": false,
-                "dashLength": 10,
-                "dashes": false,
-                "datasource": null,
-                "fieldConfig": {
-                  "defaults": {},
-                  "overrides": []
-                },
-                "fill": 1,
-                "fillGradient": 0,
-                "gridPos": {
-                  "h": 8,
-                  "w": 12,
-                  "x": 0,
-                  "y": 34
-                },
-                "hiddenSeries": false,
-                "id": 22,
-                "legend": {
-                  "avg": false,
-                  "current": false,
-                  "max": false,
-                  "min": false,
-                  "show": true,
-                  "total": false,
-                  "values": false
-                },
-                "lines": true,
-                "linewidth": 1,
-                "nullPointMode": "null",
-                "options": {
-                  "alertThreshold": true
-                },
-                "percentage": false,
-                "pluginVersion": "{{ .Values.grafana.version }}",
-                "pointradius": 2,
-                "points": false,
-                "renderer": "flot",
-                "seriesOverrides": [],
-                "spaceLength": 10,
-                "stack": false,
-                "steppedLine": false,
-                "targets": [
-                  {
-                    "exemplar": true,
-                    "expr": "rate(mongodb_ss_extra_info_page_faults{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\"}[5m])",
-                    "interval": "",
-                    "legendFormat": "",
-                    "refId": "A"
-                  }
-                ],
-                "thresholds": [
-                  {
-                    "colorMode": "critical",
-                    "fill": true,
-                    "line": true,
-                    "op": "gt",
-                    "value": 0,
-                    "visible": true
-                  }
-                ],
-                "timeFrom": null,
-                "timeRegions": [],
-                "timeShift": null,
-                "title": "MongoDB Recurrent Memory Page Faults",
-                "tooltip": {
-                  "shared": true,
-                  "sort": 0,
-                  "value_type": "individual"
-                },
-                "type": "graph",
-                "xaxis": {
-                  "buckets": null,
-                  "mode": "time",
-                  "name": null,
-                  "show": true,
-                  "values": []
-                },
-                "yaxes": [
-                  {
-                    "$$hashKey": "object:104",
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                  },
-                  {
-                    "$$hashKey": "object:105",
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                  }
-                ],
-                "yaxis": {
-                  "align": false,
-                  "alignLevel": null
-                }
+                "exemplar": true,
+                "expr": "kubedb_com_pgpool_status_phase{app=\"{{ .Release.Name }}\",namespace=\"{{ .Release.Namespace }}\",phase=\"NotReady\"}",
+                "instant": false,
+                "interval": "",
+                "legendFormat": {{ `"{{pgpool}}"` }},
+                "refId": "A"
               }
             ],
-            "title": "MongoDB Server Status",
-            "type": "row"
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": true,
+                "line": true,
+                "op": "gt",
+                "value": 0,
+                "visible": true
+              }
+            ],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Pgpool Phase Not Ready",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
           },
           {
-            "collapsed": true,
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      0
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "2m",
+              "frequency": "5m",
+              "handler": 1,
+              "name": "KubeDBPgpoolPhaseCritical",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "description": "Trigger alert if phase is critical",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 1
+            },
+            "hiddenSeries": false,
+            "id": 5,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "kubedb_com_pgpool_status_phase{app=\"{{ .Release.Name }}\",namespace=\"{{ .Release.Namespace }}\",phase=\"Critical\"}",
+                "instant": false,
+                "interval": "",
+                "legendFormat": {{ `"{{pgpool}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": true,
+                "line": true,
+                "op": "gt",
+                "value": 0,
+                "visible": true
+              }
+            ],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Pgpool Phase Critical",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "collapsed": false,
             "datasource": null,
             "gridPos": {
               "h": 1,
               "w": 24,
               "x": 0,
-              "y": 2
+              "y": 9
             },
-            "id": 30,
-            "panels": [
-              {
-                "alert": {
-                  "alertRuleTags": {},
-                  "conditions": [
-                    {
-                      "evaluator": {
-                        "params": [
-                          0
-                        ],
-                        "type": "gt"
-                      },
-                      "operator": {
-                        "type": "and"
-                      },
-                      "query": {
-                        "params": [
-                          "A",
-                          "1h",
-                          "now"
-                        ]
-                      },
-                      "reducer": {
-                        "params": [],
-                        "type": "last"
-                      },
-                      "type": "query"
-                    }
-                  ],
-                  "executionErrorState": "alerting",
-                  "for": "10s",
-                  "frequency": "10s",
-                  "handler": 1,
-                  "name": "KubeDB MongoDB OpsRequest Failed alert",
-                  "noDataState": "no_data",
-                  "notifications": []
-                },
-                "aliasColors": {},
-                "bars": false,
-                "dashLength": 10,
-                "dashes": false,
-                "datasource": null,
-                "fieldConfig": {
-                  "defaults": {},
-                  "overrides": []
-                },
-                "fill": 1,
-                "fillGradient": 0,
-                "gridPos": {
-                  "h": 8,
-                  "w": 12,
-                  "x": 0,
-                  "y": 3
-                },
-                "hiddenSeries": false,
-                "id": 26,
-                "legend": {
-                  "avg": false,
-                  "current": false,
-                  "max": false,
-                  "min": false,
-                  "show": false,
-                  "total": false,
-                  "values": false
-                },
-                "lines": true,
-                "linewidth": 1,
-                "nullPointMode": "null",
-                "options": {
-                  "alertThreshold": true
-                },
-                "percentage": false,
-                "pluginVersion": "{{ .Values.grafana.version }}",
-                "pointradius": 2,
-                "points": false,
-                "renderer": "flot",
-                "seriesOverrides": [],
-                "spaceLength": 10,
-                "stack": false,
-                "steppedLine": false,
-                "targets": [
-                  {
-                    "exemplar": true,
-                    "expr": "ops_kubedb_com_mongodbopsrequest_status_phase{app=\"{{ .Release.Name }}\",namespace=\"{{ .Release.Namespace }}\",phase=\"Failed\"}",
-                    "interval": "",
-                    "legendFormat": "",
-                    "refId": "A"
-                  }
-                ],
-                "thresholds": [
-                  {
-                    "colorMode": "critical",
-                    "fill": true,
-                    "line": true,
-                    "op": "gt",
-                    "value": 0,
-                    "visible": true
-                  }
-                ],
-                "timeFrom": null,
-                "timeRegions": [],
-                "timeShift": null,
-                "title": "KubeDB MongoDB OpsRequest Failed",
-                "tooltip": {
-                  "shared": true,
-                  "sort": 0,
-                  "value_type": "individual"
-                },
-                "type": "graph",
-                "xaxis": {
-                  "buckets": null,
-                  "mode": "time",
-                  "name": null,
-                  "show": true,
-                  "values": []
-                },
-                "yaxes": [
-                  {
-                    "$$hashKey": "object:259",
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
+            "id": 14,
+            "panels": [],
+            "title": "Pgpool Info",
+            "type": "row"
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      1
+                    ],
+                    "type": "lt"
                   },
-                  {
-                    "$$hashKey": "object:260",
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                  }
-                ],
-                "yaxis": {
-                  "align": false,
-                  "alignLevel": null
-                }
-              },
-              {
-                "alert": {
-                  "alertRuleTags": {},
-                  "conditions": [
-                    {
-                      "evaluator": {
-                        "params": [
-                          0
-                        ],
-                        "type": "gt"
-                      },
-                      "operator": {
-                        "type": "and"
-                      },
-                      "query": {
-                        "params": [
-                          "A",
-                          "1h",
-                          "now"
-                        ]
-                      },
-                      "reducer": {
-                        "params": [],
-                        "type": "last"
-                      },
-                      "type": "query"
-                    }
-                  ],
-                  "executionErrorState": "alerting",
-                  "for": "10s",
-                  "frequency": "10s",
-                  "handler": 1,
-                  "name": "KubeDB MongoDBOpsRequest Status Progressing TooLong alert",
-                  "noDataState": "no_data",
-                  "notifications": []
-                },
-                "aliasColors": {},
-                "bars": false,
-                "dashLength": 10,
-                "dashes": false,
-                "datasource": null,
-                "fieldConfig": {
-                  "defaults": {},
-                  "overrides": []
-                },
-                "fill": 1,
-                "fillGradient": 0,
-                "gridPos": {
-                  "h": 8,
-                  "w": 12,
-                  "x": 12,
-                  "y": 3
-                },
-                "hiddenSeries": false,
-                "id": 24,
-                "legend": {
-                  "avg": false,
-                  "current": false,
-                  "max": false,
-                  "min": false,
-                  "show": true,
-                  "total": false,
-                  "values": false
-                },
-                "lines": true,
-                "linewidth": 1,
-                "nullPointMode": "null",
-                "options": {
-                  "alertThreshold": true
-                },
-                "percentage": false,
-                "pluginVersion": "{{ .Values.grafana.version }}",
-                "pointradius": 2,
-                "points": false,
-                "renderer": "flot",
-                "seriesOverrides": [],
-                "spaceLength": 10,
-                "stack": false,
-                "steppedLine": false,
-                "targets": [
-                  {
-                    "exemplar": true,
-                    "expr": "ops_kubedb_com_mongodbopsrequest_status_phase{app=\"{{ .Release.Name }}\",namespace=\"{{ .Release.Namespace }}\",phase=\"Progressing\"}",
-                    "interval": "",
-                    "legendFormat": "",
-                    "refId": "A"
-                  }
-                ],
-                "thresholds": [
-                  {
-                    "colorMode": "critical",
-                    "fill": true,
-                    "line": true,
-                    "op": "gt",
-                    "value": 0,
-                    "visible": true
-                  }
-                ],
-                "timeFrom": null,
-                "timeRegions": [],
-                "timeShift": null,
-                "title": "KubeDB MongoDB OpsRequest Status Progressing TooLong",
-                "tooltip": {
-                  "shared": true,
-                  "sort": 0,
-                  "value_type": "individual"
-                },
-                "type": "graph",
-                "xaxis": {
-                  "buckets": null,
-                  "mode": "time",
-                  "name": null,
-                  "show": true,
-                  "values": []
-                },
-                "yaxes": [
-                  {
-                    "$$hashKey": "object:108",
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
+                  "operator": {
+                    "type": "and"
                   },
-                  {
-                    "$$hashKey": "object:109",
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
-                  }
-                ],
-                "yaxis": {
-                  "align": false,
-                  "alignLevel": null
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
                 }
+              ],
+              "executionErrorState": "alerting",
+              "for": "2m",
+              "frequency": "5m",
+              "handler": 1,
+              "name": "PgpoolDown",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "description": "Specifies  alert  for Pgpool pod ",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 10
+            },
+            "hiddenSeries": false,
+            "id": 15,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "pgpool2_up{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}",
+                "instant": false,
+                "interval": "",
+                "legendFormat": {{ `"{{pod}}"` }},
+                "refId": "A"
               }
             ],
-            "title": "MongoDBOpsRequest",
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": true,
+                "line": true,
+                "op": "lt",
+                "value": 1,
+                "visible": true
+              }
+            ],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Pgpool Down",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      0.9
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "2m",
+              "frequency": "5m",
+              "handler": 1,
+              "name": "PgpoolTooManyConnections",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "description": "Specifies  alert  for Pgpool opened connections",
+            "fieldConfig": {
+              "defaults": {
+                "unit": "percentunit"
+              },
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 10
+            },
+            "hiddenSeries": false,
+            "id": 16,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "(sum by (pod) (pgpool2_backend_by_process_total{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}) / sum by (pod) (pgpool2_backend_total{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}))",
+                "instant": false,
+                "interval": "",
+                "legendFormat": {{ `"{{pod}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": true,
+                "line": true,
+                "op": "gt",
+                "value": 0.9,
+                "visible": true
+              }
+            ],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Too Many Connections",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "percentunit",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      0
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "0m",
+              "frequency": "5m",
+              "handler": 1,
+              "name": "PgpoolExporterLastScrapeError",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "description": "Specifies  alert  for Pgpool exporter error",
+            "fieldConfig": {
+              "defaults": {
+                "unit": "none"
+              },
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 18
+            },
+            "hiddenSeries": false,
+            "id": 17,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "pgpool2_last_scrape_error{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}",
+                "instant": false,
+                "interval": "",
+                "legendFormat": {{ `"{{pod}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": true,
+                "line": true,
+                "op": "gt",
+                "value": 0,
+                "visible": true
+              }
+            ],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Exporter Last Scrape Error",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "none",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      10
+                    ],
+                    "type": "lt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "2m",
+              "frequency": "5m",
+              "handler": 1,
+              "name": "PgpoolLowCacheMemory",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "description": "Specifies  alert  for Pgpool low cache memory",
+            "fieldConfig": {
+              "defaults": {
+                "unit": "decmbytes"
+              },
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 18
+            },
+            "hiddenSeries": false,
+            "id": 18,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "pgpool2_pool_cache_free_cache_entries_size{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"} / 1000000",
+                "instant": false,
+                "interval": "",
+                "legendFormat": {{ `"{{pod}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": true,
+                "line": true,
+                "op": "lt",
+                "value": 10,
+                "visible": true
+              }
+            ],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Low Cache Memory",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "decmbytes",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "collapsed": false,
+            "datasource": null,
+            "gridPos": {
+              "h": 1,
+              "w": 24,
+              "x": 0,
+              "y": 26
+            },
+            "id": 7,
+            "panels": [],
+            "title": "Backend PostgresSQL",
             "type": "row"
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      5
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "1m",
+              "frequency": "10m",
+              "handler": 1,
+              "name": "PgpoolBackendPanicMessageCount",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "description": "Pgpool panic messages returned from backend postgres",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 27
+            },
+            "hiddenSeries": false,
+            "id": 9,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "pgpool2_pool_backend_stats_panic_cnt{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}",
+                "instant": false,
+                "interval": "",
+                "legendFormat": {{ `"{{pod}} ({{role}})"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": true,
+                "line": true,
+                "op": "gt",
+                "value": 5,
+                "visible": true
+              }
+            ],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Panic Message Count",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      5
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "1m",
+              "frequency": "5m",
+              "handler": 1,
+              "name": "PgpoolBackendFatalMessageCount",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "description": "Pgpool fatal messages returned from backend postgres",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 27
+            },
+            "hiddenSeries": false,
+            "id": 10,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "pgpool2_pool_backend_stats_fatal_cnt{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}",
+                "instant": false,
+                "interval": "",
+                "legendFormat": {{ `"{{pod}} ({{role}})"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": true,
+                "line": true,
+                "op": "gt",
+                "value": 5,
+                "visible": true
+              }
+            ],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Fatal Message Count",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      5
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "2m",
+              "frequency": "5m",
+              "handler": 1,
+              "name": "PgpoolBackendErrorMessageCount",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "description": "Pgpool error messages returned from backend postgres",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 35
+            },
+            "hiddenSeries": false,
+            "id": 11,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "pgpool2_pool_backend_stats_error_cnt{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}",
+                "instant": false,
+                "interval": "",
+                "legendFormat": {{ `"{{pod}} ({{role}})"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": true,
+                "line": true,
+                "op": "gt",
+                "value": 5,
+                "visible": true
+              }
+            ],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Error Message Count",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      5
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "2m",
+              "frequency": "5m",
+              "handler": 1,
+              "name": "PgpoolPostgresHealthCheckFailure",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "description": "Health check failure count for postgres",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 35
+            },
+            "hiddenSeries": false,
+            "id": 12,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "pgpool2_pool_health_check_stats_fail_count{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}",
+                "instant": false,
+                "interval": "",
+                "legendFormat": {{ `"{{pod}} ({{role}})"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": true,
+                "line": true,
+                "op": "gt",
+                "value": 5,
+                "visible": true
+              }
+            ],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Postgres Health Check Failure",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
           }
         ],
         "schemaVersion": 27,
@@ -1919,14 +1500,14 @@ data:
           "list": []
         },
         "time": {
-          "from": "now-15m",
+          "from": "now-5m",
           "to": "now"
         },
         "timepicker": {},
         "timezone": "",
         "title": "{{ .Values.metadata.resource.group }} / {{ .Values.metadata.resource.kind }} / {{ .Release.Namespace }} / {{ .Release.Name }}",
-        "uid": null,
-        "version": 23
+        "uid": "pgpoolAlert",
+        "version": 22
       },
       "folderId": 0,
       "overwrite": false

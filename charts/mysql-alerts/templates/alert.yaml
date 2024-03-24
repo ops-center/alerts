@@ -241,7 +241,7 @@ spec:
         {{- include "mysql-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: MySQLOpsRequest on progress (mysqlopsrequest {{`{{`}} $labels.mysqlopsrequest {{`}}`}})
-        description: "MaraiDBOpsRequest {{`{{`}} $labels.mysqlopsrequest {{`}}`}} is in progressressing status\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "MySQLOpsRequest {{`{{`}} $labels.mysqlopsrequest {{`}}`}} is in progressressing status\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if (include "mysql-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.opsRequestStatusProgressingToLong.enabled .rules.opsRequestStatusProgressingToLong.severity)) -}}
     - alert: KubeDBMySQLOpsRequestStatusProgressingToLong
@@ -252,7 +252,7 @@ spec:
         {{- include "mysql-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: MySQLOpsRequest is in progressing status for too long (mysqlopsrequest {{`{{`}} $labels.mysqlopsrequest {{`}}`}})
-        description: "MaraiDBOpsRequest {{`{{`}} $labels.mysqlopsrequest {{`}}`}} is in progressing status for too long\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "MySQLOpsRequest {{`{{`}} $labels.mysqlopsrequest {{`}}`}} is in progressing status for too long\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if (include "mysql-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.opsRequestFailed.enabled .rules.opsRequestFailed.severity)) -}}
     - alert: KubeDBMySQLOpsRequestFailed
@@ -263,7 +263,7 @@ spec:
         {{- include "mysql-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: MySQLOpsRequest failed (mysqlopsrequest {{`{{`}} $labels.mysqlopsrequest {{`}}`}})
-        description: "MaraiDBOpsRequest {{`{{`}} $labels.mysqlopsrequest {{`}}`}} failed \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "MySQLOpsRequest {{`{{`}} $labels.mysqlopsrequest {{`}}`}} failed \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
   {{ end -}}
   {{ end -}}

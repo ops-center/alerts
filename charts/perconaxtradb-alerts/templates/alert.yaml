@@ -208,7 +208,7 @@ spec:
         {{- include "perconaxtradb-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: PerconaXtraDBOpsRequest on progress (perconaxtradbopsrequest {{`{{`}} $labels.perconaxtradbopsrequest {{`}}`}})
-        description: "MaraiDBOpsRequest {{`{{`}} $labels.perconaxtradbopsrequest {{`}}`}} is in progressressing status\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "PerconaXtraDBOpsRequest {{`{{`}} $labels.perconaxtradbopsrequest {{`}}`}} is in progressressing status\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if (include "perconaxtradb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.opsRequestStatusProgressingToLong.enabled .rules.opsRequestStatusProgressingToLong.severity)) -}}
     - alert: KubeDBPerconaXtraDBOpsRequestStatusProgressingToLong
@@ -219,7 +219,7 @@ spec:
         {{- include "perconaxtradb-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: PerconaXtraDBOpsRequest is in progressing status for too long (perconaxtradbopsrequest {{`{{`}} $labels.perconaxtradbopsrequest {{`}}`}})
-        description: "MaraiDBOpsRequest {{`{{`}} $labels.perconaxtradbopsrequest {{`}}`}} is in progressing status for too long\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "PerconaXtraDBOpsRequest {{`{{`}} $labels.perconaxtradbopsrequest {{`}}`}} is in progressing status for too long\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if (include "perconaxtradb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.opsRequestFailed.enabled .rules.opsRequestFailed.severity)) -}}
     - alert: KubeDBPerconaXtraDBOpsRequestFailed
@@ -230,7 +230,7 @@ spec:
         {{- include "perconaxtradb-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: PerconaXtraDBOpsRequest failed (perconaxtradbopsrequest {{`{{`}} $labels.perconaxtradbopsrequest {{`}}`}})
-        description: "MaraiDBOpsRequest {{`{{`}} $labels.perconaxtradbopsrequest {{`}}`}} failed \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "PerconaXtraDBOpsRequest {{`{{`}} $labels.perconaxtradbopsrequest {{`}}`}} failed \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
   {{ end -}}
   {{ end -}}

@@ -194,7 +194,7 @@ spec:
         {{- include "mongodb-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: MongoDBOpsRequest on progress (mongodbopsrequest {{`{{`}} $labels.mongodbopsrequest {{`}}`}})
-        description: "MaraiDBOpsRequest {{`{{`}} $labels.mongodbopsrequest {{`}}`}} is in progressressing status\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "MongoDBOpsRequest {{`{{`}} $labels.mongodbopsrequest {{`}}`}} is in progressressing status\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if (include "mongodb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.opsRequestStatusProgressingToLong.enabled .rules.opsRequestStatusProgressingToLong.severity)) -}}
     - alert: KubeDBMongoDBOpsRequestStatusProgressingToLong
@@ -205,7 +205,7 @@ spec:
         {{- include "mongodb-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: MongoDBOpsRequest is in progressing status for too long (mongodbopsrequest {{`{{`}} $labels.mongodbopsrequest {{`}}`}})
-        description: "MaraiDBOpsRequest {{`{{`}} $labels.mongodbopsrequest {{`}}`}} is in progressing status for too long\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "MongoDBOpsRequest {{`{{`}} $labels.mongodbopsrequest {{`}}`}} is in progressing status for too long\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if (include "mongodb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.opsRequestFailed.enabled .rules.opsRequestFailed.severity)) -}}
     - alert: KubeDBMongoDBOpsRequestFailed
@@ -216,7 +216,7 @@ spec:
         {{- include "mongodb-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: MongoDBOpsRequest failed (mongodbopsrequest {{`{{`}} $labels.mongodbopsrequest {{`}}`}})
-        description: "MaraiDBOpsRequest {{`{{`}} $labels.mongodbopsrequest {{`}}`}} failed \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "MongoDBOpsRequest {{`{{`}} $labels.mongodbopsrequest {{`}}`}} failed \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
   {{ end -}}
   {{ end -}}

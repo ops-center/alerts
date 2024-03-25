@@ -7,9 +7,9 @@ metadata:
     version: v1alpha1
   release:
     # Release name
-    name: ""
+    name: "connect-cluster"
     # Release namespace
-    namespace: ""
+    namespace: "demo"
 
 form:
   alert:

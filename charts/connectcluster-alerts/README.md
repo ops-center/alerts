@@ -52,8 +52,8 @@ The following table lists the configurable parameters of the `connectcluster-ale
 | metadata.resource.name                                                             |                                               | <code>connectclusters</code>                     |
 | metadata.resource.scope                                                            |                                               | <code>Namespaced</code>                          |
 | metadata.resource.version                                                          |                                               | <code>v1alpha1</code>                            |
-| metadata.release.name                                                              | Release name                                  | <code>""</code>                                  |
-| metadata.release.namespace                                                         | Release namespace                             | <code>""</code>                                  |
+| metadata.release.name                                                              | Release name                                  | <code>"connect-cluster"</code>                   |
+| metadata.release.namespace                                                         | Release namespace                             | <code>"demo"</code>                              |
 | form.alert.enabled                                                                 | # Enable PrometheusRule alerts                | <code>warning</code>                             |
 | form.alert.labels                                                                  | # Labels for default rules                    | <code>{"release":"kube-prometheus-stack"}</code> |
 | form.alert.annotations                                                             | # Annotations for default rules               | <code>{}</code>                                  |

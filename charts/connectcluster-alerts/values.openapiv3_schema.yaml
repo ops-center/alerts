@@ -20,7 +20,7 @@ properties:
             type: string
           groups:
             properties:
-              database:
+              connect:
                 properties:
                   enabled:
                     enum:
@@ -31,7 +31,7 @@ properties:
                     type: string
                   rules:
                     properties:
-                      connectClusterPhaseCritical:
+                      connectClusterConnectorCount:
                         properties:
                           duration:
                             type: string
@@ -43,10 +43,33 @@ properties:
                             - warning
                             - info
                             type: string
+                          val:
+                            type: integer
                         required:
                         - duration
                         - enabled
                         - severity
+                        - val
+                        type: object
+                      connectClusterCoordinatorRebalanceFailed:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                          val:
+                            type: integer
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        - val
                         type: object
                       connectClusterTooManyConnections:
                         properties:
@@ -85,130 +108,11 @@ properties:
                         - enabled
                         - severity
                         type: object
-                      connectclusterConnectorCount:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      connectclusterCoordinatorRebalanceFailed:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      connectclusterTaskTotal:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      connectclusterTaskTotalDestroyed:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        type: object
-                      connectclusterTaskTotalFailed:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        type: object
-                      connectclusterTasksErrorTotalRetries:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
                     required:
-                    - connectClusterPhaseCritical
+                    - connectClusterConnectorCount
+                    - connectClusterCoordinatorRebalanceFailed
                     - connectClusterTooManyConnections
                     - connectClusterWorkerDown
-                    - connectclusterConnectorCount
-                    - connectclusterCoordinatorRebalanceFailed
-                    - connectclusterTaskTotal
-                    - connectclusterTaskTotalDestroyed
-                    - connectclusterTaskTotalFailed
-                    - connectclusterTasksErrorTotalRetries
                     type: object
                 required:
                 - enabled
@@ -267,9 +171,105 @@ properties:
                 - enabled
                 - rules
                 type: object
+              task:
+                properties:
+                  enabled:
+                    enum:
+                    - none
+                    - critical
+                    - warning
+                    - info
+                    type: string
+                  rules:
+                    properties:
+                      connectClusterTaskErrorTotalRetries:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                          val:
+                            type: integer
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        - val
+                        type: object
+                      connectClusterTaskTotal:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                          val:
+                            type: integer
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        - val
+                        type: object
+                      connectClusterTaskTotalDestroyed:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        type: object
+                      connectClusterTaskTotalFailed:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        type: object
+                    required:
+                    - connectClusterTaskErrorTotalRetries
+                    - connectClusterTaskTotal
+                    - connectClusterTaskTotalDestroyed
+                    - connectClusterTaskTotalFailed
+                    type: object
+                required:
+                - enabled
+                - rules
+                type: object
             required:
-            - database
+            - connect
             - provisioner
+            - task
             type: object
           labels:
             additionalProperties:

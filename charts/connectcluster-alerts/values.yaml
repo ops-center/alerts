@@ -7,9 +7,9 @@ metadata:
     version: v1alpha1
   release:
     # Release name
-    name: "connect-cluster"
+    name: ""
     # Release namespace
-    namespace: "demo"
+    namespace: ""
 
 form:
   alert:
@@ -30,13 +30,13 @@ form:
     # runbookUrl: "https://runbooks.prometheus-operator.dev/runbooks"
 
     groups:
-      database:
+      connect:
         enabled: warning
         rules:
           # Specifies alert configurations for Worker nodes going down
           connectClusterWorkerDown:
             enabled: true
-            duration: "0m"
+            duration: "1m"
             severity: critical
           # Specifies alert configurations for connectcluster too many connections.
           connectClusterTooManyConnections:
@@ -44,44 +44,42 @@ form:
             duration: "2m"
             val: 80
             severity: warning
-          # Sepcifies the alert configuration for connectcluster is in Critical phase, that means one or more of the nodes are down but the connectcluster tasks are not hampered.
-          connectClusterPhaseCritical:
-            enabled: true
-            duration: "3m"
-            severity: warning
           # Specifies alert configurations for number of connectors going beyond the provided threshold
-          connectclusterConnectorCount:
+          connectClusterConnectorCount:
             enabled: true
             duration: "1m"
             severity: warning
             val: 50
           # Specifies alert configurations for number of coordinator rebalance failed.
-          connectclusterCoordinatorRebalanceFailed:
+          connectClusterCoordinatorRebalanceFailed:
             enabled: true
-            duration: "0m"
+            duration: "1m"
             severity: critical
             val: 10
+      task:
+        enabled: warning
+        rules:
           # Specifies alert configurations for number of tasks error retries.
-          connectclusterTasksErrorTotalRetries:
+          connectClusterTaskErrorTotalRetries:
             enabled: true
-            duration: "0m"
+            duration: "1m"
             severity: critical
             val: 5
           # Specifies alert configurations for number of tasks going beyond the provided threshold
-          connectclusterTaskTotal:
+          connectClusterTaskTotal:
             enabled: true
             duration: "1m"
             severity: warning
             val: 150
           # Specifies alert configurations for number of tasks failed.
-          connectclusterTaskTotalFailed:
+          connectClusterTaskTotalFailed:
             enabled: true
-            duration: "0m"
+            duration: "1m"
             severity: warning
           # Specifies alert configurations for number of tasks destroyed.
-          connectclusterTaskTotalDestroyed:
+          connectClusterTaskTotalDestroyed:
             enabled: true
-            duration: "0m"
+            duration: "1m"
             severity: warning
       provisioner:
         enabled: warning

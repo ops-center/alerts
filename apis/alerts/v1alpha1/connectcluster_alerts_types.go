@@ -46,25 +46,33 @@ type ConnectClusterAlert struct {
 }
 
 type ConnectClusterAlertGroups struct {
-	Database    ConnectClusterDatabaseAlert `json:"database"`
-	Provisioner ProvisionerAlert            `json:"provisioner"`
+	Connect     ConnectClusterConnectAlert `json:"connect"`
+	Task        ConnectClusterTaskAlert    `json:"task"`
+	Provisioner ProvisionerAlert           `json:"provisioner"`
 }
 
-type ConnectClusterDatabaseAlert struct {
-	Enabled mona.SeverityFlag                `json:"enabled"`
-	Rules   ConnectClusterDatabaseAlertRules `json:"rules"`
+type ConnectClusterConnectAlert struct {
+	Enabled mona.SeverityFlag               `json:"enabled"`
+	Rules   ConnectClusterConnectAlertRules `json:"rules"`
 }
 
-type ConnectClusterDatabaseAlertRules struct {
+type ConnectClusterConnectAlertRules struct {
 	ConnectClusterWorkerDown                 FixedAlert  `json:"connectClusterWorkerDown"`
 	ConnectClusterTooManyConnections         IntValAlert `json:"connectClusterTooManyConnections"`
-	ConnectClusterPhaseCritical              FixedAlert  `json:"connectClusterPhaseCritical"`
-	ConnectclusterConnectorCount             IntValAlert `json:"connectclusterConnectorCount"`
-	ConnectclusterCoordinatorRebalanceFailed IntValAlert `json:"connectclusterCoordinatorRebalanceFailed"`
-	ConnectclusterTasksErrorTotalRetries     IntValAlert `json:"connectclusterTasksErrorTotalRetries"`
-	ConnectclusterTaskTotal                  IntValAlert `json:"connectclusterTaskTotal"`
-	ConnectclusterTaskTotalFailed            FixedAlert  `json:"connectclusterTaskTotalFailed"`
-	ConnectclusterTaskTotalDestroyed         FixedAlert  `json:"connectclusterTaskTotalDestroyed"`
+	ConnectClusterConnectorCount             IntValAlert `json:"connectClusterConnectorCount"`
+	ConnectClusterCoordinatorRebalanceFailed IntValAlert `json:"connectClusterCoordinatorRebalanceFailed"`
+}
+
+type ConnectClusterTaskAlert struct {
+	Enabled mona.SeverityFlag       `json:"enabled"`
+	Rules   ConnectClusterTaskRules `json:"rules"`
+}
+
+type ConnectClusterTaskRules struct {
+	ConnectClusterTaskErrorTotalRetries IntValAlert `json:"connectClusterTaskErrorTotalRetries"`
+	ConnectClusterTaskTotal             IntValAlert `json:"connectClusterTaskTotal"`
+	ConnectClusterTaskTotalFailed       FixedAlert  `json:"connectClusterTaskTotalFailed"`
+	ConnectClusterTaskTotalDestroyed    FixedAlert  `json:"connectClusterTaskTotalDestroyed"`
 }
 
 type ConnectClusterGrafana struct {

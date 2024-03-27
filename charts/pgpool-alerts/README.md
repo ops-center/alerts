@@ -52,8 +52,8 @@ The following table lists the configurable parameters of the `pgpool-alerts` cha
 | metadata.resource.name                                                     |                                               | <code>pgpools</code>                  |
 | metadata.resource.scope                                                    |                                               | <code>Namespaced</code>               |
 | metadata.resource.version                                                  |                                               | <code>v1alpha2</code>                 |
-| metadata.release.name                                                      | Release name                                  | <code>"pgpool-monitoring"</code>      |
-| metadata.release.namespace                                                 | Release namespace                             | <code>"pool"</code>                   |
+| metadata.release.name                                                      | Release name                                  | <code>""</code>                       |
+| metadata.release.namespace                                                 | Release namespace                             | <code>""</code>                       |
 | form.alert.enabled                                                         | # Enable PrometheusRule alerts                | <code>warning</code>                  |
 | form.alert.labels                                                          | # Labels for default rules                    | <code>{"release":"prometheus"}</code> |
 | form.alert.annotations                                                     | # Annotations for default rules               | <code>{}</code>                       |
@@ -64,7 +64,6 @@ The following table lists the configurable parameters of the `pgpool-alerts` cha
 | form.alert.groups.database.rules.pgpoolTooManyConnections.duration         |                                               | <code>"1m"</code>                     |
 | form.alert.groups.database.rules.pgpoolTooManyConnections.severity         |                                               | <code>warning</code>                  |
 | form.alert.groups.database.rules.pgpoolExporterLastScrapeError.enabled     |                                               | <code>true</code>                     |
-| form.alert.groups.database.rules.pgpoolExporterLastScrapeError.val         |                                               | <code>10</code>                       |
 | form.alert.groups.database.rules.pgpoolExporterLastScrapeError.duration    |                                               | <code>"0m"</code>                     |
 | form.alert.groups.database.rules.pgpoolExporterLastScrapeError.severity    |                                               | <code>warning</code>                  |
 | form.alert.groups.database.rules.pgpoolDown.enabled                        |                                               | <code>true</code>                     |
@@ -87,7 +86,7 @@ The following table lists the configurable parameters of the `pgpool-alerts` cha
 | form.alert.groups.database.rules.pgpoolBackendErrorMessageCount.duration   |                                               | <code>"0m"</code>                     |
 | form.alert.groups.database.rules.pgpoolBackendErrorMessageCount.severity   |                                               | <code>critical</code>                 |
 | form.alert.groups.database.rules.pgpoolLowCacheMemory.enabled              |                                               | <code>true</code>                     |
-| form.alert.groups.database.rules.pgpoolLowCacheMemory.val                  |                                               | <code>100 #10mb</code>                |
+| form.alert.groups.database.rules.pgpoolLowCacheMemory.val                  |                                               | <code>100 # 10mb</code>               |
 | form.alert.groups.database.rules.pgpoolLowCacheMemory.duration             |                                               | <code>"1m"</code>                     |
 | form.alert.groups.database.rules.pgpoolLowCacheMemory.severity             |                                               | <code>warning</code>                  |
 | form.alert.groups.provisioner.enabled                                      |                                               | <code>warning</code>                  |

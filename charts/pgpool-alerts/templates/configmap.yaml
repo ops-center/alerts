@@ -41,7 +41,7 @@ data:
         "editable": true,
         "gnetId": null,
         "graphTooltip": 0,
-        "id": 31,
+        "id": null,
         "links": [],
         "panels": [
           {
@@ -87,7 +87,7 @@ data:
                 }
               ],
               "executionErrorState": "alerting",
-              "for": "2m",
+              "for": "{{ .Values.form.alert.groups.provisioner.rules.appPhaseNotReady.duration }}",
               "frequency": "5m",
               "handler": 1,
               "name": "KubeDBPgpoolPhaseNotReady",
@@ -227,7 +227,7 @@ data:
                 }
               ],
               "executionErrorState": "alerting",
-              "for": "2m",
+              "for": "{{ .Values.form.alert.groups.provisioner.rules.appPhaseCritical.duration }}",
               "frequency": "5m",
               "handler": 1,
               "name": "KubeDBPgpoolPhaseCritical",
@@ -381,7 +381,7 @@ data:
                 }
               ],
               "executionErrorState": "alerting",
-              "for": "2m",
+              "for": "{{ .Values.form.alert.groups.database.rules.pgpoolDown.duration }}",
               "frequency": "5m",
               "handler": 1,
               "name": "PgpoolDown",
@@ -499,7 +499,7 @@ data:
                 {
                   "evaluator": {
                     "params": [
-                      0.9
+                      {{ .Values.form.alert.groups.database.rules.pgpoolTooManyConnections.val }}
                     ],
                     "type": "gt"
                   },
@@ -521,7 +521,7 @@ data:
                 }
               ],
               "executionErrorState": "alerting",
-              "for": "2m",
+              "for": "{{ .Values.form.alert.groups.database.rules.pgpoolTooManyConnections.duration }}",
               "frequency": "5m",
               "handler": 1,
               "name": "PgpoolTooManyConnections",
@@ -663,7 +663,7 @@ data:
                 }
               ],
               "executionErrorState": "alerting",
-              "for": "0m",
+              "for": "{{ .Values.form.alert.groups.database.rules.pgpoolExporterLastScrapeError.duration }}",
               "frequency": "5m",
               "handler": 1,
               "name": "PgpoolExporterLastScrapeError",
@@ -783,7 +783,7 @@ data:
                 {
                   "evaluator": {
                     "params": [
-                      10
+                      {{ .Values.form.alert.groups.database.rules.pgpoolLowCacheMemory.val }}
                     ],
                     "type": "lt"
                   },
@@ -805,7 +805,7 @@ data:
                 }
               ],
               "executionErrorState": "alerting",
-              "for": "2m",
+              "for": "{{ .Values.form.alert.groups.database.rules.pgpoolLowCacheMemory.duration }}",
               "frequency": "5m",
               "handler": 1,
               "name": "PgpoolLowCacheMemory",
@@ -939,7 +939,7 @@ data:
                 {
                   "evaluator": {
                     "params": [
-                      5
+                      {{ .Values.form.alert.groups.database.rules.pgpoolBackendPanicMessageCount.val }}
                     ],
                     "type": "gt"
                   },
@@ -961,7 +961,7 @@ data:
                 }
               ],
               "executionErrorState": "alerting",
-              "for": "1m",
+              "for": "{{ .Values.form.alert.groups.database.rules.pgpoolBackendPanicMessageCount.duration }}",
               "frequency": "10m",
               "handler": 1,
               "name": "PgpoolBackendPanicMessageCount",
@@ -1079,7 +1079,7 @@ data:
                 {
                   "evaluator": {
                     "params": [
-                      5
+                      {{ .Values.form.alert.groups.database.rules.pgpoolBackendFatalMessageCount.val }}
                     ],
                     "type": "gt"
                   },
@@ -1101,7 +1101,7 @@ data:
                 }
               ],
               "executionErrorState": "alerting",
-              "for": "1m",
+              "for": "{{ .Values.form.alert.groups.database.rules.pgpoolBackendFatalMessageCount.duration }}",
               "frequency": "5m",
               "handler": 1,
               "name": "PgpoolBackendFatalMessageCount",
@@ -1219,7 +1219,7 @@ data:
                 {
                   "evaluator": {
                     "params": [
-                      5
+                      {{ .Values.form.alert.groups.database.rules.pgpoolBackendErrorMessageCount.val }}
                     ],
                     "type": "gt"
                   },
@@ -1241,7 +1241,7 @@ data:
                 }
               ],
               "executionErrorState": "alerting",
-              "for": "2m",
+              "for": "{{ .Values.form.alert.groups.database.rules.pgpoolBackendErrorMessageCount.duration }}",
               "frequency": "5m",
               "handler": 1,
               "name": "PgpoolBackendErrorMessageCount",
@@ -1359,7 +1359,7 @@ data:
                 {
                   "evaluator": {
                     "params": [
-                      5
+                      {{ .Values.form.alert.groups.database.rules.pgpoolPostgresHealthCheckFailure.val }}
                     ],
                     "type": "gt"
                   },
@@ -1381,7 +1381,7 @@ data:
                 }
               ],
               "executionErrorState": "alerting",
-              "for": "2m",
+              "for": "{{ .Values.form.alert.groups.database.rules.pgpoolPostgresHealthCheckFailure.duration }}",
               "frequency": "5m",
               "handler": 1,
               "name": "PgpoolPostgresHealthCheckFailure",
@@ -1506,7 +1506,7 @@ data:
         "timepicker": {},
         "timezone": "",
         "title": "{{ .Values.metadata.resource.group }} / {{ .Values.metadata.resource.kind }} / {{ .Release.Namespace }} / {{ .Release.Name }}",
-        "uid": "pgpoolAlert",
+        "uid": null,
         "version": 22
       },
       "folderId": 0,

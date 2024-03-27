@@ -7,9 +7,9 @@ metadata:
     version: v1alpha2
   release:
     # Release name
-    name: "pgpool-monitoring"
+    name: ""
     # Release namespace
-    namespace: "pool"
+    namespace: ""
 
 form:
   alert:
@@ -76,7 +76,7 @@ form:
           # Specifies the alert configuration for low memory of pgpool cache, triggers if less than < val.
           pgpoolLowCacheMemory:
             enabled: true
-            val: 100 #10mb
+            val: 100 # 10mb
             duration: "1m"
             severity: warning
       provisioner:
@@ -91,9 +91,10 @@ form:
             duration: "15m"
             severity: warning
 
+
 grafana:
-  enabled: true
-  version: 7.5.5
-  jobName: pgpool-monitoring-stats
+  enabled: false
+  version: 8.2.3
+  jobName: kubedb-databases
   url: ""
   apikey: ""

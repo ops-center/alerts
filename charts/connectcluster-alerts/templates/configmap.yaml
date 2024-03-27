@@ -1498,7 +1498,7 @@ data:
         "timepicker": {},
         "timezone": "",
         "title": "kafka.kubedb.com / ConnectCluster /  {{ .Release.Namespace }} / {{ .Release.Name }}",
-        "uid": "sdfgdcwer",
+        "uid": null,
         "version": 17
       },
       "folderId": 0,

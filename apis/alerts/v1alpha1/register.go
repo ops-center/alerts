@@ -74,6 +74,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&ProxysqlAlertsList{},
 		&RedisAlerts{},
 		&RedisAlertsList{},
+		&KafkaAlerts{},
+		&KafkaAlertsList{},
 		&RabbitmqAlerts{},
 		&RabbitmqAlertsList{},
 		&SinglestoreAlerts{},

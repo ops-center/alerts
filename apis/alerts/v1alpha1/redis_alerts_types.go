@@ -80,6 +80,8 @@ type RedisDatabaseAlertRules struct {
 	RedisDisconnectedSlaves  IntValAlert `json:"redisDisconnectedSlaves"`
 	RedisTooManyConnections  IntValAlert `json:"redisTooManyConnections"`
 	RedisRejectedConnections IntValAlert `json:"redisRejectedConnections"`
+	DiskUsageHigh            IntValAlert `json:"diskUsageHigh"`
+	DiskAlmostFull           IntValAlert `json:"diskAlmostFull"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

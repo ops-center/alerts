@@ -87,6 +87,8 @@ type MongoDBDatabaseAlertRules struct {
 	MongodbHighTicketUtilization     IntValAlert `json:"mongodbHighTicketUtilization"`
 	MongodbRecurrentCursorTimeout    IntValAlert `json:"mongodbRecurrentCursorTimeout"`
 	MongodbRecurrentMemoryPageFaults IntValAlert `json:"mongodbRecurrentMemoryPageFaults"`
+	DiskUsageHigh                    IntValAlert `json:"diskUsageHigh"`
+	DiskAlmostFull                   IntValAlert `json:"diskAlmostFull"`
 }
 
 type Grafana struct {

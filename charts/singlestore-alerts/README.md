@@ -89,6 +89,14 @@ The following table lists the configurable parameters of the `singlestore-alerts
 | form.alert.groups.database.rules.singlestoreHighOutgoingBytes.duration  |                                               | <code>"0m"</code>                                |
 | form.alert.groups.database.rules.singlestoreHighOutgoingBytes.val       |                                               | <code>1048576 # 1MB</code>                       |
 | form.alert.groups.database.rules.singlestoreHighOutgoingBytes.severity  |                                               | <code>critical</code>                            |
+| form.alert.groups.database.rules.diskUsageHigh.enabled                  |                                               | <code>true</code>                                |
+| form.alert.groups.database.rules.diskUsageHigh.val                      |                                               | <code>80</code>                                  |
+| form.alert.groups.database.rules.diskUsageHigh.duration                 |                                               | <code>"1m"</code>                                |
+| form.alert.groups.database.rules.diskUsageHigh.severity                 |                                               | <code>warning</code>                             |
+| form.alert.groups.database.rules.diskAlmostFull.enabled                 |                                               | <code>true</code>                                |
+| form.alert.groups.database.rules.diskAlmostFull.val                     |                                               | <code>95</code>                                  |
+| form.alert.groups.database.rules.diskAlmostFull.duration                |                                               | <code>"1m"</code>                                |
+| form.alert.groups.database.rules.diskAlmostFull.severity                |                                               | <code>critical</code>                            |
 | form.alert.groups.provisioner.enabled                                   |                                               | <code>warning</code>                             |
 | form.alert.groups.provisioner.rules.appPhaseNotReady.enabled            |                                               | <code>true</code>                                |
 | form.alert.groups.provisioner.rules.appPhaseNotReady.duration           |                                               | <code>"1m"</code>                                |

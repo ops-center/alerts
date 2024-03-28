@@ -108,11 +108,53 @@ properties:
                         - enabled
                         - severity
                         type: object
+                      diskAlmostFull:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                          val:
+                            type: integer
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        - val
+                        type: object
+                      diskUsageHigh:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                          val:
+                            type: integer
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        - val
+                        type: object
                     required:
                     - connectClusterConnectorCount
                     - connectClusterCoordinatorRebalanceFailed
                     - connectClusterTooManyConnections
                     - connectClusterWorkerDown
+                    - diskAlmostFull
+                    - diskUsageHigh
                     type: object
                 required:
                 - enabled

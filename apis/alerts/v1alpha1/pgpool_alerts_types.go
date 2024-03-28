@@ -88,6 +88,8 @@ type PgpoolDatabaseAlertRules struct {
 	PgpoolBackendFatalMessageCount   IntValAlert         `json:"pgpoolBackendFatalMessageCount"`
 	PgpoolBackendErrorMessageCount   IntValAlert         `json:"pgpoolBackendErrorMessageCount"`
 	PgpoolLowCacheMemory             FloatValAlertConfig `json:"pgpoolLowCacheMemory"`
+	DiskUsageHigh                    IntValAlert         `json:"diskUsageHigh"`
+	DiskAlmostFull                   IntValAlert         `json:"diskAlmostFull"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

@@ -258,6 +258,91 @@ spec:
   {{ end -}}
 
 
+  {{ with .Values.form.alert.groups.kubeStash -}}
+  {{ if (include "postgres-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
+  - name: postgres.kubeStash.{{ $.Release.Namespace }}.{{ $app }}.rules
+    rules:
+    {{ if (include "postgres-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.backupSessionFailed.enabled .rules.backupSessionFailed.severity)) -}}
+    - alert: PostgreSQLKubeStashBackupSessionFailed
+      expr: core_kubestash_com_backupsession_phase{phase="Failed"} * on(backup_invoker_kind, backup_invoker_name) group_left(target_kind, target_name, target_namespace) core_kubestash_com_backupconfiguration_info{target_kind="PostgreSQL", target_name="{{ $app }}", target_namespace="{{ $.Release.Namespace }}"} == 1
+      for: {{ .rules.backupSessionFailed.duration }}
+      labels:
+        severity: {{ .rules.backupSessionFailed.severity }}
+        {{- include "postgres-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: PostgreSQL KubeStash backup session failed (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "PostgreSQL KubeStash backupsession failed {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if (include "postgres-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.restoreSessionFailed.enabled .rules.restoreSessionFailed.severity)) -}}
+    - alert: PostgreSQLKubeStashRestoreSessionFailed
+      expr: core_kubestash_com_restoresession_phase{target_kind="PostgreSQL", target_name="{{ $app }}", target_namespace="{{ $.Release.Namespace }}", phase="Failed"} == 1
+      for: {{ .rules.restoreSessionFailed.duration }}
+      labels:
+        severity: {{ .rules.restoreSessionFailed.severity }}
+        {{- include "postgres-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: PostgreSQL KubeStash restore session failed (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "PostgreSQL KubeStash restore session failed {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if (include "postgres-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.noBackupSessionForTooLong.enabled .rules.noBackupSessionForTooLong.severity)) -}}
+    - alert: PostgreSQLKubeStashNoBackupSessionForTooLong
+      expr: time() - max(core_kubestash_com_backupsession_created * on(backup_invoker_kind, backup_invoker_name) group_left(target_kind, target_name, target_namespace) core_kubestash_com_backupconfiguration_info{target_kind="PostgreSQL", target_name="{{ $app }}", target_namespace="{{ $.Release.Namespace }}"}) > {{ .rules.noBackupSessionForTooLong.val }}
+      for: {{ .rules.noBackupSessionForTooLong.duration }}
+      labels:
+        severity: {{ .rules.noBackupSessionForTooLong.severity }}
+        {{- include "postgres-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: PostgreSQL KubeStash no backup for last {{ .rules.noBackupSessionForTooLong.val }} second (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "PostgreSQL KubeStash no backup for too long {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if (include "postgres-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.repositoryCorrupted.enabled .rules.repositoryCorrupted.severity)) -}}
+    - alert: PostgreSQLKubeStashRepositoryCorrupted
+      expr: storage_kubestash_com_repository_info{target_kind="PostgreSQL", target_name="{{ $app }}", target_namespace="{{ $.Release.Namespace }}", integrity="false"} == 1
+      for: {{ .rules.repositoryCorrupted.duration }}
+      labels:
+        severity: {{ .rules.repositoryCorrupted.severity }}
+        {{- include "postgres-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: PostgreSQL KubeStash repository corrupted (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "PostgreSQL KubeStash repository corrupted {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if (include "postgres-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.repositoryStorageRunningLow.enabled .rules.repositoryStorageRunningLow.severity)) -}}
+    - alert: PostgreSQLKubeStashRepositoryStorageRunningLow
+      expr: storage_kubestash_com_repository_size_bytes{target_kind="PostgreSQL", target_name="{{ $app }}", target_namespace="{{ $.Release.Namespace }}"} > {{ .rules.repositoryStorageRunningLow.val }}
+      for: {{ .rules.repositoryStorageRunningLow.duration }}
+      labels:
+        severity: {{ .rules.repositoryStorageRunningLow.severity }}
+        {{- include "postgres-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: PostgreSQL KubeStash Repository storage more than {{ .rules.repositoryStorageRunningLow.val }} byte. (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "PostgreSQL KubeStash Repository storage running low {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if (include "postgres-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.backupSessionPeriodTooLong.enabled .rules.backupSessionPeriodTooLong.severity)) -}}
+    - alert: PostgreSQLKubeStashBackupSessionPeriodTooLong
+      expr: core_kubestash_com_backupsession_duration_seconds * on(backup_invoker_kind, backup_invoker_name) group_left(target_kind, target_name, target_namespace) core_kubestash_com_backupconfiguration_info{target_kind="PostgreSQL", target_name="{{ $app }}", target_namespace="{{ $.Release.Namespace }}"} > {{ .rules.backupSessionPeriodTooLong.val }}
+      for: {{ .rules.backupSessionPeriodTooLong.duration }}
+      labels:
+        severity: {{ .rules.backupSessionPeriodTooLong.severity }}
+        {{- include "postgres-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary:  PostgreSQL KubeStash backup session took more than {{ .rules.backupSessionPeriodTooLong.val }} second to complete. (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "PostgreSQL KubeStash backup session taking to long to complete {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{ end -}}
+    {{ if (include "postgres-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.restoreSessionPeriodTooLong.enabled .rules.restoreSessionPeriodTooLong.severity)) -}}
+    - alert: PostgreSQLKubeStashRestoreSessionPeriodTooLong
+      expr: core_kubestash_com_restoresession_duration_seconds{target_kind="PostgreSQL", target_name="{{ $app }}", target_namespace="{{ $.Release.Namespace }}"} > {{ .rules.restoreSessionPeriodTooLong.val }}
+      for: {{ .rules.restoreSessionPeriodTooLong.duration }}
+      labels:
+        severity: {{ .rules.restoreSessionPeriodTooLong.severity }}
+        {{- include "postgres-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary:  PostgreSQL KubeStash restore session took more than {{ .rules.restoreSessionPeriodTooLong.val }} second to complete. (invoker_name {{`{{`}} $labels.invoker_name {{`}}`}})
+        description: "PostgreSQL KubeStash restore session taking to long to complete {{`{{`}} $labels.invoker_name {{`}}`}} \n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+  {{ end -}}
+  {{ end -}}
+
+
   {{ with .Values.form.alert.groups.schemaManager -}}
   {{ if (include "postgres-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
   - name: postgres.schemaManager.{{ $.Release.Namespace }}.{{ $app }}.rules

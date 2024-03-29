@@ -65,6 +65,7 @@ type RedisAlertGroups struct {
 	Provisioner ProvisionerAlert   `json:"provisioner"`
 	OpsManager  OpsManagerAlert    `json:"opsManager"`
 	Stash       StashAlert         `json:"stash"`
+	KubeStash   KubeStashAlert     `json:"kubeStash"`
 }
 
 type RedisDatabaseAlert struct {

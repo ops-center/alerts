@@ -63,6 +63,7 @@ type SinglestoreAlert struct {
 type SinglestoreAlertGroups struct {
 	Database    SinglestoreDatabaseAlert `json:"database"`
 	Provisioner ProvisionerAlert         `json:"provisioner"`
+	KubeStash   KubeStashAlert           `json:"kubeStash"`
 }
 type SinglestoreDatabaseAlert struct {
 	Enabled mona.SeverityFlag             `json:"enabled"`

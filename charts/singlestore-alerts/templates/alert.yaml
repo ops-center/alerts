@@ -12,7 +12,7 @@ metadata:
     {{- toYaml .Values.form.alert.labels | nindent 4 }}
 {{- end }}
 {{- if .Values.form.alert.annotations }}
-annotations:
+  annotations:
     {{- toYaml .Values.form.alert.annotations | nindent 4 }}
 {{- end }}
 spec:

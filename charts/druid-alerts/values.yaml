@@ -7,9 +7,9 @@ metadata:
     version: v1alpha2
   release:
     # Release name
-    name: "druid-sample"
+    name: ""
     # Release namespace
-    namespace: "druid"
+    namespace: ""
 form:
   alert:
     ## Enable PrometheusRule alerts
@@ -32,41 +32,49 @@ form:
       database:
         enabled: warning
         rules:
+          # Specifies the alert configuration for one of the service of druid is down
           druidDown:
             enabled: true
-            duration: "30s"
+            duration: "1m"
             severity: critical
+          # Specifies the alert configuration for Druid lost connection to ZooKeeper
           zkDisconnected:
             enabled: true
-            duration: "30s"
+            duration: "1m"
             severity: critical
+          # Specifies the alert configuration for Druid high query time
           highQueryTime:
             enabled: true
             duration: "1m"
             severity: warning
+          # Specifies the alert configuration for Druid high query wait time
           highQueryWaitTime:
             enabled: true
             duration: "1m"
             severity: warning
+          # Specifies the alert configuration for high number of segments in pending
           highSegmentScanPending:
             enabled: true
             duration: "1m"
-            severity: "warning"
+            severity: warning
             val: 2
+          # Specifies the alert configuration for high percentage of segment usage
           highSegmentUsage:
             enabled: true
             duration: "1m"
-            severity: "critical"
+            severity: critical
             val: 95
+          # Specifies the alert configuration for high percentage of jvm pool usage
           highJVMPoolUsage:
             enabled: true
             duration: "30s"
-            severity: "warning"
+            severity: warning
             val: 95
+          # Specifies the alert configuration for high percentage of jvm memory usage
           highJVMMemoryUsage:
             enabled: true
             duration: "30s"
-            severity: "warning"
+            severity: critical
             val: 95
       provisioner:
         enabled: warning
@@ -81,7 +89,7 @@ form:
             severity: warning
 
 grafana:
-  enabled: true
+  enabled: false
   version: 8.2.3
   jobName: kubedb-databases
   url: ""

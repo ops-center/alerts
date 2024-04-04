@@ -23,7 +23,7 @@ spec:
     rules:
     {{ if (include "druid-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.druidDown.enabled .rules.druidDown.severity)) -}}
     - alert: DruidDown
-      expr: min(druid_service_heartbeat{job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"}) == 0
+      expr: min(druid_service_heartbeat{service="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"}) == 0
       for: {{ .rules.druidDown.duration }}
       labels:
         severity: {{ .rules.druidDown.severity }}
@@ -34,7 +34,7 @@ spec:
     {{- end }}
     {{ if (include "druid-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.zkDisconnected.enabled .rules.zkDisconnected.severity)) -}}
     - alert: ZKDisconnected
-      expr: min(druid_zk_connected{job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"}) == 0
+      expr: min(druid_zk_connected{service="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"}) == 0
       for: {{ .rules.zkDisconnected.duration }}
       labels:
         severity: {{ .rules.zkDisconnected.severity }}
@@ -45,7 +45,7 @@ spec:
     {{- end }}
     {{ if (include "druid-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.highQueryTime.enabled .rules.highQueryTime.severity)) -}}
     - alert: HighQueryTime
-      expr: max(max without(le) (druid_query_time_bucket{job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}",le="+Inf", pod=~".*historicals-0"} - on(dataSource, type) group_left(le) druid_query_time_bucket{job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}",le="1.0", pod=~".*historicals-0"})) > 0
+      expr: max(max without(le) (druid_query_time_bucket{service="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}",le="+Inf", pod=~".*historicals-0"} - on(dataSource, type) group_left(le) druid_query_time_bucket{service="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}",le="1.0", pod=~".*historicals-0"})) > 0
       for: {{ .rules.highQueryTime.duration }}
       labels:
         severity: {{ .rules.highQueryTime.severity }}
@@ -56,7 +56,7 @@ spec:
     {{- end }}
     {{ if (include "druid-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.highQueryWaitTime.enabled .rules.highQueryWaitTime.severity)) -}}
     - alert: HighQueryWaitTime
-      expr: druid_query_wait_time_bucket{job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}",pod=~".*historicals-0",le="+Inf"}- on() druid_query_wait_time_bucket{job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}",pod=~".*historicals-0",le="0.1"} > 0
+      expr: druid_query_wait_time_bucket{service="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}",pod=~".*historicals-0",le="+Inf"}- on() druid_query_wait_time_bucket{service="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}",pod=~".*historicals-0",le="0.1"} > 0
       for: {{ .rules.highQueryWaitTime.duration }}
       labels:
         severity: {{ .rules.highQueryWaitTime.severity }}
@@ -67,7 +67,7 @@ spec:
     {{- end }}
     {{ if (include "druid-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.highSegmentScanPending.enabled .rules.highSegmentScanPending.severity)) -}}
     - alert: HighSegmentScanPending
-      expr: max(druid_segment_scan_pending{job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"}) >  {{ .rules.highSegmentScanPending.val }}
+      expr: max(druid_segment_scan_pending{service="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"}) >  {{ .rules.highSegmentScanPending.val }}
       for: {{ .rules.highSegmentScanPending.duration }}
       labels:
         severity: {{ .rules.highSegmentScanPending.severity }}
@@ -78,7 +78,7 @@ spec:
     {{- end }}
     {{ if (include "druid-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.highSegmentUsage.enabled .rules.highSegmentUsage.severity)) -}}
     - alert: HighSegmentUsage
-      expr: max(druid_segment_usedpercent{job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"}) >  {{ .rules.highSegmentUsage.val }}
+      expr: max(druid_segment_usedpercent{service="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"}) >  {{ .rules.highSegmentUsage.val }}
       for: {{ .rules.highSegmentUsage.duration }}
       labels:
         severity: {{ .rules.highSegmentUsage.severity }}
@@ -89,7 +89,7 @@ spec:
     {{- end }}
     {{ if (include "druid-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.highJVMPoolUsage.enabled .rules.highJVMPoolUsage.severity)) -}}
     - alert: HighJVMPoolUsage
-      expr: max(druid_jvm_pool_used{job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"} / on(pod, poolName) druid_jvm_pool_max{job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"}*100) > {{ .rules.highJVMPoolUsage.val }}
+      expr: max(druid_jvm_pool_used{service="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"} / on(pod, poolName) druid_jvm_pool_max{service="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"}*100) > {{ .rules.highJVMPoolUsage.val }}
       for: {{ .rules.highJVMPoolUsage.duration }}
       labels:
         severity: {{ .rules.highJVMPoolUsage.severity }}
@@ -100,7 +100,7 @@ spec:
     {{- end }}
     {{ if (include "druid-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.highJVMMemoryUsage.enabled .rules.highJVMMemoryUsage.severity)) -}}
     - alert: HighJVMMemoryUsage
-      expr: max(druid_jvm_mem_used{job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"}/on(pod, memKind) druid_jvm_mem_max{job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"}*100) > {{ .rules.highJVMMemoryUsage.val }}
+      expr: max(druid_jvm_mem_used{service="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"}/on(pod, memKind) druid_jvm_mem_max{service="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"}*100) > {{ .rules.highJVMMemoryUsage.val }}
       for: {{ .rules.highJVMMemoryUsage.duration }}
       labels:
         severity: {{ .rules.highJVMMemoryUsage.severity }}

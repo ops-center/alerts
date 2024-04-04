@@ -31,7 +31,7 @@ properties:
                     type: string
                   rules:
                     properties:
-                      rabbitmqDown:
+                      druidDown:
                         properties:
                           duration:
                             type: string
@@ -48,7 +48,83 @@ properties:
                         - enabled
                         - severity
                         type: object
-                      rabbitmqFileDescriptorsNearLimit:
+                      highJVMMemoryUsage:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                          val:
+                            format: double
+                            type: number
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        - val
+                        type: object
+                      highJVMPoolUsage:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                          val:
+                            format: double
+                            type: number
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        - val
+                        type: object
+                      highQueryTime:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        type: object
+                      highQueryWaitTime:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        type: object
+                      highSegmentScanPending:
                         properties:
                           duration:
                             type: string
@@ -68,7 +144,7 @@ properties:
                         - severity
                         - val
                         type: object
-                      rabbitmqHighConnectionChurn:
+                      highSegmentUsage:
                         properties:
                           duration:
                             type: string
@@ -81,54 +157,15 @@ properties:
                             - info
                             type: string
                           val:
-                            type: integer
+                            format: double
+                            type: number
                         required:
                         - duration
                         - enabled
                         - severity
                         - val
                         type: object
-                      rabbitmqInsufficientEstablishedErlangDistributionLinks:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      rabbitmqLowDiskWatermarkPredicted:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      rabbitmqPhaseCritical:
+                      zkDisconnected:
                         properties:
                           duration:
                             type: string
@@ -144,77 +181,16 @@ properties:
                         - duration
                         - enabled
                         - severity
-                        type: object
-                      rabbitmqQueueIsGrowing:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      rabbitmqTCPSocketsNearLimit:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      rabbitmqUnroutableMessages:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
                         type: object
                     required:
-                    - rabbitmqDown
-                    - rabbitmqFileDescriptorsNearLimit
-                    - rabbitmqHighConnectionChurn
-                    - rabbitmqInsufficientEstablishedErlangDistributionLinks
-                    - rabbitmqLowDiskWatermarkPredicted
-                    - rabbitmqPhaseCritical
-                    - rabbitmqQueueIsGrowing
-                    - rabbitmqTCPSocketsNearLimit
-                    - rabbitmqUnroutableMessages
+                    - druidDown
+                    - highJVMMemoryUsage
+                    - highJVMPoolUsage
+                    - highQueryTime
+                    - highQueryWaitTime
+                    - highSegmentScanPending
+                    - highSegmentUsage
+                    - zkDisconnected
                     type: object
                 required:
                 - enabled

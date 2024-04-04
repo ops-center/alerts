@@ -79,3 +79,10 @@ form:
             enabled: true
             duration: "15m"
             severity: warning
+
+grafana:
+  enabled: true
+  version: 8.2.3
+  jobName: kubedb-databases
+  url: ""
+  apikey: ""

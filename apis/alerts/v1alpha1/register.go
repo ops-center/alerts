@@ -80,6 +80,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&RabbitmqAlertsList{},
 		&SinglestoreAlerts{},
 		&SinglestoreAlertsList{},
+		&SolrAlerts{},
+		&SolrAlertsList{},
 	)
 
 	scheme.AddKnownTypes(SchemeGroupVersion,

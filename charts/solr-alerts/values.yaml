@@ -1,0 +1,102 @@
+metadata:
+  resource:
+    group: kubedb.com
+    kind: Solr
+    name: solrs
+    scope: Namespaced
+    version: v1alpha2
+  release:
+    # Release name
+    name: ""
+    # Release namespace
+    namespace: ""
+form:
+  alert:
+    ## Enable PrometheusRule alerts
+    enabled: warning
+
+    ## Labels for default rules
+    labels: # +doc-gen:break
+      release: kube-prometheus-stack
+
+    ## Annotations for default rules
+    annotations: {}
+
+    ## Additional labels for PrometheusRule alerts
+    additionalRuleLabels: {}
+
+    ## Prefix for runbook URLs. Use this to override the first part of the runbookURLs that is common to all rules.
+    # runbookUrl: "https://runbooks.prometheus-operator.dev/runbooks"
+
+    groups:
+      database:
+        enabled: warning
+        rules:
+          # Specifies the alert configuration for database, if some shards are down.
+          solrDownShards:
+            enabled: true
+            duration: "30s"
+            severity: critical
+          # Specifies the alert configuration for database, if some shards are failed to recovery
+          solrRecoveryFailedShards:
+            enabled: true
+            duration: "30s"
+            severity: critical
+          # Specifies the alert configuration for high number of thread running.
+          solrHighThreadRunning:
+            enabled: true
+            duration: "30s"
+            val: 300
+            severity: warning
+          # Specifies the alert configuration for high number of pool size.
+          solrHighPoolSize:
+            enabled: true
+            duration: "30s"
+            val: 3000000
+            severity: warning
+          # Specifies alert configuration for high number of queries per second
+          solrHighQPS:
+            enabled: true
+            duration: "30s"
+            val: 1000
+            severity: warning
+          # Specifies alert configuration for high vertual memory consumption
+          solrHighHeapSize:
+            enabled: true
+            duration: "30s"
+            val: 3000000
+            severity: warning
+          # Specifies alert configuration for high nuffer size
+          solrHighBufferSize:
+            enabled: true
+            duration: "30s"
+            val: 3000000
+            severity: warning
+          diskUsageHigh:
+            enabled: true
+            val: 0.8
+            duration: "1m"
+            severity: warning
+          diskAlmostFull:
+            enabled: true
+            val: 0.95
+            duration: "1m"
+            severity: critical
+      provisioner:
+        enabled: warning
+        rules:
+          appPhaseNotReady:
+            enabled: true
+            duration: "1m"
+            severity: critical
+          appPhaseCritical:
+            enabled: true
+            duration: "1m"
+            severity: warning
+
+grafana:
+  enabled: false
+  version: 8.2.3
+  jobName: kubedb-databases
+  url: "http://grafana.monitoring.svc:80"
+  apikey: ""

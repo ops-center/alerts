@@ -28,6 +28,12 @@ type Metadata struct {
 	Release  ObjectMeta       `json:"release"`
 }
 
+type MetadataFlat struct {
+	kmapi.ResourceID `json:",inline"`
+	ReleaseName      string `json:"releaseName"`
+	Namespace        string `json:"namespace"`
+}
+
 type ObjectMeta struct {
 	Name      string `json:"name"`
 	Namespace string `json:"namespace"`
@@ -137,11 +143,13 @@ type ObjectModel struct {
 
 type ResourceObject struct {
 	Filename string                     `json:"filename,omitempty"`
+	Key      string                     `json:"key,omitempty"`
 	Data     *unstructured.Unstructured `json:"data,omitempty"`
 }
 
 type ResourceFile struct {
 	Filename string `json:"filename,omitempty"`
+	Key      string `json:"key,omitempty"`
 	Data     string `json:"data,omitempty"`
 }
 

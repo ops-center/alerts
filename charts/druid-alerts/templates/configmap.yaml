@@ -1,0 +1,1537 @@
+# templates/configmap.yaml
+{{- if .Values.grafana.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "druid-alerts.fullname" . }}-configmap
+  labels:
+    {{- include "druid-alerts.labels" . | nindent 4 }}
+data:
+  grafana-json.json: |-
+    {
+      "dashboard": {
+        "__inputs": [],
+        "__requires": [
+          {
+            "type": "grafana",
+            "id": "grafana",
+            "name": "Grafana",
+            "version": "{{ .Values.grafana.version }}"
+          },
+          {
+            "type": "panel",
+            "id": "graph",
+            "name": "Graph",
+            "version": ""
+          }
+        ],
+        "annotations": {
+          "list": [
+            {
+              "builtIn": 1,
+              "datasource": "-- Grafana --",
+              "enable": true,
+              "hide": true,
+              "iconColor": "rgba(0, 211, 255, 1)",
+              "name": "Annotations & Alerts",
+              "type": "dashboard"
+            }
+          ]
+        },
+        "editable": true,
+        "gnetId": null,
+        "graphTooltip": 0,
+        "id": null,
+        "links": [],
+        "panels": [
+          {
+            "collapsed": false,
+            "datasource": null,
+            "gridPos": {
+              "h": 1,
+              "w": 24,
+              "x": 0,
+              "y": 0
+            },
+            "id": 2,
+            "panels": [],
+            "title": "Druid Phase",
+            "type": "row"
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      0
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "{{ .Values.form.alert.groups.provisioner.rules.appPhaseNotReady.duration }}",
+              "frequency": "5m",
+              "handler": 1,
+              "name": "KubeDBDruidPhaseNotReady",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "description": "Trigger alert if phase is not ready",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 1
+            },
+            "hiddenSeries": false,
+            "id": 4,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "kubedb_com_druid_status_phase{app=\"{{ .Release.Name }}\",namespace=\"{{ .Release.Namespace }}\",phase=\"NotReady\"}",
+                "instant": false,
+                "interval": "",
+                "legendFormat": {{ `"{{druid}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": true,
+                "line": true,
+                "op": "gt",
+                "value": 0,
+                "visible": true
+              }
+            ],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Druid Phase Not Ready",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      0
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "{{ .Values.form.alert.groups.provisioner.rules.appPhaseCritical.duration }}",
+              "frequency": "5m",
+              "handler": 1,
+              "name": "KubeDBDruidPhaseCritical",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "description": "Trigger alert if phase is critical",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 1
+            },
+            "hiddenSeries": false,
+            "id": 5,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "kubedb_com_druid_status_phase{app=\"{{ .Release.Name }}\",namespace=\"{{ .Release.Namespace }}\",phase=\"Critical\"}",
+                "instant": false,
+                "interval": "",
+                "legendFormat": {{ `"{{druid}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": true,
+                "line": true,
+                "op": "gt",
+                "value": 0,
+                "visible": true
+              }
+            ],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Druid Phase Critical",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "collapsed": false,
+            "datasource": null,
+            "gridPos": {
+              "h": 1,
+              "w": 24,
+              "x": 0,
+              "y": 9
+            },
+            "id": 14,
+            "panels": [],
+            "title": "Druid Info",
+            "type": "row"
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      1
+                    ],
+                    "type": "lt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "{{ .Values.form.alert.groups.database.rules.druidDown.duration }}",
+              "frequency": "5m",
+              "handler": 1,
+              "name": "DruidDown",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "description": "Specifies  alert  for Druid service down",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 10
+            },
+            "hiddenSeries": false,
+            "id": 15,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "min(druid_service_heartbeat{namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"})",
+                "instant": false,
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": true,
+                "line": true,
+                "op": "lt",
+                "value": 1,
+                "visible": true
+              }
+            ],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Druid Down",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      1
+                    ],
+                    "type": "lt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "{{ .Values.form.alert.groups.database.rules.zkDisconnected.duration }}",
+              "frequency": "5m",
+              "handler": 1,
+              "name": "ZKDisconnected",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "description": "Specifies  alert  for Druid lost connection to ZooKeeper",
+            "fieldConfig": {
+              "defaults": {
+                "unit": "percentunit"
+              },
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 10
+            },
+            "hiddenSeries": false,
+            "id": 16,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "min(druid_zk_connected{namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"})",
+                "instant": false,
+                "interval": "",
+                "legendFormat": {{ `"{{pod}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": true,
+                "line": true,
+                "op": "lt",
+                "value": 1,
+                "visible": true
+              }
+            ],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "ZooKeeper Disconnected",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "percentunit",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "collapsed": false,
+            "datasource": null,
+            "gridPos": {
+              "h": 1,
+              "w": 24,
+              "x": 0,
+              "y": 18
+            },
+            "id": 7,
+            "panels": [],
+            "title": "Druid Query Info",
+            "type": "row"
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      0
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "{{ .Values.form.alert.groups.database.rules.highQueryTime.duration }}",
+              "frequency": "5m",
+              "handler": 1,
+              "name": "HighQueryTime",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "description": "Druid took more than 1 second to complete a query.",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 19
+            },
+            "hiddenSeries": false,
+            "id": 9,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "max(max without(le) (druid_query_time_bucket{service=\"{{ .Release.Name }}-stats\",namespace=\"{{ .Release.Namespace }}\",le=\"+Inf\", pod=~\".*historicals-0\"} - on(dataSource, type) group_left(le) druid_query_time_bucket{service=\"{{ .Release.Name }}-stats\",namespace=\"{{ .Release.Namespace }}\",le=\"1.0\", pod=~\".*historicals-0\"}))",
+                "instant": false,
+                "interval": "",
+                "legendFormat": {{ `"{{service}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": true,
+                "line": true,
+                "op": "gt",
+                "value": 0,
+                "visible": true
+              }
+            ],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "High Query Time",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      0
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "{{ .Values.form.alert.groups.database.rules.highQueryWaitTime.duration }}",
+              "frequency": "5m",
+              "handler": 1,
+              "name": "HighQueryWaitTime",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "description": "Druid spent more than 1 sec on waiting for a segment to be scanned.",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 19
+            },
+            "hiddenSeries": false,
+            "id": 10,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "druid_query_wait_time_bucket{service=\"{{ .Release.Name }}-stats\",namespace=\"{{ .Release.Namespace }}\",pod=~\".*historicals-0\",le=\"+Inf\"}- on() druid_query_wait_time_bucket{service=\"{{ .Release.Name }}-stats\",namespace=\"{{ .Release.Namespace }}\",pod=~\".*historicals-0\",le=\"0.1\"}",
+                "instant": false,
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": true,
+                "line": true,
+                "op": "gt",
+                "value": 0,
+                "visible": true
+              }
+            ],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "High Query Wait TIme",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "collapsed": false,
+            "datasource": null,
+            "gridPos": {
+              "h": 1,
+              "w": 24,
+              "x": 0,
+              "y": 27
+            },
+            "id": 18,
+            "panels": [],
+            "title": "Druid Segment Info",
+            "type": "row"
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      {{ .Values.form.alert.groups.database.rules.highSegmentScanPending.val }}
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "{{ .Values.form.alert.groups.database.rules.highSegmentScanPending.duration }}",
+              "frequency": "5m",
+              "handler": 1,
+              "name": "HighSegmentScanPending",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "description": "More than 2 segments are in queue waiting to be scanned for more than 1 min.",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 28
+            },
+            "hiddenSeries": false,
+            "id": 11,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "max(druid_segment_scan_pending{service=\"{{ .Release.Name }}-stats\",namespace=\"{{ .Release.Namespace }}\"})",
+                "instant": false,
+                "interval": "",
+                "legendFormat": {{ `"{{pod}} ({{role}})"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": true,
+                "line": true,
+                "op": "gt",
+                "value": 2,
+                "visible": true
+              }
+            ],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "High Num of Segment Scan Pending",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      {{ .Values.form.alert.groups.database.rules.highSegmentUsage.val }}
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "{{ .Values.form.alert.groups.database.rules.highSegmentUsage.duration }}",
+              "frequency": "5m",
+              "handler": 1,
+              "name": "HighSegmentUsage",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "description": "More than 95% of space used by served segments.",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 28
+            },
+            "hiddenSeries": false,
+            "id": 12,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "max(druid_segment_usedpercent{service=\"{{ .Release.Name }}-stats\",namespace=\"{{ .Release.Namespace }}\"})",
+                "instant": false,
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": true,
+                "line": true,
+                "op": "gt",
+                "value": 95,
+                "visible": true
+              }
+            ],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "High Percent of Segment Used",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "collapsed": false,
+            "datasource": null,
+            "gridPos": {
+              "h": 1,
+              "w": 24,
+              "x": 0,
+              "y": 36
+            },
+            "id": 20,
+            "panels": [],
+            "title": "Druid JVM Info",
+            "type": "row"
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      {{ .Values.form.alert.groups.database.rules.highJVMPoolUsage.val }}
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "{{ .Values.form.alert.groups.database.rules.highJVMPoolUsage.duration }}",
+              "frequency": "5m",
+              "handler": 1,
+              "name": "HighJVMPoolUsage",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "description": "More than 95% of JVM Pool is being used.",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 37
+            },
+            "hiddenSeries": false,
+            "id": 22,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "max(druid_jvm_pool_used{service=\"{{ .Release.Name }}-stats\",namespace=\"{{ .Release.Namespace }}\"} / on(pod, poolName) druid_jvm_pool_max{service=\"{{ .Release.Name }}-stats\",namespace=\"{{ .Release.Namespace }}\"}*100)",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": true,
+                "line": true,
+                "op": "gt",
+                "value": 95,
+                "visible": true
+              }
+            ],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "High JVM Pool Usage Percent",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      {{ .Values.form.alert.groups.database.rules.highJVMMemoryUsage.val }}
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "{{ .Values.form.alert.groups.database.rules.highJVMMemoryUsage.duration }}",
+              "frequency": "5m",
+              "handler": 1,
+              "name": "HighJVMMemoryUsage",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "description": "More than 95% of JVM Memory is being used.",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 37
+            },
+            "hiddenSeries": false,
+            "id": 24,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "max(druid_jvm_mem_used{service=\"{{ .Release.Name }}-stats\",namespace=\"{{ .Release.Namespace }}\"}/on(pod, memKind) druid_jvm_mem_max{service=\"{{ .Release.Name }}-stats\",namespace=\"{{ .Release.Namespace }}\"}*100)",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": true,
+                "line": true,
+                "op": "gt",
+                "value": 95,
+                "visible": true
+              }
+            ],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "High JVM Memory Usage Percentage",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          }
+        ],
+        "schemaVersion": 27,
+        "style": "dark",
+        "tags": [],
+        "templating": {
+          "list": []
+        },
+        "time": {
+          "from": "now-5m",
+          "to": "now"
+        },
+        "timepicker": {},
+        "timezone": "",
+        "title": "{{ .Values.metadata.resource.group }} / {{ .Values.metadata.resource.kind }} / {{ .Release.Namespace }} / {{ .Release.Name }}",
+        "uid": null,
+        "version": 20
+      },
+      "folderId": 0,
+      "overwrite": false
+    }
+{{- end }}

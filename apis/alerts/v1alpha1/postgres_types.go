@@ -65,6 +65,7 @@ type PostgresAlertGroups struct {
 	Provisioner   ProvisionerAlert      `json:"provisioner"`
 	OpsManager    OpsManagerAlert       `json:"opsManager"`
 	Stash         StashAlert            `json:"stash"`
+	KubeStash     KubeStashAlert        `json:"kubeStash"`
 	SchemaManager SchemaManagerAlert    `json:"schemaManager"`
 }
 

@@ -90,6 +90,21 @@ type StashAlertRules struct {
 	RestoreSessionPeriodTooLong IntValAlert `json:"restoreSessionPeriodTooLong"`
 }
 
+type KubeStashAlert struct {
+	Enabled mona.SeverityFlag   `json:"enabled"`
+	Rules   KubeStashAlertRules `json:"rules"`
+}
+
+type KubeStashAlertRules struct {
+	BackupSessionFailed         FixedAlert  `json:"backupSessionFailed"`
+	RestoreSessionFailed        FixedAlert  `json:"restoreSessionFailed"`
+	NoBackupSessionForTooLong   IntValAlert `json:"noBackupSessionForTooLong"`
+	RepositoryCorrupted         FixedAlert  `json:"repositoryCorrupted"`
+	RepositoryStorageRunningLow IntValAlert `json:"repositoryStorageRunningLow"`
+	BackupSessionPeriodTooLong  IntValAlert `json:"backupSessionPeriodTooLong"`
+	RestoreSessionPeriodTooLong IntValAlert `json:"restoreSessionPeriodTooLong"`
+}
+
 type SchemaManagerAlert struct {
 	Enabled mona.SeverityFlag       `json:"enabled"`
 	Rules   SchemaManagerAlertRules `json:"rules"`

@@ -88,3 +88,43 @@
   - Check if the `INTEGRITY` of `repository` is true
   - Check the `MongoDB` CRs status
   - Contact AppsCode team
+
+### KubeStash Alerts
+
+- #### MongoDBKubeStashBackupSessionFailed
+  - Describe the BackupSession
+  - Check the conditions in the BackupSession
+  - Check the reasons of the `false` conditions (if any)
+  - Check the events of the BackupSession
+  - View the Backup Job log
+  - Check if the `INTEGRITY` of Repository is `true`
+  - Check the KubeStash operator log
+  - Contact AppsCode team
+- #### MongoDBKubeStashRestoreSessionFailed
+  - Describe the RestoreSession
+  - Check the conditions in the RestoreSession
+  - Check the reasons of the `false` conditions (if any)
+  - Check the events of the RestoreSession
+  - View the Restore Job log
+  - Check if the `INTEGRITY` of Repository is `true`
+  - Check the KubeStash operator log
+  - Contact AppsCode team
+- #### MongoDBKubeStashNoBackupSessionForTooLong
+  - Check if the BackupConfiguration is not `Paused`
+  - Check if the BackupConfiguration is in `Not Ready` or `Invalid` Phase
+  - Describe the BackupConfiguration
+  - Check the conditions of BackupConfiguration
+  - Check the reasons of the `false` conditions (if any)
+  - Check the KubeStash operator log
+  - Contact AppsCode team
+- #### MongoDBKubeStashRepositoryCorrupted
+  - Check if the `INTEGRITY` of `repository` is `true`
+  - Contact AppsCode team
+- #### MongoDBKubeStashRepositoryStorageRunningLow
+  - Increase the volume size of `repository` backend
+  - Update RetentionPolicy to free up storage
+- #### MongoDBKubeStashBackupSessionPeriodTooLong | MongoDBKubeStashRestoreSessionPeriodTooLong
+  - Check if the `INTEGRITY` of `repository` is `true`
+  - Check the `MongoDB` CRs status
+  - Contact AppsCode team
+

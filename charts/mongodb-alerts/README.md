@@ -101,6 +101,14 @@ The following table lists the configurable parameters of the `mongodb-alerts` ch
 | form.alert.groups.database.rules.mongodbRecurrentMemoryPageFaults.val         |                                               | <code>0</code>                                   |
 | form.alert.groups.database.rules.mongodbRecurrentMemoryPageFaults.duration    |                                               | <code>"30m"</code>                               |
 | form.alert.groups.database.rules.mongodbRecurrentMemoryPageFaults.severity    |                                               | <code>warning</code>                             |
+| form.alert.groups.database.rules.diskUsageHigh.enabled                        |                                               | <code>true</code>                                |
+| form.alert.groups.database.rules.diskUsageHigh.val                            |                                               | <code>80</code>                                  |
+| form.alert.groups.database.rules.diskUsageHigh.duration                       |                                               | <code>"1m"</code>                                |
+| form.alert.groups.database.rules.diskUsageHigh.severity                       |                                               | <code>warning</code>                             |
+| form.alert.groups.database.rules.diskAlmostFull.enabled                       |                                               | <code>true</code>                                |
+| form.alert.groups.database.rules.diskAlmostFull.val                           |                                               | <code>95</code>                                  |
+| form.alert.groups.database.rules.diskAlmostFull.duration                      |                                               | <code>"1m"</code>                                |
+| form.alert.groups.database.rules.diskAlmostFull.severity                      |                                               | <code>critical</code>                            |
 | form.alert.groups.provisioner.enabled                                         |                                               | <code>warning</code>                             |
 | form.alert.groups.provisioner.rules.appPhaseNotReady.enabled                  |                                               | <code>true</code>                                |
 | form.alert.groups.provisioner.rules.appPhaseNotReady.duration                 |                                               | <code>"1m"</code>                                |

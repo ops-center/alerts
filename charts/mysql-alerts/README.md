@@ -100,6 +100,14 @@ The following table lists the configurable parameters of the `mysql-alerts` char
 | form.alert.groups.database.rules.mysqlTooManyOpenFiles.duration               |                                               | <code>"2m"</code>                                |
 | form.alert.groups.database.rules.mysqlTooManyOpenFiles.val                    |                                               | <code>80</code>                                  |
 | form.alert.groups.database.rules.mysqlTooManyOpenFiles.severity               |                                               | <code>warning</code>                             |
+| form.alert.groups.database.rules.diskUsageHigh.enabled                        |                                               | <code>true</code>                                |
+| form.alert.groups.database.rules.diskUsageHigh.val                            |                                               | <code>80</code>                                  |
+| form.alert.groups.database.rules.diskUsageHigh.duration                       |                                               | <code>"1m"</code>                                |
+| form.alert.groups.database.rules.diskUsageHigh.severity                       |                                               | <code>warning</code>                             |
+| form.alert.groups.database.rules.diskAlmostFull.enabled                       |                                               | <code>true</code>                                |
+| form.alert.groups.database.rules.diskAlmostFull.val                           |                                               | <code>95</code>                                  |
+| form.alert.groups.database.rules.diskAlmostFull.duration                      |                                               | <code>"1m"</code>                                |
+| form.alert.groups.database.rules.diskAlmostFull.severity                      |                                               | <code>critical</code>                            |
 | form.alert.groups.group.enabled                                               |                                               | <code>warning</code>                             |
 | form.alert.groups.group.rules.mysqlHighReplicationDelay.enabled               |                                               | <code>true</code>                                |
 | form.alert.groups.group.rules.mysqlHighReplicationDelay.val                   |                                               | <code>0.5 # second</code>                        |

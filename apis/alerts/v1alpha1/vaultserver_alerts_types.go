@@ -82,6 +82,8 @@ type VaultserverAlertsVaultAlertRules struct {
 	VaultRequestFailures         FixedAlert  `json:"vaultRequestFailures"`
 	VaultResponseFailures        FixedAlert  `json:"vaultResponseFailures"`
 	VaultTooManyInfinityTokens   IntValAlert `json:"vaultTooManyInfinityTokens"`
+	DiskUsageHigh                IntValAlert `json:"diskUsageHigh"`
+	DiskAlmostFull               IntValAlert `json:"diskAlmostFull"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

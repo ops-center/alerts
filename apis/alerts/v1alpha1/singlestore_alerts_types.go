@@ -79,6 +79,8 @@ type SinglestoreDatabaseAlertRules struct {
 	SinglestoreHighQPS            IntValAlert `json:"singlestoreHighQPS"`
 	SinglestoreHighIncomingBytes  IntValAlert `json:"singlestoreHighIncomingBytes"`
 	SinglestoreHighOutgoingBytes  IntValAlert `json:"singlestoreHighOutgoingBytes"`
+	DiskUsageHigh                 IntValAlert `json:"diskUsageHigh"`
+	DiskAlmostFull                IntValAlert `json:"diskAlmostFull"`
 }
 
 type SinglestoreGrafana struct {

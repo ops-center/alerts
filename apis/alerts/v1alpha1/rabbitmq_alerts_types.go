@@ -81,6 +81,8 @@ type RabbitmqDatabaseAlertRules struct {
 	RabbitmqHighConnectionChurn                            IntValAlert `json:"rabbitmqHighConnectionChurn"`
 	RabbitmqPhaseCritical                                  FixedAlert  `json:"rabbitmqPhaseCritical"`
 	RabbitmqDown                                           FixedAlert  `json:"rabbitmqDown"`
+	DiskUsageHigh                                          IntValAlert `json:"diskUsageHigh"`
+	DiskAlmostFull                                         IntValAlert `json:"diskAlmostFull"`
 }
 
 type RabbitmqGrafana struct {

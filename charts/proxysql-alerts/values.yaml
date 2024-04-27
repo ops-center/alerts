@@ -75,6 +75,17 @@ form:
             duration: "0m"
             val: 1048576 # 1MB
             severity: critical
+          # Sepcifies the alert configuration for persistent volume usages.
+          diskUsageHigh:
+            enabled: true
+            val: 80
+            duration: "1m"
+            severity: warning
+          diskAlmostFull:
+            enabled: true
+            val: 95
+            duration: "1m"
+            severity: critical
       cluster:
         enabled: warning
         rules:

@@ -77,6 +77,8 @@ type ConnectClusterConnectAlertRules struct {
 	ConnectClusterTooManyConnections         IntValAlert `json:"connectClusterTooManyConnections"`
 	ConnectClusterConnectorCount             IntValAlert `json:"connectClusterConnectorCount"`
 	ConnectClusterCoordinatorRebalanceFailed IntValAlert `json:"connectClusterCoordinatorRebalanceFailed"`
+	DiskUsageHigh                            IntValAlert `json:"diskUsageHigh"`
+	DiskAlmostFull                           IntValAlert `json:"diskAlmostFull"`
 }
 
 type ConnectClusterTaskAlert struct {

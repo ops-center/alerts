@@ -90,6 +90,14 @@ The following table lists the configurable parameters of the `vaultserver-alerts
 | form.alert.groups.vault.rules.vaultTooManyInfinityTokens.duration             |                                               | <code>"5m"</code>                     |
 | form.alert.groups.vault.rules.vaultTooManyInfinityTokens.val                  |                                               | <code>3</code>                        |
 | form.alert.groups.vault.rules.vaultTooManyInfinityTokens.severity             |                                               | <code>warning</code>                  |
+| form.alert.groups.vault.rules.diskUsageHigh.enabled                           |                                               | <code>true</code>                     |
+| form.alert.groups.vault.rules.diskUsageHigh.val                               |                                               | <code>80</code>                       |
+| form.alert.groups.vault.rules.diskUsageHigh.duration                          |                                               | <code>"1m"</code>                     |
+| form.alert.groups.vault.rules.diskUsageHigh.severity                          |                                               | <code>warning</code>                  |
+| form.alert.groups.vault.rules.diskAlmostFull.enabled                          |                                               | <code>true</code>                     |
+| form.alert.groups.vault.rules.diskAlmostFull.val                              |                                               | <code>95</code>                       |
+| form.alert.groups.vault.rules.diskAlmostFull.duration                         |                                               | <code>"1m"</code>                     |
+| form.alert.groups.vault.rules.diskAlmostFull.severity                         |                                               | <code>critical</code>                 |
 | form.alert.groups.operator.enabled                                            |                                               | <code>warning</code>                  |
 | form.alert.groups.operator.rules.appPhaseNotReady.enabled                     |                                               | <code>true</code>                     |
 | form.alert.groups.operator.rules.appPhaseNotReady.duration                    |                                               | <code>"5m"</code>                     |

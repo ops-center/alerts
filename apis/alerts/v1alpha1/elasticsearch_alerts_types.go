@@ -87,6 +87,8 @@ type ElasticsearchDatabaseAlertRules struct {
 	ElasticsearchUnassignedShards   FixedAlert  `json:"elasticsearchUnassignedShards"`
 	ElasticsearchPendingTasks       FixedAlert  `json:"elasticsearchPendingTasks"`
 	ElasticsearchNoNewDocuments10M  FixedAlert  `json:"elasticsearchNoNewDocuments10m"`
+	DiskUsageHigh                   IntValAlert `json:"diskUsageHigh"`
+	DiskAlmostFull                  IntValAlert `json:"diskAlmostFull"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

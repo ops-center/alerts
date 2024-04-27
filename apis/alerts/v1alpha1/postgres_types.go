@@ -85,6 +85,8 @@ type PostgresDatabaseAlertRules struct {
 	PostgresHighRollbackRate     FloatValAlertConfig `json:"postgresHighRollbackRate"`
 	PostgresSplitBrain           FixedAlert          `json:"postgresSplitBrain"`
 	PostgresTooManyLocksAcquired FloatValAlertConfig `json:"postgresTooManyLocksAcquired"`
+	DiskUsageHigh                IntValAlert         `json:"diskUsageHigh"`
+	DiskAlmostFull               IntValAlert         `json:"diskAlmostFull"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

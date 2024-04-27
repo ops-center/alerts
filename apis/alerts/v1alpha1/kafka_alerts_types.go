@@ -87,6 +87,8 @@ type KafkaDatabaseAlertRules struct {
 	KafkaTopicCount                  IntValAlert `json:"KafkaTopicCount"`
 	KafkaPhaseCritical               FixedAlert  `json:"kafkaPhaseCritical"`
 	KafkaDown                        FixedAlert  `json:"kafkaDown"`
+	DiskUsageHigh                    IntValAlert `json:"diskUsageHigh"`
+	DiskAlmostFull                   IntValAlert `json:"diskAlmostFull"`
 }
 
 type KafkaGrafana struct {

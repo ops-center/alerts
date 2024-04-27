@@ -87,6 +87,8 @@ type MariaDBDatabaseAlertRules struct {
 	MySQLHighIncomingBytes  IntValAlert `json:"mysqlHighIncomingBytes"`
 	MySQLHighOutgoingBytes  IntValAlert `json:"mysqlHighOutgoingBytes"`
 	MySQLTooManyOpenFiles   IntValAlert `json:"mysqlTooManyOpenFiles"`
+	DiskUsageHigh           IntValAlert `json:"diskUsageHigh"`
+	DiskAlmostFull          IntValAlert `json:"diskAlmostFull"`
 }
 
 type MariaDBClusterAlert struct {

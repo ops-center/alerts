@@ -202,6 +202,8 @@ func (in *ConnectClusterConnectAlertRules) DeepCopyInto(out *ConnectClusterConne
 	out.ConnectClusterTooManyConnections = in.ConnectClusterTooManyConnections
 	out.ConnectClusterConnectorCount = in.ConnectClusterConnectorCount
 	out.ConnectClusterCoordinatorRebalanceFailed = in.ConnectClusterCoordinatorRebalanceFailed
+	out.DiskUsageHigh = in.DiskUsageHigh
+	out.DiskAlmostFull = in.DiskAlmostFull
 	return
 }
 
@@ -664,6 +666,8 @@ func (in *ElasticsearchDatabaseAlertRules) DeepCopyInto(out *ElasticsearchDataba
 	out.ElasticsearchUnassignedShards = in.ElasticsearchUnassignedShards
 	out.ElasticsearchPendingTasks = in.ElasticsearchPendingTasks
 	out.ElasticsearchNoNewDocuments10M = in.ElasticsearchNoNewDocuments10M
+	out.DiskUsageHigh = in.DiskUsageHigh
+	out.DiskAlmostFull = in.DiskAlmostFull
 	return
 }
 
@@ -928,6 +932,8 @@ func (in *KafkaDatabaseAlertRules) DeepCopyInto(out *KafkaDatabaseAlertRules) {
 	out.KafkaTopicCount = in.KafkaTopicCount
 	out.KafkaPhaseCritical = in.KafkaPhaseCritical
 	out.KafkaDown = in.KafkaDown
+	out.DiskUsageHigh = in.DiskUsageHigh
+	out.DiskAlmostFull = in.DiskAlmostFull
 	return
 }
 
@@ -1123,6 +1129,8 @@ func (in *MariaDBDatabaseAlertRules) DeepCopyInto(out *MariaDBDatabaseAlertRules
 	out.MySQLHighIncomingBytes = in.MySQLHighIncomingBytes
 	out.MySQLHighOutgoingBytes = in.MySQLHighOutgoingBytes
 	out.MySQLTooManyOpenFiles = in.MySQLTooManyOpenFiles
+	out.DiskUsageHigh = in.DiskUsageHigh
+	out.DiskAlmostFull = in.DiskAlmostFull
 	return
 }
 
@@ -1322,6 +1330,8 @@ func (in *MongoDBDatabaseAlertRules) DeepCopyInto(out *MongoDBDatabaseAlertRules
 	out.MongodbHighTicketUtilization = in.MongodbHighTicketUtilization
 	out.MongodbRecurrentCursorTimeout = in.MongodbRecurrentCursorTimeout
 	out.MongodbRecurrentMemoryPageFaults = in.MongodbRecurrentMemoryPageFaults
+	out.DiskUsageHigh = in.DiskUsageHigh
+	out.DiskAlmostFull = in.DiskAlmostFull
 	return
 }
 
@@ -1523,6 +1533,8 @@ func (in *MySQLDatabaseAlertRules) DeepCopyInto(out *MySQLDatabaseAlertRules) {
 	out.MySQLHighIncomingBytes = in.MySQLHighIncomingBytes
 	out.MySQLHighOutgoingBytes = in.MySQLHighOutgoingBytes
 	out.MySQLTooManyOpenFiles = in.MySQLTooManyOpenFiles
+	out.DiskUsageHigh = in.DiskUsageHigh
+	out.DiskAlmostFull = in.DiskAlmostFull
 	return
 }
 
@@ -1829,6 +1841,8 @@ func (in *PerconaXtraDBDatabaseAlertRules) DeepCopyInto(out *PerconaXtraDBDataba
 	out.MySQLHighIncomingBytes = in.MySQLHighIncomingBytes
 	out.MySQLHighOutgoingBytes = in.MySQLHighOutgoingBytes
 	out.MySQLTooManyOpenFiles = in.MySQLTooManyOpenFiles
+	out.DiskUsageHigh = in.DiskUsageHigh
+	out.DiskAlmostFull = in.DiskAlmostFull
 	return
 }
 
@@ -2117,6 +2131,8 @@ func (in *PgpoolDatabaseAlertRules) DeepCopyInto(out *PgpoolDatabaseAlertRules) 
 	out.PgpoolBackendFatalMessageCount = in.PgpoolBackendFatalMessageCount
 	out.PgpoolBackendErrorMessageCount = in.PgpoolBackendErrorMessageCount
 	out.PgpoolLowCacheMemory = in.PgpoolLowCacheMemory
+	out.DiskUsageHigh = in.DiskUsageHigh
+	out.DiskAlmostFull = in.DiskAlmostFull
 	return
 }
 
@@ -2331,6 +2347,8 @@ func (in *PostgresDatabaseAlertRules) DeepCopyInto(out *PostgresDatabaseAlertRul
 	out.PostgresHighRollbackRate = in.PostgresHighRollbackRate
 	out.PostgresSplitBrain = in.PostgresSplitBrain
 	out.PostgresTooManyLocksAcquired = in.PostgresTooManyLocksAcquired
+	out.DiskUsageHigh = in.DiskUsageHigh
+	out.DiskAlmostFull = in.DiskAlmostFull
 	return
 }
 
@@ -2500,6 +2518,8 @@ func (in *ProxySQLDatabaseAlertRules) DeepCopyInto(out *ProxySQLDatabaseAlertRul
 	out.ProxySQLHighQPS = in.ProxySQLHighQPS
 	out.ProxySQLHighIncomingBytes = in.ProxySQLHighIncomingBytes
 	out.ProxySQLHighOutgoingBytes = in.ProxySQLHighOutgoingBytes
+	out.DiskUsageHigh = in.DiskUsageHigh
+	out.DiskAlmostFull = in.DiskAlmostFull
 	return
 }
 
@@ -2789,6 +2809,8 @@ func (in *RabbitmqDatabaseAlertRules) DeepCopyInto(out *RabbitmqDatabaseAlertRul
 	out.RabbitmqHighConnectionChurn = in.RabbitmqHighConnectionChurn
 	out.RabbitmqPhaseCritical = in.RabbitmqPhaseCritical
 	out.RabbitmqDown = in.RabbitmqDown
+	out.DiskUsageHigh = in.DiskUsageHigh
+	out.DiskAlmostFull = in.DiskAlmostFull
 	return
 }
 
@@ -2998,6 +3020,8 @@ func (in *RedisDatabaseAlertRules) DeepCopyInto(out *RedisDatabaseAlertRules) {
 	out.RedisDisconnectedSlaves = in.RedisDisconnectedSlaves
 	out.RedisTooManyConnections = in.RedisTooManyConnections
 	out.RedisRejectedConnections = in.RedisRejectedConnections
+	out.DiskUsageHigh = in.DiskUsageHigh
+	out.DiskAlmostFull = in.DiskAlmostFull
 	return
 }
 
@@ -3230,6 +3254,8 @@ func (in *SinglestoreDatabaseAlertRules) DeepCopyInto(out *SinglestoreDatabaseAl
 	out.SinglestoreHighQPS = in.SinglestoreHighQPS
 	out.SinglestoreHighIncomingBytes = in.SinglestoreHighIncomingBytes
 	out.SinglestoreHighOutgoingBytes = in.SinglestoreHighOutgoingBytes
+	out.DiskUsageHigh = in.DiskUsageHigh
+	out.DiskAlmostFull = in.DiskAlmostFull
 	return
 }
 
@@ -3707,6 +3733,8 @@ func (in *VaultserverAlertsVaultAlertRules) DeepCopyInto(out *VaultserverAlertsV
 	out.VaultRequestFailures = in.VaultRequestFailures
 	out.VaultResponseFailures = in.VaultResponseFailures
 	out.VaultTooManyInfinityTokens = in.VaultTooManyInfinityTokens
+	out.DiskUsageHigh = in.DiskUsageHigh
+	out.DiskAlmostFull = in.DiskAlmostFull
 	return
 }
 

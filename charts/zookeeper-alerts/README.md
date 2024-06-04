@@ -80,7 +80,6 @@ The following table lists the configurable parameters of the `zookeeper-alerts` 
 | form.alert.groups.database.rules.zookeeperTooManyConnections.severity  |                                               | <code>warning</code>                             |
 | form.alert.groups.database.rules.zookeeperLeaderElection.enabled       |                                               | <code>true</code>                                |
 | form.alert.groups.database.rules.zookeeperLeaderElection.duration      |                                               | <code>"1m"</code>                                |
-| form.alert.groups.database.rules.zookeeperLeaderElection.val           |                                               | <code>0</code>                                   |
 | form.alert.groups.database.rules.zookeeperLeaderElection.severity      |                                               | <code>warning</code>                             |
 | form.alert.groups.database.rules.zookeeperTooManyOpenFiles.enabled     |                                               | <code>true</code>                                |
 | form.alert.groups.database.rules.zookeeperTooManyOpenFiles.duration    |                                               | <code>"1m"</code>                                |

@@ -39,7 +39,7 @@ jobs:
           make ci
 
   app:
-    name: App Alerts
+    name: App
     runs-on: ubuntu-22.04
     needs: build
     strategy:

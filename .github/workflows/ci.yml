@@ -16,7 +16,7 @@ concurrency:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Set up Go 1.22
         uses: actions/setup-go@v1
@@ -38,13 +38,30 @@ jobs:
         run: |
           make ci
 
-  kubernetes:
-    name: Kubernetes
-    runs-on: ubuntu-20.04
+  app:
+    name: App Alerts
+    runs-on: ubuntu-22.04
     needs: build
     strategy:
       matrix:
-        k8s: [v1.19.16, v1.20.15, v1.21.14, v1.22.17, v1.23.17, v1.24.12, v1.25.8, v1.26.3, v1.27.1]
+        chart:
+          - connectcluster-alerts
+          - druid-alerts
+          - elasticsearch-alerts
+          - kafka-alerts
+          - mariadb-alerts
+          - mongodb-alerts
+          - mysql-alerts
+          - perconaxtradb-alerts
+          - pgpool-alerts
+          - postgres-alerts
+          - proxysql-alerts
+          - rabbitmq-alerts
+          - redis-alerts
+          - singlestore-alerts
+          - solr-alerts
+          - vaultserver-alerts
+          - zookeeper-alerts
     steps:
       - uses: actions/checkout@v1
 
@@ -55,12 +72,11 @@ jobs:
           sudo mv yqq /usr/local/bin/yqq
           pip3 install yq
 
-      - name: Create Kubernetes ${{ matrix.k8s }} cluster
+      - name: Create Kubernetes cluster
         id: kind
         uses: engineerd/setup-kind@v0.5.0
         with:
-          version: v0.17.0
-          image: kindest/node:${{ matrix.k8s }}
+          version: v0.23.0
 
       - name: Prepare cluster for testing
         id: local-path
@@ -73,9 +89,16 @@ jobs:
           kubectl get nodes
           echo
           echo "install helm 3"
-          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+          pushd /usr/local/bin && sudo curl -fsSLO https://github.com/x-helm/helm/releases/latest/download/helm && sudo chmod +x helm && popd
 
       - name: Test charts
         run: |
           export KUBECONFIG="${HOME}/.kube/config"
-          ./hack/scripts/ct.sh
+          make ct TEST_CHARTS=charts/${{ matrix.chart }}
+
+      - name: Test Alerts
+        run: |
+          helm install ${{ matrix.chart }} charts/${{ matrix.chart }} --set form.alert.enabled=critical
+          helm uninstall ${{ matrix.chart }}
+          helm install ${{ matrix.chart }} charts/${{ matrix.chart }} --set form.alert.enabled=warning
+          helm uninstall ${{ matrix.chart }}

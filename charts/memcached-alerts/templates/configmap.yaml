@@ -1,0 +1,1197 @@
+# templates/configmap.yaml
+{{- if .Values.grafana.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "memcached-alerts.fullname" . }}-configmap
+  labels:
+    {{- include "memcached-alerts.labels" . | nindent 4 }}
+
+data:
+  grafana-json.json: |-
+    {
+      "dashboard": {
+        "__inputs": [],
+        "__requires": [
+          {
+            "type": "grafana",
+            "id": "grafana",
+            "name": "Grafana",
+            "version": "{{ .Values.grafana.version }}"
+          },
+          {
+            "type": "panel",
+            "id": "graph",
+            "name": "Graph",
+            "version": ""
+          }
+        ],
+        "annotations": {
+            "list": [
+                {
+                    "builtIn": 1,
+                    "datasource": "-- Grafana --",
+                    "enable": true,
+                    "hide": true,
+                    "iconColor": "rgba(0, 211, 255, 1)",
+                    "name": "Annotations & Alerts",
+                    "type": "dashboard"
+                }
+            ]
+        },
+        "editable": true,
+        "gnetId": null,
+        "graphTooltip": 0,
+        "id": null,
+        "links": [],
+        "panels": [
+            {
+                "collapsed": false,
+                "datasource": null,
+                "gridPos": {
+                    "h": 1,
+                    "w": 24,
+                    "x": 0,
+                    "y": 0
+                },
+                "id": 20,
+                "panels": [],
+                "title": "Memcached Phase",
+                "type": "row"
+            },
+            {
+                "alert": {
+                    "alertRuleTags": {},
+                    "conditions": [
+                        {
+                            "evaluator": {
+                                "params": [
+                                    0
+                                ],
+                                "type": "gt"
+                            },
+                            "operator": {
+                                "type": "and"
+                            },
+                            "query": {
+                                "params": [
+                                    "A",
+                                    "5m",
+                                    "now"
+                                ]
+                            },
+                            "reducer": {
+                                "params": [],
+                                "type": "last"
+                            },
+                            "type": "query"
+                        }
+                    ],
+                    "executionErrorState": "alerting",
+                    "for": "1m",
+                    "frequency": "1m",
+                    "handler": 1,
+                    "name": "KubeDB Memcached Phase Not Ready",
+                    "noDataState": "no_data",
+                    "notifications": []
+                },
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": null,
+                "fieldConfig": {
+                    "defaults": {},
+                    "overrides": []
+                },
+                "fill": 1,
+                "fillGradient": 0,
+                "gridPos": {
+                    "h": 8,
+                    "w": 12,
+                    "x": 0,
+                    "y": 1
+                },
+                "hiddenSeries": false,
+                "id": 22,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "nullPointMode": "null",
+                "options": {
+                    "alertThreshold": true
+                },
+                "percentage": false,
+                "pluginVersion": "7.5.5",
+                "pointradius": 2,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "exemplar": true,
+                        "expr": "kubedb_com_memcached_status_phase{app=\"memcached\",namespace=\"demo\",phase=\"NotReady\"}",
+                        "interval": "",
+                        "legendFormat": "",
+                        "refId": "A"
+                    }
+                ],
+                "thresholds": [
+                    {
+                        "colorMode": "critical",
+                        "fill": true,
+                        "line": true,
+                        "op": "gt",
+                        "value": 0,
+                        "visible": true
+                    }
+                ],
+                "timeFrom": null,
+                "timeRegions": [],
+                "timeShift": null,
+                "title": "KubeDB Memcached Phase Not Ready",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "alert": {
+                    "alertRuleTags": {},
+                    "conditions": [
+                        {
+                            "evaluator": {
+                                "params": [
+                                    0
+                                ],
+                                "type": "gt"
+                            },
+                            "operator": {
+                                "type": "and"
+                            },
+                            "query": {
+                                "params": [
+                                    "A",
+                                    "5m",
+                                    "now"
+                                ]
+                            },
+                            "reducer": {
+                                "params": [],
+                                "type": "last"
+                            },
+                            "type": "query"
+                        }
+                    ],
+                    "executionErrorState": "alerting",
+                    "for": "15m",
+                    "frequency": "1m",
+                    "handler": 1,
+                    "name": "KubeDB Memcached Phase Critical",
+                    "noDataState": "no_data",
+                    "notifications": []
+                },
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": null,
+                "fieldConfig": {
+                    "defaults": {},
+                    "overrides": []
+                },
+                "fill": 1,
+                "fillGradient": 0,
+                "gridPos": {
+                    "h": 8,
+                    "w": 12,
+                    "x": 12,
+                    "y": 1
+                },
+                "hiddenSeries": false,
+                "id": 24,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "nullPointMode": "null",
+                "options": {
+                    "alertThreshold": true
+                },
+                "percentage": false,
+                "pluginVersion": "7.5.5",
+                "pointradius": 2,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "exemplar": true,
+                        "expr": "kubedb_com_memcached_status_phase{app=\"memcached\",namespace=\"demo\",phase=\"Critical\"}",
+                        "interval": "",
+                        "legendFormat": "",
+                        "refId": "A"
+                    }
+                ],
+                "thresholds": [
+                    {
+                        "colorMode": "critical",
+                        "fill": true,
+                        "line": true,
+                        "op": "gt",
+                        "value": 0,
+                        "visible": true
+                    }
+                ],
+                "timeFrom": null,
+                "timeRegions": [],
+                "timeShift": null,
+                "title": "KubeDB Memcached Phase Critical",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "collapsed": false,
+                "datasource": null,
+                "gridPos": {
+                    "h": 1,
+                    "w": 24,
+                    "x": 0,
+                    "y": 9
+                },
+                "id": 6,
+                "panels": [],
+                "title": "Memcached Server Status",
+                "type": "row"
+            },
+            {
+                "alert": {
+                    "alertRuleTags": {},
+                    "conditions": [
+                        {
+                            "evaluator": {
+                                "params": [
+                                    1
+                                ],
+                                "type": "lt"
+                            },
+                            "operator": {
+                                "type": "and"
+                            },
+                            "query": {
+                                "params": [
+                                    "A",
+                                    "5m",
+                                    "now"
+                                ]
+                            },
+                            "reducer": {
+                                "params": [],
+                                "type": "last"
+                            },
+                            "type": "query"
+                        }
+                    ],
+                    "executionErrorState": "alerting",
+                    "for": "0m",
+                    "frequency": "1m",
+                    "handler": 1,
+                    "name": "Memcached Down",
+                    "noDataState": "no_data",
+                    "notifications": []
+                },
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": null,
+                "fieldConfig": {
+                    "defaults": {},
+                    "overrides": []
+                },
+                "fill": 1,
+                "fillGradient": 0,
+                "gridPos": {
+                    "h": 9,
+                    "w": 12,
+                    "x": 0,
+                    "y": 10
+                },
+                "hiddenSeries": false,
+                "id": 2,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "nullPointMode": "null",
+                "options": {
+                    "alertThreshold": true
+                },
+                "percentage": false,
+                "pluginVersion": "7.5.5",
+                "pointradius": 2,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "exemplar": true,
+                        "expr": "memcached_up{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}",
+                        "interval": "",
+                        "legendFormat": "",
+                        "refId": "A"
+                    }
+                ],
+                "thresholds": [
+                    {
+                        "colorMode": "critical",
+                        "fill": true,
+                        "line": true,
+                        "op": "lt",
+                        "value": 1,
+                        "visible": true
+                    }
+                ],
+                "timeFrom": null,
+                "timeRegions": [],
+                "timeShift": null,
+                "title": "Memcached Down",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "alert": {
+                    "alertRuleTags": {},
+                    "conditions": [
+                        {
+                            "evaluator": {
+                                "params": [
+                                    1
+                                ],
+                                "type": "lt"
+                            },
+                            "operator": {
+                                "type": "and"
+                            },
+                            "query": {
+                                "params": [
+                                    "A",
+                                    "5m",
+                                    "now"
+                                ]
+                            },
+                            "reducer": {
+                                "params": [],
+                                "type": "avg"
+                            },
+                            "type": "query"
+                        }
+                    ],
+                    "executionErrorState": "alerting",
+                    "for": "0m",
+                    "frequency": "1m",
+                    "handler": 1,
+                    "name": "Memcached Service Respawn",
+                    "noDataState": "no_data",
+                    "notifications": []
+                },
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": null,
+                "fieldConfig": {
+                    "defaults": {},
+                    "overrides": []
+                },
+                "fill": 1,
+                "fillGradient": 0,
+                "gridPos": {
+                    "h": 9,
+                    "w": 12,
+                    "x": 12,
+                    "y": 10
+                },
+                "hiddenSeries": false,
+                "id": 4,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "nullPointMode": "null",
+                "options": {
+                    "alertThreshold": true
+                },
+                "percentage": false,
+                "pluginVersion": "7.5.5",
+                "pointradius": 2,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "exemplar": true,
+                        "expr": "memcached_uptime_seconds{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}",
+                        "interval": "",
+                        "legendFormat": "",
+                        "refId": "A"
+                    }
+                ],
+                "thresholds": [
+                    {
+                        "colorMode": "critical",
+                        "fill": true,
+                        "line": true,
+                        "op": "lt",
+                        "value": 1,
+                        "visible": true
+                    }
+                ],
+                "timeFrom": null,
+                "timeRegions": [],
+                "timeShift": null,
+                "title": "Memcached Service Respawn",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "alert": {
+                    "alertRuleTags": {},
+                    "conditions": [
+                        {
+                            "evaluator": {
+                                "params": [
+                                    10
+                                ],
+                                "type": "gt"
+                            },
+                            "operator": {
+                                "type": "and"
+                            },
+                            "query": {
+                                "params": [
+                                    "A",
+                                    "5m",
+                                    "now"
+                                ]
+                            },
+                            "reducer": {
+                                "params": [],
+                                "type": "avg"
+                            },
+                            "type": "query"
+                        }
+                    ],
+                    "executionErrorState": "alerting",
+                    "for": "2m",
+                    "frequency": "1m",
+                    "handler": 1,
+                    "name": "Memcached Connection Throttled",
+                    "noDataState": "no_data",
+                    "notifications": []
+                },
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": null,
+                "fieldConfig": {
+                    "defaults": {},
+                    "overrides": []
+                },
+                "fill": 1,
+                "fillGradient": 0,
+                "gridPos": {
+                    "h": 8,
+                    "w": 12,
+                    "x": 0,
+                    "y": 19
+                },
+                "hiddenSeries": false,
+                "id": 8,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "nullPointMode": "null",
+                "options": {
+                    "alertThreshold": true
+                },
+                "percentage": false,
+                "pluginVersion": "7.5.5",
+                "pointradius": 2,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "exemplar": true,
+                        "expr": "increase(memcached_connections_yielded_total{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}[1m])",
+                        "interval": "",
+                        "legendFormat": "",
+                        "refId": "A"
+                    }
+                ],
+                "thresholds": [
+                    {
+                        "colorMode": "critical",
+                        "fill": true,
+                        "line": true,
+                        "op": "gt",
+                        "value": 80,
+                        "visible": true
+                    }
+                ],
+                "timeFrom": null,
+                "timeRegions": [],
+                "timeShift": null,
+                "title": "Memcached Connection Throttled",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "alert": {
+                    "alertRuleTags": {},
+                    "conditions": [
+                        {
+                            "evaluator": {
+                                "params": [],
+                                "type": "gt"
+                            },
+                            "operator": {
+                                "type": "and"
+                            },
+                            "query": {
+                                "params": [
+                                    "A",
+                                    "5m",
+                                    "now"
+                                ]
+                            },
+                            "reducer": {
+                                "params": [],
+                                "type": "last"
+                            },
+                            "type": "query"
+                        }
+                    ],
+                    "executionErrorState": "alerting",
+                    "for": "2m",
+                    "frequency": "1m",
+                    "handler": 1,
+                    "name": "Memcached Connections None Minor",
+                    "noDataState": "no_data",
+                    "notifications": []
+                },
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": null,
+                "fieldConfig": {
+                    "defaults": {},
+                    "overrides": []
+                },
+                "fill": 1,
+                "fillGradient": 0,
+                "gridPos": {
+                    "h": 8,
+                    "w": 12,
+                    "x": 12,
+                    "y": 19
+                },
+                "hiddenSeries": false,
+                "id": 10,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "nullPointMode": "null",
+                "options": {
+                    "alertThreshold": true
+                },
+                "percentage": false,
+                "pluginVersion": "7.5.5",
+                "pointradius": 2,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "exemplar": true,
+                        "expr": "memcached_current_connections{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}",
+                        "interval": "",
+                        "legendFormat": "",
+                        "refId": "A"
+                    }
+                ],
+                "thresholds": [
+                    {
+                        "colorMode": "critical",
+                        "fill": true,
+                        "line": true,
+                        "op": "gt",
+                        "value": 60,
+                        "visible": true
+                    }
+                ],
+                "timeFrom": null,
+                "timeRegions": [],
+                "timeShift": null,
+                "title": "Memcached Connections None Minor",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "alert": {
+                    "alertRuleTags": {},
+                    "conditions": [
+                        {
+                            "evaluator": {
+                                "params": [],
+                                "type": "lt"
+                            },
+                            "operator": {
+                                "type": "and"
+                            },
+                            "query": {
+                                "params": [
+                                    "A",
+                                    "5m",
+                                    "now"
+                                ]
+                            },
+                            "reducer": {
+                                "params": [],
+                                "type": "last"
+                            },
+                            "type": "query"
+                        }
+                    ],
+                    "executionErrorState": "alerting",
+                    "for": "2m",
+                    "frequency": "1m",
+                    "handler": 1,
+                    "name": "Memcached Items None Minor",
+                    "noDataState": "no_data",
+                    "notifications": []
+                },
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": null,
+                "fieldConfig": {
+                    "defaults": {},
+                    "overrides": []
+                },
+                "fill": 1,
+                "fillGradient": 0,
+                "gridPos": {
+                    "h": 8,
+                    "w": 12,
+                    "x": 0,
+                    "y": 27
+                },
+                "hiddenSeries": false,
+                "id": 12,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "nullPointMode": "null",
+                "options": {
+                    "alertThreshold": true
+                },
+                "percentage": false,
+                "pluginVersion": "7.5.5",
+                "pointradius": 2,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "exemplar": true,
+                        "expr": "memcached_current_items{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}",
+                        "interval": "",
+                        "legendFormat": "",
+                        "refId": "A"
+                    }
+                ],
+                "thresholds": [
+                    {
+                        "colorMode": "critical",
+                        "fill": true,
+                        "line": true,
+                        "op": "lt",
+                        "value": 60,
+                        "visible": true
+                    }
+                ],
+                "timeFrom": null,
+                "timeRegions": [],
+                "timeShift": null,
+                "title": "Memcached Items None Minor",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "alert": {
+                    "alertRuleTags": {},
+                    "conditions": [
+                        {
+                            "evaluator": {
+                                "params": [
+                                    10
+                                ],
+                                "type": "gt"
+                            },
+                            "operator": {
+                                "type": "and"
+                            },
+                            "query": {
+                                "params": [
+                                    "A",
+                                    "5m",
+                                    "now"
+                                ]
+                            },
+                            "reducer": {
+                                "params": [],
+                                "type": "last"
+                            },
+                            "type": "query"
+                        }
+                    ],
+                    "executionErrorState": "alerting",
+                    "for": "0m",
+                    "frequency": "1m",
+                    "handler": 1,
+                    "name": "Memcached Evictions Limit",
+                    "noDataState": "no_data",
+                    "notifications": []
+                },
+                "aliasColors": {},
+                "bars": false,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": null,
+                "fieldConfig": {
+                    "defaults": {},
+                    "overrides": []
+                },
+                "fill": 1,
+                "fillGradient": 0,
+                "gridPos": {
+                    "h": 8,
+                    "w": 12,
+                    "x": 12,
+                    "y": 27
+                },
+                "hiddenSeries": false,
+                "id": 14,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                },
+                "lines": true,
+                "linewidth": 1,
+                "nullPointMode": "null",
+                "options": {
+                    "alertThreshold": true
+                },
+                "percentage": false,
+                "pluginVersion": "7.5.5",
+                "pointradius": 2,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "exemplar": true,
+                        "expr": "increase(memcached_connections_yielded_total{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}[1m])",
+                        "interval": "",
+                        "legendFormat": "",
+                        "refId": "A"
+                    }
+                ],
+                "thresholds": [
+                    {
+                        "colorMode": "critical",
+                        "fill": true,
+                        "line": true,
+                        "op": "gt",
+                        "value": 1000,
+                        "visible": true
+                    }
+                ],
+                "timeFrom": null,
+                "timeRegions": [],
+                "timeShift": null,
+                "title": "Memcached Evictions Limit",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            }
+        ],
+        "schemaVersion": 27,
+        "style": "dark",
+        "tags": [],
+        "templating": {
+            "list": []
+        },
+        "time": {
+            "from": "now-15m",
+            "to": "now"
+        },
+        "timepicker": {},
+        "timezone": "",
+        "title": "kubedb.com / Memcached / demo / memcached",
+        "uid": null,
+        "version": 23
+      },
+      "folderId": 0,
+      "overwrite": false
+    }
+  {{- end }}
+

@@ -1,0 +1,18 @@
+project:
+  name: Memcached alerts by AppsCode
+  shortName: Memcached alerts
+  url: https://github.com/appscode/alerts
+  description: Memcached alerts for KubeDB
+  app: Memcached alerts
+repository:
+  url: https://charts.appscode.com/stable/
+  name: appscode
+chart:
+  name: memcached
+  values: -- generate from values file --
+  valuesExample: -- generate from values file --
+prerequisites:
+  - Kubernetes 1.19+
+release:
+  name: memcached
+  namespace: demo

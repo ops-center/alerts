@@ -1,0 +1,123 @@
+{{ $app := (include "cassandra-alerts.fullname" .) }}
+
+  {{ if (include "cassandra-alerts.alertsEnabled" .Values.form.alert.enabled) }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ $app }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "cassandra-alerts.labels" . | nindent 4 }}
+  {{- if .Values.form.alert.labels }}
+  {{- toYaml .Values.form.alert.labels | nindent 4 }}
+  {{- end }}
+  {{- if .Values.form.alert.annotations }}
+annotations:
+  {{- toYaml .Values.form.alert.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  groups:
+  {{ with .Values.form.alert.groups.database -}}
+  {{ if (include "cassandra-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
+  - name: cassandra.database.{{ $.Release.Namespace }}.{{ $app }}.rules
+    rules:
+    {{ if (include "cassandra-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.cassandraDown.enabled .rules.cassandraDown.severity)) -}}
+    - alert: CassandraDown
+      expr: cassandra_up{job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"} == 0
+      for: {{ .rules.cassandraDown.duration }}
+      labels:
+        severity: {{ .rules.cassandraDown.severity }}
+        {{- include "cassandra-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: Cassandra down (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "Cassandra is down on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if (include "cassandra-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.cassandraServiceRespawn.enabled .rules.cassandraServiceRespawn.severity)) -}}
+    - alert: CassandraServiceRespawn
+      expr:  (cassandra_uptime_seconds{job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"}) < {{.rules.cassandraServiceRespawn.val}}
+      for: {{ .rules.cassandraServiceRespawn.duration }}
+      labels:
+        severity: {{ .rules.cassandraServiceRespawn.severity }}
+        {{- include "cassandra-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: Cassandra service restart (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "Cassandra service restart on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if (include "cassandra-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.cassandraConnectionThrottled.enabled .rules.cassandraConnectionThrottled.severity)) -}}
+    - alert: CassandraConnectionThrottled
+      expr: increase(cassandra_connections_yielded_total{job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"}[1m]) > {{.rules.cassandraConnectionThrottled.val}}
+      for: {{ .rules.cassandraConnectionThrottled.duration }}
+      labels:
+        severity: {{ .rules.cassandraConnectionThrottled.severity }}
+        {{- include "cassandra-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: Cassandra too many connections (> {{.rules.cassandraConnectionThrottled.val}}%) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "More than {{.rules.cassandraConnectionThrottled.val}}% of Cassandra connections are throttled {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if (include "cassandra-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.cassandraConnectionsNoneMinor.enabled .rules.cassandraConnectionsNoneMinor.severity)) -}}
+    - alert: CassandraConnectionsNoneMinor
+      expr: cassandra_current_connections{job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"} == 0
+      for: {{ .rules.cassandraConnectionsNoneMinor.duration }}
+      labels:
+        severity: {{ .rules.cassandraConnectionsNoneMinor.severity }}
+        {{- include "cassandra-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: Cassandra no connection (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "No connection to cassandra {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if (include "cassandra-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.cassandraItemsNoneMinor.enabled .rules.cassandraItemsNoneMinor.severity)) -}}
+    - alert: CassandraItemsNoneMinor
+      expr: cassandra_current_items{job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"} == 0
+      for: {{ .rules.cassandraItemsNoneMinor.duration }}
+      labels:
+        severity: {{ .rules.cassandraItemsNoneMinor.severity }}
+        {{- include "cassandra-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: Cassandra has no item ({{.rules.cassandraItemsNoneMinor.val}} second ago) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "Cassandra has no item\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if (include "cassandra-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.cassandraEvictionsLimit.enabled .rules.cassandraEvictionsLimit.severity)) -}}
+    - alert: cassandraEvictionsLimit
+      expr: increase(cassandra_items_evicted_total{job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"}[1m]) > {{.rules.cassandraEvictionsLimit.val}}
+      for: {{ .rules.cassandraEvictionsLimit.duration }}
+      labels:
+        severity: {{ .rules.cassandraEvictionsLimit.severity }}
+        {{- include "cassandra-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: Cassandra has high evictions per minute (> {{.rules.cassandraEvictionsLimit.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "Cassandra has high evictions on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+  {{ end -}}
+  {{ end -}}
+
+
+  {{ with .Values.form.alert.groups.provisioner -}}
+  {{ if (include "cassandra-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
+  - name: cassandra.provisioner.{{ $.Release.Namespace }}.{{ $app }}.rules
+    rules:
+    {{ if (include "cassandra-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.appPhaseNotReady.enabled .rules.appPhaseNotReady.severity)) -}}
+    - alert: KubeDBCassandraPhaseNotReady
+      expr: kubedb_com_cassandra_status_phase{phase="NotReady",app="{{ $app }}",namespace="{{ $.Release.Namespace }}"} == 1
+      for: {{ .rules.appPhaseNotReady.duration }}
+      labels:
+        severity: {{ .rules.appPhaseNotReady.severity }}
+        {{- include "cassandra-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: KubeDB Cassandra Phase NotReady (cassandra {{`{{`}} $labels.cassandra {{`}}`}})
+        description: "KubeDB Cassandra Phase not ready on {{`{{`}} $labels.cassandra {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if (include "cassandra-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.appPhaseCritical.enabled .rules.appPhaseCritical.severity)) -}}
+    - alert: KubeDBCassandraPhaseCritical
+      expr: kubedb_com_cassandra_status_phase{phase="Critical",app="{{ $app }}",namespace="{{ $.Release.Namespace }}"} == 1
+      for: {{ .rules.appPhaseCritical.duration }}
+      labels:
+        severity: {{ .rules.appPhaseCritical.severity }}
+        {{- include "cassandra-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: KubeDB Cassandra Phase Critical (cassandra {{`{{`}} $labels.cassandra {{`}}`}})
+        description: "KubeDB Cassandra Phase Critical {{`{{`}} $labels.cassandra {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+  {{ end -}}
+  {{ end -}}
+
+{{ end }}

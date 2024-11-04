@@ -141,7 +141,7 @@ data:
                 "targets": [
                     {
                         "exemplar": true,
-                        "expr": "kubedb_com_cassandra_status_phase{app=\"cassandra\",namespace=\"demo\",phase=\"NotReady\"}",
+                        "expr": "kubedb_com_cassandra_status_phase{app=\"{{ .Release.Name }}\",namespace=\"demo\",phase=\"NotReady\"}",
                         "interval": "",
                         "legendFormat": "",
                         "refId": "A"
@@ -279,7 +279,7 @@ data:
                 "targets": [
                     {
                         "exemplar": true,
-                        "expr": "kubedb_com_cassandra_status_phase{app=\"cassandra\",namespace=\"demo\",phase=\"Critical\"}",
+                        "expr": "kubedb_com_cassandra_status_phase{app=\"{{ .Release.Name }}\",namespace=\"demo\",phase=\"Critical\"}",
                         "interval": "",
                         "legendFormat": "",
                         "refId": "A"
@@ -431,7 +431,7 @@ data:
                 "targets": [
                     {
                         "exemplar": true,
-                        "expr": "cassandra_up{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}",
+                        "expr": "count(up{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\"}) OR vector(0)",
                         "interval": "",
                         "legendFormat": "",
                         "refId": "A"
@@ -569,7 +569,7 @@ data:
                 "targets": [
                     {
                         "exemplar": true,
-                        "expr": "cassandra_uptime_seconds{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}",
+                        "expr": "cassandra_stats{name=\"java:lang:runtime:uptime\",job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\"}",
                         "interval": "",
                         "legendFormat": "",
                         "refId": "A"
@@ -657,7 +657,7 @@ data:
                     "for": "2m",
                     "frequency": "1m",
                     "handler": 1,
-                    "name": "Cassandra Connection Throttled",
+                    "name": "Cassandra Connection Timeouts Count",
                     "noDataState": "no_data",
                     "notifications": []
                 },
@@ -707,7 +707,7 @@ data:
                 "targets": [
                     {
                         "exemplar": true,
-                        "expr": "increase(cassandra_connections_yielded_total{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}[1m])",
+                        "expr": "increase(cassandra_stats{name=\"org:apache:cassandra:metrics:connection:totaltimeouts:count\",job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\"}[1m])",
                         "interval": "",
                         "legendFormat": "",
                         "refId": "A"
@@ -726,7 +726,7 @@ data:
                 "timeFrom": null,
                 "timeRegions": [],
                 "timeShift": null,
-                "title": "Cassandra Connection Throttled",
+                "title": "Cassandra Connection Timeout",
                 "tooltip": {
                     "shared": true,
                     "sort": 0,
@@ -793,7 +793,7 @@ data:
                     "for": "2m",
                     "frequency": "1m",
                     "handler": 1,
-                    "name": "Cassandra Connections None Minor",
+                    "name": "Cassandra Dropped Messages",
                     "noDataState": "no_data",
                     "notifications": []
                 },
@@ -843,7 +843,7 @@ data:
                 "targets": [
                     {
                         "exemplar": true,
-                        "expr": "cassandra_current_connections{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}",
+                        "expr": "cassandra_stats{name=~\"org:apache:cassandra:metrics:droppedmessage:.*:count\",job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}",
                         "interval": "",
                         "legendFormat": "",
                         "refId": "A"
@@ -862,7 +862,7 @@ data:
                 "timeFrom": null,
                 "timeRegions": [],
                 "timeShift": null,
-                "title": "Cassandra Connections None Minor",
+                "title": "Cassandra Dropped Messages",
                 "tooltip": {
                     "shared": true,
                     "sort": 0,
@@ -929,7 +929,7 @@ data:
                     "for": "2m",
                     "frequency": "1m",
                     "handler": 1,
-                    "name": "Cassandra Items None Minor",
+                    "name": "Cassandra High Read Latency",
                     "noDataState": "no_data",
                     "notifications": []
                 },
@@ -979,7 +979,7 @@ data:
                 "targets": [
                     {
                         "exemplar": true,
-                        "expr": "cassandra_current_items{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}",
+                        "expr": "cassandra_stats{name=~\"org:apache:cassandra:metrics:table:kubedb_keyspace:healthcheck_table:coordinatorreadlatency:99thpercentile\",job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}",
                         "interval": "",
                         "legendFormat": "",
                         "refId": "A"
@@ -998,7 +998,7 @@ data:
                 "timeFrom": null,
                 "timeRegions": [],
                 "timeShift": null,
-                "title": "Cassandra Items None Minor",
+                "title": "Cassandra High Read Latency",
                 "tooltip": {
                     "shared": true,
                     "sort": 0,
@@ -1042,7 +1042,7 @@ data:
                         {
                             "evaluator": {
                                 "params": [
-                                    10
+                                    7000
                                 ],
                                 "type": "gt"
                             },
@@ -1067,7 +1067,7 @@ data:
                     "for": "0m",
                     "frequency": "1m",
                     "handler": 1,
-                    "name": "Cassandra Evictions Limit",
+                    "name": "Cassandra High Write Latency",
                     "noDataState": "no_data",
                     "notifications": []
                 },
@@ -1117,7 +1117,7 @@ data:
                 "targets": [
                     {
                         "exemplar": true,
-                        "expr": "increase(cassandra_connections_yielded_total{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}[1m])",
+                        "expr": "cassandra_stats{name=~\"org:apache:cassandra:metrics:table:kubedb_keyspace:healthcheck_table:coordinatorreadlatency:99thpercentile\",job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}",
                         "interval": "",
                         "legendFormat": "",
                         "refId": "A"
@@ -1129,14 +1129,14 @@ data:
                         "fill": true,
                         "line": true,
                         "op": "gt",
-                        "value": 1000,
+                        "value": 7000,
                         "visible": true
                     }
                 ],
                 "timeFrom": null,
                 "timeRegions": [],
                 "timeShift": null,
-                "title": "Cassandra Evictions Limit",
+                "title": "Cassandra High Write Latency",
                 "tooltip": {
                     "shared": true,
                     "sort": 0,

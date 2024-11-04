@@ -23,7 +23,7 @@ spec:
     rules:
     {{ if (include "cassandra-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.cassandraDown.enabled .rules.cassandraDown.severity)) -}}
     - alert: CassandraDown
-      expr: cassandra_up{job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"} == 0
+      expr: (count(up{job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"} == 0) OR vector(0) ) > {{.rules.cassandraDown.val}}
       for: {{ .rules.cassandraDown.duration }}
       labels:
         severity: {{ .rules.cassandraDown.severity }}
@@ -34,7 +34,7 @@ spec:
     {{- end }}
     {{ if (include "cassandra-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.cassandraServiceRespawn.enabled .rules.cassandraServiceRespawn.severity)) -}}
     - alert: CassandraServiceRespawn
-      expr:  (cassandra_uptime_seconds{job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"}) < {{.rules.cassandraServiceRespawn.val}}
+      expr: (cassandra_stats{name="java:lang:runtime:uptime"}) < {{.rules.cassandraServiceRespawn.val}}
       for: {{ .rules.cassandraServiceRespawn.duration }}
       labels:
         severity: {{ .rules.cassandraServiceRespawn.severity }}
@@ -43,53 +43,52 @@ spec:
         summary: Cassandra service restart (instance {{`{{`}} $labels.pod {{`}}`}})
         description: "Cassandra service restart on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
-    {{ if (include "cassandra-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.cassandraConnectionThrottled.enabled .rules.cassandraConnectionThrottled.severity)) -}}
-    - alert: CassandraConnectionThrottled
-      expr: increase(cassandra_connections_yielded_total{job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"}[1m]) > {{.rules.cassandraConnectionThrottled.val}}
-      for: {{ .rules.cassandraConnectionThrottled.duration }}
+    {{ if (include "cassandra-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.cassandraConnectionTimeouts.enabled .rules.cassandraConnectionTimeouts.severity)) -}}
+    - alert: ConnectionTimeouts
+      expr: increase(cassandra_stats{name="org:apache:cassandra:metrics:connection:totaltimeouts:count",job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"}[1m]) > {{.rules.cassandraConnectionTimeouts.val}}
+      for: {{ .rules.cassandraConnectionTimeouts.duration }}
       labels:
-        severity: {{ .rules.cassandraConnectionThrottled.severity }}
+        severity: {{ .rules.cassandraConnectionTimeouts.severity }}
         {{- include "cassandra-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: Cassandra too many connections (> {{.rules.cassandraConnectionThrottled.val}}%) (instance {{`{{`}} $labels.pod {{`}}`}})
-        description: "More than {{.rules.cassandraConnectionThrottled.val}}% of Cassandra connections are throttled {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: Cassandra too many connections (> {{.rules.cassandraConnectionTimeouts.val}}%) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "More than {{.rules.cassandraConnectionTimeouts.val}}% of Cassandra connections are throttled {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
-    {{ if (include "cassandra-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.cassandraConnectionsNoneMinor.enabled .rules.cassandraConnectionsNoneMinor.severity)) -}}
-    - alert: CassandraConnectionsNoneMinor
-      expr: cassandra_current_connections{job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"} == 0
-      for: {{ .rules.cassandraConnectionsNoneMinor.duration }}
+    {{ if (include "cassandra-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.cassandraDroppedMessages.enabled .rules.cassandraDroppedMessages.severity)) -}}
+    - alert: DroppedMessages
+      expr: cassandra_stats{name=~"org:apache:cassandra:metrics:droppedmessage:.*:count",job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"} > 0
+      for: {{ .rules.cassandraDroppedMessages.duration }}
       labels:
-        severity: {{ .rules.cassandraConnectionsNoneMinor.severity }}
+        severity: {{ .rules.cassandraDroppedMessages.severity }}
         {{- include "cassandra-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: Cassandra no connection (instance {{`{{`}} $labels.pod {{`}}`}})
-        description: "No connection to cassandra {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: Cassandra has high drop message (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "High drop message for Cassandra {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
-    {{ if (include "cassandra-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.cassandraItemsNoneMinor.enabled .rules.cassandraItemsNoneMinor.severity)) -}}
-    - alert: CassandraItemsNoneMinor
-      expr: cassandra_current_items{job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"} == 0
-      for: {{ .rules.cassandraItemsNoneMinor.duration }}
+    {{ if (include "cassandra-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.cassandraHighReadLatency.enabled .rules.cassandraHighReadLatency.severity)) -}}
+    - alert: HighReadLatency
+      expr: cassandra_stats{name=~"org:apache:cassandra:metrics:table:kubedb_keyspace:healthcheck_table:coordinatorreadlatency:99thpercentile",job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"} > 7000
+      for: {{ .rules.cassandraHighReadLatency.duration }}
       labels:
-        severity: {{ .rules.cassandraItemsNoneMinor.severity }}
+        severity: {{ .rules.cassandraHighReadLatency.severity }}
         {{- include "cassandra-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: Cassandra has no item ({{.rules.cassandraItemsNoneMinor.val}} second ago) (instance {{`{{`}} $labels.pod {{`}}`}})
-        description: "Cassandra has no item\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: Cassandra has high read latency (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "Cassandra has high read latency\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
-    {{ if (include "cassandra-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.cassandraEvictionsLimit.enabled .rules.cassandraEvictionsLimit.severity)) -}}
-    - alert: cassandraEvictionsLimit
-      expr: increase(cassandra_items_evicted_total{job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"}[1m]) > {{.rules.cassandraEvictionsLimit.val}}
-      for: {{ .rules.cassandraEvictionsLimit.duration }}
+    {{ if (include "cassandra-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.cassandraHighWriteLatency.enabled .rules.cassandraHighWriteLatency.severity)) -}}
+    - alert: HighWriteLatency
+      expr: cassandra_stats{name=~"org:apache:cassandra:metrics:table:kubedb_keyspace:healthcheck_table:coordinatorwritelatency:99thpercentile",job="{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"} > 7000
+      for: {{ .rules.cassandraHighWriteLatency.duration }}
       labels:
-        severity: {{ .rules.cassandraEvictionsLimit.severity }}
+        severity: {{ .rules.cassandraHighWriteLatency.severity }}
         {{- include "cassandra-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: Cassandra has high evictions per minute (> {{.rules.cassandraEvictionsLimit.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
-        description: "Cassandra has high evictions on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: Cassandra has high write latency (> {{.rules.cassandraHighWriteLatency.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "Cassandra has high write latency on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
   {{ end -}}
   {{ end -}}
-
 
   {{ with .Values.form.alert.groups.provisioner -}}
   {{ if (include "cassandra-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}

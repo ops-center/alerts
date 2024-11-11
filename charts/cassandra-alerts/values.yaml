@@ -80,8 +80,8 @@ form:
 
 
 grafana:
-  enabled: true
+  enabled: false
   version: 7.5.5
-  jobName: cass-stats
+  jobName: kubedb-databases
   url: ""
-  apikey: "="
+  apikey: ""

@@ -94,11 +94,11 @@ The following table lists the configurable parameters of the `cassandra-alerts` 
 | form.alert.groups.provisioner.rules.appPhaseCritical.enabled          |                                               | <code>true</code>                                |
 | form.alert.groups.provisioner.rules.appPhaseCritical.duration         |                                               | <code>"5m"</code>                                |
 | form.alert.groups.provisioner.rules.appPhaseCritical.severity         |                                               | <code>warning</code>                             |
-| grafana.enabled                                                       |                                               | <code>true</code>                                |
+| grafana.enabled                                                       |                                               | <code>false</code>                               |
 | grafana.version                                                       |                                               | <code>7.5.5</code>                               |
-| grafana.jobName                                                       |                                               | <code>cass-stats</code>                          |
+| grafana.jobName                                                       |                                               | <code>kubedb-databases</code>                    |
 | grafana.url                                                           |                                               | <code>""</code>                                  |
-| grafana.apikey                                                        |                                               | <code>"="</code>                                 |
+| grafana.apikey                                                        |                                               | <code>""</code>                                  |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm upgrade -i`. For example:

@@ -1,11 +1,11 @@
 This template is designed to contact with AppsCode with troubleshooting and support in general. You will find all the KubeDB Managed database follows similar pattern. To troubleshoot and find what to do let's get started with the database phase.
 
-Let's say you have MSSQLServer database in namespace demo.Please refer to [KubeDB Docs](https://kubedb.com/docs/latest/guides/mssqlserver/) for more about KubeDB.
+Let's say you have MSSQLServer database in namespace `demo`. Please refer to [KubeDB Docs](https://kubedb.com/docs/latest/guides/mssqlserver/) for more about KubeDB.
 ```bash
 kubectl get mssqlserver -n <ns>     // will list all the database in a namesapce  
 $ kubectl get mssqlserver -n demo
-  NAME    VERSION   STATUS   AGE
-  mssqlserver   13.2    Ready    6h51m
+NAME               VERSION     STATUS      AGE
+mssqlserver        2022-cu12   Ready       5s
 ```
 There are four different db phase you may see in KubeDB managed Database.
 ``Ready`` ``Provisioning`` ``Critical`` ``NotReady``
@@ -26,7 +26,7 @@ You can contact to AppsCode with the following things attached,
     ```bash
       kubectl describe mssqlserver -n <ns> <mssqlserver-object-Name> 
     ```
-- Describe the StatefulSet object:
+- Describe the PetSet object:
     ```bash
       kubectl describe sts -n <ns> <mssqlserver-object-Name>
     ```
@@ -64,17 +64,17 @@ You can contact to AppsCode with the following things attached,
     ```bash
       kubectl describe mssqlserver -n <ns> <mssqlserver-object-Name> 
     ```
-- Describe the StatefulSet object
+- Describe the PetSet object
     ```bash
-      kubectl describe sts -n <ns> <mssqlserver-object-Name>
+      kubectl describe petset -n <ns> <mssqlserver-object-Name>
     ```
 - Describe the pods: if there are multiple pods describe all of them
     ```bash
        kubectl describe pod -n <ns> <podName> 
     ```
-- Pod logs:  if there are multiple pods, log all of them. stand alone mssqlserver doesn't contain the `mssql-coordinator` container.
+- Pod logs:  if there are multiple pods, log all of them. standalone mssqlserver doesn't contain the `mssql-coordinator` container.
     ```bash
-    kubectl logs -n <ns> <pod-name> -c mssqlserver
+    kubectl logs -n <ns> <pod-name> -c mssql
     kubectl logs -n <ns> <pod-name> -c mssql-coordinator  
     ```
 - Operator logs:
@@ -99,7 +99,7 @@ In that case please contact AppsCode with the following information.
     ```bash
       kubectl describe mssqlserver -n <ns> <mssqlserver-object-Name> 
     ```
-- Describe the StatefulSet object
+- Describe the PetSet object
     ```bash
       kubectl describe sts -n <ns> <mssqlserver-object-Name>
     ```

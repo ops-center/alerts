@@ -28,7 +28,7 @@ const (
 	ResourceMSSQLServerAlertss    = "mssqlserveralertss"
 )
 
-// MSSQLServerAlerts defines the schama for KubeDB Ops Manager Operator Installer.
+// MSSQLServerAlerts defines the schema for KubeDB Ops Manager Operator Installer.
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
@@ -44,6 +44,7 @@ type MSSQLServerAlerts struct {
 type MSSQLServerAlertsSpec struct {
 	api.Metadata `json:"metadata,omitempty"`
 	Form         MSSQLServerAlertsSpecForm `json:"form"`
+	Grafana      MemcachedGrafana          `json:"grafana"`
 }
 
 type MSSQLServerAlertsSpecForm struct {
@@ -61,12 +62,9 @@ type MSSQLServerAlert struct {
 }
 
 type MSSQLServerAlertGroups struct {
-	Database      MSSQLServerDatabaseAlert `json:"database"`
-	Provisioner   ProvisionerAlert         `json:"provisioner"`
-	OpsManager    OpsManagerAlert          `json:"opsManager"`
-	Stash         StashAlert               `json:"stash"`
-	KubeStash     KubeStashAlert           `json:"kubeStash"`
-	SchemaManager SchemaManagerAlert       `json:"schemaManager"`
+	Database    MSSQLServerDatabaseAlert `json:"database"`
+	Provisioner ProvisionerAlert         `json:"provisioner"`
+	KubeStash   KubeStashAlert           `json:"kubeStash"`
 }
 
 type MSSQLServerDatabaseAlert struct {
@@ -75,18 +73,20 @@ type MSSQLServerDatabaseAlert struct {
 }
 
 type MSSQLServerDatabaseAlertRules struct {
-	MSSQLServerInstanceDown         FixedAlert          `json:"mssqlserverInstanceDown"`
-	MSSQLServerRestarted            IntValAlert         `json:"mssqlserverRestarted"`
-	MSSQLServerExporterError        FixedAlert          `json:"mssqlserverExporterError"`
-	MSSQLServerTooManyConnections   IntValAlert         `json:"mssqlserverTooManyConnections"`
-	MSSQLServerNotEnoughConnections IntValAlert         `json:"mssqlserverNotEnoughConnections"`
-	MSSQLServerSlowQueries          FixedAlert          `json:"mssqlserverSlowQueries"`
-	MSSQLServerReplicationLag       StringValAlert      `json:"mssqlserverReplicationLag"`
-	MSSQLServerHighRollbackRate     FloatValAlertConfig `json:"mssqlserverHighRollbackRate"`
-	MSSQLServerSplitBrain           FixedAlert          `json:"mssqlserverSplitBrain"`
-	MSSQLServerTooManyLocksAcquired FloatValAlertConfig `json:"mssqlserverTooManyLocksAcquired"`
-	DiskUsageHigh                   IntValAlert         `json:"diskUsageHigh"`
-	DiskAlmostFull                  IntValAlert         `json:"diskAlmostFull"`
+	MSSQLServerInstanceDown       FixedAlert  `json:"mssqlserverInstanceDown"`
+	MSSSQLServerServiceDown       FixedAlert  `json:"mssqlserverServiceDown"`
+	MSSQLServerRestarted          IntValAlert `json:"mssqlserverRestarted"`
+	MSSQLServerTooManyConnections IntValAlert `json:"mssqlserverTooManyConnections"`
+	DiskUsageHigh                 IntValAlert `json:"diskUsageHigh"`
+	DiskAlmostFull                IntValAlert `json:"diskAlmostFull"`
+}
+
+type MSSQLServerGrafana struct {
+	Enabled bool   `json:"enabled"`
+	Version string `json:"version"`
+	JobName string `json:"jobName"`
+	URL     string `json:"url"`
+	ApiKey  string `json:"apikey"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

@@ -32,28 +32,6 @@ spec:
         summary: MSSQLServer instance down (instance {{`{{`}} $labels.pod {{`}}`}})
         description: "MSSQLServer instance is down on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{end -}}
-    {{ if (include "mssqlserver-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.mssqlserverSplitBrain.enabled .rules.mssqlserverSplitBrain.severity)) -}}
-    - alert: MSSQLServerSplitBrain
-      expr: count(pg_replication_is_replica{job="{{- $app -}}-stats",namespace="{{ $.Release.Namespace }}"} == 0) != 1
-      for: {{ .rules.mssqlserverSplitBrain.duration }}
-      labels:
-        severity: {{ .rules.mssqlserverSplitBrain.severity }}
-        {{- include "mssqlserver-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: MSSQLServer split brain (instance {{`{{`}} $labels.pod {{`}}`}})
-        description: "Split Brain, too many primary MSSQLServer databases in read-write mode\n  {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-    {{end -}}
-    {{ if (include "mssqlserver-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.mssqlserverTooManyLocksAcquired.enabled .rules.mssqlserverTooManyLocksAcquired.severity)) -}}
-    - alert: MSSQLServerTooManyLocksAcquired
-      expr: ((sum by (pod) (pg_locks_count{job="{{- $app -}}-stats",namespace="{{ $.Release.Namespace }}"}) ) / ( sum by (pod) (pg_settings_max_locks_per_transaction{job="{{- $app -}}-stats",namespace="{{ $.Release.Namespace }}"}) * sum by (pod) (pg_settings_max_connections{job="{{- $app -}}-stats",namespace="{{ $.Release.Namespace }}"}))) > {{.rules.mssqlserverTooManyLocksAcquired.val}}
-      for: {{ .rules.mssqlserverTooManyLocksAcquired.duration }}
-      labels:
-        severity: {{ .rules.mssqlserverTooManyLocksAcquired.severity }}
-        {{- include "mssqlserver-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: MSSQLServer too many locks acquired (instance {{`{{`}} $labels.pod {{`}}`}})
-        description: "Too many locks acquired on the database. \n  If this alert happens frequently, we may need to increase the mssqlserver setting max_locks_per_transaction.\n  {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-    {{end -}}
     {{ if (include "mssqlserver-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.mssqlserverRestarted.enabled .rules.mssqlserverRestarted.severity)) -}}
     - alert: MSSQLServerRestarted
       expr: time() - pg_postmaster_start_time_seconds{job="{{- $app -}}-stats",namespace="{{ $.Release.Namespace }}"} < {{ .rules.mssqlserverRestarted.val }}
@@ -64,28 +42,6 @@ spec:
       annotations:
         summary: MSSQLServer restarted (instance {{`{{`}} $labels.pod {{`}}`}})
         description: "MSSQLServer restarted\n  {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-    {{end -}}
-    {{ if (include "mssqlserver-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.mssqlserverExporterError.enabled .rules.mssqlserverExporterError.severity)) -}}
-    - alert: MSSQLServerExporterError
-      expr: pg_exporter_last_scrape_error{job="{{- $app -}}-stats",namespace="{{ $.Release.Namespace }}"} > 0
-      for: {{ .rules.mssqlserverExporterError.duration }}
-      labels:
-        severity: {{ .rules.mssqlserverExporterError.severity }}
-        {{- include "mssqlserver-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: MSSQLServer exporter error (instance {{`{{`}} $labels.pod {{`}}`}})
-        description: "MSSQLServer exporter is showing errors. A query may be buggy in query.yaml\n  {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-    {{end -}}
-    {{ if (include "mssqlserver-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.mssqlserverHighRollbackRate.enabled .rules.mssqlserverHighRollbackRate.severity)) -}}
-    - alert: MSSQLServerHighRollbackRate
-      expr: rate(pg_stat_database_xact_rollback{job="{{- $app -}}-stats",namespace="{{ $.Release.Namespace }}"}[3m]) / rate(pg_stat_database_xact_commit{job="{{- $app -}}-stats",namespace="{{ $.Release.Namespace }}"}[3m]) > {{ .rules.mssqlserverHighRollbackRate.val }}
-      for: {{ .rules.mssqlserverHighRollbackRate.duration }}
-      labels:
-        severity: {{ .rules.mssqlserverHighRollbackRate.severity }}
-        {{- include "mssqlserver-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: MSSQLServer high rollback rate (instance {{`{{`}} $labels.pod {{`}}`}})
-        description: "Ratio of transactions being aborted compared to committed is hign. {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{end -}}
     {{ if (include "mssqlserver-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.mssqlserverTooManyConnections.enabled .rules.mssqlserverTooManyConnections.severity)) -}}
     - alert: MSSQLServerTooManyConnections

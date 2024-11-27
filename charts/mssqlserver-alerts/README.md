@@ -52,8 +52,8 @@ The following table lists the configurable parameters of the `mssqlserver-alerts
 | metadata.resource.name                                                        |                                               | <code>mssqlserveres</code>                                 |
 | metadata.resource.scope                                                       |                                               | <code>Namespaced</code>                                    |
 | metadata.resource.version                                                     |                                               | <code>v1alpha2</code>                                      |
-| metadata.release.name                                                         | Release name                                  | <code>""</code>                                            |
-| metadata.release.namespace                                                    | Release namespace                             | <code>""</code>                                            |
+| metadata.release.name                                                         | Release name                                  | <code>"mssql-ag"</code>                                    |
+| metadata.release.namespace                                                    | Release namespace                             | <code>"demo"</code>                                        |
 | form.alert.enabled                                                            | # Enable PrometheusRule alerts                | <code>warning</code>                                       |
 | form.alert.labels                                                             | # Labels for default rules                    | <code>{"release":"kube-prometheus-stack"}</code>           |
 | form.alert.annotations                                                        | # Annotations for default rules               | <code>{}</code>                                            |
@@ -69,10 +69,6 @@ The following table lists the configurable parameters of the `mssqlserver-alerts
 | form.alert.groups.database.rules.mssqlserverRestarted.duration                |                                               | <code>"0m"</code>                                          |
 | form.alert.groups.database.rules.mssqlserverRestarted.val                     |                                               | <code>60</code>                                            |
 | form.alert.groups.database.rules.mssqlserverRestarted.severity                |                                               | <code>critical</code>                                      |
-| form.alert.groups.database.rules.mssqlserverTooManyConnections.enabled        |                                               | <code>true</code>                                          |
-| form.alert.groups.database.rules.mssqlserverTooManyConnections.duration       |                                               | <code>"2m"</code>                                          |
-| form.alert.groups.database.rules.mssqlserverTooManyConnections.val            |                                               | <code>80</code>                                            |
-| form.alert.groups.database.rules.mssqlserverTooManyConnections.severity       |                                               | <code>warning</code>                                       |
 | form.alert.groups.database.rules.diskUsageHigh.enabled                        |                                               | <code>true</code>                                          |
 | form.alert.groups.database.rules.diskUsageHigh.val                            |                                               | <code>80</code>                                            |
 | form.alert.groups.database.rules.diskUsageHigh.duration                       |                                               | <code>"1m"</code>                                          |
@@ -100,7 +96,7 @@ The following table lists the configurable parameters of the `mssqlserver-alerts
 | form.alert.groups.opsManager.rules.opsRequestFailed.severity                  |                                               | <code>critical</code>                                      |
 | grafana.enabled                                                               |                                               | <code>true</code>                                          |
 | grafana.version                                                               |                                               | <code>7.5.5</code>                                         |
-| grafana.jobName                                                               |                                               | <code>mssqlserver-stats</code>                             |
+| grafana.jobName                                                               |                                               | <code>mssql-ag-stats</code>                                |
 | grafana.url                                                                   |                                               | <code>"http://prometheus-grafana.monitoring.svc:80"</code> |
 | grafana.apikey                                                                |                                               | <code>""</code>                                            |
 

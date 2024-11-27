@@ -141,7 +141,7 @@ data:
             "targets": [
               {
                 "exemplar": true,
-                "expr": "kubedb_com_mssqlserver_status_phase{app=\"{{ .Release.Name }}\",namespace=\"{{ .Release.Namespace }}\",phase=\"NotReady\"}",
+                "expr": "kubedb_com_mssqlserver_status_phase{app=\"{{ .Release.Name }}\",app_namespace=\"{{ .Release.Namespace }}\",phase=\"NotReady\"}",
                 "interval": "",
                 "legendFormat": "",
                 "refId": "A"
@@ -279,7 +279,7 @@ data:
             "targets": [
               {
                 "exemplar": true,
-                "expr": "kubedb_com_mssqlserver_status_phase{app=\"{{ .Release.Name }}\",namespace=\"{{ .Release.Namespace }}\",phase=\"Critical\"}",
+                "expr": "kubedb_com_mssqlserver_status_phase{app=\"{{ .Release.Name }}\",app_namespace=\"{{ .Release.Namespace }}\",phase=\"Critical\"}",
                 "interval": "",
                 "legendFormat": "",
                 "refId": "A"
@@ -431,7 +431,7 @@ data:
             "targets": [
               {
                 "exemplar": true,
-                "expr": "min by (service) (memsql_up{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"})",
+                "expr": "min by (service) (up{namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"})",
                 "interval": "",
                 "legendFormat": "",
                 "refId": "A"
@@ -569,7 +569,7 @@ data:
             "targets": [
               {
                 "exemplar": true,
-                "expr": "max by (service) (memsql_up{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"})",
+                "expr": "max by (service) (up{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"})",
                 "interval": "",
                 "legendFormat": "",
                 "refId": "A"
@@ -589,144 +589,6 @@ data:
             "timeRegions": [],
             "timeShift": null,
             "title": "MSSQLServer Service Down",
-            "tooltip": {
-              "shared": true,
-              "sort": 0,
-              "value_type": "individual"
-            },
-            "type": "graph",
-            "xaxis": {
-              "buckets": null,
-              "mode": "time",
-              "name": null,
-              "show": true,
-              "values": []
-            },
-            "yaxes": [
-              {
-                "format": "short",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              },
-              {
-                "format": "short",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              }
-            ],
-            "yaxis": {
-              "align": false,
-              "alignLevel": null
-            }
-          },
-          {
-            "alert": {
-              "alertRuleTags": {},
-              "conditions": [
-                {
-                  "evaluator": {
-                    "params": [
-                      {{ .Values.form.alert.groups.database.rules.mssqlserverTooManyConnections.val}}
-                    ],
-                    "type": "gt"
-                  },
-                  "operator": {
-                    "type": "and"
-                  },
-                  "query": {
-                    "params": [
-                      "A",
-                      "5m",
-                      "now"
-                    ]
-                  },
-                  "reducer": {
-                    "params": [],
-                    "type": "avg"
-                  },
-                  "type": "query"
-                }
-              ],
-              "executionErrorState": "alerting",
-              "for": "{{ .Values.form.alert.groups.database.rules.mssqlserverTooManyConnections.duration }}",
-              "frequency": "1m",
-              "handler": 1,
-              "name": "MSSQLServer Too Many Connections",
-              "noDataState": "no_data",
-              "notifications": []
-            },
-            "aliasColors": {},
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": null,
-            "fieldConfig": {
-              "defaults": {},
-              "overrides": []
-            },
-            "fill": 1,
-            "fillGradient": 0,
-            "gridPos": {
-              "h": 8,
-              "w": 12,
-              "x": 0,
-              "y": 19
-            },
-            "hiddenSeries": false,
-            "id": 8,
-            "legend": {
-              "avg": false,
-              "current": false,
-              "max": false,
-              "min": false,
-              "show": true,
-              "total": false,
-              "values": false
-            },
-            "lines": true,
-            "linewidth": 1,
-            "nullPointMode": "null",
-            "options": {
-              "alertThreshold": true
-            },
-            "percentage": false,
-            "pluginVersion": "7.5.5",
-            "pointradius": 2,
-            "points": false,
-            "renderer": "flot",
-            "seriesOverrides": [],
-            "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
-            "targets": [
-              {
-                "exemplar": true,
-                "expr": "max by (service) (max_over_time(memsql_status_threads_connected{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"}[1m]) / memsql_variable_max_connections{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"} * 100)",
-                "interval": "",
-                "legendFormat": "",
-                "refId": "A"
-              }
-            ],
-            "thresholds": [
-              {
-                "colorMode": "critical",
-                "fill": true,
-                "line": true,
-                "op": "gt",
-                "value": 80,
-                "visible": true
-              }
-            ],
-            "timeFrom": null,
-            "timeRegions": [],
-            "timeShift": null,
-            "title": "MSSQLServer Too Many Connections",
             "tooltip": {
               "shared": true,
               "sort": 0,
@@ -845,7 +707,7 @@ data:
             "targets": [
               {
                 "exemplar": true,
-                "expr": "min by (service) (memsql_status_uptime{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"})",
+                "expr": "min by (service) (mssql_uptime_seconds{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"})",
                 "interval": "",
                 "legendFormat": "",
                 "refId": "A"

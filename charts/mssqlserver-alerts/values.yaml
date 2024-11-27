@@ -7,9 +7,9 @@ metadata:
     version: v1alpha2
   release:
     # Release name
-    name: ""
+    name: "mssql-ag"
     # Release namespace
-    namespace: ""
+    namespace: "demo"
 
 form:
   alert:
@@ -47,11 +47,6 @@ form:
             duration: "0m"
             val: 60
             severity: critical
-          mssqlserverTooManyConnections:
-            enabled: true
-            duration: "2m"
-            val: 80
-            severity: warning
           # Sepcifies the alert configuration for persistent volume usages.
           diskUsageHigh:
             enabled: true
@@ -93,6 +88,6 @@ form:
 grafana:
   enabled: true
   version: 7.5.5
-  jobName: mssqlserver-stats
+  jobName: mssql-ag-stats
   url: "http://prometheus-grafana.monitoring.svc:80"
   apikey: ""

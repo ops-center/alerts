@@ -1,0 +1,18 @@
+project:
+  name: PgBouncer alerts by AppsCode
+  shortName: PgBouncer alerts
+  url: https://github.com/appscode/alerts
+  description: PgBouncer alerts for KubeDB
+  app: PgBouncer alerts
+repository:
+  url: https://charts.appscode.com/stable/
+  name: appscode
+chart:
+  name: pgbouncer
+  values: -- generate from values file --
+  valuesExample: -- generate from values file --
+prerequisites:
+  - Kubernetes 1.19+
+release:
+  name: pgbouncer
+  namespace: demo

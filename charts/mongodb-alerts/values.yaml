@@ -66,7 +66,7 @@ form:
           # Sepcifies the alert configuration for database is in Critical phase, that means one or more of the nodes are down but the database read/write are not hampered.
           mongoDBPhaseCritical:
             enabled: true
-            duration: "3m"
+            duration: "10m"
             severity: warning
           # Sepcifies the alert configuration for database is in NotReady phase, that means the database is not accepting connections, read/write are hampered.
           mongoDBDown:

@@ -80,7 +80,7 @@ The following table lists the configurable parameters of the `mongodb-alerts` ch
 | form.alert.groups.database.rules.mongodbTooManyConnections.duration           |                                               | <code>"2m"</code>                                |
 | form.alert.groups.database.rules.mongodbTooManyConnections.severity           |                                               | <code>warning</code>                             |
 | form.alert.groups.database.rules.mongoDBPhaseCritical.enabled                 |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.mongoDBPhaseCritical.duration                |                                               | <code>"3m"</code>                                |
+| form.alert.groups.database.rules.mongoDBPhaseCritical.duration                |                                               | <code>"10m"</code>                               |
 | form.alert.groups.database.rules.mongoDBPhaseCritical.severity                |                                               | <code>warning</code>                             |
 | form.alert.groups.database.rules.mongoDBDown.enabled                          |                                               | <code>true</code>                                |
 | form.alert.groups.database.rules.mongoDBDown.duration                         |                                               | <code>"30s"</code>                               |

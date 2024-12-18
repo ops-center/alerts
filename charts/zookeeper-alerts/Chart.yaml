@@ -3,7 +3,7 @@ name: zookeeper-alerts
 description: A Helm chart for ZooKeeper Alert by AppsCode
 type: application
 version: v2024.2.14
-appVersion: v0.2.0
+appVersion: v0.3.0
 home: https://github.com/appscode/alerts
 icon: https://cdn.appscode.com/images/products/kubedb/kubedb-icon.png
 sources:

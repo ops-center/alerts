@@ -15,6 +15,7 @@
 package v1
 
 import (
+	"errors"
 	"fmt"
 
 	v1 "k8s.io/api/core/v1"
@@ -73,6 +74,35 @@ type PrometheusRuleExcludeConfig struct {
 	RuleNamespace string `json:"ruleNamespace"`
 	// Name of the excluded PrometheusRule object.
 	RuleName string `json:"ruleName"`
+}
+
+type ProxyConfig struct {
+	// `proxyURL` defines the HTTP proxy server to use.
+	//
+	// It requires Prometheus >= v2.43.0.
+	// +kubebuilder:validation:Pattern:="^http(s)?://.+$"
+	// +optional
+	ProxyURL *string `json:"proxyUrl,omitempty"`
+	// `noProxy` is a comma-separated string that can contain IPs, CIDR notation, domain names
+	// that should be excluded from proxying. IP and domain names can
+	// contain port numbers.
+	//
+	// It requires Prometheus >= v2.43.0.
+	// +optional
+	NoProxy *string `json:"noProxy,omitempty"`
+	// Whether to use the proxy configuration defined by environment variables (HTTP_PROXY, HTTPS_PROXY, and NO_PROXY).
+	// If unset, Prometheus uses its default value.
+	//
+	// It requires Prometheus >= v2.43.0.
+	// +optional
+	ProxyFromEnvironment *bool `json:"proxyFromEnvironment,omitempty"`
+	// ProxyConnectHeader optionally specifies headers to send to
+	// proxies during CONNECT requests.
+	//
+	// It requires Prometheus >= v2.43.0.
+	// +optional
+	// +mapType:=atomic
+	ProxyConnectHeader map[string][]v1.SecretKeySelector `json:"proxyConnectHeader,omitempty"`
 }
 
 // ObjectReference references a PodMonitor, ServiceMonitor, Probe or PrometheusRule object.
@@ -200,8 +230,8 @@ type EmbeddedPersistentVolumeClaim struct {
 	// +optional
 	Spec v1.PersistentVolumeClaimSpec `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
 
-	// *Deprecated: this field is never set.*
 	// +optional
+	// Deprecated: this field is never set.
 	Status v1.PersistentVolumeClaimStatus `json:"status,omitempty" protobuf:"bytes,3,opt,name=status"`
 }
 
@@ -313,17 +343,9 @@ type WebTLSConfig struct {
 	CurvePreferences []string `json:"curvePreferences,omitempty"`
 }
 
-// WebTLSConfigError is returned by WebTLSConfig.Validate() on
-// semantically invalid configurations.
-// +k8s:openapi-gen=false
-type WebTLSConfigError struct {
-	err string
-}
-
-func (e *WebTLSConfigError) Error() string {
-	return e.err
-}
-
+// Validate returns an error if one of the WebTLSConfig fields is invalid.
+// A valid WebTLSConfig should have Cert and KeySecret fields which are not
+// zero values.
 func (c *WebTLSConfig) Validate() error {
 	if c == nil {
 		return nil
@@ -331,20 +353,18 @@ func (c *WebTLSConfig) Validate() error {
 
 	if c.ClientCA != (SecretOrConfigMap{}) {
 		if err := c.ClientCA.Validate(); err != nil {
-			msg := fmt.Sprintf("invalid web tls config: %s", err.Error())
-			return &WebTLSConfigError{msg}
+			return fmt.Errorf("client CA: %w", err)
 		}
 	}
 
 	if c.Cert == (SecretOrConfigMap{}) {
-		return &WebTLSConfigError{"invalid web tls config: cert must be defined"}
+		return errors.New("TLS cert must be defined")
 	} else if err := c.Cert.Validate(); err != nil {
-		msg := fmt.Sprintf("invalid web tls config: %s", err.Error())
-		return &WebTLSConfigError{msg}
+		return fmt.Errorf("TLS cert: %w", err)
 	}
 
 	if c.KeySecret == (v1.SecretKeySelector{}) {
-		return &WebTLSConfigError{"invalid web tls config: key must be defined"}
+		return errors.New("TLS key must be defined")
 	}
 
 	return nil
@@ -366,10 +386,10 @@ type Endpoint struct {
 	// It takes precedence over `targetPort`.
 	Port string `json:"port,omitempty"`
 
-	// Name or number of the target port of the `Pod` object behind the Service, the
-	// port must be specified with container port property.
+	// Name or number of the target port of the `Pod` object behind the
+	// Service. The port must be specified with the container's port property.
 	//
-	// Deprecated: use `port` instead.
+	// +optional
 	TargetPort *intstr.IntOrString `json:"targetPort,omitempty"`
 
 	// HTTP path from which to scrape for metrics.
@@ -468,7 +488,7 @@ type Endpoint struct {
 	// samples before ingestion.
 	//
 	// +optional
-	MetricRelabelConfigs []*RelabelConfig `json:"metricRelabelings,omitempty"`
+	MetricRelabelConfigs []RelabelConfig `json:"metricRelabelings,omitempty"`
 
 	// `relabelings` configures the relabeling rules to apply the target's
 	// metadata labels.
@@ -480,7 +500,7 @@ type Endpoint struct {
 	// More info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
 	//
 	// +optional
-	RelabelConfigs []*RelabelConfig `json:"relabelings,omitempty"`
+	RelabelConfigs []RelabelConfig `json:"relabelings,omitempty"`
 
 	// `proxyURL` configures the HTTP Proxy URL (e.g.
 	// "http://proxyserver:2195") to go through when scraping the target.
@@ -594,24 +614,32 @@ type SecretOrConfigMap struct {
 	ConfigMap *v1.ConfigMapKeySelector `json:"configMap,omitempty"`
 }
 
-// SecretOrConfigMapValidationError is returned by SecretOrConfigMap.Validate()
-// on semantically invalid configurations.
-// +k8s:openapi-gen=false
-type SecretOrConfigMapValidationError struct {
-	err string
-}
-
-func (e *SecretOrConfigMapValidationError) Error() string {
-	return e.err
-}
-
-// Validate semantically validates the given TLSConfig.
+// Validate semantically validates the given SecretOrConfigMap.
 func (c *SecretOrConfigMap) Validate() error {
+	if c == nil {
+		return nil
+	}
+
 	if c.Secret != nil && c.ConfigMap != nil {
-		return &SecretOrConfigMapValidationError{"SecretOrConfigMap can not specify both Secret and ConfigMap"}
+		return fmt.Errorf("cannot specify both Secret and ConfigMap")
 	}
 
 	return nil
+}
+
+func (c *SecretOrConfigMap) String() string {
+	if c == nil {
+		return "<nil>"
+	}
+
+	switch {
+	case c.Secret != nil:
+		return fmt.Sprintf("<secret=%s,key=%s>", c.Secret.LocalObjectReference.Name, c.Secret.Key)
+	case c.ConfigMap != nil:
+		return fmt.Sprintf("<configmap=%s,key=%s>", c.ConfigMap.LocalObjectReference.Name, c.ConfigMap.Key)
+	}
+
+	return "<empty>"
 }
 
 // SafeTLSConfig specifies safe TLS configuration parameters.
@@ -619,36 +647,42 @@ func (c *SecretOrConfigMap) Validate() error {
 type SafeTLSConfig struct {
 	// Certificate authority used when verifying server certificates.
 	CA SecretOrConfigMap `json:"ca,omitempty"`
+
 	// Client certificate to present when doing client-authentication.
 	Cert SecretOrConfigMap `json:"cert,omitempty"`
+
 	// Secret containing the client key file for the targets.
 	KeySecret *v1.SecretKeySelector `json:"keySecret,omitempty"`
+
 	// Used to verify the hostname for the targets.
-	ServerName string `json:"serverName,omitempty"`
+	//+optional
+	ServerName *string `json:"serverName,omitempty"`
+
 	// Disable target certificate validation.
-	InsecureSkipVerify bool `json:"insecureSkipVerify,omitempty"`
+	//+optional
+	InsecureSkipVerify *bool `json:"insecureSkipVerify,omitempty"`
 }
 
 // Validate semantically validates the given SafeTLSConfig.
 func (c *SafeTLSConfig) Validate() error {
 	if c.CA != (SecretOrConfigMap{}) {
 		if err := c.CA.Validate(); err != nil {
-			return err
+			return fmt.Errorf("ca %s: %w", c.CA.String(), err)
 		}
 	}
 
 	if c.Cert != (SecretOrConfigMap{}) {
 		if err := c.Cert.Validate(); err != nil {
-			return err
+			return fmt.Errorf("cert %s: %w", c.Cert.String(), err)
 		}
 	}
 
 	if c.Cert != (SecretOrConfigMap{}) && c.KeySecret == nil {
-		return &TLSConfigValidationError{"client cert specified without client key"}
+		return fmt.Errorf("client cert specified without client key")
 	}
 
 	if c.KeySecret != nil && c.Cert == (SecretOrConfigMap{}) {
-		return &TLSConfigValidationError{"client key specified without client cert"}
+		return fmt.Errorf("client key specified without client cert")
 	}
 
 	return nil
@@ -666,50 +700,39 @@ type TLSConfig struct {
 	KeyFile string `json:"keyFile,omitempty"`
 }
 
-// TLSConfigValidationError is returned by TLSConfig.Validate() on semantically
-// invalid tls configurations.
-// +k8s:openapi-gen=false
-type TLSConfigValidationError struct {
-	err string
-}
-
-func (e *TLSConfigValidationError) Error() string {
-	return e.err
-}
-
 // Validate semantically validates the given TLSConfig.
 func (c *TLSConfig) Validate() error {
 	if c.CA != (SecretOrConfigMap{}) {
 		if c.CAFile != "" {
-			return &TLSConfigValidationError{"tls config can not both specify CAFile and CA"}
+			return fmt.Errorf("cannot specify both caFile and ca")
 		}
 		if err := c.CA.Validate(); err != nil {
-			return &TLSConfigValidationError{"tls config CA is invalid"}
+			return fmt.Errorf("SecretOrConfigMap ca: %w", err)
 		}
 	}
 
 	if c.Cert != (SecretOrConfigMap{}) {
 		if c.CertFile != "" {
-			return &TLSConfigValidationError{"tls config can not both specify CertFile and Cert"}
+			return fmt.Errorf("cannot specify both certFile and cert")
 		}
 		if err := c.Cert.Validate(); err != nil {
-			return &TLSConfigValidationError{"tls config Cert is invalid"}
+			return fmt.Errorf("SecretOrConfigMap cert: %w", err)
 		}
 	}
 
 	if c.KeyFile != "" && c.KeySecret != nil {
-		return &TLSConfigValidationError{"tls config can not both specify KeyFile and KeySecret"}
+		return fmt.Errorf("cannot specify both keyFile and keySecret")
 	}
 
 	hasCert := c.CertFile != "" || c.Cert != (SecretOrConfigMap{})
 	hasKey := c.KeyFile != "" || c.KeySecret != nil
 
 	if hasCert && !hasKey {
-		return &TLSConfigValidationError{"tls config can not specify client cert without client key"}
+		return fmt.Errorf("cannot specify client cert without client key")
 	}
 
 	if hasKey && !hasCert {
-		return &TLSConfigValidationError{"tls config can not specify client key without client cert"}
+		return fmt.Errorf("cannot specify client key without client cert")
 	}
 
 	return nil
@@ -742,3 +765,13 @@ type Argument struct {
 	// Argument value, e.g. 30s. Can be empty for name-only arguments (e.g. --storage.tsdb.no-lockfile)
 	Value string `json:"value,omitempty"`
 }
+
+// The valid options for Role.
+const (
+	RoleNode          = "node"
+	RolePod           = "pod"
+	RoleService       = "service"
+	RoleEndpoint      = "endpoints"
+	RoleEndpointSlice = "endpointslice"
+	RoleIngress       = "ingress"
+)

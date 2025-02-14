@@ -4,21 +4,34 @@
 
 - #### RedisDown
     - Describe the `Redis` CR, check the reason from conditions, and try restarting the pods
-    - **Example**: Check the logs for errors
-    - Contact AppsCode team
+    - Check the KubeDB Operator logs for errors
+    - Check pod status: `kubectl describe pod <redis-pod> -n <namespace>`
+    - Verify resource limits (CPU/Memory)
+    - Command: `kubectl get redis <name> -n <namespace> -o yaml`
+      For Redis Cluster: 
+    - Verify quorum with `redis-cli CLUSTER INFO`
+    - Check node communication: `redis-cli CLUSTER NODES`. Ensure the required number of  master and slave nodes exist and has connected status  
+     Contact AppsCode team
 - #### RedisMissingMaster
     - Describe the `Redis` CR, check the reason from conditions, and try restarting the `replica` pods
-    - **Example**: Ensure the primary node is reachable
+    - Ensure the primary node is reachable
     - Contact AppsCode team
 - #### RedisTooManyMasters
     - Verify network connectivity between nodes
+    - Check for split-brain scenario
     - Contact AppsCode team
 - #### RedisDisconnectedSlaves
     - Describe the `Redis` CR, check the reason from conditions, and try restarting the `replica/slave` pods
-    - **Example**: Verify network connectivity between nodes
+    - Verify network connectivity between nodes
+    - Increase `repl-timeout` if network latency is high
+    - Check replica synchronization: `redis-cli INFO replication`
+    - For Redis cluster, verify health: `redis-cli CLUSTER INFO`
+    - For Sentinel, verify replica connection to master: `redis-cli -p 26379 SENTINEL replicas <master-name>`
     - Contact AppsCode team
 - #### RedisTooManyConnections
+    - Analyze connection sources: `redis-cli CLIENT LIST`
     - Increase Redis variable `maxclients` using `RedisOpsRequest` type `Reconfigure`
+    - Scale horizontally: Add more replicas or shards via `RedisOpsRequest` type `HorizontalScaling`
     - Contact AppsCode team
 
 ### KubeDB Provisioner

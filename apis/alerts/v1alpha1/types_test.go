@@ -27,14 +27,25 @@ import (
 
 func TestDefaultValues(t *testing.T) {
 	checker := sc.New(os.DirFS("../../.."),
+		sc.TestCase{Obj: v1alpha1.CassandraAlertsSpec{}},
+		sc.TestCase{Obj: v1alpha1.ConnectClusterAlertsSpec{}},
+		sc.TestCase{Obj: v1alpha1.DruidAlertsSpec{}},
 		sc.TestCase{Obj: v1alpha1.ElasticsearchAlertsSpec{}},
+		sc.TestCase{Obj: v1alpha1.KafkaAlertsSpec{}},
 		sc.TestCase{Obj: v1alpha1.MariadbAlertsSpec{}},
+		sc.TestCase{Obj: v1alpha1.MemcachedAlertsSpec{}},
 		sc.TestCase{Obj: v1alpha1.MongodbAlertsSpec{}},
+		sc.TestCase{Obj: v1alpha1.MSSQLServerAlertsSpec{}},
 		sc.TestCase{Obj: v1alpha1.MysqlAlertsSpec{}},
 		sc.TestCase{Obj: v1alpha1.PerconaxtradbAlertsSpec{}},
+		sc.TestCase{Obj: v1alpha1.PgbouncerAlertsSpec{}},
+		sc.TestCase{Obj: v1alpha1.PgpoolAlertsSpec{}},
 		sc.TestCase{Obj: v1alpha1.PostgresAlertsSpec{}},
 		sc.TestCase{Obj: v1alpha1.ProxysqlAlertsSpec{}},
+		sc.TestCase{Obj: v1alpha1.RabbitmqAlertsSpec{}},
 		sc.TestCase{Obj: v1alpha1.RedisAlertsSpec{}},
+		sc.TestCase{Obj: v1alpha1.SinglestoreAlertsSpec{}},
+		sc.TestCase{Obj: v1alpha1.SolrAlertsSpec{}},
 		sc.TestCase{Obj: v1alpha1.VaultserverAlertsSpec{}},
 	)
 	checker.TestAll(t)

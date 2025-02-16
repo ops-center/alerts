@@ -36,7 +36,7 @@ form:
           # Specifies the alert configuration for connection usage
           pgbouncerTooManyConnections:
             enabled: true
-            val: .7 # 70%
+            val: 70 # 70%
             duration: "1m"
             severity: warning
           # Specifies the alert configuration for exporter scrape error.

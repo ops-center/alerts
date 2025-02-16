@@ -60,11 +60,14 @@ type SinglestoreAlert struct {
 	AdditionalRuleLabels map[string]string      `json:"additionalRuleLabels"`
 	Groups               SinglestoreAlertGroups `json:"groups"`
 }
+
 type SinglestoreAlertGroups struct {
 	Database    SinglestoreDatabaseAlert `json:"database"`
 	Provisioner ProvisionerAlert         `json:"provisioner"`
+	OpsManager  OpsManagerAlert          `json:"opsManager"`
 	KubeStash   KubeStashAlert           `json:"kubeStash"`
 }
+
 type SinglestoreDatabaseAlert struct {
 	Enabled mona.SeverityFlag             `json:"enabled"`
 	Rules   SinglestoreDatabaseAlertRules `json:"rules"`

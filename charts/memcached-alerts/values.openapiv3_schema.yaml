@@ -154,7 +154,7 @@ properties:
                 - enabled
                 - rules
                 type: object
-              kubeStash:
+              opsManager:
                 properties:
                   enabled:
                     enum:
@@ -165,7 +165,7 @@ properties:
                     type: string
                   rules:
                     properties:
-                      backupSessionFailed:
+                      opsRequestFailed:
                         properties:
                           duration:
                             type: string
@@ -182,47 +182,7 @@ properties:
                         - enabled
                         - severity
                         type: object
-                      backupSessionPeriodTooLong:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      noBackupSessionForTooLong:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      repositoryCorrupted:
+                      opsRequestOnProgress:
                         properties:
                           duration:
                             type: string
@@ -239,27 +199,7 @@ properties:
                         - enabled
                         - severity
                         type: object
-                      repositoryStorageRunningLow:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      restoreSessionFailed:
+                      opsRequestStatusProgressingToLong:
                         properties:
                           duration:
                             type: string
@@ -275,35 +215,11 @@ properties:
                         - duration
                         - enabled
                         - severity
-                        type: object
-                      restoreSessionPeriodTooLong:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
                         type: object
                     required:
-                    - backupSessionFailed
-                    - backupSessionPeriodTooLong
-                    - noBackupSessionForTooLong
-                    - repositoryCorrupted
-                    - repositoryStorageRunningLow
-                    - restoreSessionFailed
-                    - restoreSessionPeriodTooLong
+                    - opsRequestFailed
+                    - opsRequestOnProgress
+                    - opsRequestStatusProgressingToLong
                     type: object
                 required:
                 - enabled
@@ -364,7 +280,7 @@ properties:
                 type: object
             required:
             - database
-            - kubeStash
+            - opsManager
             - provisioner
             type: object
           labels:

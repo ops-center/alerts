@@ -92,14 +92,6 @@ The following table lists the configurable parameters of the `proxysql-alerts` c
 | form.alert.groups.database.rules.proxysqlHighOutgoingBytes.duration           |                                               | <code>"0m"</code>                                |
 | form.alert.groups.database.rules.proxysqlHighOutgoingBytes.val                |                                               | <code>1048576 # 1MB</code>                       |
 | form.alert.groups.database.rules.proxysqlHighOutgoingBytes.severity           |                                               | <code>critical</code>                            |
-| form.alert.groups.database.rules.diskUsageHigh.enabled                        |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.diskUsageHigh.val                            |                                               | <code>80</code>                                  |
-| form.alert.groups.database.rules.diskUsageHigh.duration                       |                                               | <code>"1m"</code>                                |
-| form.alert.groups.database.rules.diskUsageHigh.severity                       |                                               | <code>warning</code>                             |
-| form.alert.groups.database.rules.diskAlmostFull.enabled                       |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.diskAlmostFull.val                           |                                               | <code>95</code>                                  |
-| form.alert.groups.database.rules.diskAlmostFull.duration                      |                                               | <code>"1m"</code>                                |
-| form.alert.groups.database.rules.diskAlmostFull.severity                      |                                               | <code>critical</code>                            |
 | form.alert.groups.cluster.enabled                                             |                                               | <code>warning</code>                             |
 | form.alert.groups.cluster.rules.proxysqlClusterSyncFailure.enabled            |                                               | <code>true</code>                                |
 | form.alert.groups.cluster.rules.proxysqlClusterSyncFailure.val                |                                               | <code>0.1</code>                                 |

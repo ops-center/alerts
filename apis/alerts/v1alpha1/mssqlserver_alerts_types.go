@@ -64,6 +64,7 @@ type MSSQLServerAlert struct {
 type MSSQLServerAlertGroups struct {
 	Database    MSSQLServerDatabaseAlert `json:"database"`
 	Provisioner ProvisionerAlert         `json:"provisioner"`
+	OpsManager  OpsManagerAlert          `json:"opsManager"`
 	KubeStash   KubeStashAlert           `json:"kubeStash"`
 }
 

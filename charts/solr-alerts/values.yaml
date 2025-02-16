@@ -74,12 +74,12 @@ form:
             severity: warning
           diskUsageHigh:
             enabled: true
-            val: 0.8
+            val: 80
             duration: "1m"
             severity: warning
           diskAlmostFull:
             enabled: true
-            val: 0.95
+            val: 95
             duration: "1m"
             severity: critical
       provisioner:

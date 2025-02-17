@@ -141,7 +141,7 @@ The following table lists the configurable parameters of the `singlestore-alerts
 | form.alert.groups.kubeStash.rules.restoreSessionPeriodTooLong.val             |                                               | <code>1800 # 30 minute</code>                    |
 | form.alert.groups.kubeStash.rules.restoreSessionPeriodTooLong.severity        |                                               | <code>warning</code>                             |
 | grafana.enabled                                                               |                                               | <code>false</code>                               |
-| grafana.version                                                               |                                               | <code>8.2.3</code>                               |
+| grafana.version                                                               |                                               | <code>7.5.5</code>                               |
 | grafana.jobName                                                               |                                               | <code>kubedb-databases</code>                    |
 | grafana.url                                                                   |                                               | <code>""</code>                                  |
 | grafana.apikey                                                                |                                               | <code>""</code>                                  |

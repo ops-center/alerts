@@ -31,7 +31,7 @@ properties:
                     type: string
                   rules:
                     properties:
-                      cassandraConnectionThrottled:
+                      cassandraConnectionTimeouts:
                         properties:
                           duration:
                             type: string
@@ -50,23 +50,6 @@ properties:
                         - enabled
                         - severity
                         - val
-                        type: object
-                      cassandraConnectionsNoneMinor:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                        required:
-                        - duration
-                        - enabled
-                        - severity
                         type: object
                       cassandraDown:
                         properties:
@@ -85,7 +68,7 @@ properties:
                         - enabled
                         - severity
                         type: object
-                      cassandraEvictionsLimit:
+                      cassandraDroppedMessages:
                         properties:
                           duration:
                             type: string
@@ -105,7 +88,7 @@ properties:
                         - severity
                         - val
                         type: object
-                      cassandraItemsNoneMinor:
+                      cassandraHighReadLatency:
                         properties:
                           duration:
                             type: string
@@ -117,10 +100,53 @@ properties:
                             - warning
                             - info
                             type: string
+                          val:
+                            type: integer
                         required:
                         - duration
                         - enabled
                         - severity
+                        - val
+                        type: object
+                      cassandraHighWriteLatency:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                          val:
+                            type: integer
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        - val
+                        type: object
+                      cassandraMemoryLimit:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                          val:
+                            type: integer
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        - val
                         type: object
                       cassandraServiceRespawn:
                         properties:
@@ -143,11 +169,12 @@ properties:
                         - val
                         type: object
                     required:
-                    - cassandraConnectionThrottled
-                    - cassandraConnectionsNoneMinor
+                    - cassandraConnectionTimeouts
                     - cassandraDown
-                    - cassandraEvictionsLimit
-                    - cassandraItemsNoneMinor
+                    - cassandraDroppedMessages
+                    - cassandraHighReadLatency
+                    - cassandraHighWriteLatency
+                    - cassandraMemoryLimit
                     - cassandraServiceRespawn
                     type: object
                 required:

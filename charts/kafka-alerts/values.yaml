@@ -86,13 +86,13 @@ form:
             enabled: true
             duration: "1m"
             severity: critical
-            val: 0.3
+            val: 30
           # Specifies alert configurations for request handlers idle rate goes beyond provided value
           kafkaRequestHandlerIdlePercent:
             enabled: true
             duration: "1m"
             severity: critical
-            val: 0.3
+            val: 30
           # Specifies alert configurations replica lag and fetcher configurations
           kafkaReplicaFetcherManagerMaxLag:
             enabled: true
@@ -158,7 +158,7 @@ form:
 
 grafana:
   enabled: false
-  version: 8.2.3
+  version: 7.5.5
   jobName: kubedb-databases
   url: ""
   apikey: ""

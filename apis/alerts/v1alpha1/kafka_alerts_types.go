@@ -73,18 +73,18 @@ type KafkaDatabaseAlert struct {
 }
 
 type KafkaDatabaseAlertRules struct {
-	KafkaUnderReplicatedPartitions   IntValAlert `json:"KafkaUnderReplicatedPartitions"`
-	KafkaAbnormalControllerState     IntValAlert `json:"KafkaAbnormalControllerState"`
-	KafkaOfflinePartitions           IntValAlert `json:"KafkaOfflinePartitions"`
-	KafkaUnderMinIsrPartitionCount   IntValAlert `json:"KafkaUnderMinIsrPartitionCount"`
-	KafkaOfflineLogDirectoryCount    IntValAlert `json:"KafkaOfflineLogDirectoryCount"`
-	KafkaISRExpandRate               IntValAlert `json:"KafkaISRExpandRate"`
-	KafkaISRShrinkRate               IntValAlert `json:"KafkaISRShrinkRate"`
-	KafkaBrokerCount                 IntValAlert `json:"KafkaBrokerCount"`
-	KafkaNetworkProcessorIdlePercent IntValAlert `json:"KafkaNetworkProcessorIdlePercent"`
+	KafkaUnderReplicatedPartitions   IntValAlert `json:"kafkaUnderReplicatedPartitions"`
+	KafkaAbnormalControllerState     IntValAlert `json:"kafkaAbnormalControllerState"`
+	KafkaOfflinePartitions           IntValAlert `json:"kafkaOfflinePartitions"`
+	KafkaUnderMinIsrPartitionCount   IntValAlert `json:"kafkaUnderMinIsrPartitionCount"`
+	KafkaOfflineLogDirectoryCount    IntValAlert `json:"kafkaOfflineLogDirectoryCount"`
+	KafkaISRExpandRate               IntValAlert `json:"kafkaISRExpandRate"`
+	KafkaISRShrinkRate               IntValAlert `json:"kafkaISRShrinkRate"`
+	KafkaBrokerCount                 IntValAlert `json:"kafkaBrokerCount"`
+	KafkaNetworkProcessorIdlePercent IntValAlert `json:"kafkaNetworkProcessorIdlePercent"`
 	KafkaRequestHandlerIdlePercent   IntValAlert `json:"kafkaRequestHandlerIdlePercent"`
-	KafkaReplicaFetcherManagerMaxLag IntValAlert `json:"KafkaReplicaFetcherManagerMaxLag"`
-	KafkaTopicCount                  IntValAlert `json:"KafkaTopicCount"`
+	KafkaReplicaFetcherManagerMaxLag IntValAlert `json:"kafkaReplicaFetcherManagerMaxLag"`
+	KafkaTopicCount                  IntValAlert `json:"kafkaTopicCount"`
 	KafkaPhaseCritical               FixedAlert  `json:"kafkaPhaseCritical"`
 	KafkaDown                        FixedAlert  `json:"kafkaDown"`
 	DiskUsageHigh                    IntValAlert `json:"diskUsageHigh"`

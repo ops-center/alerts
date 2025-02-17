@@ -45,7 +45,7 @@ jobs:
     strategy:
       matrix:
         chart:
-          - connectcluster-alerts
+          - connect-cluster-alerts
           - druid-alerts
           - elasticsearch-alerts
           - kafka-alerts

@@ -94,11 +94,11 @@ The following table lists the configurable parameters of the `kafka-alerts` char
 | form.alert.groups.database.rules.kafkaNetworkProcessorIdlePercent.enabled     |                                               | <code>true</code>                                |
 | form.alert.groups.database.rules.kafkaNetworkProcessorIdlePercent.duration    |                                               | <code>"1m"</code>                                |
 | form.alert.groups.database.rules.kafkaNetworkProcessorIdlePercent.severity    |                                               | <code>critical</code>                            |
-| form.alert.groups.database.rules.kafkaNetworkProcessorIdlePercent.val         |                                               | <code>0.3</code>                                 |
+| form.alert.groups.database.rules.kafkaNetworkProcessorIdlePercent.val         |                                               | <code>30</code>                                  |
 | form.alert.groups.database.rules.kafkaRequestHandlerIdlePercent.enabled       |                                               | <code>true</code>                                |
 | form.alert.groups.database.rules.kafkaRequestHandlerIdlePercent.duration      |                                               | <code>"1m"</code>                                |
 | form.alert.groups.database.rules.kafkaRequestHandlerIdlePercent.severity      |                                               | <code>critical</code>                            |
-| form.alert.groups.database.rules.kafkaRequestHandlerIdlePercent.val           |                                               | <code>0.3</code>                                 |
+| form.alert.groups.database.rules.kafkaRequestHandlerIdlePercent.val           |                                               | <code>30</code>                                  |
 | form.alert.groups.database.rules.kafkaReplicaFetcherManagerMaxLag.enabled     |                                               | <code>true</code>                                |
 | form.alert.groups.database.rules.kafkaReplicaFetcherManagerMaxLag.duration    |                                               | <code>"1m"</code>                                |
 | form.alert.groups.database.rules.kafkaReplicaFetcherManagerMaxLag.severity    |                                               | <code>critical</code>                            |
@@ -139,7 +139,7 @@ The following table lists the configurable parameters of the `kafka-alerts` char
 | form.alert.groups.opsManager.rules.opsRequestFailed.duration                  |                                               | <code>"0m"</code>                                |
 | form.alert.groups.opsManager.rules.opsRequestFailed.severity                  |                                               | <code>critical</code>                            |
 | grafana.enabled                                                               |                                               | <code>false</code>                               |
-| grafana.version                                                               |                                               | <code>8.2.3</code>                               |
+| grafana.version                                                               |                                               | <code>7.5.5</code>                               |
 | grafana.jobName                                                               |                                               | <code>kubedb-databases</code>                    |
 | grafana.url                                                                   |                                               | <code>""</code>                                  |
 | grafana.apikey                                                                |                                               | <code>""</code>                                  |

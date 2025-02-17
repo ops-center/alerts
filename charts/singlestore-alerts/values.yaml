@@ -157,7 +157,7 @@ form:
 
 grafana:
   enabled: false
-  version: 8.2.3
+  version: 7.5.5
   jobName: kubedb-databases
   url: ""
   apikey: ""

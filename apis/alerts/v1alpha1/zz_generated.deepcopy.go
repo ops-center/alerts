@@ -199,10 +199,11 @@ func (in *CassandraDatabaseAlertRules) DeepCopyInto(out *CassandraDatabaseAlertR
 	*out = *in
 	out.CassandraDown = in.CassandraDown
 	out.CassandraServiceRespawn = in.CassandraServiceRespawn
-	out.CassandraConnectionThrottled = in.CassandraConnectionThrottled
-	out.CassandraConnectionsNoneMinor = in.CassandraConnectionsNoneMinor
-	out.CassandraItemsNoneMinor = in.CassandraItemsNoneMinor
-	out.CassandraEvictionsLimit = in.CassandraEvictionsLimit
+	out.CassandraConnectionTimeouts = in.CassandraConnectionTimeouts
+	out.CassandraDroppedMessages = in.CassandraDroppedMessages
+	out.CassandraHighReadLatency = in.CassandraHighReadLatency
+	out.CassandraHighWriteLatency = in.CassandraHighWriteLatency
+	out.CassandraMemoryLimit = in.CassandraMemoryLimit
 	return
 }
 
@@ -393,8 +394,6 @@ func (in *ConnectClusterConnectAlertRules) DeepCopyInto(out *ConnectClusterConne
 	out.ConnectClusterTooManyConnections = in.ConnectClusterTooManyConnections
 	out.ConnectClusterConnectorCount = in.ConnectClusterConnectorCount
 	out.ConnectClusterCoordinatorRebalanceFailed = in.ConnectClusterCoordinatorRebalanceFailed
-	out.DiskUsageHigh = in.DiskUsageHigh
-	out.DiskAlmostFull = in.DiskAlmostFull
 	return
 }
 

@@ -68,7 +68,7 @@ form:
             severity: critical
           # Specifies the alert configuration for high memory usage.
          memcachedMemoryLimit:
-            enable: true
+            enabled: true
             duration: "0m"
             val: 33554432  # 32MB
             severity: critical
@@ -102,8 +102,8 @@ form:
             severity: critical
 
 grafana:
-  enabled: true
+  enabled: false
   version: 7.5.5
-  jobName: memcached-stats
-  url: "http://prometheus-grafana.monitoring.svc:80"
+  jobName: kubedb-databases
+  url: ""
   apikey: ""

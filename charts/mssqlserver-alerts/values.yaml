@@ -124,8 +124,8 @@ form:
             severity: warning
 
 grafana:
-  enabled: true
+  enabled: false
   version: 7.5.5
-  jobName: mssql-ag-stats
-  url: "http://prometheus-grafana.monitoring.svc:80"
+  jobName: kubedb-databases
+  url: ""
   apikey: ""

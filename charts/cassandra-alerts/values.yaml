@@ -33,7 +33,6 @@ form:
             enabled: true
             duration: "0m"
             severity: critical
-            val: 1
           # Specifies the alert configuration for recently respawned(restarted).
           cassandraServiceRespawn:
             enabled: true

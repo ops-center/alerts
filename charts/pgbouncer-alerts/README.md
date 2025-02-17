@@ -90,9 +90,9 @@ The following table lists the configurable parameters of the `pgbouncer-alerts` 
 | form.alert.groups.opsManager.rules.opsRequestFailed.enabled                   |                                               | <code>true</code>                     |
 | form.alert.groups.opsManager.rules.opsRequestFailed.duration                  |                                               | <code>"0m"</code>                     |
 | form.alert.groups.opsManager.rules.opsRequestFailed.severity                  |                                               | <code>critical</code>                 |
-| grafana.enabled                                                               |                                               | <code>true</code>                     |
-| grafana.version                                                               |                                               | <code>8.2.3</code>                    |
-| grafana.jobName                                                               |                                               | <code>""</code>                       |
+| grafana.enabled                                                               |                                               | <code>false</code>                    |
+| grafana.version                                                               |                                               | <code>7.5.5</code>                    |
+| grafana.jobName                                                               |                                               | <code>kubedb-databases</code>         |
 | grafana.url                                                                   |                                               | <code>""</code>                       |
 | grafana.apikey                                                                |                                               | <code>""</code>                       |
 

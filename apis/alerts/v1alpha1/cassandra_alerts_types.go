@@ -68,12 +68,13 @@ type CassandraDatabaseAlert struct {
 }
 
 type CassandraDatabaseAlertRules struct {
-	CassandraDown                 FixedAlert  `json:"cassandraDown"`
-	CassandraServiceRespawn       IntValAlert `json:"cassandraServiceRespawn"`
-	CassandraConnectionThrottled  IntValAlert `json:"cassandraConnectionThrottled"`
-	CassandraConnectionsNoneMinor FixedAlert  `json:"cassandraConnectionsNoneMinor"`
-	CassandraItemsNoneMinor       FixedAlert  `json:"cassandraItemsNoneMinor"`
-	CassandraEvictionsLimit       IntValAlert `json:"cassandraEvictionsLimit"`
+	CassandraDown               FixedAlert  `json:"cassandraDown"`
+	CassandraServiceRespawn     IntValAlert `json:"cassandraServiceRespawn"`
+	CassandraConnectionTimeouts IntValAlert `json:"cassandraConnectionTimeouts"`
+	CassandraDroppedMessages    IntValAlert `json:"cassandraDroppedMessages"`
+	CassandraHighReadLatency    IntValAlert `json:"cassandraHighReadLatency"`
+	CassandraHighWriteLatency   IntValAlert `json:"cassandraHighWriteLatency"`
+	CassandraMemoryLimit        IntValAlert `json:"cassandraMemoryLimit"`
 }
 
 type CassandraGrafana struct {

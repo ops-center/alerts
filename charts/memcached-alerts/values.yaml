@@ -34,40 +34,40 @@ form:
         enabled: warning
         rules:
           # Specifies the alert configuration for database is in NotReady phase, that means the database is not accepting connections, read/write are hampered.
-         memcachedDown:
+          memcachedDown:
             enabled: true
             duration: "0m"
             severity: critical
           # Specifies the alert configuration for recently respawned(restarted).
-         memcachedServiceRespawn:
+          memcachedServiceRespawn:
             enabled: true
             duration: "0m"
             val: 180
             severity: critical
           # Specifies the alert configuration for too many connections.
-         memcachedConnectionThrottled:
+          memcachedConnectionThrottled:
             enabled: true
             duration: "2m"
             val: 10
             severity: warning
           # Specifies the alert configuration for no current open connections.
-         memcachedConnectionsNoneMinor:
+          memcachedConnectionsNoneMinor:
             enabled: true
             duration: "2m"
             severity: warning
           # Specifies the alert configuration for no items on memcached.
-         memcachedItemsNoneMinor:
+          memcachedItemsNoneMinor:
             enabled: true
             duration: "2m"
             severity: warning
           # Specifies the alert configuration for high eviction.
-         memcachedEvictionsLimit:
+          memcachedEvictionsLimit:
             enabled: true
             duration: "0m"
             val: 10
             severity: critical
           # Specifies the alert configuration for high memory usage.
-         memcachedMemoryLimit:
+          memcachedMemoryLimit:
             enabled: true
             duration: "0m"
             val: 33554432  # 32MB

@@ -45,14 +45,18 @@ jobs:
     strategy:
       matrix:
         chart:
+          - cassandra-alerts
           - connect-cluster-alerts
           - druid-alerts
           - elasticsearch-alerts
           - kafka-alerts
           - mariadb-alerts
+          - memcached-alerts
           - mongodb-alerts
+          - mssqlserver-alerts
           - mysql-alerts
           - perconaxtradb-alerts
+          - pgbouncer-alerts
           - pgpool-alerts
           - postgres-alerts
           - proxysql-alerts

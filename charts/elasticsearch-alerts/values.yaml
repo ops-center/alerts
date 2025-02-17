@@ -230,3 +230,10 @@ form:
             duration: "0m"
             val: 1800 # 30 minute
             severity: warning
+
+grafana:
+  enabled: false
+  version: 7.5.5
+  jobName: kubedb-databases
+  url: ""
+  apikey: ""

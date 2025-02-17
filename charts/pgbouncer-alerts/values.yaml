@@ -36,7 +36,7 @@ form:
           # Specifies the alert configuration for connection usage
           pgbouncerTooManyConnections:
             enabled: true
-            val: .7 # 70%
+            val: 70 # 70%
             duration: "1m"
             severity: warning
           # Specifies the alert configuration for exporter scrape error.
@@ -55,6 +55,7 @@ form:
             val: 10
             duration: "0m"
             severity: critical
+
       provisioner:
         enabled: warning
         rules:
@@ -67,10 +68,26 @@ form:
             duration: "15m"
             severity: warning
 
+      opsManager:
+        enabled: warning
+        rules:
+          opsRequestOnProgress:
+            enabled: true
+            duration: "0m"
+            severity: info
+          opsRequestStatusProgressingToLong:
+            enabled: true
+            duration: "30m"
+            severity: critical
+          opsRequestFailed:
+            enabled: true
+            duration: "0m"
+            severity: critical
+
 
 grafana:
-  enabled: true
-  version: 8.2.3
-  jobName: ""
+  enabled: false
+  version: 7.5.5
+  jobName: kubedb-databases
   url: ""
   apikey: ""

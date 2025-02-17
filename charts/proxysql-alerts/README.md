@@ -92,14 +92,6 @@ The following table lists the configurable parameters of the `proxysql-alerts` c
 | form.alert.groups.database.rules.proxysqlHighOutgoingBytes.duration           |                                               | <code>"0m"</code>                                |
 | form.alert.groups.database.rules.proxysqlHighOutgoingBytes.val                |                                               | <code>1048576 # 1MB</code>                       |
 | form.alert.groups.database.rules.proxysqlHighOutgoingBytes.severity           |                                               | <code>critical</code>                            |
-| form.alert.groups.database.rules.diskUsageHigh.enabled                        |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.diskUsageHigh.val                            |                                               | <code>80</code>                                  |
-| form.alert.groups.database.rules.diskUsageHigh.duration                       |                                               | <code>"1m"</code>                                |
-| form.alert.groups.database.rules.diskUsageHigh.severity                       |                                               | <code>warning</code>                             |
-| form.alert.groups.database.rules.diskAlmostFull.enabled                       |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.diskAlmostFull.val                           |                                               | <code>95</code>                                  |
-| form.alert.groups.database.rules.diskAlmostFull.duration                      |                                               | <code>"1m"</code>                                |
-| form.alert.groups.database.rules.diskAlmostFull.severity                      |                                               | <code>critical</code>                            |
 | form.alert.groups.cluster.enabled                                             |                                               | <code>warning</code>                             |
 | form.alert.groups.cluster.rules.proxysqlClusterSyncFailure.enabled            |                                               | <code>true</code>                                |
 | form.alert.groups.cluster.rules.proxysqlClusterSyncFailure.val                |                                               | <code>0.1</code>                                 |
@@ -122,6 +114,11 @@ The following table lists the configurable parameters of the `proxysql-alerts` c
 | form.alert.groups.opsManager.rules.opsRequestFailed.enabled                   |                                               | <code>true</code>                                |
 | form.alert.groups.opsManager.rules.opsRequestFailed.duration                  |                                               | <code>"0m"</code>                                |
 | form.alert.groups.opsManager.rules.opsRequestFailed.severity                  |                                               | <code>critical</code>                            |
+| grafana.enabled                                                               |                                               | <code>false</code>                               |
+| grafana.version                                                               |                                               | <code>7.5.5</code>                               |
+| grafana.jobName                                                               |                                               | <code>kubedb-databases</code>                    |
+| grafana.url                                                                   |                                               | <code>""</code>                                  |
+| grafana.apikey                                                                |                                               | <code>""</code>                                  |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm upgrade -i`. For example:

@@ -97,7 +97,7 @@ The following table lists the configurable parameters of the `connectcluster-ale
 | form.alert.groups.provisioner.rules.appPhaseCritical.duration                     |                                               | <code>"15m"</code>                               |
 | form.alert.groups.provisioner.rules.appPhaseCritical.severity                     |                                               | <code>warning</code>                             |
 | grafana.enabled                                                                   |                                               | <code>false</code>                               |
-| grafana.version                                                                   |                                               | <code>8.2.3</code>                               |
+| grafana.version                                                                   |                                               | <code>7.5.5</code>                               |
 | grafana.jobName                                                                   |                                               | <code>kubedb-databases</code>                    |
 | grafana.url                                                                       |                                               | <code>""</code>                                  |
 | grafana.apikey                                                                    |                                               | <code>""</code>                                  |

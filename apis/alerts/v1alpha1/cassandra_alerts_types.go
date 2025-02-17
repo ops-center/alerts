@@ -41,7 +41,7 @@ type CassandraAlerts struct {
 type CassandraAlertsSpec struct {
 	api.Metadata `json:"metadata,omitempty"`
 	Form         CassandraAlertsSpecForm `json:"form"`
-	Grafana      CassandraGrafana        `json:"grafana"`
+	Grafana      Grafana                 `json:"grafana"`
 }
 
 type CassandraAlertsSpecForm struct {
@@ -60,7 +60,6 @@ type CassandraAlert struct {
 type CassandraAlertGroups struct {
 	Database    CassandraDatabaseAlert `json:"database"`
 	Provisioner ProvisionerAlert       `json:"provisioner"`
-	KubeStash   KubeStashAlert         `json:"kubeStash"`
 }
 type CassandraDatabaseAlert struct {
 	Enabled mona.SeverityFlag           `json:"enabled"`
@@ -75,14 +74,6 @@ type CassandraDatabaseAlertRules struct {
 	CassandraHighReadLatency    IntValAlert `json:"cassandraHighReadLatency"`
 	CassandraHighWriteLatency   IntValAlert `json:"cassandraHighWriteLatency"`
 	CassandraMemoryLimit        IntValAlert `json:"cassandraMemoryLimit"`
-}
-
-type CassandraGrafana struct {
-	Enabled bool   `json:"enabled"`
-	Version string `json:"version"`
-	JobName string `json:"jobName"`
-	URL     string `json:"url"`
-	ApiKey  string `json:"apikey"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

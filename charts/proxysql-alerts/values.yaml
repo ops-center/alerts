@@ -75,17 +75,6 @@ form:
             duration: "0m"
             val: 1048576 # 1MB
             severity: critical
-          # Sepcifies the alert configuration for persistent volume usages.
-          diskUsageHigh:
-            enabled: true
-            val: 80
-            duration: "1m"
-            severity: warning
-          diskAlmostFull:
-            enabled: true
-            val: 95
-            duration: "1m"
-            severity: critical
       cluster:
         enabled: warning
         rules:
@@ -120,3 +109,10 @@ form:
             enabled: true
             duration: "0m"
             severity: critical
+
+grafana:
+  enabled: false
+  version: 7.5.5
+  jobName: kubedb-databases
+  url: ""
+  apikey: ""

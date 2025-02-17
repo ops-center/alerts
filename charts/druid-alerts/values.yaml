@@ -76,6 +76,7 @@ form:
             duration: "30s"
             severity: critical
             val: 95
+
       provisioner:
         enabled: warning
         rules:
@@ -88,9 +89,25 @@ form:
             duration: "15m"
             severity: warning
 
+      opsManager:
+        enabled: warning
+        rules:
+          opsRequestOnProgress:
+            enabled: true
+            duration: "0m"
+            severity: info
+          opsRequestStatusProgressingToLong:
+            enabled: true
+            duration: "30m"
+            severity: critical
+          opsRequestFailed:
+            enabled: true
+            duration: "0m"
+            severity: critical
+
 grafana:
   enabled: false
-  version: 8.2.3
+  version: 7.5.5
   jobName: kubedb-databases
   url: ""
   apikey: ""

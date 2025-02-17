@@ -62,7 +62,6 @@ The following table lists the configurable parameters of the `cassandra-alerts` 
 | form.alert.groups.database.rules.cassandraDown.enabled                |                                               | <code>true</code>                                |
 | form.alert.groups.database.rules.cassandraDown.duration               |                                               | <code>"0m"</code>                                |
 | form.alert.groups.database.rules.cassandraDown.severity               |                                               | <code>critical</code>                            |
-| form.alert.groups.database.rules.cassandraDown.val                    |                                               | <code>1</code>                                   |
 | form.alert.groups.database.rules.cassandraServiceRespawn.enabled      |                                               | <code>true</code>                                |
 | form.alert.groups.database.rules.cassandraServiceRespawn.duration     |                                               | <code>"0m"</code>                                |
 | form.alert.groups.database.rules.cassandraServiceRespawn.val          |                                               | <code>180</code>                                 |

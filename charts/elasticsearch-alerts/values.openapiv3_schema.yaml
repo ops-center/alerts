@@ -784,6 +784,25 @@ properties:
     required:
     - alert
     type: object
+  grafana:
+    properties:
+      apikey:
+        type: string
+      enabled:
+        type: boolean
+      jobName:
+        type: string
+      url:
+        type: string
+      version:
+        type: string
+    required:
+    - apikey
+    - enabled
+    - jobName
+    - url
+    - version
+    type: object
   metadata:
     properties:
       release:
@@ -825,4 +844,5 @@ properties:
     type: object
 required:
 - form
+- grafana
 type: object

@@ -195,7 +195,7 @@ The following table lists the configurable parameters of the `mongodb-alerts` ch
 | form.alert.groups.schemaManager.rules.schemaExpired.duration                  |                                               | <code>"0m"</code>                                |
 | form.alert.groups.schemaManager.rules.schemaExpired.severity                  |                                               | <code>warning</code>                             |
 | grafana.enabled                                                               |                                               | <code>false</code>                               |
-| grafana.version                                                               |                                               | <code>8.2.3</code>                               |
+| grafana.version                                                               |                                               | <code>7.5.5</code>                               |
 | grafana.jobName                                                               |                                               | <code>kubedb-databases</code>                    |
 | grafana.url                                                                   |                                               | <code>""</code>                                  |
 | grafana.apikey                                                                |                                               | <code>""</code>                                  |

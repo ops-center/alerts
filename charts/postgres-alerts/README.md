@@ -188,6 +188,11 @@ The following table lists the configurable parameters of the `postgres-alerts` c
 | form.alert.groups.schemaManager.rules.schemaExpired.enabled                   |                                               | <code>true</code>                                |
 | form.alert.groups.schemaManager.rules.schemaExpired.duration                  |                                               | <code>"0m"</code>                                |
 | form.alert.groups.schemaManager.rules.schemaExpired.severity                  |                                               | <code>warning</code>                             |
+| grafana.enabled                                                               |                                               | <code>false</code>                               |
+| grafana.version                                                               |                                               | <code>7.5.5</code>                               |
+| grafana.jobName                                                               |                                               | <code>kubedb-databases</code>                    |
+| grafana.url                                                                   |                                               | <code>""</code>                                  |
+| grafana.apikey                                                                |                                               | <code>""</code>                                  |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm upgrade -i`. For example:

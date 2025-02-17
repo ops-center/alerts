@@ -37,6 +37,7 @@ form:
             enabled: true
             duration: "30s"
             severity: critical
+            val: 0
           # Specifies the alert configuration for database, if some shards are failed to recovery
           solrRecoveryFailedShards:
             enabled: true
@@ -82,6 +83,7 @@ form:
             val: 95
             duration: "1m"
             severity: critical
+
       provisioner:
         enabled: warning
         rules:
@@ -93,6 +95,22 @@ form:
             enabled: true
             duration: "1m"
             severity: warning
+
+      opsManager:
+        enabled: warning
+        rules:
+          opsRequestOnProgress:
+            enabled: true
+            duration: "0m"
+            severity: info
+          opsRequestStatusProgressingToLong:
+            enabled: true
+            duration: "30m"
+            severity: critical
+          opsRequestFailed:
+            enabled: true
+            duration: "0m"
+            severity: critical
 
 grafana:
   enabled: false

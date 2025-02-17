@@ -79,6 +79,7 @@ form:
             val: 100 # 10mb
             duration: "1m"
             severity: warning
+
       provisioner:
         enabled: warning
         rules:
@@ -91,6 +92,21 @@ form:
             duration: "15m"
             severity: warning
 
+      opsManager:
+        enabled: warning
+        rules:
+          opsRequestOnProgress:
+            enabled: true
+            duration: "0m"
+            severity: info
+          opsRequestStatusProgressingToLong:
+            enabled: true
+            duration: "30m"
+            severity: critical
+          opsRequestFailed:
+            enabled: true
+            duration: "0m"
+            severity: critical
 
 grafana:
   enabled: false

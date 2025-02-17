@@ -181,6 +181,11 @@ The following table lists the configurable parameters of the `elasticsearch-aler
 | form.alert.groups.kubeStash.rules.restoreSessionPeriodTooLong.duration        |                                                 | <code>"0m"</code>                                |
 | form.alert.groups.kubeStash.rules.restoreSessionPeriodTooLong.val             |                                                 | <code>1800 # 30 minute</code>                    |
 | form.alert.groups.kubeStash.rules.restoreSessionPeriodTooLong.severity        |                                                 | <code>warning</code>                             |
+| grafana.enabled                                                               |                                                 | <code>false</code>                               |
+| grafana.version                                                               |                                                 | <code>7.5.5</code>                               |
+| grafana.jobName                                                               |                                                 | <code>kubedb-databases</code>                    |
+| grafana.url                                                                   |                                                 | <code>""</code>                                  |
+| grafana.apikey                                                                |                                                 | <code>""</code>                                  |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm upgrade -i`. For example:

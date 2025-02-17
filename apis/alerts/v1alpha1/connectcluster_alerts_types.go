@@ -44,7 +44,7 @@ type ConnectClusterAlerts struct {
 type ConnectClusterAlertsSpec struct {
 	api.Metadata `json:"metadata,omitempty"`
 	Form         ConnectClusterAlertsSpecForm `json:"form"`
-	Grafana      ConnectClusterGrafana        `json:"grafana"`
+	Grafana      Grafana                      `json:"grafana"`
 }
 
 type ConnectClusterAlertsSpecForm struct {
@@ -91,14 +91,6 @@ type ConnectClusterTaskRules struct {
 	ConnectClusterTaskTotal             IntValAlert `json:"connectClusterTaskTotal"`
 	ConnectClusterTaskTotalFailed       FixedAlert  `json:"connectClusterTaskTotalFailed"`
 	ConnectClusterTaskTotalDestroyed    FixedAlert  `json:"connectClusterTaskTotalDestroyed"`
-}
-
-type ConnectClusterGrafana struct {
-	Enabled bool   `json:"enabled"`
-	Version string `json:"version"`
-	JobName string `json:"jobName"`
-	URL     string `json:"url"`
-	ApiKey  string `json:"apikey"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

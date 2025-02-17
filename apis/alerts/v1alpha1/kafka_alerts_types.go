@@ -44,7 +44,7 @@ type KafkaAlerts struct {
 type KafkaAlertsSpec struct {
 	api.Metadata `json:"metadata,omitempty"`
 	Form         KafkaAlertsSpecForm `json:"form"`
-	Grafana      KafkaGrafana        `json:"grafana"`
+	Grafana      Grafana             `json:"grafana"`
 }
 
 type KafkaAlertsSpecForm struct {
@@ -65,7 +65,6 @@ type KafkaAlertGroups struct {
 	Database    KafkaDatabaseAlert `json:"database"`
 	Provisioner ProvisionerAlert   `json:"provisioner"`
 	OpsManager  OpsManagerAlert    `json:"opsManager"`
-	KubeStash   KubeStashAlert     `json:"kubeStash"`
 }
 
 type KafkaDatabaseAlert struct {
@@ -90,14 +89,6 @@ type KafkaDatabaseAlertRules struct {
 	KafkaDown                        FixedAlert  `json:"kafkaDown"`
 	DiskUsageHigh                    IntValAlert `json:"diskUsageHigh"`
 	DiskAlmostFull                   IntValAlert `json:"diskAlmostFull"`
-}
-
-type KafkaGrafana struct {
-	Enabled bool   `json:"enabled"`
-	Version string `json:"version"`
-	JobName string `json:"jobName"`
-	URL     string `json:"url"`
-	ApiKey  string `json:"apikey"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

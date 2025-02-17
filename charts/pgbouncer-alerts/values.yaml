@@ -55,6 +55,7 @@ form:
             val: 10
             duration: "0m"
             severity: critical
+
       provisioner:
         enabled: warning
         rules:
@@ -66,6 +67,22 @@ form:
             enabled: true
             duration: "15m"
             severity: warning
+
+      opsManager:
+        enabled: warning
+        rules:
+          opsRequestOnProgress:
+            enabled: true
+            duration: "0m"
+            severity: info
+          opsRequestStatusProgressingToLong:
+            enabled: true
+            duration: "30m"
+            severity: critical
+          opsRequestFailed:
+            enabled: true
+            duration: "0m"
+            severity: critical
 
 
 grafana:

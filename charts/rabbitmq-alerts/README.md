@@ -101,6 +101,16 @@ The following table lists the configurable parameters of the `rabbitmq-alerts` c
 | form.alert.groups.provisioner.rules.appPhaseCritical.enabled                                     |                                               | <code>true</code>                                |
 | form.alert.groups.provisioner.rules.appPhaseCritical.duration                                    |                                               | <code>"15m"</code>                               |
 | form.alert.groups.provisioner.rules.appPhaseCritical.severity                                    |                                               | <code>warning</code>                             |
+| form.alert.groups.opsManager.enabled                                                             |                                               | <code>warning</code>                             |
+| form.alert.groups.opsManager.rules.opsRequestOnProgress.enabled                                  |                                               | <code>true</code>                                |
+| form.alert.groups.opsManager.rules.opsRequestOnProgress.duration                                 |                                               | <code>"0m"</code>                                |
+| form.alert.groups.opsManager.rules.opsRequestOnProgress.severity                                 |                                               | <code>info</code>                                |
+| form.alert.groups.opsManager.rules.opsRequestStatusProgressingToLong.enabled                     |                                               | <code>true</code>                                |
+| form.alert.groups.opsManager.rules.opsRequestStatusProgressingToLong.duration                    |                                               | <code>"30m"</code>                               |
+| form.alert.groups.opsManager.rules.opsRequestStatusProgressingToLong.severity                    |                                               | <code>critical</code>                            |
+| form.alert.groups.opsManager.rules.opsRequestFailed.enabled                                      |                                               | <code>true</code>                                |
+| form.alert.groups.opsManager.rules.opsRequestFailed.duration                                     |                                               | <code>"0m"</code>                                |
+| form.alert.groups.opsManager.rules.opsRequestFailed.severity                                     |                                               | <code>critical</code>                            |
 | grafana.enabled                                                                                  |                                               | <code>false</code>                               |
 | grafana.version                                                                                  |                                               | <code>8.2.3</code>                               |
 | grafana.jobName                                                                                  |                                               | <code>kubedb-databases</code>                    |

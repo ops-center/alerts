@@ -109,3 +109,10 @@ form:
             enabled: true
             duration: "0m"
             severity: critical
+
+grafana:
+  enabled: false
+  version: 7.5.5
+  jobName: kubedb-databases
+  url: ""
+  apikey: ""

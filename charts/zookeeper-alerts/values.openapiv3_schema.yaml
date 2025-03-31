@@ -446,8 +446,9 @@ properties:
             type: string
           name:
             description: 'Name is the plural name of the resource to serve.  It must
-              match the name of the CustomResourceDefinition-registration too: plural.group
-              and it must be all lowercase.'
+              match the name of the CustomResourceDefinition-registration
+
+              too: plural.group and it must be all lowercase.'
             type: string
           scope:
             description: ResourceScope is an enum defining the different scopes available

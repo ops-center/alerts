@@ -14,7 +14,7 @@
   - Increasing MariaDB variable `max_connections` may help. 
   - Also try tuning MariaDB for memory optimization
 - #### MariaDBSlowQueries
-  - Check Slow Query log file here `/var/log/mariadb/mariadb-slow.log`
+  - Check Slow Query log file here `/var/lib/mysql/mariadb-0-slow.log`
 - #### MariaDBInnoDBLogWaits
   - Reason for alert: [Innodb_log_waits](https://dev.mysql.com/doc/refman/8.0/en/server-status-variables.html#statvar_Innodb_log_waits)
   - Try reconfiguring [innodb_log_buffer_size](https://dev.my sql.com/doc/refman/8.0/en/innodb-parameters.html#sysvar_innodb_log_buffer_size)

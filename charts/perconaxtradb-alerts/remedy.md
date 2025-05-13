@@ -14,7 +14,7 @@
   - Increasing PerconaXtraDB variable `max_connections` may help. 
   - Also try tuning PerconaXtraDB for memory optimization
 - #### PerconaXtraDBSlowQueries
-  - Check Slow Query log file here `/var/lib/mysql/percona-0-slow.log`
+  - Check Slow Query log file here `/var/lib/mysql/'$pod-name'-slow.log`
 - #### PerconaXtraDBInnoDBLogWaits
   - Reason for alert: [Innodb_log_waits](https://dev.mysql.com/doc/refman/8.0/en/server-status-variables.html#statvar_Innodb_log_waits)
   - Try reconfiguring [innodb_log_buffer_size](https://dev.PerconaXtraDB.com/doc/refman/8.0/en/innodb-parameters.html#sysvar_innodb_log_buffer_size)

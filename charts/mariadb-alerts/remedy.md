@@ -1,30 +1,30 @@
-## TODOs on MySQL Critical Alerts
+## TODOs on MariaDB Critical Alerts
 
 ### Database Alerts
 
-- #### MySQLInstanceDown
+- #### MariaDBInstanceDown
   - Describe the `MariaDB` CR, check the reason from conditions and try restarting the pods
   - Contact AppsCode team
-- #### MySQLServiceDown
+- #### MariaDBServiceDown
   - Describe the `MariaDB` CR check the conditions
   - Contact AppsCode team
-- #### MySQLTooManyConnections
-  - Increase mysql variable `max_connections`
-- #### MySQLHighThreadsRunning
-  - Increasing mysql variable `max_connections` may help. 
-  - Also try tuning mysql for memory optimization
-- #### MySQLSlowQueries
-  - Check Slow Query log file here `/var/log/mysql/mysql-slow.log`
-- #### MySQLInnoDBLogWaits
+- #### MariaDBTooManyConnections
+  - Increase MariaDB variable `max_connections`
+- #### MariaDBHighThreadsRunning
+  - Increasing MariaDB variable `max_connections` may help. 
+  - Also try tuning MariaDB for memory optimization
+- #### MariaDBSlowQueries
+  - Check Slow Query log file here `/var/log/mariadb/mariadb-slow.log`
+- #### MariaDBInnoDBLogWaits
   - Reason for alert: [Innodb_log_waits](https://dev.mysql.com/doc/refman/8.0/en/server-status-variables.html#statvar_Innodb_log_waits)
-  - Try reconfiguring [innodb_log_buffer_size](https://dev.mysql.com/doc/refman/8.0/en/innodb-parameters.html#sysvar_innodb_log_buffer_size)
-- #### MySQLRestarted
+  - Try reconfiguring [innodb_log_buffer_size](https://dev.my sql.com/doc/refman/8.0/en/innodb-parameters.html#sysvar_innodb_log_buffer_size)
+- #### MariaDBRestarted
   - Check if `MariaDB` CR is in Ready status
   - Contact AppsCode team if status is not updated.
-- #### MySQLHighQPS | MySQLHighIncomingBytes | MySQLHighOutgoingBytes
+- #### MariaDBHighQPS | MariaDBHighIncomingBytes | MariaDBHighOutgoingBytes
   - Scale MariaDB using [KubeDB](https://kubedb.com/docs/latest/guides/mariadb/) Scaling OpsRequest
-- #### MySQLTooManyOpenFiles
-  - Increase mysql variable `open_files_limit`
+- #### MariaDBTooManyOpenFiles
+  - Increase MariaDB variable `open_files_limit`
 
 ### MariaDB Cluster Alerts
 

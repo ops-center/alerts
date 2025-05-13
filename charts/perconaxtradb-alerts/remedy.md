@@ -1,30 +1,30 @@
-## TODOs on MySQL Critical Alerts
+## TODOs on PerconaXtraDB Critical Alerts
 
 ### Database Alerts
 
-- #### MySQLInstanceDown
+- #### PerconaXtraDBInstanceDown
   - Describe the `PerconaXtraDB` CR, check the reason from conditions and try restarting the pods
   - Contact AppsCode team
-- #### MySQLServiceDown
+- #### PerconaXtraDBServiceDown
   - Describe the `PerconaXtraDB` CR check the conditions
   - Contact AppsCode team
-- #### MySQLTooManyConnections
-  - Increase mysql variable `max_connections`
-- #### MySQLHighThreadsRunning
-  - Increasing mysql variable `max_connections` may help. 
-  - Also try tuning mysql for memory optimization
-- #### MySQLSlowQueries
-  - Check Slow Query log file here `/var/log/mysql/mysql-slow.log`
-- #### MySQLInnoDBLogWaits
+- #### PerconaXtraDBTooManyConnections
+  - Increase PerconaXtraDB variable `max_connections`
+- #### PerconaXtraDBHighThreadsRunning
+  - Increasing PerconaXtraDB variable `max_connections` may help. 
+  - Also try tuning PerconaXtraDB for memory optimization
+- #### PerconaXtraDBSlowQueries
+  - Check Slow Query log file here `/var/log/PerconaXtraDB/PerconaXtraDB-slow.log`
+- #### PerconaXtraDBInnoDBLogWaits
   - Reason for alert: [Innodb_log_waits](https://dev.mysql.com/doc/refman/8.0/en/server-status-variables.html#statvar_Innodb_log_waits)
-  - Try reconfiguring [innodb_log_buffer_size](https://dev.mysql.com/doc/refman/8.0/en/innodb-parameters.html#sysvar_innodb_log_buffer_size)
-- #### MySQLRestarted
+  - Try reconfiguring [innodb_log_buffer_size](https://dev.PerconaXtraDB.com/doc/refman/8.0/en/innodb-parameters.html#sysvar_innodb_log_buffer_size)
+- #### PerconaXtraDBRestarted
   - Check if `PerconaXtraDB` CR is in Ready status
   - Contact AppsCode team if status is not updated.
-- #### MySQLHighQPS | MySQLHighIncomingBytes | MySQLHighOutgoingBytes
+- #### PerconaXtraDBHighQPS | PerconaXtraDBHighIncomingBytes | PerconaXtraDBHighOutgoingBytes
   - Scale PerconaXtraDB using [KubeDB](https://kubedb.com/docs/latest/guides/perconaxtradb/) Scaling OpsRequest
-- #### MySQLTooManyOpenFiles
-  - Increase mysql variable `open_files_limit`
+- #### PerconaXtraDBTooManyOpenFiles
+  - Increase PerconaXtraDB variable `open_files_limit`
 
 ### PerconaXtraDB Cluster Alerts
 

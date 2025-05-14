@@ -29,8 +29,8 @@ spec:
             severity: {{ .rules.mysqlInstanceDown.severity }}
         {{- include "perconaxtradb-alerts.alertLabels" $ | nindent 8 }}
           annotations:
-            summary: PerconaXtraDB instance down (instance {{`{{`}} $labels.pod {{`}}`}})
-            description: "PerconaXtraDB instance is down on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+            summary: MySQL instance down (instance {{`{{`}} $labels.pod {{`}}`}})
+            description: "MySQL instance is down on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if (include "perconaxtradb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.mysqlServiceDown.enabled .rules.mysqlServiceDown.severity)) -}}
         - alert: PerconaXtraDBServiceDown
@@ -40,8 +40,8 @@ spec:
             severity: {{ .rules.mysqlServiceDown.severity }}
         {{- include "perconaxtradb-alerts.alertLabels" $ | nindent 8 }}
           annotations:
-            summary: PerconaXtraDB service down (instance {{`{{`}} $labels.pod {{`}}`}})
-            description: "PerconaXtraDB service is down on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+            summary: MySQL service down (instance {{`{{`}} $labels.pod {{`}}`}})
+            description: "MySQL service is down on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if (include "perconaxtradb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.mysqlTooManyConnections.enabled .rules.mysqlTooManyConnections.severity)) -}}
         - alert: PerconaXtraDBTooManyConnections
@@ -51,8 +51,8 @@ spec:
             severity: {{ .rules.mysqlTooManyConnections.severity }}
         {{- include "perconaxtradb-alerts.alertLabels" $ | nindent 8 }}
           annotations:
-            summary: PerconaXtraDB too many connections (> {{.rules.mysqlTooManyConnections.val}}%) (instance {{`{{`}} $labels.pod {{`}}`}})
-            description: "More than {{.rules.mysqlTooManyConnections.val}}% of PerconaXtraDB connections are in use on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+            summary: MySQL too many connections (> {{.rules.mysqlTooManyConnections.val}}%) (instance {{`{{`}} $labels.pod {{`}}`}})
+            description: "More than {{.rules.mysqlTooManyConnections.val}}% of MySQL connections are in use on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if (include "perconaxtradb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.mysqlHighThreadsRunning.enabled .rules.mysqlHighThreadsRunning.severity)) -}}
         - alert: PerconaXtraDBHighThreadsRunning
@@ -62,8 +62,8 @@ spec:
             severity: {{ .rules.mysqlHighThreadsRunning.severity }}
         {{- include "perconaxtradb-alerts.alertLabels" $ | nindent 8 }}
           annotations:
-            summary: PerconaXtraDB high threads running (> {{.rules.mysqlHighThreadsRunning.val}}%) (instance {{`{{`}} $labels.pod {{`}}`}})
-            description: "More than {{.rules.mysqlHighThreadsRunning.val}}% of PerconaXtraDB threads are in use on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+            summary: MySQL high threads running (> {{.rules.mysqlHighThreadsRunning.val}}%) (instance {{`{{`}} $labels.pod {{`}}`}})
+            description: "More than {{.rules.mysqlHighThreadsRunning.val}}% of MySQL threads are in use on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if (include "perconaxtradb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.mysqlSlowQueries.enabled .rules.mysqlSlowQueries.severity)) -}}
         - alert: PerconaXtraDBSlowQueries
@@ -73,8 +73,8 @@ spec:
             severity: {{ .rules.mysqlSlowQueries.severity }}
         {{- include "perconaxtradb-alerts.alertLabels" $ | nindent 8 }}
           annotations:
-            summary: PerconaXtraDB slow queries on (instance {{`{{`}} $labels.pod {{`}}`}})
-            description: "PerconaXtraDB server perconaxtradb has some new slow query.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+            summary: MySQL slow queries on (instance {{`{{`}} $labels.pod {{`}}`}})
+            description: "MySQL server mysql has some new slow query.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if (include "perconaxtradb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.mysqlInnoDBLogWaits.enabled .rules.mysqlInnoDBLogWaits.severity)) -}}
         - alert: PerconaXtraDBInnoDBLogWaits
@@ -84,8 +84,8 @@ spec:
             severity: {{ .rules.mysqlInnoDBLogWaits.severity }}
         {{- include "perconaxtradb-alerts.alertLabels" $ | nindent 8 }}
           annotations:
-            summary: PerconaXtraDB InnoDB log waits (> {{.rules.mysqlInnoDBLogWaits.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
-            description: "PerconaXtraDB innodb log writes stalling\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+            summary: MySQL InnoDB log waits (> {{.rules.mysqlInnoDBLogWaits.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
+            description: "MySQL innodb log writes stalling\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if (include "perconaxtradb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.mysqlRestarted.enabled .rules.mysqlRestarted.severity)) -}}
         - alert: PerconaXtraDBRestarted
@@ -95,8 +95,8 @@ spec:
             severity: {{ .rules.mysqlRestarted.severity }}
         {{- include "perconaxtradb-alerts.alertLabels" $ | nindent 8 }}
           annotations:
-            summary: PerconaXtraDB restarted ({{.rules.mysqlRestarted.val}} second ago) (instance {{`{{`}} $labels.pod {{`}}`}})
-            description: "PerconaXtraDB restarted\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+            summary: MySQL restarted ({{.rules.mysqlRestarted.val}} second ago) (instance {{`{{`}} $labels.pod {{`}}`}})
+            description: "MySQL restarted\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if (include "perconaxtradb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.mysqlHighQPS.enabled .rules.mysqlHighQPS.severity)) -}}
         - alert: PerconaXtraDBHighQPS
@@ -106,8 +106,8 @@ spec:
             severity: {{ .rules.mysqlHighQPS.severity }}
         {{- include "perconaxtradb-alerts.alertLabels" $ | nindent 8 }}
           annotations:
-            summary: PerconaXtraDB has high queries per second (> {{.rules.mysqlHighQPS.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
-            description: "PerconaXtraDB has high QPS on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+            summary: MySQL has high queries per second (> {{.rules.mysqlHighQPS.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
+            description: "MySQL has high QPS on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if (include "perconaxtradb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.mysqlHighIncomingBytes.enabled .rules.mysqlHighIncomingBytes.severity)) -}}
         - alert: PerconaXtraDBHighIncomingBytes
@@ -117,8 +117,8 @@ spec:
             severity: {{ .rules.mysqlHighIncomingBytes.severity }}
         {{- include "perconaxtradb-alerts.alertLabels" $ | nindent 8 }}
           annotations:
-            summary: PerconaXtraDB has high incoming bytes second (> {{.rules.mysqlHighIncomingBytes.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
-            description: "PerconaXtraDB has high incoming bytes per second on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+            summary: MySQL has high incoming bytes second (> {{.rules.mysqlHighIncomingBytes.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
+            description: "MySQL has high incoming bytes per second on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if (include "perconaxtradb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.mysqlHighOutgoingBytes.enabled .rules.mysqlHighOutgoingBytes.severity)) -}}
         - alert: PerconaXtraDBHighOutgoingBytes
@@ -128,8 +128,8 @@ spec:
             severity: {{ .rules.mysqlHighOutgoingBytes.severity }}
         {{- include "perconaxtradb-alerts.alertLabels" $ | nindent 8 }}
           annotations:
-            summary: PerconaXtraDB has high outgoing bytes second (> {{.rules.mysqlHighOutgoingBytes.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
-            description: "PerconaXtraDB has high outgoing bytes per second on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+            summary: MySQL has high outgoing bytes second (> {{.rules.mysqlHighOutgoingBytes.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
+            description: "MySQL has high outgoing bytes per second on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if (include "perconaxtradb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.mysqlTooManyOpenFiles.enabled .rules.mysqlTooManyOpenFiles.severity)) -}}
         - alert: PerconaXtraDBTooManyOpenFiles
@@ -139,8 +139,8 @@ spec:
             severity: {{ .rules.mysqlTooManyOpenFiles.severity }}
         {{- include "perconaxtradb-alerts.alertLabels" $ | nindent 8 }}
           annotations:
-            summary: PerconaXtraDB too many opened files (> {{.rules.mysqlTooManyOpenFiles.val}}%) (instance {{`{{`}} $labels.pod {{`}}`}})
-            description: "PerconaXtraDB too many opened files on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+            summary: MySQL too many opened files (> {{.rules.mysqlTooManyOpenFiles.val}}%) (instance {{`{{`}} $labels.pod {{`}}`}})
+            description: "MySQL too many opened files on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
 
     {{ if (include "perconaxtradb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.diskUsageHigh.enabled .rules.diskUsageHigh.severity)) -}}

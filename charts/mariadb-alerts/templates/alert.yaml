@@ -29,8 +29,8 @@ spec:
         severity: {{ .rules.mysqlInstanceDown.severity }}
         {{- include "mariadb-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: MySQL instance down (instance {{`{{`}} $labels.pod {{`}}`}})
-        description: "MySQL instance is down on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: MariaDB instance down (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MariaDB instance is down on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if (include "mariadb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.mysqlServiceDown.enabled .rules.mysqlServiceDown.severity)) -}}
     - alert: MariaDBServiceDown
@@ -40,8 +40,8 @@ spec:
         severity: {{ .rules.mysqlServiceDown.severity }}
         {{- include "mariadb-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: MySQL service down (instance {{`{{`}} $labels.pod {{`}}`}})
-        description: "MySQL service is down on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: MariaDB service down (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MariaDB service is down on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if (include "mariadb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.mysqlTooManyConnections.enabled .rules.mysqlTooManyConnections.severity)) -}}
     - alert: MariaDBTooManyConnections
@@ -51,8 +51,8 @@ spec:
         severity: {{ .rules.mysqlTooManyConnections.severity }}
         {{- include "mariadb-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: MySQL too many connections (> {{.rules.mysqlTooManyConnections.val}}%) (instance {{`{{`}} $labels.pod {{`}}`}})
-        description: "More than {{.rules.mysqlTooManyConnections.val}}% of MySQL connections are in use on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: MariaDB too many connections (> {{.rules.mysqlTooManyConnections.val}}%) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "More than {{.rules.mysqlTooManyConnections.val}}% of MariaDB connections are in use on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if (include "mariadb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.mysqlHighThreadsRunning.enabled .rules.mysqlHighThreadsRunning.severity)) -}}
     - alert: MariaDBHighThreadsRunning
@@ -62,8 +62,8 @@ spec:
         severity: {{ .rules.mysqlHighThreadsRunning.severity }}
         {{- include "mariadb-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: MySQL high threads running (> {{.rules.mysqlHighThreadsRunning.val}}%) (instance {{`{{`}} $labels.pod {{`}}`}})
-        description: "More than {{.rules.mysqlHighThreadsRunning.val}}% of MySQL threads are in use on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: MariaDB high threads running (> {{.rules.mysqlHighThreadsRunning.val}}%) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "More than {{.rules.mysqlHighThreadsRunning.val}}% of MariaDB threads are in use on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if (include "mariadb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.mysqlSlowQueries.enabled .rules.mysqlSlowQueries.severity)) -}}
     - alert: MariaDBSlowQueries
@@ -73,8 +73,8 @@ spec:
         severity: {{ .rules.mysqlSlowQueries.severity }}
         {{- include "mariadb-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: MySQL slow queries on (instance {{`{{`}} $labels.pod {{`}}`}})
-        description: "MySQL server mysql has some new slow query.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: MariaDB slow queries on (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MariaDB server mariadb has some new slow query.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if (include "mariadb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.mysqlInnoDBLogWaits.enabled .rules.mysqlInnoDBLogWaits.severity)) -}}
     - alert: MariaDBInnoDBLogWaits
@@ -84,8 +84,8 @@ spec:
         severity: {{ .rules.mysqlInnoDBLogWaits.severity }}
         {{- include "mariadb-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: MySQL InnoDB log waits (> {{.rules.mysqlInnoDBLogWaits.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
-        description: "MySQL innodb log writes stalling\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: MariaDB InnoDB log waits (> {{.rules.mysqlInnoDBLogWaits.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MariaDB innodb log writes stalling\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if (include "mariadb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.mysqlRestarted.enabled .rules.mysqlRestarted.severity)) -}}
     - alert: MariaDBRestarted
@@ -95,8 +95,8 @@ spec:
         severity: {{ .rules.mysqlRestarted.severity }}
         {{- include "mariadb-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: MySQL restarted ({{.rules.mysqlRestarted.val}} second ago) (instance {{`{{`}} $labels.pod {{`}}`}})
-        description: "MySQL restarted\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: MariaDB restarted ({{.rules.mysqlRestarted.val}} second ago) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MariaDB restarted\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if (include "mariadb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.mysqlHighQPS.enabled .rules.mysqlHighQPS.severity)) -}}
     - alert: MariaDBHighQPS
@@ -106,8 +106,8 @@ spec:
         severity: {{ .rules.mysqlHighQPS.severity }}
         {{- include "mariadb-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: MySQL has high queries per second (> {{.rules.mysqlHighQPS.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
-        description: "MySQL has high QPS on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: MariaDB has high queries per second (> {{.rules.mysqlHighQPS.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MariaDB has high QPS on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if (include "mariadb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.mysqlHighIncomingBytes.enabled .rules.mysqlHighIncomingBytes.severity)) -}}
     - alert: MariaDBHighIncomingBytes
@@ -117,8 +117,8 @@ spec:
         severity: {{ .rules.mysqlHighIncomingBytes.severity }}
         {{- include "mariadb-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: MySQL has high incoming bytes second (> {{.rules.mysqlHighIncomingBytes.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
-        description: "MySQL has high incoming bytes per second on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: MariaDB has high incoming bytes second (> {{.rules.mysqlHighIncomingBytes.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MariaDB has high incoming bytes per second on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if (include "mariadb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.mysqlHighOutgoingBytes.enabled .rules.mysqlHighOutgoingBytes.severity)) -}}
     - alert: MariaDBHighOutgoingBytes
@@ -128,8 +128,8 @@ spec:
         severity: {{ .rules.mysqlHighOutgoingBytes.severity }}
         {{- include "mariadb-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: MySQL has high outgoing bytes second (> {{.rules.mysqlHighOutgoingBytes.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
-        description: "MySQL has high outgoing bytes per second on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: MariaDB has high outgoing bytes second (> {{.rules.mysqlHighOutgoingBytes.val}}) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MariaDB has high outgoing bytes per second on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if (include "mariadb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.mysqlTooManyOpenFiles.enabled .rules.mysqlTooManyOpenFiles.severity)) -}}
     - alert: MariaDBTooManyOpenFiles
@@ -139,8 +139,8 @@ spec:
         severity: {{ .rules.mysqlTooManyOpenFiles.severity }}
         {{- include "mariadb-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: MySQL too many opened files (> {{.rules.mysqlTooManyOpenFiles.val}}%) (instance {{`{{`}} $labels.pod {{`}}`}})
-        description: "MySQL too many opened files on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: MariaDB too many opened files (> {{.rules.mysqlTooManyOpenFiles.val}}%) (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "MariaDB too many opened files on (instance {{`{{`}} $labels.pod {{`}}`}})\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
     
     {{ if (include "mariadb-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.diskUsageHigh.enabled .rules.diskUsageHigh.severity)) -}}

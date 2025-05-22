@@ -7,9 +7,9 @@ metadata:
     version: v1alpha2
   release:
     # Release name
-    name: ""
+    name: "ignite-quickstart"
     # Release namespace
-    namespace: ""
+    namespace: "demo"
 form:
   alert:
     ## Enable PrometheusRule alerts
@@ -32,51 +32,52 @@ form:
       database:
         enabled: warning
         rules:
-          # Specifies the alert configuration for database is in Critical phase, that means one or more of the nodes are down but the database read/write are not hampered.
-          rabbitmqPhaseCritical:
-            enabled: true
-            duration: "3m"
-            severity: warning
           # Specifies the alert configuration for database is in NotReady phase, that means the database is not accepting connections, read/write are hampered.
-          rabbitmqDown:
+          igniteDown:
             enabled: true
             duration: "30s"
             severity: critical
-          # Specifies the alert configuration for high latency.
-          rabbitmqFileDescriptorsNearLimit:
+          # Specifies the alert configuration for database is in Critical phase, that means one or more of the nodes are down but the database read/write are not hampered.
+          ignitePhaseCritical:
             enabled: true
-            duration: "30s"
+            duration: "1m"
             severity: warning
-          # Specifies the alert configuration for frequently opening and closing of connections.
-          rabbitmqHighConnectionChurn:
+          # Specifies the alert configuration for database is in Critical phase, that means one or more of the nodes are down but the database read/write are not hampered.
+          igniteClusterNoBaselineNode:
             enabled: true
-            duration: "30s"
+            duration: "1m"
             severity: warning
-          # Specifies alert configuration for incorrect erlang distributions in nodes
-          rabbitmqInsufficientEstablishedErlangDistributionLinks:
+            val: 0
+          # Specifies the alert configuration for database is in Critical phase, that means one or more of the nodes are down but the database read/write are not hampered.
+          igniteRestarted:
             enabled: true
-            duration: "30s"
+            duration: "1m"
             severity: warning
-          # Specifies alert configuration for disk space used upto watermark threshold
-          rabbitmqLowDiskWatermarkPredicted:
+            val: 180
+          # Specifies the alert configuration for database is in Critical phase, that means one or more of the nodes are down but the database read/write are not hampered.
+          igniteHighCPULoad:
             enabled: true
-            duration: "30s"
+            duration: "1m"
             severity: warning
-          # Specifies alert configuration for misconfigured routing of messages
-          rabbitmqUnroutableMessages:
+            val: 80
+          # Specifies the alert configuration for database is in Critical phase, that means one or more of the nodes are down but the database read/write are not hampered.
+          igniteHighHeapMemoryUsed:
             enabled: true
-            duration: "30s"
+            duration: "1m"
             severity: warning
-          # Specifies alert configuration for lower number of opened TCP sockets than required
-          rabbitmqTCPSocketsNearLimit:
+            val: 80
+          # Specifies the alert configuration for database is in Critical phase, that means one or more of the nodes are down but the database read/write are not hampered.
+          igniteHighDataregionOffHeapUsed:
             enabled: true
-            duration: "30s"
+            duration: "1m"
             severity: warning
-          # Specifies alert configuration for rapidly growing queues
-          rabbitmqQueueIsGrowing:
+            val: 80
+          # Specifies the alert configuration for database is in Critical phase, that means one or more of the nodes are down but the database read/write are not hampered.
+          igniteJVMPausesTotalDuration:
             enabled: true
-            duration: "30s"
+            duration: "1m"
             severity: warning
+            val: 0
           # Sepcifies the alert configuration for persistent volume usages.
           diskUsageHigh:
             enabled: true
@@ -118,7 +119,7 @@ form:
             severity: critical
 
 grafana:
-  enabled: false
+  enabled: true
   version: 7.5.5
   jobName: kubedb-databases
   url: ""

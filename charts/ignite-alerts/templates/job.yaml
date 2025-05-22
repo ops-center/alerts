@@ -1,5 +1,5 @@
 # templates/job.yaml
-  {{- if .Values.grafana.enabled }}
+{{- if .Values.grafana.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -14,22 +14,22 @@ spec:
           configMap:
             name: {{ include "ignite-alerts.fullname" . }}-configmap
       containers:
-          - name: post-json-container
-            image: curlimages/curl:latest
-            command: ["curl"]
-            args:
-              - "-X"
-              - "POST"
-              - "-H"
-              - "Content-Type: application/json"
-              - "-H"
-              - "Authorization: Bearer {{ .Values.grafana.apikey }}"
-              - "--data-binary"
-              - "@/etc/grafana-json/grafana-json.json"
-              - {{ .Values.grafana.url }}/api/dashboards/import
-            volumeMounts:
-                - mountPath: /etc/grafana-json
-                  name: grafana-json-volume
+        - name: post-json-container
+          image: curlimages/curl:latest
+          command: ["curl"]
+          args:
+            - "-X"
+            - "POST"
+            - "-H"
+            - "Content-Type: application/json"
+            - "-H"
+            - "Authorization: Bearer {{ .Values.grafana.apikey }}"
+            - "--data-binary"
+            - "@/etc/grafana-json/grafana-json.json"
+            - {{ .Values.grafana.url }}/api/dashboards/import
+          volumeMounts:
+            - mountPath: /etc/grafana-json
+              name: grafana-json-volume
       restartPolicy: Never
   backoffLimit: 2
   successfulJobsHistoryLimit: 1

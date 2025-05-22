@@ -73,17 +73,16 @@ type IgniteDatabaseAlert struct {
 }
 
 type IgniteDatabaseAlertRules struct {
-	RabbitmqFileDescriptorsNearLimit                       FixedAlert  `json:"rabbitmqFileDescriptorsNearLimit"`
-	RabbitmqQueueIsGrowing                                 FixedAlert  `json:"rabbitmqQueueIsGrowing"`
-	RabbitmqUnroutableMessages                             FixedAlert  `json:"rabbitmqUnroutableMessages"`
-	RabbitmqTCPSocketsNearLimit                            FixedAlert  `json:"rabbitmqTCPSocketsNearLimit"`
-	RabbitmqLowDiskWatermarkPredicted                      FixedAlert  `json:"rabbitmqLowDiskWatermarkPredicted"`
-	RabbitmqInsufficientEstablishedErlangDistributionLinks FixedAlert  `json:"rabbitmqInsufficientEstablishedErlangDistributionLinks"`
-	RabbitmqHighConnectionChurn                            FixedAlert  `json:"rabbitmqHighConnectionChurn"`
-	RabbitmqPhaseCritical                                  FixedAlert  `json:"rabbitmqPhaseCritical"`
-	RabbitmqDown                                           FixedAlert  `json:"rabbitmqDown"`
-	DiskUsageHigh                                          IntValAlert `json:"diskUsageHigh"`
-	DiskAlmostFull                                         IntValAlert `json:"diskAlmostFull"`
+	IgniteDown                      FixedAlert  `json:"igniteDown"`
+	IgnitePhaseCritical             FixedAlert  `json:"ignitePhaseCritical"`
+	IgniteClusterNoBaselineNode     FixedAlert  `json:"igniteClusterNoBaselineNode"`
+	IgniteRestarted                 IntValAlert `json:"igniteRestarted"`
+	IgniteHighCPULoad               FixedAlert  `json:"igniteHighCPULoad"`
+	IgniteHighHeapMemoryUsed        FixedAlert  `json:"igniteHighHeapMemoryUsed"`
+	IgniteHighDataregionOffHeapUsed FixedAlert  `json:"igniteHighDataregionOffHeapUsed"`
+	IgniteJVMPausesTotalDuration    FixedAlert  `json:"igniteJVMPausesTotalDuration"`
+	DiskUsageHigh                   IntValAlert `json:"diskUsageHigh"`
+	DiskAlmostFull                  IntValAlert `json:"diskAlmostFull"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

@@ -5,7 +5,7 @@ Let's say you have ignite database in namespace demo.
 Kubectl get ignite -n <ns>     // will list all the database in a namesapce  
 $ kubectl get ignite -n demo
   NAME    VERSION   STATUS   AGE
-  rm-sh   4.4.6     Ready    6h51m
+  rm-sh   2.17.0    Ready    6h51m
 ```
 There are four different db phase you may see in KubeDB managed Database.
 ``Ready`` ``Provisioning`` ``Critical`` ``NotReady``

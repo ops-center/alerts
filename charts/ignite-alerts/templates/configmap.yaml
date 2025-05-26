@@ -41,7 +41,7 @@ data:
         "editable": true,
         "gnetId": null,
         "graphTooltip": 0,
-        "id": 42,
+        "id": null,
         "links": [],
         "panels": [
           {
@@ -102,10 +102,6 @@ data:
             "dashLength": 10,
             "dashes": false,
             "datasource": null,
-            "fieldConfig": {
-              "defaults": {},
-              "overrides": []
-            },
             "fill": 1,
             "fillGradient": 0,
             "gridPos": {
@@ -132,7 +128,7 @@ data:
               "alertThreshold": true
             },
             "percentage": false,
-            "pluginVersion": "7.5.5",
+            "pluginVersion": "{{ .Values.grafana.version }}",
             "pointradius": 2,
             "points": false,
             "renderer": "flot",
@@ -143,7 +139,7 @@ data:
             "targets": [
               {
                 "exemplar": true,
-                "expr": "kubedb_com_ignite_status_phase{phase=\"NotReady\"}",
+                "expr": "kubedb_com_ignite_status_phase{app=\"{{ .Release.Name }}\",namespace=\"demo\",phase=\"NotReady\"}",
                 "interval": "",
                 "legendFormat": "",
                 "refId": "A"
@@ -178,11 +174,13 @@ data:
             },
             "yaxes": [
               {
+                "$$hashKey": "object:88",
                 "format": "short",
                 "logBase": 1,
                 "show": true
               },
               {
+                "$$hashKey": "object:89",
                 "format": "short",
                 "logBase": 1,
                 "show": true
@@ -226,7 +224,7 @@ data:
               "for": "10s",
               "frequency": "10s",
               "handler": 1,
-              "name": "Ignite Phase Critical Alert",
+              "name": "IgnitePhaseCritical",
               "noDataState": "no_data",
               "notifications": []
             },
@@ -235,10 +233,6 @@ data:
             "dashLength": 10,
             "dashes": false,
             "datasource": null,
-            "fieldConfig": {
-              "defaults": {},
-              "overrides": []
-            },
             "fill": 1,
             "fillGradient": 0,
             "gridPos": {
@@ -265,7 +259,7 @@ data:
               "alertThreshold": true
             },
             "percentage": false,
-            "pluginVersion": "7.5.5",
+            "pluginVersion": "{{ .Values.grafana.version }}",
             "pointradius": 2,
             "points": false,
             "renderer": "flot",
@@ -276,7 +270,7 @@ data:
             "targets": [
               {
                 "exemplar": true,
-                "expr": "kubedb_com_ignite_status_phase{phase=\"Critical\"}",
+                "expr": "kubedb_com_ignite_status_phase{app=\"{{ .Release.Name }}\",namespace=\"{{ .Release.Namespace }}\",phase=\"Critical\"}",
                 "interval": "",
                 "legendFormat": "",
                 "refId": "A"
@@ -311,11 +305,13 @@ data:
             },
             "yaxes": [
               {
+                "$$hashKey": "object:70",
                 "format": "short",
                 "logBase": 1,
                 "show": true
               },
               {
+                "$$hashKey": "object:71",
                 "format": "short",
                 "logBase": 1,
                 "show": true
@@ -379,8 +375,7 @@ data:
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": null,
-            "description": "80% of available file descriptors are in use. Fewer connections, fewer durable queues, or higher file descriptor limit will help.",
+            "description": "",
             "fieldConfig": {
               "defaults": {},
               "overrides": []
@@ -427,21 +422,21 @@ data:
                 },
                 "editorMode": "code",
                 "exemplar": false,
-                "expr": "min (cluster_TotalBaselineNodes) ",
+                "expr": "min (cluster_TotalBaselineNodes{job=~\"{{ .Release.Name }}-stats\",namespace=~\"{{ .Release.Namespace }}\"}) ",
                 "interval": "",
-                "legendFormat": "",
+                "legendFormat": {{ `"{{pod}}"` }},
                 "range": true,
                 "refId": "A"
               }
             ],
             "thresholds": [
               {
-                "colorMode": "critical",
+                "value": 1,
+                "op": "lt",
+                "visible": true,
                 "fill": true,
                 "line": true,
-                "op": "lt",
-                "value": 1,
-                "visible": true
+                "colorMode": "critical"
               }
             ],
             "timeFrom": null,
@@ -482,7 +477,8 @@ data:
             "yaxis": {
               "align": false,
               "alignLevel": null
-            }
+            },
+            "datasource": null
           },
           {
             "alert": {
@@ -521,23 +517,18 @@ data:
               "notifications": []
             },
             "aliasColors": {},
-            "bars": false,
             "dashLength": 10,
-            "dashes": false,
-            "datasource": null,
             "fieldConfig": {
               "defaults": {},
               "overrides": []
             },
             "fill": 1,
-            "fillGradient": 0,
             "gridPos": {
               "h": 8,
               "w": 12,
               "x": 12,
               "y": 10
             },
-            "hiddenSeries": false,
             "id": 36,
             "legend": {
               "avg": false,
@@ -554,41 +545,35 @@ data:
             "options": {
               "alertThreshold": true
             },
-            "percentage": false,
             "pluginVersion": "7.5.5",
             "pointradius": 2,
-            "points": false,
             "renderer": "flot",
             "seriesOverrides": [],
             "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
             "targets": [
               {
+                "expr": "ignite_uptime{job=~\"{{ .Release.Name }}-stats\",namespace=~\"{{ .Release.Namespace }}\"}",
+                "legendFormat": {{ `"{{pod}}"` }},
+                "interval": "",
+                "exemplar": true,
                 "datasource": {
                   "type": "prometheus",
                   "uid": "prometheus"
                 },
-                "exemplar": true,
-                "expr": "ignite_uptime",
-                "interval": "",
-                "legendFormat": "",
                 "refId": "A"
               }
             ],
             "thresholds": [
               {
-                "colorMode": "critical",
+                "value": 180,
+                "op": "lt",
+                "visible": true,
                 "fill": true,
                 "line": true,
-                "op": "lt",
-                "value": 180,
-                "visible": true
+                "colorMode": "critical"
               }
             ],
-            "timeFrom": null,
             "timeRegions": [],
-            "timeShift": null,
             "title": "Ignite Restarted",
             "tooltip": {
               "shared": true,
@@ -624,7 +609,18 @@ data:
             "yaxis": {
               "align": false,
               "alignLevel": null
-            }
+            },
+            "bars": false,
+            "dashes": false,
+            "fillGradient": 0,
+            "hiddenSeries": false,
+            "percentage": false,
+            "points": false,
+            "stack": false,
+            "steppedLine": false,
+            "timeFrom": null,
+            "timeShift": null,
+            "datasource": null
           },
           {
             "alert": {
@@ -663,24 +659,19 @@ data:
               "notifications": []
             },
             "aliasColors": {},
-            "bars": false,
             "dashLength": 10,
-            "dashes": false,
-            "datasource": null,
             "description": "80% of available TCP sockets are in use. More channels, fewer connections or a more even spread across the cluster will help.",
             "fieldConfig": {
               "defaults": {},
               "overrides": []
             },
             "fill": 1,
-            "fillGradient": 0,
             "gridPos": {
               "h": 8,
               "w": 12,
               "x": 0,
               "y": 18
             },
-            "hiddenSeries": false,
             "id": 40,
             "legend": {
               "avg": false,
@@ -697,15 +688,11 @@ data:
             "options": {
               "alertThreshold": true
             },
-            "percentage": false,
             "pluginVersion": "7.5.5",
             "pointradius": 2,
-            "points": false,
             "renderer": "flot",
             "seriesOverrides": [],
             "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
             "targets": [
               {
                 "datasource": {
@@ -713,25 +700,23 @@ data:
                   "uid": "prometheus"
                 },
                 "exemplar": true,
-                "expr": "(sys_CpuLoad) *100",
+                "expr": "(sys_CpuLoad{job=~\"{{ .Release.Name }}-stats\",namespace=~\"{{ .Release.Namespace }}\"}) *100",
                 "interval": "",
-                "legendFormat": "",
+                "legendFormat": {{ `"{{pod}}"` }},
                 "refId": "A"
               }
             ],
             "thresholds": [
               {
-                "colorMode": "critical",
+                "value": 80,
+                "op": "gt",
+                "visible": true,
                 "fill": true,
                 "line": true,
-                "op": "gt",
-                "value": 80,
-                "visible": true
+                "colorMode": "critical"
               }
             ],
-            "timeFrom": null,
             "timeRegions": [],
-            "timeShift": null,
             "title": "Ignite High CPU Load",
             "tooltip": {
               "shared": true,
@@ -767,7 +752,18 @@ data:
             "yaxis": {
               "align": false,
               "alignLevel": null
-            }
+            },
+            "bars": false,
+            "dashes": false,
+            "fillGradient": 0,
+            "hiddenSeries": false,
+            "percentage": false,
+            "points": false,
+            "stack": false,
+            "steppedLine": false,
+            "timeFrom": null,
+            "timeShift": null,
+            "datasource": null
           },
           {
             "alert": {
@@ -806,24 +802,18 @@ data:
               "notifications": []
             },
             "aliasColors": {},
-            "bars": false,
             "dashLength": 10,
-            "dashes": false,
-            "datasource": null,
-            "description": "",
             "fieldConfig": {
               "defaults": {},
               "overrides": []
             },
             "fill": 1,
-            "fillGradient": 0,
             "gridPos": {
               "h": 8,
               "w": 12,
               "x": 12,
               "y": 18
             },
-            "hiddenSeries": false,
             "id": 44,
             "legend": {
               "avg": false,
@@ -840,15 +830,11 @@ data:
             "options": {
               "alertThreshold": true
             },
-            "percentage": false,
             "pluginVersion": "7.5.5",
             "pointradius": 2,
-            "points": false,
             "renderer": "flot",
             "seriesOverrides": [],
             "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
             "targets": [
               {
                 "datasource": {
@@ -856,25 +842,23 @@ data:
                   "uid": "prometheus"
                 },
                 "exemplar": true,
-                "expr": "100 - (( sys_memory_heap_max - sys_memory_heap_used)*100 / sys_memory_heap_max)",
+                "expr": "100 - (( sys_memory_heap_max{job=~\"{{ .Release.Name }}-stats\",namespace=~\"{{ .Release.Namespace }}\"} - sys_memory_heap_used{job=~\"{{ .Release.Name }}-stats\",namespace=~\"{{ .Release.Namespace }}\"})*100 / sys_memory_heap_max{job=~\"{{ .Release.Name }}-stats\",namespace=~\"{{ .Release.Namespace }}\"})",
                 "interval": "",
-                "legendFormat": "",
+                "legendFormat": {{ `"{{pod}}"` }},
                 "refId": "A"
               }
             ],
             "thresholds": [
               {
-                "colorMode": "critical",
+                "value": 80,
+                "op": "gt",
+                "visible": true,
                 "fill": true,
                 "line": true,
-                "op": "gt",
-                "value": 80,
-                "visible": true
+                "colorMode": "critical"
               }
             ],
-            "timeFrom": null,
             "timeRegions": [],
-            "timeShift": null,
             "title": "Ignite High Heap Memory Used",
             "tooltip": {
               "shared": true,
@@ -910,7 +894,19 @@ data:
             "yaxis": {
               "align": false,
               "alignLevel": null
-            }
+            },
+            "bars": false,
+            "dashes": false,
+            "description": "",
+            "fillGradient": 0,
+            "hiddenSeries": false,
+            "percentage": false,
+            "points": false,
+            "stack": false,
+            "steppedLine": false,
+            "timeFrom": null,
+            "timeShift": null,
+            "datasource": null
           },
           {
             "alert": {
@@ -952,7 +948,6 @@ data:
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": null,
             "description": "",
             "fieldConfig": {
               "defaults": {},
@@ -999,20 +994,20 @@ data:
                   "uid": "prometheus"
                 },
                 "exemplar": true,
-                "expr": "(io_dataregion_default_OffheapUsedSize / 1024 / 1024 / 1024) * 100",
+                "expr": "(io_dataregion_default_OffheapUsedSize{job=~\"{{ .Release.Name }}-stats\",namespace=~\"{{ .Release.Namespace }}\"} / 1024 / 1024 / 1024) * 100",
                 "interval": "",
-                "legendFormat": "",
+                "legendFormat": {{ `"{{pod}}"` }},
                 "refId": "A"
               }
             ],
             "thresholds": [
               {
-                "colorMode": "critical",
+                "value": 80,
+                "op": "gt",
+                "visible": true,
                 "fill": true,
                 "line": true,
-                "op": "gt",
-                "value": 80,
-                "visible": true
+                "colorMode": "critical"
               }
             ],
             "timeFrom": null,
@@ -1053,7 +1048,8 @@ data:
             "yaxis": {
               "align": false,
               "alignLevel": null
-            }
+            },
+            "datasource": null
           },
           {
             "alert": {
@@ -1095,7 +1091,6 @@ data:
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": null,
             "description": "",
             "fieldConfig": {
               "defaults": {},
@@ -1142,20 +1137,20 @@ data:
                   "uid": "prometheus"
                 },
                 "exemplar": true,
-                "expr": "ignite_longJVMPausesTotalDuration",
+                "expr": "ignite_longJVMPausesTotalDuration{job=~\"{{ .Release.Name }}-stats\",namespace=~\"{{ .Release.Namespace }}\"}",
                 "interval": "",
-                "legendFormat": "",
+                "legendFormat": {{ `"{{pod}}"` }},
                 "refId": "A"
               }
             ],
             "thresholds": [
               {
-                "colorMode": "critical",
+                "value": 0,
+                "op": "gt",
+                "visible": true,
                 "fill": true,
                 "line": true,
-                "op": "gt",
-                "value": 0,
-                "visible": true
+                "colorMode": "critical"
               }
             ],
             "timeFrom": null,
@@ -1196,7 +1191,8 @@ data:
             "yaxis": {
               "align": false,
               "alignLevel": null
-            }
+            },
+            "datasource": null
           }
         ],
         "refresh": "5s",
@@ -1207,16 +1203,16 @@ data:
           "list": []
         },
         "time": {
-          "from": "now-5m",
+          "from": "now-15m",
           "to": "now"
         },
         "timepicker": {},
         "timezone": "",
-        "title": "kubedb.com / Ignite / default / ignite",
+        "title": "{{ .Values.metadata.resource.group }} / {{ .Values.metadata.resource.kind }} / {{ .Release.Namespace }} / {{ .Release.Name }}",
         "uid": null,
-        "version": 5
+        "version": 23
       },
-       "folderId": 0,
+      "folderId": 0,
       "overwrite": false
     }
 {{- end }}

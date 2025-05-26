@@ -52,8 +52,8 @@ The following table lists the configurable parameters of the `ignite-alerts` cha
 | metadata.resource.name                                                        |                                               | <code>ignites</code>                                                                        |
 | metadata.resource.scope                                                       |                                               | <code>Namespaced</code>                                                                     |
 | metadata.resource.version                                                     |                                               | <code>v1alpha2</code>                                                                       |
-| metadata.release.name                                                         | Release name                                  | <code>""</code>                                                                             |
-| metadata.release.namespace                                                    | Release namespace                             | <code>""</code>                                                                             |
+| metadata.release.name                                                         | Release name                                  | <code>"ignite-quickstart"</code>                                                            |
+| metadata.release.namespace                                                    | Release namespace                             | <code>"demo"</code>                                                                         |
 | form.alert.enabled                                                            | # Enable PrometheusRule alerts                | <code>warning</code>                                                                        |
 | form.alert.labels                                                             | # Labels for default rules                    | <code>{"release":"kube-prometheus-stack"}</code>                                            |
 | form.alert.annotations                                                        | # Annotations for default rules               | <code>{}</code>                                                                             |
@@ -117,8 +117,6 @@ The following table lists the configurable parameters of the `ignite-alerts` cha
 | grafana.enabled                                                               |                                               | <code>true</code>                                                                           |
 | grafana.version                                                               |                                               | <code>7.5.5</code>                                                                          |
 | grafana.jobName                                                               |                                               | <code>kubedb-databases</code>                                                               |
-
-
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm upgrade -i`. For example:
 

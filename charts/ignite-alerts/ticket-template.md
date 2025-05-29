@@ -22,12 +22,12 @@ A recommended approach is to describe the ignite object, check the configuration
 You can contact to AppsCode with the following things attached,
 - [Get the ignite object](#get-ignite)
 - [Describe ignite object](#describe-ignite)
-- Describe the StatefulSet object: If there are multiple sts, describe all of them. To do that, first
-  [List statefulsets under a ignite](#list-statefulsets-under-a-ignite). Then [Describe statefulsets](#describe-statefulsets) for each of the sts.
+- Describe the PetSet object: If there are multiple petsets, describe all of them. To do that, first
+  [List petsets under a ignite](#list-petsets-under-a-ignite). Then [Describe petsets](#describe-petsets) for each of the petsets.
 - Describe the pods: If there are multiple pod, describe all of them. To do that, first
   [List pods under a ignite](#list-pods-under-a-ignite). Then [Describe pods](#describe-pods) for each of the pod.
 - [Check the secret is created](#check-secret)
-- [Check Pod logs](#get-pod-logs).  If it is a sharded ignite, you also need to check the [mongos bootstrap container's logs](#mongos-bootstrap-logs).
+- [Check Pod logs](#get-pod-logs).  If it is a sharded ignite, you also need to check the [ignite bootstrap container's logs](#ignite-bootstrap-logs).
 - [Operator logs](#operator-logs)
 
 ## Critical
@@ -38,12 +38,12 @@ To resolve this , we need to  find out which servers/pod that is not in the clus
 You can contact to AppsCode with the following things attached,
 - [Get the ignite object](#get-ignite)
 - [Describe ignite object](#describe-ignite)
-- Describe the StatefulSet object: If there are multiple sts, describe all of them. To do that, first
-  [List statefulsets under a ignite](#list-statefulsets-under-a-ignite). Then [Describe statefulsets](#describe-statefulsets) for each of the sts.
+- Describe the PetSet object: If there are multiple petsets, describe all of them. To do that, first
+  [List petsets under a ignite](#list-petsets-under-a-ignite). Then [Describe petsets](#describe-petsets) for each of the petsets.
 - Describe the pods: If there are multiple pod, describe all of them. To do that, first
   [List pods under a ignite](#list-pods-under-a-ignite). Then [Describe pods](#describe-pods) for each of the pod.
 - [Check the secret is created](#check-secret)
-- [Check Pod logs](#get-pod-logs).  If it is a sharded ignite, you also need to check the [mongos bootstrap container's logs](#mongos-bootstrap-logs).
+- [Check Pod logs](#get-pod-logs).  If it is a sharded ignite, you also need to check the [ignite bootstrap container's logs](#ignite-bootstrap-logs).
 - [Operator logs](#operator-logs)
 
 ## NotReady
@@ -55,12 +55,12 @@ there might be a need for human intervention to know what will be the best way t
 You can contact to AppsCode with the following things attached,
 - [Get the ignite object](#get-ignite)
 - [Describe ignite object](#describe-ignite)
-- Describe the StatefulSet object: If there are multiple sts, describe all of them. To do that, first
-  [List statefulsets under a ignite](#list-statefulsets-under-a-ignite). Then [Describe statefulsets](#describe-statefulsets) for each of the sts.
+- Describe the PetSet object: If there are multiple petsets, describe all of them. To do that, first
+  [List petsets under a ignite](#list-petsets-under-a-ignite). Then [Describe petsets](#describe-petsets) for each of the petsets.
 - Describe the pods: If there are multiple pod, describe all of them. To do that, first
   [List pods under a ignite](#list-pods-under-a-ignite). Then [Describe pods](#describe-pods) for each of the pod.
 - [Check the secret is created](#check-secret)
-- [Check Pod logs](#get-pod-logs).  If it is a sharded ignite, you also need to check the [mongos bootstrap container's logs](#mongos-bootstrap-logs).
+- [Check Pod logs](#get-pod-logs).  If it is a sharded ignite, you also need to check the [ignite bootstrap container's logs](#ignite-bootstrap-logs).
 - [Operator logs](#operator-logs)
 
 # How to ?
@@ -74,14 +74,14 @@ kubectl get ignite -n <namespace> -oyaml <ignite-object-Name>
 kubectl describe ignite -n <namespace> <ignite-object-Name> 
 ```
 
-## List statefulsets under a ignite
+## List petsets under a ignite
 ```bash
-kubectl get sts -n <namespace> -l=app.kubernetes.io/component=database,app.kubernetes.io/managed-by=kubedb.com,app.kubernetes.io/name=ignites.kubedb.com,app.kubernetes.io/instance=<ignite-object-Name> 
+kubectl get petsets -n <namespace> -l=app.kubernetes.io/component=database,app.kubernetes.io/managed-by=kubedb.com,app.kubernetes.io/name=ignites.kubedb.com,app.kubernetes.io/instance=<ignite-object-Name> 
 ```
 
-## Describe statefulsets
+## Describe petsets
 ```bash
-kubectl describe sts -n <namespace> <sts-Name> 
+kubectl describe petsets -n <namespace> <petsets-Name> 
 ```
 
 ## Check secret
@@ -109,7 +109,7 @@ kubectl logs -n <namespace> <pod-name> -c ignite
 
 ## Ignite bootstrap logs
 ```bash
-# List mongos pods 
+# List ignite pods 
 kubectl get pods -n <namespace> -l=app.kubernetes.io/component=database,app.kubernetes.io/managed-by=kubedb.com,app.kubernetes.io/name=ignites.kubedb.com,app.kubernetes.io/instance=<ignite-object-Name> 
 # Now check logs
 kubectl logs -n <ns> <pod-name> -c ignite

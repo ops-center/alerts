@@ -1,0 +1,18 @@
+project:
+  name: Ignite alerts by AppsCode
+  shortName: Ignite alerts
+  url: https://github.com/appscode/alerts
+  description: Ignite alerts for KubeDB
+  app: Ignite alerts
+repository:
+  url: https://charts.appscode.com/stable/
+  name: appscode
+chart:
+  name: ignite
+  values: -- generate from values file --
+  valuesExample: -- generate from values file --
+prerequisites:
+  - Kubernetes 1.19+
+release:
+  name: ignite
+  namespace: demo

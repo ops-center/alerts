@@ -1,6 +1,6 @@
 This template is designed to contact with AppsCode with troubleshooting and support in general. You will find all the KubeDB Managed database follows similar pattern. To troubleshoot and find what to do let's get started with the database phase.
 
-Let's say you have mongodb database in namespace demo.
+Let's say you have rabbitmq database in namespace demo.
 ```bash
 Kubectl get rabbitmq -n <ns>     // will list all the database in a namesapce  
 $ kubectl get rabbitmq -n demo
@@ -107,7 +107,7 @@ kubectl describe pods -n <namespace> <pod-Name>
 kubectl logs -n <namespace> <pod-name> -c rabbitmq
 ```
 
-## Mongos bootstrap logs
+## Rabbitmq bootstrap logs
 ```bash
 # List mongos pods 
 kubectl get pods -n <namespace> -l=app.kubernetes.io/component=database,app.kubernetes.io/managed-by=kubedb.com,app.kubernetes.io/name=rabbitmqs.kubedb.com,app.kubernetes.io/instance=<rabbitmq-object-Name> 

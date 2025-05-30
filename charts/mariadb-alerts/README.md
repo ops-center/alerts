@@ -7,8 +7,8 @@
 ```bash
 $ helm repo add appscode https://charts.appscode.com/stable/
 $ helm repo update
-$ helm search repo appscode/mariadb-alerts --version=v2024.12.18
-$ helm upgrade -i mariadb appscode/mariadb-alerts -n demo --create-namespace --version=v2024.12.18
+$ helm search repo appscode/mariadb-alerts --version=v2025.3.24
+$ helm upgrade -i mariadb appscode/mariadb-alerts -n demo --create-namespace --version=v2025.3.24
 ```
 
 ## Introduction
@@ -24,7 +24,7 @@ This chart deploys MariaDB alerts on a [Kubernetes](http://kubernetes.io) cluste
 To install/upgrade the chart with the release name `mariadb`:
 
 ```bash
-$ helm upgrade -i mariadb appscode/mariadb-alerts -n demo --create-namespace --version=v2024.12.18
+$ helm upgrade -i mariadb appscode/mariadb-alerts -n demo --create-namespace --version=v2025.3.24
 ```
 
 The command deploys MariaDB alerts on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -208,12 +208,12 @@ The following table lists the configurable parameters of the `mariadb-alerts` ch
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm upgrade -i`. For example:
 
 ```bash
-$ helm upgrade -i mariadb appscode/mariadb-alerts -n demo --create-namespace --version=v2024.12.18 --set metadata.resource.group=kubedb.com
+$ helm upgrade -i mariadb appscode/mariadb-alerts -n demo --create-namespace --version=v2025.3.24 --set metadata.resource.group=kubedb.com
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while
 installing the chart. For example:
 
 ```bash
-$ helm upgrade -i mariadb appscode/mariadb-alerts -n demo --create-namespace --version=v2024.12.18 --values values.yaml
+$ helm upgrade -i mariadb appscode/mariadb-alerts -n demo --create-namespace --version=v2025.3.24 --values values.yaml
 ```

@@ -23,7 +23,7 @@
   - Verify resource limits (CPU/Memory): Inspect your ProxySQL container’s CPU/Memory settings under the CR or PetSet. If pods cannot start due to insufficient resources, adjust as needed.
   - Contact AppsCode team: If the issue persists, reach out with collected logs and events.
 - #### ProxySQLTooManyConnections
-    - Inspect Current Connection Count
+    - Inspect Current Connection Count. `SELECT COUNT(*) AS connection_count FROM stats_mysql_processlist;`
     - Increase ProxySQL variable `mysql-max_connections`
       - Create a ProxySQLOpsRequest of type Reconfigure to increase max connections
       - Scale Horizontally: Create a ProxySQLOpsRequest of type HorizontalScaling

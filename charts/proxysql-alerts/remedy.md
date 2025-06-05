@@ -54,8 +54,8 @@
     - Wait for all nodes/pods to be `Ready`. 
        - kubectl get pods -l app=<proxysql-label> -n <namespace>
        - Ensure all cluster members show Running and Ready: 1/1.
-    - Check Cluster Status via Admin Interface: `SELECT hostname, status FROM proxysql_servers;` 
-      - Look for nodes in status other than ONLINE.
+    - Check Replica count against the number of nodes in the cluster.: `SELECT COUNT(*) AS count FROM RUNTIME_PROXYSQL_SERVERS;` 
+    - Check if the any of the response times are above 10 ms: `SELECT hostname, response_time_ms FROM stats_proxysql_servers_metrics;`
     - Restart One Node at a Time: If a specific node is stuck, restart that pod and let it rejoin:
        - `kubectl delete pod <proxysql-node-pod> -n <namespace>`
     - Contact AppsCode Team: If sync never completes.

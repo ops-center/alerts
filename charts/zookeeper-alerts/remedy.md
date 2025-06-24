@@ -8,7 +8,6 @@
   - Contact AppsCode team
 - #### ZooKeeperTooManyNodes
   - Describe the ZooKeeper CR and check current znode count
-  - Investigate which applications are creating excessive znodes — check for stale or unnecessary znodes
   - Perform cleanup if needed, or tune heap/memory settings if the load is legitimate
   - Contact AppsCode team
 - #### ZooKeeperTooBigMemory
@@ -27,23 +26,17 @@
   - Describe the `ZooKeeper` CR and check pod restarts and logs
   - Verify ZooKeeper ensemble stability — leader election should not happen frequently
   - Contact AppsCode team
-- #### ZooKeeperTooLongFsyncTime
-  - Describe the `ZooKeeper` CR, check storage performance — slow disk I/O may cause long fsync
-  - Contact AppsCode team
-- #### ZooKeeperTooLongSnapshotTime
-  - Describe the `ZooKeeper` CR, check storage performance and heap usage
-  - Contact AppsCode team
 - #### ZooKeeperTooHighAvgLatency
-  - Describe the `ZooKeeper` CR, check ZooKeeper pod CPU/memory utilization and network latency
+  - Monitor and Tune Garbage Collection
   - Contact AppsCode team
 - #### ZooKeeperJvmMemoryFilingUp
-  - Describe the `ZooKeeper` CR, check for memory leaks or improper GC tuning
+  - Increase ZooKeeper JVM Heap Memory Size
   - Contact AppsCode team
 - #### DiskUsageHigh
-  - Describe the `ZooKeeper` CR, investigate persistent volume usage and clean up old data
+  - Expand disk volume or move data
   - Contact AppsCode team
 - #### DiskAlmostFull
-  - Describe the `ZooKeeper` CR, investigate persistent volume usage and clean up old data
+  - Expand disk volume or move data
   - Contact AppsCode team
 
 

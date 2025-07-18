@@ -5,7 +5,7 @@ project:
   description: Postgres alerts for KubeDB
   app: Postgres alerts
 repository:
-  url: https://charts.appscode.com/stable/
+  url: oci://ghcr.io/appscode-charts
   name: appscode
 chart:
   name: postgres

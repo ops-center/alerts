@@ -2,8 +2,8 @@ apiVersion: v2
 name: perconaxtradb-alerts
 description: A Helm chart for PerconaXtraDB Alert by AppsCode
 type: application
-version: v2025.3.24
-appVersion: v0.4.0
+version: v2025.6.30
+appVersion: v0.5.0
 home: https://github.com/appscode/alerts
 icon: https://cdn.appscode.com/images/products/kubedb/kubedb-icon.png
 sources:

@@ -5,7 +5,7 @@ project:
   description: ProxySQL alerts for KubeDB
   app: ProxySQL alerts
 repository:
-  url: https://charts.appscode.com/stable/
+  url: oci://ghcr.io/appscode-charts
   name: appscode
 chart:
   name: proxysql

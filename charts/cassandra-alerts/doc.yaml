@@ -5,7 +5,7 @@ project:
   description: Cassandra alerts for KubeDB
   app: Cassandra alerts
 repository:
-  url: https://charts.appscode.com/stable/
+  url: oci://ghcr.io/appscode-charts
   name: appscode
 chart:
   name: cassandra

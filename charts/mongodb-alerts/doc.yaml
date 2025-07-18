@@ -5,7 +5,7 @@ project:
   description: MongoDB alerts for KubeDB
   app: MongoDB alerts
 repository:
-  url: https://charts.appscode.com/stable/
+  url: oci://ghcr.io/appscode-charts
   name: appscode
 chart:
   name: mongodb

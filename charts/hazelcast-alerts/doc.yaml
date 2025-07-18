@@ -5,7 +5,7 @@ project:
   description: Hazelcast alerts for KubeDB
   app: Hazelcast alerts
 repository:
-  url: https://charts.appscode.com/stable/
+  url: oci://ghcr.io/appscode-charts
   name: appscode
 chart:
   name: hazelcast

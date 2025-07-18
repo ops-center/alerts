@@ -5,7 +5,7 @@ project:
   description: ZooKeeper alerts for KubeDB
   app: ZooKeeper alerts
 repository:
-  url: https://charts.appscode.com/stable/
+  url: oci://ghcr.io/appscode-charts
   name: appscode
 chart:
   name: zookeeper

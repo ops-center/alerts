@@ -5,7 +5,7 @@ project:
   description: ConnectCluster alerts for KubeDB
   app: ConnectCluster alerts
 repository:
-  url: https://charts.appscode.com/stable/
+  url: oci://ghcr.io/appscode-charts
   name: appscode
 chart:
   name: connectcluster

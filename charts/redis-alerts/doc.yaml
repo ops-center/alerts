@@ -5,7 +5,7 @@ project:
   description: Redis alerts for KubeDB
   app: Redis alerts
 repository:
-  url: https://charts.appscode.com/stable/
+  url: oci://ghcr.io/appscode-charts
   name: appscode
 chart:
   name: redis

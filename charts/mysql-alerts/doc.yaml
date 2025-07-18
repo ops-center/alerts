@@ -5,7 +5,7 @@ project:
   description: MySQL alerts for KubeDB
   app: MySQL alerts
 repository:
-  url: https://charts.appscode.com/stable/
+  url: oci://ghcr.io/appscode-charts
   name: appscode
 chart:
   name: mysql

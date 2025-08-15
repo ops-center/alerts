@@ -5,7 +5,7 @@
 ## TL;DR;
 
 ```bash
-$ helm repo add appscode https://charts.appscode.com/stable/
+$ helm repo add appscode oci://ghcr.io/appscode-charts
 $ helm repo update
 $ helm search repo appscode/postgres-alerts --version=v2025.6.30
 $ helm upgrade -i postgres appscode/postgres-alerts -n demo --create-namespace --version=v2025.6.30

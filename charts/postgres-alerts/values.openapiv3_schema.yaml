@@ -43,13 +43,13 @@ properties:
                             - warning
                             - info
                             type: string
-                          slot_name:
-                            type: string
+                          val:
+                            type: integer
                         required:
                         - duration
                         - enabled
                         - severity
-                        - slot_name
+                        - val
                         type: object
                       PostgresReplicationSlotLagHigh:
                         properties:
@@ -63,13 +63,13 @@ properties:
                             - warning
                             - info
                             type: string
-                          slot_name:
-                            type: string
+                          val:
+                            type: integer
                         required:
                         - duration
                         - enabled
                         - severity
-                        - slot_name
+                        - val
                         type: object
                       diskAlmostFull:
                         properties:

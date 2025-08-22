@@ -84,13 +84,11 @@ form:
             duration: "15s"
             severity: warning
             val: 838860800 # 800 MB
-            slot_name: "ace_pgoutbox_slot"
-          PostgresReplicationSlotLagCritical: 
+          PostgresReplicationSlotLagCritical:
             enabled: true
             duration: "15s"
             severity: critical
             val: 1288490188 # 1.2 GB
-            slot_name: "ace_pgoutbox_slot"
           # Sepcifies the alert configuration for persistent volume usages.
           diskUsageHigh:
             enabled: true

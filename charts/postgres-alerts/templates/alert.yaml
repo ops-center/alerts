@@ -54,6 +54,28 @@ spec:
         summary: Postgresql too many locks acquired (instance {{`{{`}} $labels.pod {{`}}`}})
         description: "Too many locks acquired on the database. \n  If this alert happens frequently, we may need to increase the postgres setting max_locks_per_transaction.\n  {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{end -}}
+    {{ if (include "postgres-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.PostgresReplicationSlotLagHigh.enabled .rules.PostgresReplicationSlotLagHigh.severity)) -}}
+    - alert: PostgresReplicationSlotLagHigh
+      expr: max_over_time(pg_replication_slots_pg_wal_lsn_diff[{{ .rules.PostgresReplicationSlotLagHigh.duration }}]) > {{ .rules.PostgresReplicationSlotLagHigh.val }}
+      for: {{ .rules.PostgresReplicationSlotLagHigh.duration }}
+      labels:
+        severity: {{ .rules.PostgresReplicationSlotLagHigh.severity }}
+        {{- include "postgres-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: "High replication slot WAL lag detected on slot {{`{{`}} $labels.slot_name {{`}}`}}"
+        description: "The replication lag for slot {{`{{`}} $labels.slot_name {{`}}`}} is {{`{{`}} $value {{`}}`}} bytes, which may cause disk space issues or replication errors. This indicates the replica or consumer might be falling behind."
+    {{end -}}
+    {{ if (include "postgres-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.PostgresReplicationSlotLagCritical.enabled .rules.PostgresReplicationSlotLagCritical.severity)) -}}
+    - alert: PostgresReplicationSlotLagCritical
+      expr: max_over_time(pg_replication_slots_pg_wal_lsn_diff[{{ .rules.PostgresReplicationSlotLagCritical.duration }}]) > {{ .rules.PostgresReplicationSlotLagCritical.val }}
+      for: {{ .rules.PostgresReplicationSlotLagCritical.duration }}
+      labels:
+        severity: {{ .rules.PostgresReplicationSlotLagCritical.severity }}
+        {{- include "postgres-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: "Critical PostgreSQL replication lag detected on slot {{`{{`}} $labels.slot_name {{`}}`}}"
+        description: "Replication slot {{`{{`}} $labels.slot_name {{`}}`}} is lagging by more than {{`{{`}} $value {{`}}`}} bytes. WAL file deletion is imminent. Immediate intervention required to prevent replication slot invalidation and potential data loss."
+    {{end -}}
     {{ if (include "postgres-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.postgresRestarted.enabled .rules.postgresRestarted.severity)) -}}
     - alert: PostgresqlRestarted
       expr: time() - pg_postmaster_start_time_seconds{job="{{- $app -}}-stats",namespace="{{ $.Release.Namespace }}"} < {{ .rules.postgresRestarted.val }}

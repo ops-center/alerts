@@ -3434,6 +3434,8 @@ func (in *PostgresDatabaseAlert) DeepCopy() *PostgresDatabaseAlert {
 func (in *PostgresDatabaseAlertRules) DeepCopyInto(out *PostgresDatabaseAlertRules) {
 	*out = *in
 	out.PostgresInstanceDown = in.PostgresInstanceDown
+	out.PostgresReplicationSlotLagHigh = in.PostgresReplicationSlotLagHigh
+	out.PostgresReplicationSlotLagCritical = in.PostgresReplicationSlotLagCritical
 	out.PostgresRestarted = in.PostgresRestarted
 	out.PostgresExporterError = in.PostgresExporterError
 	out.PostgresTooManyConnections = in.PostgresTooManyConnections

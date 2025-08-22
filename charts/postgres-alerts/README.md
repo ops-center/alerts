@@ -96,11 +96,11 @@ The following table lists the configurable parameters of the `postgres-alerts` c
 | form.alert.groups.database.rules.postgresTooManyLocksAcquired.val             |                                               | <code>0.20</code>                                |
 | form.alert.groups.database.rules.postgresTooManyLocksAcquired.severity        |                                               | <code>critical</code>                            |
 | form.alert.groups.database.rules.PostgresReplicationSlotLagHigh.enabled       |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.PostgresReplicationSlotLagHigh.duration      |                                               | <code>"15s"</code>                               |
+| form.alert.groups.database.rules.PostgresReplicationSlotLagHigh.duration      |                                               | <code>"1m"</code>                                |
 | form.alert.groups.database.rules.PostgresReplicationSlotLagHigh.severity      |                                               | <code>warning</code>                             |
 | form.alert.groups.database.rules.PostgresReplicationSlotLagHigh.val           |                                               | <code>838860800 # 800 MB</code>                  |
 | form.alert.groups.database.rules.PostgresReplicationSlotLagCritical.enabled   |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.PostgresReplicationSlotLagCritical.duration  |                                               | <code>"15s"</code>                               |
+| form.alert.groups.database.rules.PostgresReplicationSlotLagCritical.duration  |                                               | <code>"1m"</code>                                |
 | form.alert.groups.database.rules.PostgresReplicationSlotLagCritical.severity  |                                               | <code>critical</code>                            |
 | form.alert.groups.database.rules.PostgresReplicationSlotLagCritical.val       |                                               | <code>1288490188 # 1.2 GB</code>                 |
 | form.alert.groups.database.rules.diskUsageHigh.enabled                        |                                               | <code>true</code>                                |

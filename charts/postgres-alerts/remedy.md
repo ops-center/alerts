@@ -15,13 +15,13 @@
   - Please check if `effective_cache_size` is 75% of available Memory.
   - Check if you are using proper `VACUUM` method for the relevant table.
 - #### PostgresReplicationSlotLagHigh
-  - Display comprehensive replication slot information including all available columns in the `pg_replication_slots` table for complete visibility into slot health and resource usage.
+  - For the slot in `labels.slot_name`, display comprehensive replication slot information including all available columns in the `pg_replication_slots` table for complete visibility into slot health and resource usage.
   - Check WAL status: `reserved` (healthy), `extended` (exceeds max_wal_size but retained), `unreserved` (files will be removed), `lost` (slot unusable).
-  - Show slots exceeding 800 MB.
+  - Show slot lag in human readable format (GB/Gi, MB/Mi).
 - #### PostgresReplicationSlotLagCritical
-  - Display comprehensive replication slot information including all available columns in the `pg_replication_slots` table for complete visibility into slot health and resource usage.
+  - For the slot in `labels.slot_name`, display comprehensive replication slot information including all available columns in the `pg_replication_slots` table for complete visibility into slot health and resource usage.
   - Check WAL status: `reserved` (healthy), `extended` (exceeds max_wal_size but retained), `unreserved` (files will be removed), `lost` (slot unusable).
-  - Show slots exceeding 1.2 GB.
+  - Show slot lag in human readable format (GB/Gi, MB/Mi).
 - #### PostgreSQLRestarted
   - Check if `Postgres` CR is in Ready status
   - Contact AppsCode team if status is not updated.

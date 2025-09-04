@@ -1,0 +1,19 @@
+project:
+  name: NATS alerts by AppsCode
+  shortName: NATS alerts
+  url: https://github.com/appscode/alerts
+  description: NATS alerts for NATS clusters
+  app: NATS alerts
+repository:
+  url: oci://ghcr.io/appscode-charts
+  name: appscode
+chart:
+  name: nats-alerts
+  values: -- generate from values file --
+  valuesExample: -- generate from values file --
+prerequisites:
+- Kubernetes 1.21+
+- Prometheus operator
+release:
+  name: nats-alerts
+  namespace: monitoring

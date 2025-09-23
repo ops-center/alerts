@@ -1972,7 +1972,7 @@ data:
                 "targets": [
                   {
                     "exemplar": true,
-                    "expr": "count(core_kubestash_com_backupsession_phase{phase=\"Succeeded\"} * on(backup_invoker_kind, backup_invoker_name) group_left(target_kind, target_name, target_namespace) core_kubestash_com_backupconfiguration_info{target_kind=\"MongoDB\", target_name=\"{{ .Release.Name }}\", target_namespace=\"{{ .Release.Namespace }}\"} == 1)",
+                    "expr": "count(core_kubestash_com_backupsession_phase{phase=\"Succeeded\"} * on(backup_invoker_kind, backup_invoker_name, namespace) group_left(target_kind, target_name, target_namespace) core_kubestash_com_backupconfiguration_info{target_kind=\"MongoDB\", target_name=\"{{ .Release.Name }}\", target_namespace=\"{{ .Release.Namespace }}\"} == 1)",
                     "format": "time_series",
                     "instant": true,
                     "interval": "",
@@ -2107,7 +2107,7 @@ data:
                 "targets": [
                   {
                     "exemplar": true,
-                    "expr": "count(core_kubestash_com_backupsession_phase{phase=\"Failed\"} * on(backup_invoker_kind, backup_invoker_name) group_left(target_kind, target_name, target_namespace) core_kubestash_com_backupconfiguration_info{target_kind=\"MongoDB\", target_name=\"{{ .Release.Name }}\", target_namespace=\"{{ .Release.Namespace }}\"} == 1)",
+                    "expr": "count(core_kubestash_com_backupsession_phase{phase=\"Failed\"} * on(backup_invoker_kind, backup_invoker_name, namespace) group_left(target_kind, target_name, target_namespace) core_kubestash_com_backupconfiguration_info{target_kind=\"MongoDB\", target_name=\"{{ .Release.Name }}\", target_namespace=\"{{ .Release.Namespace }}\"} == 1)",
                     "format": "time_series",
                     "instant": true,
                     "interval": "",
@@ -2251,7 +2251,7 @@ data:
                 "targets": [
                   {
                     "exemplar": true,
-                    "expr": "time() - max(core_kubestash_com_backupsession_created * on(backup_invoker_kind, backup_invoker_name) group_left(target_kind, target_name, target_namespace) core_kubestash_com_backupconfiguration_info{target_kind=\"MongoDB\", target_name=\"{{ .Release.Name }}\", target_namespace=\"{{ .Release.Namespace }}\"})",
+                    "expr": "time() - max(core_kubestash_com_backupsession_created * on(backup_invoker_kind, backup_invoker_name, namespace) group_left(target_kind, target_name, target_namespace) core_kubestash_com_backupconfiguration_info{target_kind=\"MongoDB\", target_name=\"{{ .Release.Name }}\", target_namespace=\"{{ .Release.Namespace }}\"})",
                     "format": "time_series",
                     "instant": true,
                     "interval": "",
@@ -2641,7 +2641,7 @@ data:
                 "targets": [
                   {
                     "exemplar": false,
-                    "expr": "core_kubestash_com_backupsession_duration_seconds * on(backup_invoker_kind, backup_invoker_name) group_left(target_kind, target_name, target_namespace) core_kubestash_com_backupconfiguration_info{target_kind=\"MongoDB\", target_name=\"{{ .Release.Name }}\", target_namespace=\"{{ .Release.Namespace }}\"}",
+                    "expr": "core_kubestash_com_backupsession_duration_seconds * on(backup_invoker_kind, backup_invoker_name, namespace) group_left(target_kind, target_name, target_namespace) core_kubestash_com_backupconfiguration_info{target_kind=\"MongoDB\", target_name=\"{{ .Release.Name }}\", target_namespace=\"{{ .Release.Namespace }}\"}",
                     "format": "time_series",
                     "instant": false,
                     "interval": "",

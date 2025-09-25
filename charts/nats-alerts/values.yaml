@@ -1,0 +1,239 @@
+# Default values for nats-alerts.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+metadata:
+  resource:
+    group: alerts.appscode.com
+    kind: NATSAlerts
+    name: natsalerts
+    scope: Namespaced
+    version: v1alpha2
+  release:
+    # Release name
+    name: ""
+    # Release namespace
+    namespace: ""
+
+form:
+  alert:
+    ## Enable PrometheusRule alerts
+    enabled: warning
+
+    ## Labels for default rules
+    labels: # +doc-gen:break
+      release: kube-prometheus-stack
+
+    ## Annotations for default rules
+    annotations: {}
+
+    ## Additional labels for PrometheusRule alerts
+    additionalRuleLabels: {}
+
+    ## Prefix for runbook URLs. Use this to override the first part of the runbookURLs that is common to all rules.
+    # runbookUrl: "https://runbooks.prometheus-operator.dev/runbooks"
+
+    groups:
+      database:
+        enabled: warning
+        rules:
+          # Resource Utilization (Most Critical)
+          natsJetStreamHighMemoryUsage:
+            enabled: true
+            duration: "5m"
+            severity: critical
+            val: 90
+          natsJetStreamHighStorageUsage:
+            enabled: true
+            duration: "5m"
+            severity: critical
+            val: 90
+          
+          # Consumer Health (Critical for Operations)
+          natsJetStreamHighPendingMessages:
+            enabled: true
+            duration: "10m"
+            severity: critical
+            val: 5000
+          natsJetStreamHighPendingMessagesWarning:
+            enabled: true
+            duration: "10m"
+            severity: warning
+            val: 2000
+          natsJetStreamHighAckPending:
+            enabled: true
+            duration: "10m"
+            severity: critical
+            val: 2000
+          natsJetStreamConsumerStalled:
+            enabled: true
+            duration: "15m"
+            severity: warning
+          
+          # Stream Performance
+          natsJetStreamHighMessageCount:
+            enabled: true
+            duration: "15m"
+            severity: warning
+            val: 1000000
+          natsJetStreamHighStreamSize:
+            enabled: true
+            duration: "15m"
+            severity: warning
+            val: 10737418240 # 10GB
+          natsJetStreamNoIngestion:
+            enabled: true
+            duration: "15m"
+            severity: warning
+          
+          # Connectivity
+          natsSuddenConnectionDrop:
+            enabled: true
+            duration: "5m"
+            severity: warning
+            val: 5
+          natsHighActiveConnections:
+            enabled: true
+            duration: "5m"
+            severity: warning
+            val: 1000
+          
+          # Consumer Management
+          natsSuddenConsumerDrop:
+            enabled: true
+            duration: "5m"
+            severity: warning
+            val: 2
+          natsHighTotalConsumers:
+            enabled: true
+            duration: "5m"
+            severity: warning
+            val: 100
+      
+      # Backup and operations alerts (inherited from ops-center pattern)
+      provisioner:
+        enabled: warning
+        rules:
+          appPhaseNotReady:
+            enabled: true
+            duration: "1m"
+            severity: critical
+          appPhaseCritical:
+            enabled: true
+            duration: "15m"
+            severity: critical
+      opsManager:
+        enabled: warning
+        rules:
+          opsRequestOnProgress:
+            enabled: true
+            duration: "0m"
+            severity: info
+          opsRequestStatusProgressingToLong:
+            enabled: true
+            duration: "30m"
+            severity: critical
+          opsRequestFailed:
+            enabled: true
+            duration: "0m"
+            severity: critical
+      stash:
+        enabled: warning
+        rules:
+          backupSessionFailed:
+            enabled: true
+            duration: "0m"
+            severity: critical
+          restoreSessionFailed:
+            enabled: true
+            duration: "0m"
+            severity: critical
+          noBackupSessionForTooLong:
+            enabled: true
+            duration: "0m"
+            severity: warning
+            val: 18000
+          repositoryCorrupted:
+            enabled: true
+            duration: "5m"
+            severity: critical
+          repositoryStorageRunningLow:
+            enabled: true
+            duration: "5m"
+            severity: warning
+            val: 10737418240 # 10GB
+          backupSessionPeriodTooLong:
+            enabled: true
+            duration: "0m"
+            severity: warning
+            val: 1800 # 30 minute
+          restoreSessionPeriodTooLong:
+            enabled: true
+            duration: "0m"
+            severity: warning
+            val: 1800 # 30 minute
+      kubeStash:
+        enabled: warning
+        rules:
+          backupSessionFailed:
+            enabled: true
+            duration: "0m"
+            severity: critical
+          restoreSessionFailed:
+            enabled: true
+            duration: "0m"
+            severity: critical
+          noBackupSessionForTooLong:
+            enabled: true
+            duration: "0m"
+            severity: warning
+            val: 18000
+          repositoryCorrupted:
+            enabled: true
+            duration: "5m"
+            severity: critical
+          repositoryStorageRunningLow:
+            enabled: true
+            duration: "5m"
+            severity: warning
+            val: 10737418240 # 10GB
+          backupSessionPeriodTooLong:
+            enabled: true
+            duration: "0m"
+            severity: warning
+            val: 1800 # 30 minute
+          restoreSessionPeriodTooLong:
+            enabled: true
+            duration: "0m"
+            severity: warning
+            val: 1800 # 30 minute
+      schemaManager:
+        enabled: warning
+        rules:
+          schemaPendingForTooLong:
+            enabled: true
+            duration: "30m"
+            severity: warning
+          schemaInProgressForTooLong:
+            enabled: true
+            duration: "30m"
+            severity: warning
+          schemaTerminatingForTooLong:
+            enabled: true
+            duration: "30m"
+            severity: warning
+          schemaFailed:
+            enabled: true
+            duration: "0m"
+            severity: warning
+          schemaExpired:
+            enabled: true
+            duration: "0m"
+            severity: warning
+
+grafana:
+  enabled: false
+  version: 8.2.3
+  jobName: nats-stats
+  url: ""
+  apikey: ""

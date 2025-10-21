@@ -1,0 +1,73 @@
+metadata:
+  resource:
+    group: alerts.appscode.com
+    kind: OpenFGAAlerts
+    name: openfgaalerts
+    scope: Namespaced
+    version: v1alpha1
+  release:
+    name: ""
+    namespace: ""
+
+form:
+  alert:
+    enabled: warning
+
+    labels:
+      release: kube-prometheus-stack
+
+    annotations: {}
+
+    additionalRuleLabels: {}
+
+    groups:
+      database:
+        enabled: warning
+        rules:
+          highRequestLatency:
+            enabled: true
+            duration: "5m"
+            val: 1.0
+            severity: critical
+          highErrorRate:
+            enabled: true
+            duration: "5m"
+            val: 5
+            severity: critical
+          lowCheckCacheHitRatio:
+            enabled: true
+            duration: "5m"
+            val: 70
+            severity: warning
+          highSQLConnections:
+            enabled: true
+            duration: "5m"
+            val: 80
+            severity: critical
+          highGoroutines:
+            enabled: true
+            duration: "5m"
+            val: 10000
+            severity: warning
+          highGCDuration:
+            enabled: true
+            duration: "5m"
+            val: 1.0
+            severity: warning
+          highHeapMemory:
+            enabled: true
+            duration: "5m"
+            val: 4294967296 # 4GB
+            severity: warning
+          highAllocationRate:
+            enabled: true
+            duration: "2m"
+            val: 104857600 # 100MB/s
+            severity: warning
+
+grafana:
+  enabled: false
+  version: 8.2.3
+  jobName: openfga
+  url: ""
+  apikey: ""

@@ -1,0 +1,18 @@
+project:
+  name: OpenFGA alerts by AppsCode
+  shortName: OpenFGA alerts
+  url: https://github.com/appscode/alerts
+  description: OpenFGA alerts for monitoring
+  app: OpenFGA alerts
+repository:
+  url: oci://ghcr.io/appscode-charts
+  name: appscode
+chart:
+  name: openfga
+  values: -- generate from values file --
+  valuesExample: -- generate from values file --
+prerequisites:
+- Kubernetes 1.19+
+release:
+  name: openfga
+  namespace: demo

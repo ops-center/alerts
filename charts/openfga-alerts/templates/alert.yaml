@@ -1,0 +1,121 @@
+{{ $app := (include "openfga-alerts.fullname" .) }}
+{{ $job := .Values.grafana.jobName }}
+
+{{ if (include "openfga-alerts.alertsEnabled" .Values.form.alert.enabled) }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ $app }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "openfga-alerts.labels" . | nindent 4 }}
+{{- if .Values.form.alert.labels }}
+    {{- toYaml .Values.form.alert.labels | nindent 4 }}
+{{- end }}
+{{- if .Values.form.alert.annotations }}
+  annotations:
+    {{- toYaml .Values.form.alert.annotations | nindent 4 }}
+{{- end }}
+spec:
+  groups:
+  {{ with .Values.form.alert.groups.database -}}
+  {{ if (include "openfga-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
+  - name: openfga.database.{{ $.Release.Namespace }}.{{ $app }}.rules
+    rules:
+    {{ if (include "openfga-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.highRequestLatency.enabled .rules.highRequestLatency.severity)) -}}
+    - alert: OpenFGAHighRequestLatency
+      expr: histogram_quantile(0.99, sum(rate(grpc_server_handling_seconds_bucket{job="{{ $job }}",namespace="{{ $.Release.Namespace }}",grpc_service="openfga.v1.OpenFGAService"}[5m])) by (grpc_method, le)) > {{ .rules.highRequestLatency.val }}
+      for: {{ .rules.highRequestLatency.duration }}
+      labels:
+        severity: {{ .rules.highRequestLatency.severity }}
+        {{- include "openfga-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: High p99 latency for OpenFGA method {{`{{`}} $labels.grpc_method {{`}}`}}
+        description: "p99 request duration exceeds {{ .rules.highRequestLatency.val }}s for method {{`{{`}} $labels.grpc_method {{`}}`}} (current: {{`{{`}} $value {{`}}`}}s). Check for database or computation issues.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if (include "openfga-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.highErrorRate.enabled .rules.highErrorRate.severity)) -}}
+    - alert: OpenFGAHighErrorRate
+      expr: sum(rate(grpc_server_handled_total{job="{{ $job }}",namespace="{{ $.Release.Namespace }}",grpc_service="openfga.v1.OpenFGAService",grpc_code!="OK"}[5m])) / sum(rate(grpc_server_handled_total{job="{{ $job }}",namespace="{{ $.Release.Namespace }}",grpc_service="openfga.v1.OpenFGAService"}[5m])) * 100 > {{ .rules.highErrorRate.val }}
+      for: {{ .rules.highErrorRate.duration }}
+      labels:
+        severity: {{ .rules.highErrorRate.severity }}
+        {{- include "openfga-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: High error rate in OpenFGA requests
+        description: "Error rate >{{ .rules.highErrorRate.val }}% (current: {{`{{`}} $value {{`}}`}}%). Investigate gRPC codes for failures.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if (include "openfga-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.lowCheckCacheHitRatio.enabled .rules.lowCheckCacheHitRatio.severity)) -}}
+    - alert: OpenFGALowCheckCacheHitRatio
+      expr: |
+        openfga_check_cache_total_count{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} > 0
+        and
+        (sum(rate(openfga_check_cache_hit_count{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[1m])) / sum(rate(openfga_check_cache_total_count{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[1m]))) * 100 < {{ .rules.lowCheckCacheHitRatio.val }}
+      for: {{ .rules.lowCheckCacheHitRatio.duration }}
+      labels:
+        severity: {{ .rules.lowCheckCacheHitRatio.severity }}
+        {{- include "openfga-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: Low cache hit ratio for OpenFGA Check API
+        description: "Cache hit ratio <{{ .rules.lowCheckCacheHitRatio.val }}% (current: {{`{{`}} $value {{`}}`}}%). May increase database load.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if (include "openfga-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.highSQLConnections.enabled .rules.highSQLConnections.severity)) -}}
+    - alert: OpenFGAHighSQLConnections
+      expr: |
+        go_sql_max_open_connections{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} > 0
+        and
+        go_sql_open_connections{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} / go_sql_max_open_connections{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} * 100 > {{ .rules.highSQLConnections.val }}
+      for: {{ .rules.highSQLConnections.duration }}
+      labels:
+        severity: {{ .rules.highSQLConnections.severity }}
+        {{- include "openfga-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: SQL connections nearing exhaustion in OpenFGA
+        description: "Open connections >{{ .rules.highSQLConnections.val }}% of max (current: {{`{{`}} $value {{`}}`}}%). Risk of connection failures.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if (include "openfga-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.highGoroutines.enabled .rules.highGoroutines.severity)) -}}
+    - alert: OpenFGAHighGoroutines
+      expr: go_goroutines{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} > {{ .rules.highGoroutines.val }}
+      for: {{ .rules.highGoroutines.duration }}
+      labels:
+        severity: {{ .rules.highGoroutines.severity }}
+        {{- include "openfga-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: High number of goroutines in OpenFGA
+        description: "Goroutines exceed {{ .rules.highGoroutines.val }} (current: {{`{{`}} $value {{`}}`}}). Possible concurrency issues or leaks.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if (include "openfga-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.highGCDuration.enabled .rules.highGCDuration.severity)) -}}
+    - alert: OpenFGAHighGCDuration
+      expr: go_gc_duration_seconds{job="{{ $job }}",namespace="{{ $.Release.Namespace }}",quantile="0.99"} > {{ .rules.highGCDuration.val }}
+      for: {{ .rules.highGCDuration.duration }}
+      labels:
+        severity: {{ .rules.highGCDuration.severity }}
+        {{- include "openfga-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: High GC duration in OpenFGA
+        description: "p99 GC duration >{{ .rules.highGCDuration.val }}s (current: {{`{{`}} $value {{`}}`}}s). May cause pauses and latency spikes.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if (include "openfga-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.highHeapMemory.enabled .rules.highHeapMemory.severity)) -}}
+    - alert: OpenFGAHighHeapMemory
+      expr: go_memstats_heap_alloc_bytes{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} > {{ .rules.highHeapMemory.val }}
+      for: {{ .rules.highHeapMemory.duration }}
+      labels:
+        severity: {{ .rules.highHeapMemory.severity }}
+        {{- include "openfga-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: High heap memory usage in OpenFGA
+        description: "Heap memory usage >{{ .rules.highHeapMemory.val }} bytes (current: {{`{{`}} $value | humanize {{`}}`}}). May lead to OOM or frequent GC.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+    {{ if (include "openfga-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.highAllocationRate.enabled .rules.highAllocationRate.severity)) -}}
+    - alert: OpenFGAHighAllocationRate
+      expr: rate(go_memstats_alloc_bytes_total{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[2m]) > {{ .rules.highAllocationRate.val }}
+      for: {{ .rules.highAllocationRate.duration }}
+      labels:
+        severity: {{ .rules.highAllocationRate.severity }}
+        {{- include "openfga-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: High memory allocation rate in OpenFGA
+        description: "Memory allocation rate >{{ .rules.highAllocationRate.val }} bytes/sec (current: {{`{{`}} $value | humanize {{`}}`}}/sec). May indicate memory churn or leaks.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
+  {{ end -}}
+  {{ end -}}
+{{ end }}

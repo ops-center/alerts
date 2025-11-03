@@ -76,6 +76,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&MSSQLServerAlertsList{},
 		&MysqlAlerts{},
 		&MysqlAlertsList{},
+		&OpenFGAAlerts{},
+		&OpenFGAAlertsList{},
 		&PerconaxtradbAlerts{},
 		&PerconaxtradbAlertsList{},
 		&PgbouncerAlerts{},

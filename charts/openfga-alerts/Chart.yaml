@@ -2,7 +2,7 @@ apiVersion: v2
 name: openfga-alerts
 description: A Helm chart for OpenFGA Alert Rules
 type: application
-version: v2025.1.0
+version: v2025.6.30
 appVersion: v0.1.0
 home: https://github.com/ops-center/alerts
 icon: https://openfga.dev/img/openfga-icon.svg

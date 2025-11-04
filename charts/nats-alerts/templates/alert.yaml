@@ -1,4 +1,5 @@
 {{ $app := (include "nats-alerts.fullname" .) }}
+{{ $job := .Values.grafana.jobName }}
 
 {{ if (include "nats-alerts.alertsEnabled" .Values.form.alert.enabled) }}
 apiVersion: monitoring.coreos.com/v1
@@ -23,7 +24,7 @@ spec:
     rules:
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamHighMemoryUsage.enabled .rules.natsJetStreamHighMemoryUsage.severity)) }}
     - alert: NatsJetStreamHighMemoryUsage
-      expr: (nats_varz_jetstream_stats_memory{job="{{ $app }}",namespace="{{ $.Release.Namespace }}"} / nats_varz_jetstream_config_max_memory{job="{{ $app }}",namespace="{{ $.Release.Namespace }}"} * 100) > {{ .rules.natsJetStreamHighMemoryUsage.val }}
+      expr: (nats_varz_jetstream_stats_memory{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} / nats_varz_jetstream_config_max_memory{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} * 100) > {{ .rules.natsJetStreamHighMemoryUsage.val }}
       for: {{ .rules.natsJetStreamHighMemoryUsage.duration }}
       labels:
         severity: {{ .rules.natsJetStreamHighMemoryUsage.severity }}
@@ -34,7 +35,7 @@ spec:
 {{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamHighStorageUsage.enabled .rules.natsJetStreamHighStorageUsage.severity)) }}
     - alert: NatsJetStreamHighStorageUsage
-      expr: (nats_varz_jetstream_stats_storage{job="{{ $app }}",namespace="{{ $.Release.Namespace }}"} / nats_varz_jetstream_config_max_storage{job="{{ $app }}",namespace="{{ $.Release.Namespace }}"} * 100) > {{ .rules.natsJetStreamHighStorageUsage.val }}
+      expr: (nats_varz_jetstream_stats_storage{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} / nats_varz_jetstream_config_max_storage{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} * 100) > {{ .rules.natsJetStreamHighStorageUsage.val }}
       for: {{ .rules.natsJetStreamHighStorageUsage.duration }}
       labels:
         severity: {{ .rules.natsJetStreamHighStorageUsage.severity }}
@@ -46,7 +47,7 @@ spec:
 
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamHighPendingMessages.enabled .rules.natsJetStreamHighPendingMessages.severity)) }}
     - alert: NatsJetStreamHighPendingMessages
-      expr: nats_consumer_num_pending{job="{{ $app }}",namespace="{{ $.Release.Namespace }}"} > {{ .rules.natsJetStreamHighPendingMessages.val }}
+      expr: nats_consumer_num_pending{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} > {{ .rules.natsJetStreamHighPendingMessages.val }}
       for: {{ .rules.natsJetStreamHighPendingMessages.duration }}
       labels:
         severity: {{ .rules.natsJetStreamHighPendingMessages.severity }}
@@ -57,7 +58,7 @@ spec:
 {{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamHighPendingMessagesWarning.enabled .rules.natsJetStreamHighPendingMessagesWarning.severity)) }}
     - alert: NatsJetStreamHighPendingMessagesWarning
-      expr: nats_consumer_num_pending{job="{{ $app }}",namespace="{{ $.Release.Namespace }}"} > {{ .rules.natsJetStreamHighPendingMessagesWarning.val }}
+      expr: nats_consumer_num_pending{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} > {{ .rules.natsJetStreamHighPendingMessagesWarning.val }}
       for: {{ .rules.natsJetStreamHighPendingMessagesWarning.duration }}
       labels:
         severity: {{ .rules.natsJetStreamHighPendingMessagesWarning.severity }}
@@ -68,7 +69,7 @@ spec:
 {{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamHighAckPending.enabled .rules.natsJetStreamHighAckPending.severity)) }}
     - alert: NatsJetStreamHighAckPending
-      expr: nats_consumer_num_ack_pending{job="{{ $app }}",namespace="{{ $.Release.Namespace }}"} > {{ .rules.natsJetStreamHighAckPending.val }}
+      expr: nats_consumer_num_ack_pending{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} > {{ .rules.natsJetStreamHighAckPending.val }}
       for: {{ .rules.natsJetStreamHighAckPending.duration }}
       labels:
         severity: {{ .rules.natsJetStreamHighAckPending.severity }}
@@ -79,7 +80,7 @@ spec:
 {{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamConsumerStalled.enabled .rules.natsJetStreamConsumerStalled.severity)) }}
     - alert: NatsJetStreamConsumerStalled
-      expr: rate(nats_consumer_delivered_consumer_seq{job="{{ $app }}",namespace="{{ $.Release.Namespace }}"}[5m]) == 0
+      expr: rate(nats_consumer_delivered_consumer_seq{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m]) == 0
       for: {{ .rules.natsJetStreamConsumerStalled.duration }}
       labels:
         severity: {{ .rules.natsJetStreamConsumerStalled.severity }}
@@ -91,7 +92,7 @@ spec:
 
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamHighMessageCount.enabled .rules.natsJetStreamHighMessageCount.severity)) }}
     - alert: NatsJetStreamHighMessageCount
-      expr: nats_stream_total_messages{job="{{ $app }}",namespace="{{ $.Release.Namespace }}"} > {{ .rules.natsJetStreamHighMessageCount.val | printf "%.0f" }}
+      expr: nats_stream_total_messages{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} > {{ .rules.natsJetStreamHighMessageCount.val | printf "%.0f" }}
       for: {{ .rules.natsJetStreamHighMessageCount.duration }}
       labels:
         severity: {{ .rules.natsJetStreamHighMessageCount.severity }}
@@ -102,7 +103,7 @@ spec:
 {{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamHighStreamSize.enabled .rules.natsJetStreamHighStreamSize.severity)) }}
     - alert: NatsJetStreamHighStreamSize
-      expr: nats_stream_total_bytes{job="{{ $app }}",namespace="{{ $.Release.Namespace }}"} > {{ .rules.natsJetStreamHighStreamSize.val | printf "%.0f" }}
+      expr: nats_stream_total_bytes{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} > {{ .rules.natsJetStreamHighStreamSize.val | printf "%.0f" }}
       for: {{ .rules.natsJetStreamHighStreamSize.duration }}
       labels:
         severity: {{ .rules.natsJetStreamHighStreamSize.severity }}
@@ -113,7 +114,7 @@ spec:
 {{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamNoIngestion.enabled .rules.natsJetStreamNoIngestion.severity)) }}
     - alert: NatsJetStreamNoIngestion
-      expr: rate(nats_stream_last_seq{job="{{ $app }}",namespace="{{ $.Release.Namespace }}"}[10m]) == 0
+      expr: rate(nats_stream_last_seq{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[10m]) == 0
       for: {{ .rules.natsJetStreamNoIngestion.duration }}
       labels:
         severity: {{ .rules.natsJetStreamNoIngestion.severity }}
@@ -125,7 +126,7 @@ spec:
 
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsSuddenConnectionDrop.enabled .rules.natsSuddenConnectionDrop.severity)) }}
     - alert: NatsSuddenConnectionDrop
-      expr: changes(nats_varz_connections{job="{{ $app }}",namespace="{{ $.Release.Namespace }}"}[5m]) > {{ .rules.natsSuddenConnectionDrop.val }} AND deriv(nats_varz_connections{job="{{ $app }}",namespace="{{ $.Release.Namespace }}"}[5m]) < 0
+      expr: changes(nats_varz_connections{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m]) > {{ .rules.natsSuddenConnectionDrop.val }} AND deriv(nats_varz_connections{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m]) < 0
       for: {{ .rules.natsSuddenConnectionDrop.duration }}
       labels:
         severity: {{ .rules.natsSuddenConnectionDrop.severity }}
@@ -136,7 +137,7 @@ spec:
 {{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsHighActiveConnections.enabled .rules.natsHighActiveConnections.severity)) }}
     - alert: NatsHighActiveConnections
-      expr: nats_varz_connections{job="{{ $app }}",namespace="{{ $.Release.Namespace }}"} > {{ .rules.natsHighActiveConnections.val }}
+      expr: nats_varz_connections{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} > {{ .rules.natsHighActiveConnections.val }}
       for: {{ .rules.natsHighActiveConnections.duration }}
       labels:
         severity: {{ .rules.natsHighActiveConnections.severity }}
@@ -148,7 +149,7 @@ spec:
 
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsSuddenConsumerDrop.enabled .rules.natsSuddenConsumerDrop.severity)) }}
     - alert: NatsSuddenConsumerDrop
-      expr: changes(nats_server_total_consumers{job="{{ $app }}",namespace="{{ $.Release.Namespace }}"}[5m]) > {{ .rules.natsSuddenConsumerDrop.val }} AND deriv(nats_server_total_consumers{job="{{ $app }}",namespace="{{ $.Release.Namespace }}"}[5m]) < 0
+      expr: changes(nats_server_total_consumers{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m]) > {{ .rules.natsSuddenConsumerDrop.val }} AND deriv(nats_server_total_consumers{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m]) < 0
       for: {{ .rules.natsSuddenConsumerDrop.duration }}
       labels:
         severity: {{ .rules.natsSuddenConsumerDrop.severity }}
@@ -159,7 +160,7 @@ spec:
 {{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsHighTotalConsumers.enabled .rules.natsHighTotalConsumers.severity)) }}
     - alert: NatsHighTotalConsumers
-      expr: nats_server_total_consumers{job="{{ $app }}",namespace="{{ $.Release.Namespace }}"} > {{ .rules.natsHighTotalConsumers.val }}
+      expr: nats_server_total_consumers{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} > {{ .rules.natsHighTotalConsumers.val }}
       for: {{ .rules.natsHighTotalConsumers.duration }}
       labels:
         severity: {{ .rules.natsHighTotalConsumers.severity }}

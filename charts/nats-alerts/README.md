@@ -7,8 +7,8 @@
 ```bash
 $ helm repo add appscode oci://ghcr.io/appscode-charts
 $ helm repo update
-$ helm search repo appscode/nats-alerts --version=v2025.1.0
-$ helm upgrade -i nats-alerts appscode/nats-alerts -n monitoring --create-namespace --version=v2025.1.0
+$ helm search repo appscode/nats-alerts --version=v2025.6.30
+$ helm upgrade -i nats-alerts appscode/nats-alerts -n monitoring --create-namespace --version=v2025.6.30
 ```
 
 ## Introduction
@@ -25,7 +25,7 @@ This chart deploys NATS alerts on a [Kubernetes](http://kubernetes.io) cluster u
 To install/upgrade the chart with the release name `nats-alerts`:
 
 ```bash
-$ helm upgrade -i nats-alerts appscode/nats-alerts -n monitoring --create-namespace --version=v2025.1.0
+$ helm upgrade -i nats-alerts appscode/nats-alerts -n monitoring --create-namespace --version=v2025.6.30
 ```
 
 The command deploys NATS alerts on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -197,7 +197,7 @@ The following table lists the configurable parameters of the `nats-alerts` chart
 | form.alert.groups.schemaManager.rules.schemaExpired.severity                      |                                               | <code>warning</code>                             |
 | grafana.enabled                                                                   |                                               | <code>false</code>                               |
 | grafana.version                                                                   |                                               | <code>8.2.3</code>                               |
-| grafana.jobName                                                                   |                                               | <code>nats-stats</code>                          |
+| grafana.jobName                                                                   |                                               | <code>nats</code>                                |
 | grafana.url                                                                       |                                               | <code>""</code>                                  |
 | grafana.apikey                                                                    |                                               | <code>""</code>                                  |
 
@@ -205,12 +205,12 @@ The following table lists the configurable parameters of the `nats-alerts` chart
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm upgrade -i`. For example:
 
 ```bash
-$ helm upgrade -i nats-alerts appscode/nats-alerts -n monitoring --create-namespace --version=v2025.1.0 --set metadata.resource.group=alerts.appscode.com
+$ helm upgrade -i nats-alerts appscode/nats-alerts -n monitoring --create-namespace --version=v2025.6.30 --set metadata.resource.group=alerts.appscode.com
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while
 installing the chart. For example:
 
 ```bash
-$ helm upgrade -i nats-alerts appscode/nats-alerts -n monitoring --create-namespace --version=v2025.1.0 --values values.yaml
+$ helm upgrade -i nats-alerts appscode/nats-alerts -n monitoring --create-namespace --version=v2025.6.30 --values values.yaml
 ```

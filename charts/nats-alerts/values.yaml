@@ -234,6 +234,6 @@ form:
 grafana:
   enabled: false
   version: 8.2.3
-  jobName: nats-stats
+  jobName: nats
   url: ""
   apikey: ""

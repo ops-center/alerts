@@ -22,13 +22,13 @@ spec:
             - "POST"
             - "-H"
             - "Content-Type: application/json"
-            - "-H"
-            - "Authorization: Bearer {{ .Values.grafana.apikey }}"
+            - "--user"
+            - "{{ .Values.grafana.user }}:{{ .Values.grafana.password }}"
             - "--data-binary"
             - "@/etc/grafana-json/grafana-json.json"
             - {{ .Values.grafana.url }}/api/dashboards/import
           volumeMounts:
-            - mountPath: /etc/grafana-json+-
+            - mountPath: /etc/grafana-json
               name: grafana-json-volume
       restartPolicy: Never
   backoffLimit: 2

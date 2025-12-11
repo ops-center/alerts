@@ -1,4 +1,3 @@
-# templates/configmap.yaml
 {{- if .Values.grafana.enabled }}
 apiVersion: v1
 kind: ConfigMap
@@ -61,6 +60,7 @@ data:
             "title": "Qdrant Phase",
             "type": "row"
           },
+
           {
             "alert": {
               "alertRuleTags": {},
@@ -139,7 +139,7 @@ data:
             "targets": [
               {
                 "exemplar": true,
-                "expr": "kubedb_com_qdrant_status_phase{app=\"{{ .Release.Name }}\",namespace=\"demo\",phase=\"NotReady\"}",
+                "expr": "kubedb_com_qdrant_status_phase{app=\"{{ .Release.Name }}\",namespace=\"{{ .Release.Namespace }}\",phase=\"NotReady\"}",
                 "interval": "",
                 "legendFormat": "",
                 "refId": "A"
@@ -174,13 +174,11 @@ data:
             },
             "yaxes": [
               {
-                "$$hashKey": "object:88",
                 "format": "short",
                 "logBase": 1,
                 "show": true
               },
               {
-                "$$hashKey": "object:89",
                 "format": "short",
                 "logBase": 1,
                 "show": true
@@ -305,13 +303,11 @@ data:
             },
             "yaxes": [
               {
-                "$$hashKey": "object:70",
                 "format": "short",
                 "logBase": 1,
                 "show": true
               },
               {
-                "$$hashKey": "object:71",
                 "format": "short",
                 "logBase": 1,
                 "show": true
@@ -320,165 +316,6 @@ data:
             "yaxis": {
               "align": false
             }
-          },
-          {
-            "collapsed": false,
-            "datasource": null,
-            "gridPos": {
-              "h": 1,
-              "w": 24,
-              "x": 0,
-              "y": 9
-            },
-            "id": 48,
-            "panels": [],
-            "title": "Qdrant Server Status",
-            "type": "row"
-          },
-          {
-            "alert": {
-              "alertRuleTags": {},
-              "conditions": [
-                {
-                  "evaluator": {
-                    "params": [
-                      1
-                    ],
-                    "type": "lt"
-                  },
-                  "operator": {
-                    "type": "and"
-                  },
-                  "query": {
-                    "params": [
-                      "A",
-                      "5m",
-                      "now"
-                    ]
-                  },
-                  "reducer": {
-                    "params": [],
-                    "type": "last"
-                  },
-                  "type": "query"
-                }
-              ],
-              "executionErrorState": "alerting",
-              "for": "5m",
-              "frequency": "1m",
-              "handler": 1,
-              "name": "Qdrant Cluster No Baseline Node Alert",
-              "noDataState": "no_data",
-              "notifications": []
-            },
-            "aliasColors": {},
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "description": "",
-            "fieldConfig": {
-              "defaults": {},
-              "overrides": []
-            },
-            "fill": 1,
-            "fillGradient": 0,
-            "gridPos": {
-              "h": 8,
-              "w": 12,
-              "x": 0,
-              "y": 10
-            },
-            "hiddenSeries": false,
-            "id": 34,
-            "legend": {
-              "avg": false,
-              "current": false,
-              "max": false,
-              "min": false,
-              "show": true,
-              "total": false,
-              "values": false
-            },
-            "lines": true,
-            "linewidth": 1,
-            "nullPointMode": "null",
-            "options": {
-              "alertThreshold": true
-            },
-            "percentage": false,
-            "pluginVersion": "7.5.5",
-            "pointradius": 2,
-            "points": false,
-            "renderer": "flot",
-            "seriesOverrides": [],
-            "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
-            "targets": [
-              {
-                "datasource": {
-                  "type": "prometheus",
-                  "uid": "prometheus"
-                },
-                "editorMode": "code",
-                "exemplar": false,
-                "expr": "min (cluster_TotalBaselineNodes{job=~\"{{ .Release.Name }}-stats\",namespace=~\"{{ .Release.Namespace }}\"}) ",
-                "interval": "",
-                "legendFormat": {{ `"{{pod}}"` }},
-                "range": true,
-                "refId": "A"
-              }
-            ],
-            "thresholds": [
-              {
-                "value": 1,
-                "op": "lt",
-                "visible": true,
-                "fill": true,
-                "line": true,
-                "colorMode": "critical"
-              }
-            ],
-            "timeFrom": null,
-            "timeRegions": [],
-            "timeShift": null,
-            "title": "Qdrant Cluster No Baseline Node",
-            "tooltip": {
-              "shared": true,
-              "sort": 0,
-              "value_type": "individual"
-            },
-            "type": "graph",
-            "xaxis": {
-              "buckets": null,
-              "mode": "time",
-              "name": null,
-              "show": true,
-              "values": []
-            },
-            "yaxes": [
-              {
-                "format": "short",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              },
-              {
-                "format": "short",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              }
-            ],
-            "yaxis": {
-              "align": false,
-              "alignLevel": null
-            },
-            "datasource": null
           },
           {
             "alert": {
@@ -526,8 +363,8 @@ data:
             "gridPos": {
               "h": 8,
               "w": 12,
-              "x": 12,
-              "y": 10
+              "x": 0,
+              "y": 9
             },
             "id": 36,
             "legend": {
@@ -545,15 +382,17 @@ data:
             "options": {
               "alertThreshold": true
             },
-            "pluginVersion": "7.5.5",
+            "pluginVersion": "{{ .Values.grafana.version }}",
             "pointradius": 2,
             "renderer": "flot",
             "seriesOverrides": [],
             "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
             "targets": [
               {
-                "expr": "qdrant_uptime{job=~\"{{ .Release.Name }}-stats\",namespace=~\"{{ .Release.Namespace }}\"}",
-                "legendFormat": {{ `"{{pod}}"` }},
+                "expr": "time() - min(kube_pod_start_time{namespace=\"{{ $.Release.Namespace }}\", pod=~\"{{ $.Release.Name }}-.*\"})",
+                "legendFormat": "",
                 "interval": "",
                 "exemplar": true,
                 "datasource": {
@@ -654,7 +493,7 @@ data:
               "for": "5m",
               "frequency": "1m",
               "handler": 1,
-              "name": "Qdrant High CPU Load alert",
+              "name": "Qdrant High CPU Usage alert",
               "noDataState": "no_data",
               "notifications": []
             },
@@ -669,8 +508,8 @@ data:
             "gridPos": {
               "h": 8,
               "w": 12,
-              "x": 0,
-              "y": 18
+              "x": 12,
+              "y": 9
             },
             "id": 40,
             "legend": {
@@ -700,7 +539,7 @@ data:
                   "uid": "prometheus"
                 },
                 "exemplar": true,
-                "expr": "(sys_CpuLoad{job=~\"{{ .Release.Name }}-stats\",namespace=~\"{{ .Release.Namespace }}\"}) *100",
+                "expr": "sum by (pod) (irate(container_cpu_usage_seconds_total{image!=\"\", job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=\"{{ $.Release.Namespace }}\", pod=~\"^{{ $.Release.Name }}.*\"}[5m])) / sum by (pod) (kube_pod_container_resource_requests{namespace=\"{{ $.Release.Namespace }}\", pod=~\"^{{ $.Release.Name }}.*\", resource=\"cpu\"}) * 100",
                 "interval": "",
                 "legendFormat": {{ `"{{pod}}"` }},
                 "refId": "A"
@@ -797,12 +636,156 @@ data:
               "for": "5m",
               "frequency": "1m",
               "handler": 1,
-              "name": "Qdrant High Heap Memory Used alert",
+              "name": "Qdrant High CPU Usage alert",
               "noDataState": "no_data",
               "notifications": []
             },
             "aliasColors": {},
             "dashLength": 10,
+            "description": "80% of available TCP sockets are in use. More channels, fewer connections or a more even spread across the cluster will help.",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 17
+            },
+            "id": 41,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "exemplar": true,
+                "expr": "sum by (pod) (container_memory_working_set_bytes{namespace=\"{{ $.Release.Namespace }}\", pod=~\"^{{ $.Release.Name }}.*\", container!=\"\", image!=\"\"}) / sum by (pod) (kube_pod_container_resource_limits{namespace=\"{{ $.Release.Namespace }}\", pod=~\"^{{ $.Release.Name }}.*\", resource=\"memory\"}) * 100",
+                "interval": "",
+                "legendFormat": {{ `"{{pod}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "value": 80,
+                "op": "gt",
+                "visible": true,
+                "fill": true,
+                "line": true,
+                "colorMode": "critical"
+              }
+            ],
+            "timeRegions": [],
+            "title": "Qdrant High Memory Load",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            },
+            "bars": false,
+            "dashes": false,
+            "fillGradient": 0,
+            "hiddenSeries": false,
+            "percentage": false,
+            "points": false,
+            "stack": false,
+            "steppedLine": false,
+            "timeFrom": null,
+            "timeShift": null,
+            "datasource": null
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      80
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "10s",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "avg"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Persistent Disk Usage High",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "dashLength": 10,
+            "description": "Percentage of persistent volume capacity currently used by the pods.",
             "fieldConfig": {
               "defaults": {},
               "overrides": []
@@ -812,7 +795,289 @@ data:
               "h": 8,
               "w": 12,
               "x": 12,
-              "y": 18
+              "y": 17
+            },
+            "id": 42,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "exemplar": true,
+                "expr": "(kubelet_volume_stats_used_bytes{service=\"kubernetes\"} / on(persistentvolumeclaim) group_left(pod) (kubelet_volume_stats_used_bytes{service=\"kubernetes\"} + on(persistentvolumeclaim) group_left(pod) kube_pod_spec_volumes_persistentvolumeclaims_info{pod=~\"{{ $.Release.Name }}-.+$\",namespace=~\"{{ $.Release.Namespace }}\"})) * 100",
+                "interval": "",
+                "legendFormat": {{ `"{{pod}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "value": 80,
+                "op": "gt",
+                "visible": true,
+                "fill": true,
+                "line": true,
+                "colorMode": "critical"
+              }
+            ],
+            "timeRegions": [],
+            "title": "Disk Usage High",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "percent",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": 0,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            },
+            "bars": false,
+            "dashes": false,
+            "fillGradient": 0,
+            "hiddenSeries": false,
+            "percentage": false,
+            "points": false,
+            "stack": false,
+            "steppedLine": false,
+            "timeFrom": null,
+            "timeShift": null,
+            "datasource": null
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [10],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Qdrant Pending Operations High",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "dashLength": 10,
+            "description": "Number of operations waiting to be processed in Qdrant. High values may indicate overload or slow disk.",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 25
+            },
+            "id": 43,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "exemplar": true,
+                "expr": "sum by (pod) (cluster_pending_operations_total{job=~\"{{ $.Release.Name }}-stats\", namespace=\"{{ $.Release.Namespace }}\", pod=~\"^{{ $.Release.Name }}.*\"})",
+                "interval": "",
+                "legendFormat": {{ `"{{pod}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "value": 10,
+                "op": "gt",
+                "visible": true,
+                "fill": true,
+                "line": true,
+                "colorMode": "critical"
+              }
+            ],
+            "timeRegions": [],
+            "title": "Qdrant High Pending Operations",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": 0,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            },
+            "bars": false,
+            "dashes": false,
+            "fillGradient": 0,
+            "hiddenSeries": false,
+            "percentage": false,
+            "points": false,
+            "stack": false,
+            "steppedLine": false,
+            "timeFrom": null,
+            "timeShift": null,
+            "datasource": null
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [10],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Qdrant gRPC Fails High",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "dashLength": 10,
+            "description": "Number of failed gRPC responses in the last 5 minutes (increase over 5m). Spikes indicate errors in search/indexing requests.",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 25
             },
             "id": 44,
             "legend": {
@@ -842,7 +1107,7 @@ data:
                   "uid": "prometheus"
                 },
                 "exemplar": true,
-                "expr": "100 - (( sys_memory_heap_max{job=~\"{{ .Release.Name }}-stats\",namespace=~\"{{ .Release.Namespace }}\"} - sys_memory_heap_used{job=~\"{{ .Release.Name }}-stats\",namespace=~\"{{ .Release.Namespace }}\"})*100 / sys_memory_heap_max{job=~\"{{ .Release.Name }}-stats\",namespace=~\"{{ .Release.Namespace }}\"})",
+                "expr": "sum by (pod) (increase(grpc_responses_fail_total{job=~\"{{ $.Release.Name }}-stats\", namespace=\"{{ $.Release.Namespace }}\", pod=~\"^{{ $.Release.Name }}.*\"}[5m]))",
                 "interval": "",
                 "legendFormat": {{ `"{{pod}}"` }},
                 "refId": "A"
@@ -850,7 +1115,7 @@ data:
             ],
             "thresholds": [
               {
-                "value": 80,
+                "value": 10,
                 "op": "gt",
                 "visible": true,
                 "fill": true,
@@ -859,7 +1124,7 @@ data:
               }
             ],
             "timeRegions": [],
-            "title": "Qdrant High Heap Memory Used",
+            "title": "Qdrant gRPC Reponses Fail High",
             "tooltip": {
               "shared": true,
               "sort": 0,
@@ -879,7 +1144,7 @@ data:
                 "label": null,
                 "logBase": 1,
                 "max": null,
-                "min": null,
+                "min": 0,
                 "show": true
               },
               {
@@ -897,7 +1162,6 @@ data:
             },
             "bars": false,
             "dashes": false,
-            "description": "",
             "fillGradient": 0,
             "hiddenSeries": false,
             "percentage": false,
@@ -906,292 +1170,6 @@ data:
             "steppedLine": false,
             "timeFrom": null,
             "timeShift": null,
-            "datasource": null
-          },
-          {
-            "alert": {
-              "alertRuleTags": {},
-              "conditions": [
-                {
-                  "evaluator": {
-                    "params": [
-                      80
-                    ],
-                    "type": "gt"
-                  },
-                  "operator": {
-                    "type": "and"
-                  },
-                  "query": {
-                    "params": [
-                      "A",
-                      "5m",
-                      "now"
-                    ]
-                  },
-                  "reducer": {
-                    "params": [],
-                    "type": "avg"
-                  },
-                  "type": "query"
-                }
-              ],
-              "executionErrorState": "alerting",
-              "for": "5m",
-              "frequency": "1m",
-              "handler": 1,
-              "name": "Qdrant High Dataregion Off Heap Used alert",
-              "noDataState": "no_data",
-              "notifications": []
-            },
-            "aliasColors": {},
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "description": "",
-            "fieldConfig": {
-              "defaults": {},
-              "overrides": []
-            },
-            "fill": 1,
-            "fillGradient": 0,
-            "gridPos": {
-              "h": 8,
-              "w": 12,
-              "x": 0,
-              "y": 26
-            },
-            "hiddenSeries": false,
-            "id": 46,
-            "legend": {
-              "avg": false,
-              "current": false,
-              "max": false,
-              "min": false,
-              "show": true,
-              "total": false,
-              "values": false
-            },
-            "lines": true,
-            "linewidth": 1,
-            "nullPointMode": "null",
-            "options": {
-              "alertThreshold": true
-            },
-            "percentage": false,
-            "pluginVersion": "7.5.5",
-            "pointradius": 2,
-            "points": false,
-            "renderer": "flot",
-            "seriesOverrides": [],
-            "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
-            "targets": [
-              {
-                "datasource": {
-                  "type": "prometheus",
-                  "uid": "prometheus"
-                },
-                "exemplar": true,
-                "expr": "(io_dataregion_default_OffheapUsedSize{job=~\"{{ .Release.Name }}-stats\",namespace=~\"{{ .Release.Namespace }}\"} / 1024 / 1024 / 1024) * 100",
-                "interval": "",
-                "legendFormat": {{ `"{{pod}}"` }},
-                "refId": "A"
-              }
-            ],
-            "thresholds": [
-              {
-                "value": 80,
-                "op": "gt",
-                "visible": true,
-                "fill": true,
-                "line": true,
-                "colorMode": "critical"
-              }
-            ],
-            "timeFrom": null,
-            "timeRegions": [],
-            "timeShift": null,
-            "title": "Qdrant High Dataregion Off Heap Used",
-            "tooltip": {
-              "shared": true,
-              "sort": 0,
-              "value_type": "individual"
-            },
-            "type": "graph",
-            "xaxis": {
-              "buckets": null,
-              "mode": "time",
-              "name": null,
-              "show": true,
-              "values": []
-            },
-            "yaxes": [
-              {
-                "format": "short",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              },
-              {
-                "format": "short",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              }
-            ],
-            "yaxis": {
-              "align": false,
-              "alignLevel": null
-            },
-            "datasource": null
-          },
-          {
-            "alert": {
-              "alertRuleTags": {},
-              "conditions": [
-                {
-                  "evaluator": {
-                    "params": [
-                      0
-                    ],
-                    "type": "gt"
-                  },
-                  "operator": {
-                    "type": "and"
-                  },
-                  "query": {
-                    "params": [
-                      "A",
-                      "5m",
-                      "now"
-                    ]
-                  },
-                  "reducer": {
-                    "params": [],
-                    "type": "last"
-                  },
-                  "type": "query"
-                }
-              ],
-              "executionErrorState": "alerting",
-              "for": "5m",
-              "frequency": "1m",
-              "handler": 1,
-              "name": "Qdrant JVM Pauses Total Duration alert",
-              "noDataState": "no_data",
-              "notifications": []
-            },
-            "aliasColors": {},
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "description": "",
-            "fieldConfig": {
-              "defaults": {},
-              "overrides": []
-            },
-            "fill": 1,
-            "fillGradient": 0,
-            "gridPos": {
-              "h": 8,
-              "w": 12,
-              "x": 12,
-              "y": 26
-            },
-            "hiddenSeries": false,
-            "id": 38,
-            "legend": {
-              "avg": false,
-              "current": false,
-              "max": false,
-              "min": false,
-              "show": true,
-              "total": false,
-              "values": false
-            },
-            "lines": true,
-            "linewidth": 1,
-            "nullPointMode": "null",
-            "options": {
-              "alertThreshold": true
-            },
-            "percentage": false,
-            "pluginVersion": "7.5.5",
-            "pointradius": 2,
-            "points": false,
-            "renderer": "flot",
-            "seriesOverrides": [],
-            "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
-            "targets": [
-              {
-                "datasource": {
-                  "type": "prometheus",
-                  "uid": "prometheus"
-                },
-                "exemplar": true,
-                "expr": "qdrant_longJVMPausesTotalDuration{job=~\"{{ .Release.Name }}-stats\",namespace=~\"{{ .Release.Namespace }}\"}",
-                "interval": "",
-                "legendFormat": {{ `"{{pod}}"` }},
-                "refId": "A"
-              }
-            ],
-            "thresholds": [
-              {
-                "value": 0,
-                "op": "gt",
-                "visible": true,
-                "fill": true,
-                "line": true,
-                "colorMode": "critical"
-              }
-            ],
-            "timeFrom": null,
-            "timeRegions": [],
-            "timeShift": null,
-            "title": "Qdrant JVM Pauses Total Duration",
-            "tooltip": {
-              "shared": true,
-              "sort": 0,
-              "value_type": "individual"
-            },
-            "type": "graph",
-            "xaxis": {
-              "buckets": null,
-              "mode": "time",
-              "name": null,
-              "show": true,
-              "values": []
-            },
-            "yaxes": [
-              {
-                "format": "short",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              },
-              {
-                "format": "short",
-                "label": null,
-                "logBase": 1,
-                "max": null,
-                "min": null,
-                "show": true
-              }
-            ],
-            "yaxis": {
-              "align": false,
-              "alignLevel": null
-            },
             "datasource": null
           }
         ],

@@ -7,9 +7,9 @@ metadata:
     version: v1alpha2
   release:
     # Release name
-    name: "qdrant-quickstart"
+    name: ""
     # Release namespace
-    namespace: "demo"
+    namespace: ""
 form:
   alert:
     ## Enable PrometheusRule alerts
@@ -17,7 +17,7 @@ form:
 
     ## Labels for default rules
     labels: # +doc-gen:break
-      release: kube-prometheus-stack
+      release: prometheus
 
     ## Annotations for default rules
     annotations: {}
@@ -43,41 +43,23 @@ form:
             duration: "1m"
             severity: warning
           # Specifies the alert configuration for database is in Critical phase, that means one or more of the nodes are down but the database read/write are not hampered.
-          qdrantClusterNoBaselineNode:
-            enabled: true
-            duration: "1m"
-            severity: warning
-            val: 0
-          # Specifies the alert configuration for database is in Critical phase, that means one or more of the nodes are down but the database read/write are not hampered.
           qdrantRestarted:
             enabled: true
             duration: "1m"
             severity: warning
             val: 180
-          # Specifies the alert configuration for database is in Critical phase, that means one or more of the nodes are down but the database read/write are not hampered.
-          qdrantHighCPULoad:
+          # Specifies the alert configuration for database cpu usage (ratio usage/limits).
+          qdrantHighCPUUsage:
             enabled: true
             duration: "1m"
             severity: warning
             val: 80
-          # Specifies the alert configuration for database is in Critical phase, that means one or more of the nodes are down but the database read/write are not hampered.
-          qdrantHighHeapMemoryUsed:
+          # Specifies the alert configuration for database memory usage (ratio working_set/limits).
+          qdrantHighMemoryUsage:
             enabled: true
             duration: "1m"
             severity: warning
             val: 80
-          # Specifies the alert configuration for database is in Critical phase, that means one or more of the nodes are down but the database read/write are not hampered.
-          qdrantHighDataregionOffHeapUsed:
-            enabled: true
-            duration: "1m"
-            severity: warning
-            val: 80
-          # Specifies the alert configuration for database is in Critical phase, that means one or more of the nodes are down but the database read/write are not hampered.
-          qdrantJVMPausesTotalDuration:
-            enabled: true
-            duration: "1m"
-            severity: warning
-            val: 0
           # Sepcifies the alert configuration for persistent volume usages.
           diskUsageHigh:
             enabled: true
@@ -88,6 +70,21 @@ form:
             enabled: true
             val: 95
             duration: "1m"
+            severity: critical
+
+          # Qdrant-specific operational alerts
+          # Pending operations backlog (instant count threshold)
+          qdrantHighPendingOperations:
+            enabled: true
+            val: 10
+            duration: "5m"
+            severity: warning
+
+          # gRPC failed responses count over lookback window (increase over 5m)
+          qdrantGrpcResponsesFailHigh:
+            enabled: true
+            val: 5
+            duration: "5m"
             severity: critical
 
       provisioner:
@@ -101,22 +98,6 @@ form:
             enabled: true
             duration: "15m"
             severity: warning
-
-      opsManager:
-        enabled: warning
-        rules:
-          opsRequestOnProgress:
-            enabled: true
-            duration: "0m"
-            severity: info
-          opsRequestStatusProgressingToLong:
-            enabled: true
-            duration: "30m"
-            severity: critical
-          opsRequestFailed:
-            enabled: true
-            duration: "0m"
-            severity: critical
 
 grafana:
   enabled: true

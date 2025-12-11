@@ -28,7 +28,7 @@ spec:
             - "@/etc/grafana-json/grafana-json.json"
             - {{ .Values.grafana.url }}/api/dashboards/import
           volumeMounts:
-            - mountPath: /etc/grafana-json
+            - mountPath: /etc/grafana-json+-
               name: grafana-json-volume
       restartPolicy: Never
   backoffLimit: 2

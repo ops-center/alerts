@@ -28,7 +28,7 @@ const (
 	ResourceQdrantAlertss    = "qdrantalertss"
 )
 
-// QdrantAlerts defines the schama for KubeDB Ops Manager Operator Installer.
+// QdrantAlerts defines the schema for KubeDB Ops Manager Operator Installer.
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
@@ -74,9 +74,11 @@ type QdrantDatabaseAlert struct {
 type QdrantDatabaseAlertRules struct {
 	QdrantDown                  FixedAlert  `json:"qdrantDown"`
 	QdrantPhaseCritical         FixedAlert  `json:"qdrantPhaseCritical"`
-	QdrantClusterNoBaselineNode FixedAlert  `json:"qdrantClusterNoBaselineNode"`
 	QdrantRestarted             IntValAlert `json:"qdrantRestarted"`
-	QdrantHighCPULoad           FixedAlert  `json:"qdrantHighCPULoad"`
+	QdrantHighCPUUsage          IntValAlert `json:"qdrantHighCPUUsage"`
+	QdrantHighMemoryUsage       IntValAlert `json:"qdrantHighMemoryUsage"`
+	QdrantHighPendingOperations IntValAlert `json:"qdrantHighPendingOperations"`
+	QdrantGrpcResponsesFailHigh IntValAlert `json:"qdrantGrpcResponsesFailHigh"`
 	DiskUsageHigh               IntValAlert `json:"diskUsageHigh"`
 	DiskAlmostFull              IntValAlert `json:"diskAlmostFull"`
 }

@@ -104,4 +104,5 @@ grafana:
   version: 7.5.5
   jobName: kubedb-databases
   url: ""
-  apikey: ""
+  user: "admin"
+  password: ""

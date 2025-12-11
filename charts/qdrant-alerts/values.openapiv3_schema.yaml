@@ -71,23 +71,6 @@ properties:
                         - severity
                         - val
                         type: object
-                      qdrantClusterNoBaselineNode:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        type: object
                       qdrantDown:
                         properties:
                           duration:
@@ -105,7 +88,7 @@ properties:
                         - enabled
                         - severity
                         type: object
-                      qdrantHighCPULoad:
+                      qdrantGrpcResponsesFailHigh:
                         properties:
                           duration:
                             type: string
@@ -117,10 +100,73 @@ properties:
                             - warning
                             - info
                             type: string
+                          val:
+                            type: integer
                         required:
                         - duration
                         - enabled
                         - severity
+                        - val
+                        type: object
+                      qdrantHighCPUUsage:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                          val:
+                            type: integer
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        - val
+                        type: object
+                      qdrantHighMemoryUsage:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                          val:
+                            type: integer
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        - val
+                        type: object
+                      qdrantHighPendingOperations:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                          val:
+                            type: integer
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        - val
                         type: object
                       qdrantPhaseCritical:
                         properties:
@@ -162,9 +208,11 @@ properties:
                     required:
                     - diskAlmostFull
                     - diskUsageHigh
-                    - qdrantClusterNoBaselineNode
                     - qdrantDown
-                    - qdrantHighCPULoad
+                    - qdrantGrpcResponsesFailHigh
+                    - qdrantHighCPUUsage
+                    - qdrantHighMemoryUsage
+                    - qdrantHighPendingOperations
                     - qdrantPhaseCritical
                     - qdrantRestarted
                     type: object

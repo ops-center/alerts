@@ -43,20 +43,9 @@ spec:
         summary: Qdrant database is in Critical state (instance {{`{{`}} $labels.instance {{`}}`}})
         description: "Database in Critical state, one or more database nodes are not working properly.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
-    {{ if (include "qdrant-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.qdrantClusterNoBaselineNode.enabled .rules.qdrantClusterNoBaselineNode.severity)) -}}
-    - alert: QdrantClusterNoBaselineNode
-      expr: cluster_TotalBaselineNodes{job=~"{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"} == {{.rules.qdrantClusterNoBaselineNode.val}}
-      for: {{ .rules.qdrantClusterNoBaselineNode.duration }}
-      labels:
-        severity: {{ .rules.qdrantClusterNoBaselineNode.severity }}
-        {{- include "qdrant-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: Qdrant no baseline node (instance {{`{{`}} $labels.pod {{`}}`}})
-        description: "Qdrant No Baseline Nodes on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-    {{- end }}
     {{ if (include "qdrant-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.qdrantRestarted.enabled .rules.qdrantRestarted.severity)) -}}
     - alert: QdrantRestarted
-      expr: (qdrant_uptime{job=~"{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"}) < {{.rules.qdrantRestarted.val}}
+      expr: (time() - min(kube_pod_start_time{ namespace="{{ $.Release.Namespace }}", pod=~"{{ $app }}-.*"})) < {{.rules.qdrantRestarted.val}}
       for: {{ .rules.qdrantRestarted.duration }}
       labels:
         severity: {{ .rules.qdrantRestarted.severity }}
@@ -65,49 +54,112 @@ spec:
         summary: Qdrant service restart (instance {{`{{`}} $labels.pod {{`}}`}})
         description: "Qdrant service restart on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
-    {{ if (include "qdrant-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.qdrantHighCPULoad.enabled .rules.qdrantHighCPULoad.severity)) -}}
-    - alert: QdrantHighCPULoad
-      expr: (sys_CpuLoad{job=~"{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"}) * 100 > {{.rules.qdrantHighCPULoad.val}}
-      for: {{ .rules.qdrantHighCPULoad.duration }}
+    {{ if (include "qdrant-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.qdrantHighCPUUsage.enabled .rules.qdrantHighCPUUsage.severity)) -}}
+    - alert: QdrantHighCPUUsage
+      expr: |
+        (
+          sum by (pod) (
+            irate(container_cpu_usage_seconds_total{
+              image!="",
+              job="kubelet",
+              metrics_path="/metrics/cadvisor",
+              namespace="{{ $.Release.Namespace }}",
+              pod=~"^{{ $app }}.*"
+            }[5m])
+          )
+        )
+        /
+        sum by (pod) (
+          kube_pod_container_resource_requests{
+            namespace="{{ $.Release.Namespace }}",
+            pod=~"^{{ $app }}.*",
+            resource="cpu"
+          }
+        ) * 100
+        > {{ .rules.qdrantHighCPUUsage.val }}
+      for: {{ .rules.qdrantHighCPUUsage.duration }}
       labels:
-        severity: {{ .rules.qdrantHighCPULoad.severity }}
+        severity: {{ .rules.qdrantHighCPUUsage.severity }}
         {{- include "qdrant-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: Qdrant System CPU High Load (instance {{`{{`}} $labels.pod {{`}}`}})
-        description: "Qdrant System CPU High Load on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: Qdrant Pod CPU usage high (pod {{`{{`}} $labels.pod {{`}}`}})
+        description: "Qdrant pod CPU usage is above {{ .rules.qdrantHighCPUUsage.val }} percent.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
-    {{ if (include "qdrant-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.qdrantHighHeapMemoryUsed.enabled .rules.qdrantHighHeapMemoryUsed.severity)) -}}
-    - alert: QdrantHighHeapMemoryUsed
-      expr:       (100 - (( sys_memory_heap_max{job=~"{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"} - sys_memory_heap_used{job=~"{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"}) * 100 / sys_memory_heap_max{job=~"{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"})) > {{.rules.qdrantHighHeapMemoryUsed.val}}
-      for: {{ .rules.qdrantHighHeapMemoryUsed.duration }}
+    {{ if (include "qdrant-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.qdrantHighMemoryUsage.enabled .rules.qdrantHighMemoryUsage.severity)) -}}
+    - alert: QdrantHighMemoryUsage
+      expr: |
+        (
+          sum by (pod) (
+            container_memory_working_set_bytes{
+              namespace="{{ $.Release.Namespace }}",
+              pod=~"^{{ $app }}.*",
+              container!="",
+              image!=""
+            }
+          )
+        )
+        /
+        sum by (pod) (
+          kube_pod_container_resource_limits{
+            namespace="{{ $.Release.Namespace }}",
+            pod=~"^{{ $app }}.*",
+            resource="memory"
+          }
+        ) * 100
+        > {{ .rules.qdrantHighMemoryUsage.val }}
+      for: {{ .rules.qdrantHighMemoryUsage.duration }}
       labels:
-        severity: {{ .rules.qdrantHighHeapMemoryUsed.severity }}
+        severity: {{ .rules.qdrantHighMemoryUsage.severity }}
         {{- include "qdrant-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: Qdrant High System Heap Memory Used (instance {{`{{`}} $labels.pod {{`}}`}})
-        description: "Qdrant High System Heap Memory Used on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: Qdrant Pod Memory usage high (pod {{`{{`}} $labels.pod {{`}}`}})
+        description: "Qdrant pod memory usage is above {{ .rules.qdrantHighMemoryUsage.val }} percent.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
-    {{ if (include "qdrant-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.qdrantHighDataregionOffHeapUsed.enabled .rules.qdrantHighDataregionOffHeapUsed.severity)) -}}
-    - alert: QdrantHighDataregionOffHeapUsed
-      expr: ((io_dataregion_default_OffheapUsedSize{job=~"{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"}) / 1024 / 1024 / 1024)  * 100 > {{.rules.qdrantHighDataregionOffHeapUsed.val}}
-      for: {{ .rules.qdrantHighDataregionOffHeapUsed.duration }}
+
+    {{ if (include "qdrant-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.qdrantHighPendingOperations.enabled .rules.qdrantHighPendingOperations.severity)) -}}
+    - alert: QdrantHighPendingOperations
+      expr: |
+        sum by (pod) (
+          cluster_pending_operations_total{
+            job=~"{{ $app }}-stats",
+            namespace="{{ $.Release.Namespace }}",
+            pod=~"^{{ $app }}.*"
+          }
+        ) > {{ .rules.qdrantHighPendingOperations.val }}
+      for: {{ .rules.qdrantHighPendingOperations.duration }}
       labels:
-        severity: {{ .rules.qdrantHighDataregionOffHeapUsed.severity }}
+        severity: {{ .rules.qdrantHighPendingOperations.severity }}
         {{- include "qdrant-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: Qdrant High default Dataregion Off Heap Memory Used (instance {{`{{`}} $labels.pod {{`}}`}})
-        description: "Qdrant High default Dataregion Off Heap Memory Used on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: Qdrant pending operations high on pod {{`{{`}} $labels.pod {{`}}`}}
+        description: |
+          Qdrant pod has too many pending operations.
+          VALUE = {{`{{`}} $value {{`}}`}}
+          LABELS = {{`{{`}} $labels {{`}}`}}
     {{- end }}
-    {{ if (include "qdrant-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.qdrantJVMPausesTotalDuration.enabled .rules.qdrantJVMPausesTotalDuration.severity)) -}}
-    - alert: QdrantJVMPausesTotalDuration
-      expr: (qdrant_longJVMPausesTotalDuration{job=~"{{ $app }}-stats",namespace="{{ $.Release.Namespace }}"}) * 100 > {{.rules.qdrantJVMPausesTotalDuration.val}}
-      for: {{ .rules.qdrantJVMPausesTotalDuration.duration }}
+
+    {{ if (include "qdrant-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.qdrantGrpcResponsesFailHigh.enabled .rules.qdrantGrpcResponsesFailHigh.severity)) -}}
+    - alert: QdrantGrpcResponsesFailHigh
+      expr: |
+        sum by (pod) (
+          increase(
+            grpc_responses_fail_total{
+              job=~"{{ $app }}-stats",
+              namespace="{{ $.Release.Namespace }}",
+              pod=~"^{{ $app }}.*"
+            }[5m]
+          )
+        ) > {{ .rules.qdrantGrpcResponsesFailHigh.val }}
+      for: {{ .rules.qdrantGrpcResponsesFailHigh.duration }}
       labels:
-        severity: {{ .rules.qdrantJVMPausesTotalDuration.severity }}
+        severity: {{ .rules.qdrantGrpcResponsesFailHigh.severity }}
         {{- include "qdrant-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: Qdrant JVM Pauses Total Duration (instance {{`{{`}} $labels.pod {{`}}`}})
-        description: "Qdrant JVM Pauses Total Duration on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: Qdrant gRPC fails high on pod {{`{{`}} $labels.pod {{`}}`}}
+        description: |
+          The number of failed gRPC responses for this pod in the last 5m exceeds threshold.
+          VALUE = {{`{{`}} $value {{`}}`}}
+          LABELS = {{`{{`}} $labels {{`}}`}}
     {{- end }}
     {{ if (include "qdrant-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.diskUsageHigh.enabled .rules.diskUsageHigh.severity)) -}}
     - alert: DiskUsageHigh

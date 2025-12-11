@@ -4669,9 +4669,11 @@ func (in *QdrantDatabaseAlertRules) DeepCopyInto(out *QdrantDatabaseAlertRules) 
 	*out = *in
 	out.QdrantDown = in.QdrantDown
 	out.QdrantPhaseCritical = in.QdrantPhaseCritical
-	out.QdrantClusterNoBaselineNode = in.QdrantClusterNoBaselineNode
 	out.QdrantRestarted = in.QdrantRestarted
-	out.QdrantHighCPULoad = in.QdrantHighCPULoad
+	out.QdrantHighCPUUsage = in.QdrantHighCPUUsage
+	out.QdrantHighMemoryUsage = in.QdrantHighMemoryUsage
+	out.QdrantHighPendingOperations = in.QdrantHighPendingOperations
+	out.QdrantGrpcResponsesFailHigh = in.QdrantGrpcResponsesFailHigh
 	out.DiskUsageHigh = in.DiskUsageHigh
 	out.DiskAlmostFull = in.DiskAlmostFull
 	return

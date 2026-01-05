@@ -1,0 +1,276 @@
+# Default values for b3-alerts.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+metadata:
+  resource:
+    group: alerts.appscode.com
+    kind: B3Alerts
+    name: b3alerts
+    scope: Namespaced
+    version: v1alpha2
+  release:
+    # Release name
+    name: ""
+    # Release namespace
+    namespace: ""
+
+form:
+  alert:
+    ## Enable PrometheusRule alerts
+    enabled: warning
+
+    ## Labels for default rules
+    labels: # +doc-gen:break
+      release: kube-prometheus-stack
+
+    ## Annotations for default rules
+    annotations: {}
+
+    ## Additional labels for PrometheusRule alerts
+    additionalRuleLabels: {}
+
+    groups:
+      # ===========================================
+      # Process & Runtime Alerts
+      # ===========================================
+      process:
+        enabled: warning
+        rules:
+          # CPU usage as percentage of limit
+          b3HighCpuUsage:
+            enabled: true
+            duration: "5m"
+            severity: warning
+            val: 80
+          b3CriticalCpuUsage:
+            enabled: true
+            duration: "5m"
+            severity: critical
+            val: 95
+          # Memory usage as percentage of limit
+          b3HighMemoryUsage:
+            enabled: true
+            duration: "5m"
+            severity: warning
+            val: 80
+          b3CriticalMemoryUsage:
+            enabled: true
+            duration: "5m"
+            severity: critical
+            val: 95
+          # Process restart detection
+          b3ProcessRestarted:
+            enabled: true
+            duration: "0m"
+            severity: warning
+          # High goroutine count
+          b3HighGoroutineCount:
+            enabled: true
+            duration: "10m"
+            severity: warning
+            val: 10000
+          # GC pause duration
+          b3HighGcPauseDuration:
+            enabled: true
+            duration: "5m"
+            severity: warning
+            val: 0.5
+          # File descriptor usage
+          b3HighFileDescriptorUsage:
+            enabled: true
+            duration: "5m"
+            severity: warning
+            val: 80
+
+      # ===========================================
+      # HTTP Server Alerts
+      # ===========================================
+      http:
+        enabled: warning
+        rules:
+          # High HTTP error rate (5xx errors)
+          b3HighHttpErrorRate:
+            enabled: true
+            duration: "5m"
+            severity: critical
+            val: 5
+          # High HTTP error rate warning
+          b3HighHttpErrorRateWarning:
+            enabled: true
+            duration: "5m"
+            severity: warning
+            val: 1
+          # High HTTP request latency (p99)
+          b3HighHttpLatency:
+            enabled: true
+            duration: "5m"
+            severity: warning
+            val: 2
+          # Critical HTTP request latency (p99)
+          b3CriticalHttpLatency:
+            enabled: true
+            duration: "5m"
+            severity: critical
+            val: 5
+          # High number of active requests
+          b3HighActiveRequests:
+            enabled: true
+            duration: "5m"
+            severity: warning
+            val: 1000
+
+      # ===========================================
+      # Database Alerts
+      # ===========================================
+      database:
+        enabled: warning
+        rules:
+          # High database error rate
+          b3HighDatabaseErrorRate:
+            enabled: true
+            duration: "5m"
+            severity: critical
+            val: 5
+          # High database latency
+          b3HighDatabaseLatency:
+            enabled: true
+            duration: "5m"
+            severity: warning
+            val: 1
+          # Database connection errors
+          b3DatabaseConnectionErrors:
+            enabled: true
+            duration: "5m"
+            severity: critical
+            val: 5
+          # High database connection pool usage
+          b3HighDatabaseConnectionPoolUsage:
+            enabled: true
+            duration: "5m"
+            severity: warning
+            val: 80
+          # No idle connections available
+          b3NoIdleDatabaseConnections:
+            enabled: true
+            duration: "5m"
+            severity: warning
+
+      # ===========================================
+      # NATS/Messaging Alerts
+      # ===========================================
+      messaging:
+        enabled: warning
+        rules:
+          # High message publish error rate
+          b3HighMessagePublishErrorRate:
+            enabled: true
+            duration: "5m"
+            severity: critical
+            val: 5
+          # High message processing latency
+          b3HighMessageProcessingLatency:
+            enabled: true
+            duration: "5m"
+            severity: warning
+            val: 5
+          # NATS disconnections
+          b3NatsDisconnections:
+            enabled: true
+            duration: "5m"
+            severity: warning
+            val: 3
+          # NATS subscription errors
+          b3NatsSubscriptionErrors:
+            enabled: true
+            duration: "5m"
+            severity: critical
+            val: 5
+          # No active NATS connections
+          b3NoActiveNatsConnections:
+            enabled: true
+            duration: "2m"
+            severity: critical
+
+      # ===========================================
+      # Authentication/Authorization Alerts
+      # ===========================================
+      auth:
+        enabled: warning
+        rules:
+          # High authentication failure rate
+          b3HighAuthFailureRate:
+            enabled: true
+            duration: "5m"
+            severity: warning
+            val: 10
+          # Critical authentication failure rate (possible brute force)
+          b3CriticalAuthFailureRate:
+            enabled: true
+            duration: "5m"
+            severity: critical
+            val: 50
+          # High authorization denial rate
+          b3HighAuthzDenialRate:
+            enabled: true
+            duration: "5m"
+            severity: warning
+            val: 10
+
+      # ===========================================
+      # License Alerts
+      # ===========================================
+      license:
+        enabled: warning
+        rules:
+          # License issuance failures
+          b3LicenseIssuanceFailures:
+            enabled: true
+            duration: "5m"
+            severity: warning
+            val: 5
+          # License validation failures
+          b3LicenseValidationFailures:
+            enabled: true
+            duration: "5m"
+            severity: warning
+            val: 10
+
+      # ===========================================
+      # BlobFS/Storage Alerts
+      # ===========================================
+      storage:
+        enabled: warning
+        rules:
+          # High blob storage error rate
+          b3HighBlobStorageErrorRate:
+            enabled: true
+            duration: "5m"
+            severity: warning
+            val: 5
+
+      # ===========================================
+      # Proxy/K8s Operations Alerts
+      # ===========================================
+      proxy:
+        enabled: warning
+        rules:
+          # High proxy error rate
+          b3HighProxyErrorRate:
+            enabled: true
+            duration: "5m"
+            severity: warning
+            val: 5
+          # High proxy latency
+          b3HighProxyLatency:
+            enabled: true
+            duration: "5m"
+            severity: warning
+            val: 30
+
+grafana:
+  enabled: false
+  version: 8.2.3
+  jobName: b3
+  url: ""
+  apikey: ""

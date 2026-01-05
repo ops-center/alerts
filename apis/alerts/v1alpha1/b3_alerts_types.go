@@ -62,14 +62,12 @@ type B3Alert struct {
 }
 
 type B3AlertGroups struct {
-	Process   B3ProcessAlert   `json:"process"`
-	HTTP      B3HTTPAlert      `json:"http"`
-	Database  B3DatabaseAlert  `json:"database"`
-	Messaging B3MessagingAlert `json:"messaging"`
-	Auth      B3AuthAlert      `json:"auth"`
-	License   B3LicenseAlert   `json:"license"`
-	Storage   B3StorageAlert   `json:"storage"`
-	Proxy     B3ProxyAlert     `json:"proxy"`
+	Process  B3ProcessAlert  `json:"process"`
+	HTTP     B3HTTPAlert     `json:"http"`
+	Database B3DatabaseAlert `json:"database"`
+	Auth     B3AuthAlert     `json:"auth"`
+	Storage  B3StorageAlert  `json:"storage"`
+	Proxy    B3ProxyAlert    `json:"proxy"`
 }
 
 // Process & Runtime alerts
@@ -79,14 +77,13 @@ type B3ProcessAlert struct {
 }
 
 type B3ProcessAlertRules struct {
-	B3HighCpuUsage            IntValAlert         `json:"b3HighCpuUsage"`
-	B3CriticalCpuUsage        IntValAlert         `json:"b3CriticalCpuUsage"`
-	B3HighMemoryUsage         IntValAlert         `json:"b3HighMemoryUsage"`
-	B3CriticalMemoryUsage     IntValAlert         `json:"b3CriticalMemoryUsage"`
 	B3ProcessRestarted        FixedAlert          `json:"b3ProcessRestarted"`
 	B3HighGoroutineCount      IntValAlert         `json:"b3HighGoroutineCount"`
 	B3HighGcPauseDuration     FloatValAlertConfig `json:"b3HighGcPauseDuration"`
 	B3HighFileDescriptorUsage IntValAlert         `json:"b3HighFileDescriptorUsage"`
+	B3MemoryLeak              IntValAlert         `json:"b3MemoryLeak"`
+	B3CpuRunaway              FloatValAlertConfig `json:"b3CpuRunaway"`
+	B3GoroutineLeak           FloatValAlertConfig `json:"b3GoroutineLeak"`
 }
 
 // HTTP Server alerts
@@ -96,11 +93,9 @@ type B3HTTPAlert struct {
 }
 
 type B3HTTPAlertRules struct {
-	B3HighHttpErrorRate        IntValAlert `json:"b3HighHttpErrorRate"`
-	B3HighHttpErrorRateWarning IntValAlert `json:"b3HighHttpErrorRateWarning"`
-	B3HighHttpLatency          IntValAlert `json:"b3HighHttpLatency"`
-	B3CriticalHttpLatency      IntValAlert `json:"b3CriticalHttpLatency"`
-	B3HighActiveRequests       IntValAlert `json:"b3HighActiveRequests"`
+	B3HighHttpErrorRate  IntValAlert `json:"b3HighHttpErrorRate"`
+	B3HighHttpLatency    IntValAlert `json:"b3HighHttpLatency"`
+	B3HighActiveRequests IntValAlert `json:"b3HighActiveRequests"`
 }
 
 // Database alerts
@@ -114,21 +109,6 @@ type B3DatabaseAlertRules struct {
 	B3HighDatabaseLatency             IntValAlert `json:"b3HighDatabaseLatency"`
 	B3DatabaseConnectionErrors        IntValAlert `json:"b3DatabaseConnectionErrors"`
 	B3HighDatabaseConnectionPoolUsage IntValAlert `json:"b3HighDatabaseConnectionPoolUsage"`
-	B3NoIdleDatabaseConnections       FixedAlert  `json:"b3NoIdleDatabaseConnections"`
-}
-
-// Messaging/NATS alerts
-type B3MessagingAlert struct {
-	Enabled mona.SeverityFlag     `json:"enabled"`
-	Rules   B3MessagingAlertRules `json:"rules"`
-}
-
-type B3MessagingAlertRules struct {
-	B3HighMessagePublishErrorRate  IntValAlert `json:"b3HighMessagePublishErrorRate"`
-	B3HighMessageProcessingLatency IntValAlert `json:"b3HighMessageProcessingLatency"`
-	B3NatsDisconnections           IntValAlert `json:"b3NatsDisconnections"`
-	B3NatsSubscriptionErrors       IntValAlert `json:"b3NatsSubscriptionErrors"`
-	B3NoActiveNatsConnections      FixedAlert  `json:"b3NoActiveNatsConnections"`
 }
 
 // Authentication/Authorization alerts
@@ -138,20 +118,7 @@ type B3AuthAlert struct {
 }
 
 type B3AuthAlertRules struct {
-	B3HighAuthFailureRate     IntValAlert `json:"b3HighAuthFailureRate"`
-	B3CriticalAuthFailureRate IntValAlert `json:"b3CriticalAuthFailureRate"`
-	B3HighAuthzDenialRate     IntValAlert `json:"b3HighAuthzDenialRate"`
-}
-
-// License alerts
-type B3LicenseAlert struct {
-	Enabled mona.SeverityFlag   `json:"enabled"`
-	Rules   B3LicenseAlertRules `json:"rules"`
-}
-
-type B3LicenseAlertRules struct {
-	B3LicenseIssuanceFailures   IntValAlert `json:"b3LicenseIssuanceFailures"`
-	B3LicenseValidationFailures IntValAlert `json:"b3LicenseValidationFailures"`
+	B3HighAuthFailureRate IntValAlert `json:"b3HighAuthFailureRate"`
 }
 
 // Storage/BlobFS alerts

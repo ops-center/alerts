@@ -25,70 +25,6 @@ spec:
 {{- if (include "b3-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) }}
   - name: b3.process.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
-{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3HighCpuUsage.enabled .rules.b3HighCpuUsage.severity)) }}
-    - alert: B3HighCpuUsage
-      expr: |
-        (
-          sum by (namespace, pod) (rate(process_cpu_seconds_total{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m]))
-          /
-          sum by (namespace, pod) (kube_pod_container_resource_limits{job="kube-state-metrics",namespace="{{ $.Release.Namespace }}",resource="cpu"})
-        ) * 100 > {{ .rules.b3HighCpuUsage.val }}
-      for: {{ .rules.b3HighCpuUsage.duration }}
-      labels:
-        severity: {{ .rules.b3HighCpuUsage.severity }}
-        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: "B3 high CPU usage (instance {{`{{`}} $labels.pod {{`}}`}})"
-        description: "B3 pod {{`{{`}} $labels.pod {{`}}`}} CPU usage is at {{`{{`}} $value | printf \"%.2f\" {{`}}`}}% of limit, exceeding {{ .rules.b3HighCpuUsage.val }}% threshold.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-{{- end }}
-{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3CriticalCpuUsage.enabled .rules.b3CriticalCpuUsage.severity)) }}
-    - alert: B3CriticalCpuUsage
-      expr: |
-        (
-          sum by (namespace, pod) (rate(process_cpu_seconds_total{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m]))
-          /
-          sum by (namespace, pod) (kube_pod_container_resource_limits{job="kube-state-metrics",namespace="{{ $.Release.Namespace }}",resource="cpu"})
-        ) * 100 > {{ .rules.b3CriticalCpuUsage.val }}
-      for: {{ .rules.b3CriticalCpuUsage.duration }}
-      labels:
-        severity: {{ .rules.b3CriticalCpuUsage.severity }}
-        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: "B3 critical CPU usage (instance {{`{{`}} $labels.pod {{`}}`}})"
-        description: "B3 pod {{`{{`}} $labels.pod {{`}}`}} CPU usage is critically high at {{`{{`}} $value | printf \"%.2f\" {{`}}`}}% of limit, exceeding {{ .rules.b3CriticalCpuUsage.val }}% threshold.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-{{- end }}
-{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3HighMemoryUsage.enabled .rules.b3HighMemoryUsage.severity)) }}
-    - alert: B3HighMemoryUsage
-      expr: |
-        (
-          sum by (namespace, pod) (process_resident_memory_bytes{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"})
-          /
-          sum by (namespace, pod) (kube_pod_container_resource_limits{job="kube-state-metrics",namespace="{{ $.Release.Namespace }}",resource="memory"})
-        ) * 100 > {{ .rules.b3HighMemoryUsage.val }}
-      for: {{ .rules.b3HighMemoryUsage.duration }}
-      labels:
-        severity: {{ .rules.b3HighMemoryUsage.severity }}
-        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: "B3 high memory usage (instance {{`{{`}} $labels.pod {{`}}`}})"
-        description: "B3 pod {{`{{`}} $labels.pod {{`}}`}} memory usage is at {{`{{`}} $value | printf \"%.2f\" {{`}}`}}% of limit, exceeding {{ .rules.b3HighMemoryUsage.val }}% threshold.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-{{- end }}
-{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3CriticalMemoryUsage.enabled .rules.b3CriticalMemoryUsage.severity)) }}
-    - alert: B3CriticalMemoryUsage
-      expr: |
-        (
-          sum by (namespace, pod) (process_resident_memory_bytes{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"})
-          /
-          sum by (namespace, pod) (kube_pod_container_resource_limits{job="kube-state-metrics",namespace="{{ $.Release.Namespace }}",resource="memory"})
-        ) * 100 > {{ .rules.b3CriticalMemoryUsage.val }}
-      for: {{ .rules.b3CriticalMemoryUsage.duration }}
-      labels:
-        severity: {{ .rules.b3CriticalMemoryUsage.severity }}
-        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: "B3 critical memory usage (instance {{`{{`}} $labels.pod {{`}}`}})"
-        description: "B3 pod {{`{{`}} $labels.pod {{`}}`}} memory usage is critically high at {{`{{`}} $value | printf \"%.2f\" {{`}}`}}% of limit, exceeding {{ .rules.b3CriticalMemoryUsage.val }}% threshold.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-{{- end }}
 {{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3ProcessRestarted.enabled .rules.b3ProcessRestarted.severity)) }}
     - alert: B3ProcessRestarted
       expr: changes(process_start_time_seconds{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[10m]) > 0
@@ -113,7 +49,7 @@ spec:
 {{- end }}
 {{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3HighGcPauseDuration.enabled .rules.b3HighGcPauseDuration.severity)) }}
     - alert: B3HighGcPauseDuration
-      expr: max(go_gc_duration_seconds{job="{{ $job }}",namespace="{{ $.Release.Namespace }}",quantile="1"}) > {{ .rules.b3HighGcPauseDuration.val }}
+      expr: max(go_gc_duration_seconds{job="{{ $job }}",namespace="{{ $.Release.Namespace }}",quantile=~"1|1.0"}) > {{ .rules.b3HighGcPauseDuration.val }}
       for: {{ .rules.b3HighGcPauseDuration.duration }}
       labels:
         severity: {{ .rules.b3HighGcPauseDuration.severity }}
@@ -132,6 +68,39 @@ spec:
       annotations:
         summary: "B3 high file descriptor usage (instance {{`{{`}} $labels.pod {{`}}`}})"
         description: "B3 pod {{`{{`}} $labels.pod {{`}}`}} is using {{`{{`}} $value | printf \"%.2f\" {{`}}`}}% of available file descriptors.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+{{- end }}
+{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3MemoryLeak.enabled .rules.b3MemoryLeak.severity)) }}
+    - alert: B3MemoryLeak
+      expr: deriv(process_resident_memory_bytes{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[1h]) > {{ .rules.b3MemoryLeak.val }}
+      for: {{ .rules.b3MemoryLeak.duration }}
+      labels:
+        severity: {{ .rules.b3MemoryLeak.severity }}
+        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: "B3 possible memory leak (instance {{`{{`}} $labels.pod {{`}}`}})"
+        description: "B3 pod {{`{{`}} $labels.pod {{`}}`}} memory has been steadily increasing at {{`{{`}} $value | humanize {{`}}`}}B/s for over {{ .rules.b3MemoryLeak.duration }}. Possible memory leak.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+{{- end }}
+{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3CpuRunaway.enabled .rules.b3CpuRunaway.severity)) }}
+    - alert: B3CpuRunaway
+      expr: deriv(rate(process_cpu_seconds_total{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m])[1h:1m]) > {{ .rules.b3CpuRunaway.val }}
+      for: {{ .rules.b3CpuRunaway.duration }}
+      labels:
+        severity: {{ .rules.b3CpuRunaway.severity }}
+        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: "B3 possible CPU runaway (instance {{`{{`}} $labels.pod {{`}}`}})"
+        description: "B3 pod {{`{{`}} $labels.pod {{`}}`}} CPU usage has been steadily increasing for over {{ .rules.b3CpuRunaway.duration }}. Possible runaway process or infinite loop.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+{{- end }}
+{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3GoroutineLeak.enabled .rules.b3GoroutineLeak.severity)) }}
+    - alert: B3GoroutineLeak
+      expr: deriv(go_goroutines{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[1h]) > {{ .rules.b3GoroutineLeak.val }}
+      for: {{ .rules.b3GoroutineLeak.duration }}
+      labels:
+        severity: {{ .rules.b3GoroutineLeak.severity }}
+        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: "B3 possible goroutine leak (instance {{`{{`}} $labels.pod {{`}}`}})"
+        description: "B3 pod {{`{{`}} $labels.pod {{`}}`}} goroutine count has been steadily increasing at {{`{{`}} $value | printf \"%.2f\" {{`}}`}} goroutines/sec for over {{ .rules.b3GoroutineLeak.duration }}. Possible goroutine leak.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
 {{- end }}
 {{- end }}
 {{- end }}
@@ -159,22 +128,6 @@ spec:
         summary: "B3 high HTTP error rate"
         description: "B3 HTTP 5xx error rate is {{`{{`}} $value | printf \"%.2f\" {{`}}`}}%, exceeding {{ .rules.b3HighHttpErrorRate.val }}% threshold.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
 {{- end }}
-{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3HighHttpErrorRateWarning.enabled .rules.b3HighHttpErrorRateWarning.severity)) }}
-    - alert: B3HighHttpErrorRateWarning
-      expr: |
-        (
-          sum(rate(b3_http_server_request_count{job="{{ $job }}",namespace="{{ $.Release.Namespace }}",http_response_status_code=~"5.."}[5m]))
-          /
-          sum(rate(b3_http_server_request_count{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m]))
-        ) * 100 > {{ .rules.b3HighHttpErrorRateWarning.val }}
-      for: {{ .rules.b3HighHttpErrorRateWarning.duration }}
-      labels:
-        severity: {{ .rules.b3HighHttpErrorRateWarning.severity }}
-        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: "B3 elevated HTTP error rate"
-        description: "B3 HTTP 5xx error rate is {{`{{`}} $value | printf \"%.2f\" {{`}}`}}%, exceeding {{ .rules.b3HighHttpErrorRateWarning.val }}% warning threshold.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-{{- end }}
 {{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3HighHttpLatency.enabled .rules.b3HighHttpLatency.severity)) }}
     - alert: B3HighHttpLatency
       expr: histogram_quantile(0.99, sum(rate(b3_http_server_request_duration_bucket{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m])) by (le)) > {{ .rules.b3HighHttpLatency.val }}
@@ -185,17 +138,6 @@ spec:
       annotations:
         summary: "B3 high HTTP latency"
         description: "B3 HTTP request p99 latency is {{`{{`}} $value | printf \"%.3f\" {{`}}`}}s, exceeding {{ .rules.b3HighHttpLatency.val }}s threshold.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-{{- end }}
-{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3CriticalHttpLatency.enabled .rules.b3CriticalHttpLatency.severity)) }}
-    - alert: B3CriticalHttpLatency
-      expr: histogram_quantile(0.99, sum(rate(b3_http_server_request_duration_bucket{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m])) by (le)) > {{ .rules.b3CriticalHttpLatency.val }}
-      for: {{ .rules.b3CriticalHttpLatency.duration }}
-      labels:
-        severity: {{ .rules.b3CriticalHttpLatency.severity }}
-        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: "B3 critical HTTP latency"
-        description: "B3 HTTP request p99 latency is critically high at {{`{{`}} $value | printf \"%.3f\" {{`}}`}}s, exceeding {{ .rules.b3CriticalHttpLatency.val }}s threshold.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
 {{- end }}
 {{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3HighActiveRequests.enabled .rules.b3HighActiveRequests.severity)) }}
     - alert: B3HighActiveRequests
@@ -272,87 +214,6 @@ spec:
         summary: "B3 high database connection pool usage"
         description: "B3 database connection pool usage is at {{`{{`}} $value | printf \"%.2f\" {{`}}`}}%, exceeding {{ .rules.b3HighDatabaseConnectionPoolUsage.val }}% threshold.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
 {{- end }}
-{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3NoIdleDatabaseConnections.enabled .rules.b3NoIdleDatabaseConnections.severity)) }}
-    - alert: B3NoIdleDatabaseConnections
-      expr: sum(b3_db_connections_idle{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}) == 0
-      for: {{ .rules.b3NoIdleDatabaseConnections.duration }}
-      labels:
-        severity: {{ .rules.b3NoIdleDatabaseConnections.severity }}
-        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: "B3 no idle database connections"
-        description: "B3 has no idle database connections available. All connections are in use.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-{{- end }}
-{{- end }}
-{{- end }}
-
-  # ===========================================
-  # Messaging/NATS Alerts
-  # ===========================================
-{{- with .Values.form.alert.groups.messaging }}
-{{- if (include "b3-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) }}
-  - name: b3.messaging.{{ $.Release.Namespace }}.{{ $app }}.rules
-    rules:
-{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3HighMessagePublishErrorRate.enabled .rules.b3HighMessagePublishErrorRate.severity)) }}
-    - alert: B3HighMessagePublishErrorRate
-      expr: |
-        (
-          sum(rate(b3_messaging_publish_error_count{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m]))
-          /
-          (sum(rate(b3_messaging_publish_count{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m])) + sum(rate(b3_messaging_publish_error_count{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m])))
-        ) * 100 > {{ .rules.b3HighMessagePublishErrorRate.val }}
-      for: {{ .rules.b3HighMessagePublishErrorRate.duration }}
-      labels:
-        severity: {{ .rules.b3HighMessagePublishErrorRate.severity }}
-        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: "B3 high message publish error rate"
-        description: "B3 NATS message publish error rate is {{`{{`}} $value | printf \"%.2f\" {{`}}`}}%, exceeding {{ .rules.b3HighMessagePublishErrorRate.val }}% threshold.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-{{- end }}
-{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3HighMessageProcessingLatency.enabled .rules.b3HighMessageProcessingLatency.severity)) }}
-    - alert: B3HighMessageProcessingLatency
-      expr: histogram_quantile(0.99, sum(rate(b3_messaging_process_duration_bucket{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m])) by (le, messaging_destination_name)) > {{ .rules.b3HighMessageProcessingLatency.val }}
-      for: {{ .rules.b3HighMessageProcessingLatency.duration }}
-      labels:
-        severity: {{ .rules.b3HighMessageProcessingLatency.severity }}
-        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: "B3 high message processing latency ({{`{{`}} $labels.messaging_destination_name {{`}}`}})"
-        description: "B3 message processing p99 latency for {{`{{`}} $labels.messaging_destination_name {{`}}`}} is {{`{{`}} $value | printf \"%.3f\" {{`}}`}}s, exceeding {{ .rules.b3HighMessageProcessingLatency.val }}s threshold.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-{{- end }}
-{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3NatsDisconnections.enabled .rules.b3NatsDisconnections.severity)) }}
-    - alert: B3NatsDisconnections
-      expr: sum(rate(b3_messaging_disconnect_count{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m])) * 60 > {{ .rules.b3NatsDisconnections.val }}
-      for: {{ .rules.b3NatsDisconnections.duration }}
-      labels:
-        severity: {{ .rules.b3NatsDisconnections.severity }}
-        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: "B3 NATS disconnections detected"
-        description: "B3 is experiencing {{`{{`}} $value | printf \"%.2f\" {{`}}`}} NATS disconnections per minute, exceeding {{ .rules.b3NatsDisconnections.val }} threshold.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-{{- end }}
-{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3NatsSubscriptionErrors.enabled .rules.b3NatsSubscriptionErrors.severity)) }}
-    - alert: B3NatsSubscriptionErrors
-      expr: sum(rate(b3_messaging_subscription_error_count{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m])) * 60 > {{ .rules.b3NatsSubscriptionErrors.val }}
-      for: {{ .rules.b3NatsSubscriptionErrors.duration }}
-      labels:
-        severity: {{ .rules.b3NatsSubscriptionErrors.severity }}
-        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: "B3 NATS subscription errors"
-        description: "B3 is experiencing {{`{{`}} $value | printf \"%.2f\" {{`}}`}} NATS subscription errors per minute, exceeding {{ .rules.b3NatsSubscriptionErrors.val }} threshold.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-{{- end }}
-{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3NoActiveNatsConnections.enabled .rules.b3NoActiveNatsConnections.severity)) }}
-    - alert: B3NoActiveNatsConnections
-      expr: sum(b3_messaging_connections_active{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}) == 0
-      for: {{ .rules.b3NoActiveNatsConnections.duration }}
-      labels:
-        severity: {{ .rules.b3NoActiveNatsConnections.severity }}
-        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: "B3 no active NATS connections"
-        description: "B3 has no active NATS connections. Message processing is unavailable.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-{{- end }}
 {{- end }}
 {{- end }}
 
@@ -378,70 +239,6 @@ spec:
       annotations:
         summary: "B3 high authentication failure rate"
         description: "B3 authentication failure rate is {{`{{`}} $value | printf \"%.2f\" {{`}}`}}%, exceeding {{ .rules.b3HighAuthFailureRate.val }}% threshold.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-{{- end }}
-{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3CriticalAuthFailureRate.enabled .rules.b3CriticalAuthFailureRate.severity)) }}
-    - alert: B3CriticalAuthFailureRate
-      expr: |
-        (
-          sum(rate(b3_auth_failures_total{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m]))
-          /
-          sum(rate(b3_auth_attempts_total{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m]))
-        ) * 100 > {{ .rules.b3CriticalAuthFailureRate.val }}
-      for: {{ .rules.b3CriticalAuthFailureRate.duration }}
-      labels:
-        severity: {{ .rules.b3CriticalAuthFailureRate.severity }}
-        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: "B3 critical authentication failure rate (possible brute force)"
-        description: "B3 authentication failure rate is critically high at {{`{{`}} $value | printf \"%.2f\" {{`}}`}}%, exceeding {{ .rules.b3CriticalAuthFailureRate.val }}% threshold. This could indicate a brute force attack.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-{{- end }}
-{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3HighAuthzDenialRate.enabled .rules.b3HighAuthzDenialRate.severity)) }}
-    - alert: B3HighAuthzDenialRate
-      expr: |
-        (
-          sum(rate(b3_authz_check_denied_count{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m]))
-          /
-          sum(rate(b3_authz_check_count{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m]))
-        ) * 100 > {{ .rules.b3HighAuthzDenialRate.val }}
-      for: {{ .rules.b3HighAuthzDenialRate.duration }}
-      labels:
-        severity: {{ .rules.b3HighAuthzDenialRate.severity }}
-        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: "B3 high authorization denial rate"
-        description: "B3 authorization denial rate is {{`{{`}} $value | printf \"%.2f\" {{`}}`}}%, exceeding {{ .rules.b3HighAuthzDenialRate.val }}% threshold.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-{{- end }}
-{{- end }}
-{{- end }}
-
-  # ===========================================
-  # License Alerts
-  # ===========================================
-{{- with .Values.form.alert.groups.license }}
-{{- if (include "b3-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) }}
-  - name: b3.license.{{ $.Release.Namespace }}.{{ $app }}.rules
-    rules:
-{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3LicenseIssuanceFailures.enabled .rules.b3LicenseIssuanceFailures.severity)) }}
-    - alert: B3LicenseIssuanceFailures
-      expr: sum(rate(b3_license_issuances_total{job="{{ $job }}",namespace="{{ $.Release.Namespace }}",success="false"}[5m])) * 60 > {{ .rules.b3LicenseIssuanceFailures.val }}
-      for: {{ .rules.b3LicenseIssuanceFailures.duration }}
-      labels:
-        severity: {{ .rules.b3LicenseIssuanceFailures.severity }}
-        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: "B3 license issuance failures"
-        description: "B3 is experiencing {{`{{`}} $value | printf \"%.2f\" {{`}}`}} license issuance failures per minute, exceeding {{ .rules.b3LicenseIssuanceFailures.val }} threshold.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-{{- end }}
-{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3LicenseValidationFailures.enabled .rules.b3LicenseValidationFailures.severity)) }}
-    - alert: B3LicenseValidationFailures
-      expr: sum(rate(b3_license_validations_total{job="{{ $job }}",namespace="{{ $.Release.Namespace }}",success="false"}[5m])) * 60 > {{ .rules.b3LicenseValidationFailures.val }}
-      for: {{ .rules.b3LicenseValidationFailures.duration }}
-      labels:
-        severity: {{ .rules.b3LicenseValidationFailures.severity }}
-        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: "B3 license validation failures"
-        description: "B3 is experiencing {{`{{`}} $value | printf \"%.2f\" {{`}}`}} license validation failures per minute, exceeding {{ .rules.b3LicenseValidationFailures.val }} threshold.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
 {{- end }}
 {{- end }}
 {{- end }}

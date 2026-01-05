@@ -32,26 +32,6 @@ properties:
                     type: string
                   rules:
                     properties:
-                      b3CriticalAuthFailureRate:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
                       b3HighAuthFailureRate:
                         properties:
                           duration:
@@ -72,30 +52,8 @@ properties:
                         - severity
                         - val
                         type: object
-                      b3HighAuthzDenialRate:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
                     required:
-                    - b3CriticalAuthFailureRate
                     - b3HighAuthFailureRate
-                    - b3HighAuthzDenialRate
                     type: object
                 required:
                 - enabled
@@ -193,29 +151,11 @@ properties:
                         - severity
                         - val
                         type: object
-                      b3NoIdleDatabaseConnections:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        type: object
                     required:
                     - b3DatabaseConnectionErrors
                     - b3HighDatabaseConnectionPoolUsage
                     - b3HighDatabaseErrorRate
                     - b3HighDatabaseLatency
-                    - b3NoIdleDatabaseConnections
                     type: object
                 required:
                 - enabled
@@ -233,26 +173,6 @@ properties:
                     type: string
                   rules:
                     properties:
-                      b3CriticalHttpLatency:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
                       b3HighActiveRequests:
                         properties:
                           duration:
@@ -293,26 +213,6 @@ properties:
                         - severity
                         - val
                         type: object
-                      b3HighHttpErrorRateWarning:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
                       b3HighHttpLatency:
                         properties:
                           duration:
@@ -334,191 +234,9 @@ properties:
                         - val
                         type: object
                     required:
-                    - b3CriticalHttpLatency
                     - b3HighActiveRequests
                     - b3HighHttpErrorRate
-                    - b3HighHttpErrorRateWarning
                     - b3HighHttpLatency
-                    type: object
-                required:
-                - enabled
-                - rules
-                type: object
-              license:
-                description: License alerts
-                properties:
-                  enabled:
-                    enum:
-                    - none
-                    - critical
-                    - warning
-                    - info
-                    type: string
-                  rules:
-                    properties:
-                      b3LicenseIssuanceFailures:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      b3LicenseValidationFailures:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                    required:
-                    - b3LicenseIssuanceFailures
-                    - b3LicenseValidationFailures
-                    type: object
-                required:
-                - enabled
-                - rules
-                type: object
-              messaging:
-                description: Messaging/NATS alerts
-                properties:
-                  enabled:
-                    enum:
-                    - none
-                    - critical
-                    - warning
-                    - info
-                    type: string
-                  rules:
-                    properties:
-                      b3HighMessageProcessingLatency:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      b3HighMessagePublishErrorRate:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      b3NatsDisconnections:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      b3NatsSubscriptionErrors:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      b3NoActiveNatsConnections:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        type: object
-                    required:
-                    - b3HighMessageProcessingLatency
-                    - b3HighMessagePublishErrorRate
-                    - b3NatsDisconnections
-                    - b3NatsSubscriptionErrors
-                    - b3NoActiveNatsConnections
                     type: object
                 required:
                 - enabled
@@ -536,7 +254,7 @@ properties:
                     type: string
                   rules:
                     properties:
-                      b3CriticalCpuUsage:
+                      b3CpuRunaway:
                         properties:
                           duration:
                             type: string
@@ -549,14 +267,15 @@ properties:
                             - info
                             type: string
                           val:
-                            type: integer
+                            format: double
+                            type: number
                         required:
                         - duration
                         - enabled
                         - severity
                         - val
                         type: object
-                      b3CriticalMemoryUsage:
+                      b3GoroutineLeak:
                         properties:
                           duration:
                             type: string
@@ -569,27 +288,8 @@ properties:
                             - info
                             type: string
                           val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      b3HighCpuUsage:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
+                            format: double
+                            type: number
                         required:
                         - duration
                         - enabled
@@ -657,7 +357,7 @@ properties:
                         - severity
                         - val
                         type: object
-                      b3HighMemoryUsage:
+                      b3MemoryLeak:
                         properties:
                           duration:
                             type: string
@@ -695,13 +395,12 @@ properties:
                         - severity
                         type: object
                     required:
-                    - b3CriticalCpuUsage
-                    - b3CriticalMemoryUsage
-                    - b3HighCpuUsage
+                    - b3CpuRunaway
+                    - b3GoroutineLeak
                     - b3HighFileDescriptorUsage
                     - b3HighGcPauseDuration
                     - b3HighGoroutineCount
-                    - b3HighMemoryUsage
+                    - b3MemoryLeak
                     - b3ProcessRestarted
                     type: object
                 required:
@@ -811,8 +510,6 @@ properties:
             - auth
             - database
             - http
-            - license
-            - messaging
             - process
             - proxy
             - storage

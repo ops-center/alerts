@@ -52,8 +52,29 @@ properties:
                         - severity
                         - val
                         type: object
+                      b3HighAuthzDenialRate:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                          val:
+                            type: integer
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        - val
+                        type: object
                     required:
                     - b3HighAuthFailureRate
+                    - b3HighAuthzDenialRate
                     type: object
                 required:
                 - enabled
@@ -275,6 +296,26 @@ properties:
                         - severity
                         - val
                         type: object
+                      b3CpuSpike:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                          val:
+                            type: integer
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        - val
+                        type: object
                       b3GoroutineLeak:
                         properties:
                           duration:
@@ -290,6 +331,26 @@ properties:
                           val:
                             format: double
                             type: number
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        - val
+                        type: object
+                      b3GoroutineSpike:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                          val:
+                            type: integer
                         required:
                         - duration
                         - enabled
@@ -377,6 +438,26 @@ properties:
                         - severity
                         - val
                         type: object
+                      b3MemorySpike:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                          val:
+                            type: integer
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        - val
+                        type: object
                       b3ProcessRestarted:
                         properties:
                           duration:
@@ -396,11 +477,14 @@ properties:
                         type: object
                     required:
                     - b3CpuRunaway
+                    - b3CpuSpike
                     - b3GoroutineLeak
+                    - b3GoroutineSpike
                     - b3HighFileDescriptorUsage
                     - b3HighGcPauseDuration
                     - b3HighGoroutineCount
                     - b3MemoryLeak
+                    - b3MemorySpike
                     - b3ProcessRestarted
                     type: object
                 required:

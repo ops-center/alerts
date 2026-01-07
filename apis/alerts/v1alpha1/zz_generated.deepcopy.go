@@ -202,6 +202,7 @@ func (in *B3AuthAlert) DeepCopy() *B3AuthAlert {
 func (in *B3AuthAlertRules) DeepCopyInto(out *B3AuthAlertRules) {
 	*out = *in
 	out.B3HighAuthFailureRate = in.B3HighAuthFailureRate
+	out.B3HighAuthzDenialRate = in.B3HighAuthzDenialRate
 	return
 }
 
@@ -315,6 +316,9 @@ func (in *B3ProcessAlertRules) DeepCopyInto(out *B3ProcessAlertRules) {
 	out.B3MemoryLeak = in.B3MemoryLeak
 	out.B3CpuRunaway = in.B3CpuRunaway
 	out.B3GoroutineLeak = in.B3GoroutineLeak
+	out.B3MemorySpike = in.B3MemorySpike
+	out.B3CpuSpike = in.B3CpuSpike
+	out.B3GoroutineSpike = in.B3GoroutineSpike
 	return
 }
 

@@ -40,24 +40,40 @@ form:
             duration: "5m"
             severity: warning
             val: 80
-          # val: bytes/sec (291 ≈ 1MB/hour)
+          # val: bytes/sec (280 ≈ 1MB/hour)
           b3MemoryLeak:
             enabled: true
-            duration: "2h"
+            duration: "3h"
             severity: warning
-            val: 291
-          # val: cores/sec (0.0001 ≈ 0.36 cores/hour)
+            val: 280
+          # val: cores/sec (0.00008 ≈ 0.29 cores/hour)
           b3CpuRunaway:
             enabled: true
-            duration: "2h"
+            duration: "4h"
             severity: warning
-            val: 0.0001
-          # val: goroutines/sec (0.1 ≈ 360/hour)
+            val: 0.00008
+          # val: goroutines/sec (0.03 ≈ 100/hour)
           b3GoroutineLeak:
             enabled: true
-            duration: "2h"
+            duration: "3h"
             severity: warning
-            val: 0.1
+            val: 0.03
+          # Spike detection (short-term anomalies)
+          b3MemorySpike:
+            enabled: true
+            duration: "0m"
+            severity: info
+            val: 524288000  # 500MB increase in 10m
+          b3CpuSpike:
+            enabled: true
+            duration: "5m"
+            severity: info
+            val: 2  # 2 cores sustained
+          b3GoroutineSpike:
+            enabled: true
+            duration: "0m"
+            severity: info
+            val: 5000  # 5000 goroutine increase in 10m
 
       http:
         enabled: warning
@@ -106,6 +122,11 @@ form:
         enabled: warning
         rules:
           b3HighAuthFailureRate:
+            enabled: true
+            duration: "5m"
+            severity: warning
+            val: 10
+          b3HighAuthzDenialRate:
             enabled: true
             duration: "5m"
             severity: warning

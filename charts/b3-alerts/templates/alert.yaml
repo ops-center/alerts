@@ -71,7 +71,7 @@ spec:
 {{- end }}
 {{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3MemoryLeak.enabled .rules.b3MemoryLeak.severity)) }}
     - alert: B3MemoryLeak
-      expr: deriv(process_resident_memory_bytes{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[1h]) > {{ .rules.b3MemoryLeak.val }}
+      expr: deriv(process_resident_memory_bytes{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[2h]) > {{ .rules.b3MemoryLeak.val }}
       for: {{ .rules.b3MemoryLeak.duration }}
       labels:
         severity: {{ .rules.b3MemoryLeak.severity }}
@@ -82,7 +82,7 @@ spec:
 {{- end }}
 {{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3CpuRunaway.enabled .rules.b3CpuRunaway.severity)) }}
     - alert: B3CpuRunaway
-      expr: deriv(rate(process_cpu_seconds_total{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m])[1h:1m]) > {{ .rules.b3CpuRunaway.val }}
+      expr: deriv(rate(process_cpu_seconds_total{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m])[2h:1m]) > {{ .rules.b3CpuRunaway.val }}
       for: {{ .rules.b3CpuRunaway.duration }}
       labels:
         severity: {{ .rules.b3CpuRunaway.severity }}
@@ -93,7 +93,7 @@ spec:
 {{- end }}
 {{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3GoroutineLeak.enabled .rules.b3GoroutineLeak.severity)) }}
     - alert: B3GoroutineLeak
-      expr: deriv(go_goroutines{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[1h]) > {{ .rules.b3GoroutineLeak.val }}
+      expr: deriv(go_goroutines{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[2h]) > {{ .rules.b3GoroutineLeak.val }}
       for: {{ .rules.b3GoroutineLeak.duration }}
       labels:
         severity: {{ .rules.b3GoroutineLeak.severity }}
@@ -101,6 +101,39 @@ spec:
       annotations:
         summary: "B3 possible goroutine leak (instance {{`{{`}} $labels.pod {{`}}`}})"
         description: "B3 pod {{`{{`}} $labels.pod {{`}}`}} goroutine count has been steadily increasing at {{`{{`}} $value | printf \"%.2f\" {{`}}`}} goroutines/sec for over {{ .rules.b3GoroutineLeak.duration }}. Possible goroutine leak.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+{{- end }}
+{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3MemorySpike.enabled .rules.b3MemorySpike.severity)) }}
+    - alert: B3MemorySpike
+      expr: increase(process_resident_memory_bytes{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[10m]) > {{ .rules.b3MemorySpike.val }}
+      for: {{ .rules.b3MemorySpike.duration }}
+      labels:
+        severity: {{ .rules.b3MemorySpike.severity }}
+        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: "B3 memory spike (instance {{`{{`}} $labels.pod {{`}}`}})"
+        description: "B3 pod {{`{{`}} $labels.pod {{`}}`}} memory increased by {{`{{`}} $value | humanize {{`}}`}}B in the last 10 minutes.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+{{- end }}
+{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3CpuSpike.enabled .rules.b3CpuSpike.severity)) }}
+    - alert: B3CpuSpike
+      expr: rate(process_cpu_seconds_total{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m]) > {{ .rules.b3CpuSpike.val }}
+      for: {{ .rules.b3CpuSpike.duration }}
+      labels:
+        severity: {{ .rules.b3CpuSpike.severity }}
+        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: "B3 CPU spike (instance {{`{{`}} $labels.pod {{`}}`}})"
+        description: "B3 pod {{`{{`}} $labels.pod {{`}}`}} is using {{`{{`}} $value | printf \"%.2f\" {{`}}`}} CPU cores, exceeding {{ .rules.b3CpuSpike.val }} threshold.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+{{- end }}
+{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3GoroutineSpike.enabled .rules.b3GoroutineSpike.severity)) }}
+    - alert: B3GoroutineSpike
+      expr: increase(go_goroutines{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[10m]) > {{ .rules.b3GoroutineSpike.val }}
+      for: {{ .rules.b3GoroutineSpike.duration }}
+      labels:
+        severity: {{ .rules.b3GoroutineSpike.severity }}
+        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: "B3 goroutine spike (instance {{`{{`}} $labels.pod {{`}}`}})"
+        description: "B3 pod {{`{{`}} $labels.pod {{`}}`}} goroutine count increased by {{`{{`}} $value | printf \"%.0f\" {{`}}`}} in the last 10 minutes.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
 {{- end }}
 {{- end }}
 {{- end }}
@@ -239,6 +272,22 @@ spec:
       annotations:
         summary: "B3 high authentication failure rate"
         description: "B3 authentication failure rate is {{`{{`}} $value | printf \"%.2f\" {{`}}`}}%, exceeding {{ .rules.b3HighAuthFailureRate.val }}% threshold.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+{{- end }}
+{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3HighAuthzDenialRate.enabled .rules.b3HighAuthzDenialRate.severity)) }}
+    - alert: B3HighAuthzDenialRate
+      expr: |
+        (
+          sum(rate(b3_authz_check_denied_count{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m]))
+          /
+          sum(rate(b3_authz_check_count{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m]))
+        ) * 100 > {{ .rules.b3HighAuthzDenialRate.val }}
+      for: {{ .rules.b3HighAuthzDenialRate.duration }}
+      labels:
+        severity: {{ .rules.b3HighAuthzDenialRate.severity }}
+        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: "B3 high authorization denial rate"
+        description: "B3 authorization denial rate is {{`{{`}} $value | printf \"%.2f\" {{`}}`}}%, exceeding {{ .rules.b3HighAuthzDenialRate.val }}% threshold.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
 {{- end }}
 {{- end }}
 {{- end }}

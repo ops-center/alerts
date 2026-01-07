@@ -84,6 +84,9 @@ type B3ProcessAlertRules struct {
 	B3MemoryLeak              IntValAlert         `json:"b3MemoryLeak"`
 	B3CpuRunaway              FloatValAlertConfig `json:"b3CpuRunaway"`
 	B3GoroutineLeak           FloatValAlertConfig `json:"b3GoroutineLeak"`
+	B3MemorySpike             IntValAlert         `json:"b3MemorySpike"`
+	B3CpuSpike                IntValAlert         `json:"b3CpuSpike"`
+	B3GoroutineSpike          IntValAlert         `json:"b3GoroutineSpike"`
 }
 
 // HTTP Server alerts
@@ -119,6 +122,7 @@ type B3AuthAlert struct {
 
 type B3AuthAlertRules struct {
 	B3HighAuthFailureRate IntValAlert `json:"b3HighAuthFailureRate"`
+	B3HighAuthzDenialRate IntValAlert `json:"b3HighAuthzDenialRate"`
 }
 
 // Storage/BlobFS alerts

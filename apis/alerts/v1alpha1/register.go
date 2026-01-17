@@ -88,6 +88,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&PostgresAlertsList{},
 		&ProxysqlAlerts{},
 		&ProxysqlAlertsList{},
+		&QdrantAlerts{},
+		&QdrantAlertsList{},
 		&RabbitmqAlerts{},
 		&RabbitmqAlertsList{},
 		&RedisAlerts{},

@@ -1,0 +1,13 @@
+apiVersion: v2
+name: b3-alerts
+description: A Helm chart for B3 Platform Alert Rules
+type: application
+version: v2025.6.30
+appVersion: v1.0.0
+home: https://github.com/bytebuilders/b3
+icon: https://byte.builders/assets/images/product/b3.png
+sources:
+- https://github.com/bytebuilders/b3
+maintainers:
+- name: ops-center
+  email: support@ops-center.dev

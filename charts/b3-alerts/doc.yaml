@@ -1,0 +1,20 @@
+project:
+  name: B3 alerts by AppsCode
+  shortName: B3 alerts
+  url: https://github.com/appscode/alerts
+  description: B3 platform alerts for monitoring CPU, memory, HTTP, database, messaging, and more
+  app: B3 alerts
+repository:
+  url: oci://ghcr.io/appscode-charts
+  name: appscode
+chart:
+  name: b3-alerts
+  values: -- generate from values file --
+  valuesExample: -- generate from values file --
+prerequisites:
+- Kubernetes 1.21+
+- Prometheus operator
+- kube-state-metrics (for CPU/memory limit-based alerts)
+release:
+  name: b3-alerts
+  namespace: monitoring

@@ -100,6 +100,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&VaultserverAlertsList{},
 		&NATSAlerts{},
 		&NATSAlertsList{},
+		&B3Alerts{},
+		&B3AlertsList{},
 	)
 
 	scheme.AddKnownTypes(SchemeGroupVersion,

@@ -1,0 +1,736 @@
+{{- if .Values.grafana.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "neo4j-alerts.fullname" .}}-configmap
+  labels:
+    {{- include "neo4j-alerts.labels" . | nindent 4 }}
+data:
+  grafana-json.json: |-
+    {
+      "dashboard": {
+        "__inputs": [],
+        "__requires": [
+          {
+            "type": "grafana",
+            "id": "grafana",
+            "name": "Grafana",
+            "version": "{{ .Values.grafana.version }}"
+          },
+          {
+            "type": "panel",
+            "id": "graph",
+            "name": "Graph (old)",
+            "version": ""
+          }
+        ],
+        "annotations": {
+          "list": [
+            {
+              "builtIn": 1,
+              "datasource": "-- Grafana --",
+              "enable": true,
+              "hide": true,
+              "iconColor": "rgba(0, 211, 255, 1)",
+              "name": "Annotations & Alerts",
+              "type": "dashboard"
+            }
+          ]
+        },
+        "editable": true,
+        "gnetId": null,
+        "graphTooltip": 0,
+        "id": null,
+        "links": [],
+        "panels": [
+          {
+            "collapsed": false,
+            "datasource": null,
+            "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+            "id": 28,
+            "panels": [],
+            "title": "Neo4j Phase & Availability",
+            "type": "row"
+          },
+
+          {
+            "alert": {
+              "conditions": [
+                {
+                  "evaluator": { "params": [0], "type": "gt" },
+                  "operator": { "type": "and" },
+                  "query": { "params": ["A", "1h", "now"] },
+                  "reducer": { "params": [], "type": "last" },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "1m",
+              "frequency": "10s",
+              "handler": 1,
+              "name": "Neo4j Down alert",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": { "type": "prometheus", "uid": "prometheus" },
+            "fill": 1,
+            "gridPos": { "h": 8, "w": 12, "x": 0, "y": 1 },
+            "id": 14,
+            "legend": { "avg": false, "current": false, "max": false, "min": false, "show": true, "total": false, "values": false },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": { "alertThreshold": true },
+            "percentage": false,
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "kubedb_com_neo4j_status_phase{app=\"{{ .Release.Name }}\", namespace=\"{{ .Release.Namespace }}\", phase=\"NotReady\"} >= 1",
+                "interval": "",
+                "legendFormat": "NotReady",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              { "colorMode": "critical", "fill": true, "line": true, "op": "gt", "value": 0, "visible": true }
+            ],
+            "title": "Neo4j Down (NotReady)",
+            "tooltip": { "shared": true, "sort": 0, "value_type": "individual" },
+            "type": "graph",
+            "xaxis": { "buckets": null, "mode": "time", "name": null, "show": true, "values": [] },
+            "yaxes": [
+              { "format": "short", "logBase": 1, "show": true },
+              { "format": "short", "logBase": 1, "show": true }
+            ]
+          },
+          {
+            "alert": {
+              "conditions": [
+                {
+                  "evaluator": { "params": [0], "type": "gt" },
+                  "operator": { "type": "and" },
+                  "query": { "params": ["A", "1h", "now"] },
+                  "reducer": { "params": [], "type": "last" },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "1m",
+              "frequency": "10s",
+              "handler": 1,
+              "name": "Neo4jPhaseCritical",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": { "type": "prometheus", "uid": "prometheus" },
+            "fill": 1,
+            "gridPos": { "h": 8, "w": 12, "x": 12, "y": 1 },
+            "id": 2,
+            "legend": { "avg": false, "current": false, "max": false, "min": false, "show": true, "total": false, "values": false },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": { "alertThreshold": true },
+            "percentage": false,
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "kubedb_com_neo4j_status_phase{app=\"{{ .Release.Name }}\", namespace=\"{{ .Release.Namespace }}\", phase=\"Critical\"} >= 1",
+                "interval": "",
+                "legendFormat": "Critical",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              { "colorMode": "critical", "fill": true, "line": true, "op": "gt", "value": 0, "visible": true }
+            ],
+            "title": "Neo4j Critical Phase",
+            "tooltip": { "shared": true, "sort": 0, "value_type": "individual" },
+            "type": "graph",
+            "xaxis": { "buckets": null, "mode": "time", "name": null, "show": true, "values": [] },
+            "yaxes": [
+              { "format": "short", "logBase": 1, "show": true },
+              { "format": "short", "logBase": 1, "show": true }
+            ]
+          },
+
+          {
+            "collapsed": false,
+            "datasource": null,
+            "gridPos": { "h": 1, "w": 24, "x": 0, "y": 9 },
+            "id": 100,
+            "panels": [],
+            "title": "Neo4j Resource Usage & Restarts",
+            "type": "row"
+          },
+          {
+            "alert": {
+              "conditions": [
+                {
+                  "evaluator": { "params": [180], "type": "lt" },
+                  "operator": { "type": "and" },
+                  "query": { "params": ["A", "5m", "now"] },
+                  "reducer": { "params": [], "type": "last" },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Neo4j Restarted Alert",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": { "type": "prometheus", "uid": "prometheus" },
+            "fill": 1,
+            "gridPos": { "h": 8, "w": 12, "x": 0, "y": 10 },
+            "id": 36,
+            "legend": { "avg": false, "current": false, "max": false, "min": false, "show": true, "total": false, "values": false },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": { "alertThreshold": true },
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "renderer": "flot",
+            "targets": [
+              {
+                "expr": "time() - min(kube_pod_start_time{namespace=\"{{ .Release.Namespace }}\", pod=~\"{{ .Release.Name }}-.*\"})",
+                "legendFormat": "Uptime",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              { "colorMode": "critical", "fill": true, "line": true, "op": "lt", "value": 180, "visible": true }
+            ],
+            "title": "Neo4j Pod Uptime (Restarted if <3min)",
+            "type": "graph"
+          },
+          {
+            "alert": {
+              "conditions": [
+                {
+                  "evaluator": { "params": [80], "type": "gt" },
+                  "operator": { "type": "and" },
+                  "query": { "params": ["A", "5m", "now"] },
+                  "reducer": { "params": [], "type": "avg" },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Neo4j High CPU Usage alert",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": { "type": "prometheus", "uid": "prometheus" },
+            "fill": 1,
+            "gridPos": { "h": 8, "w": 12, "x": 12, "y": 10 },
+            "id": 40,
+            "legend": { "avg": false, "current": false, "max": false, "min": false, "show": true, "total": false, "values": false },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": { "alertThreshold": true },
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "renderer": "flot",
+            "targets": [
+              {
+                "expr": "100 * sum by (pod) (irate(container_cpu_usage_seconds_total{namespace=\"{{ .Release.Namespace }}\", pod=~\"{{ .Release.Name }}-.*\"}[5m])) / sum by (pod) (kube_pod_container_resource_limits{namespace=\"{{ .Release.Namespace }}\", pod=~\"{{ .Release.Name }}-.*\", resource=\"cpu\"})",
+                "legendFormat": {{ `"{{pod}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              { "colorMode": "critical", "fill": true, "line": true, "op": "gt", "value": 80, "visible": true }
+            ],
+            "title": "Neo4j High CPU Usage (%)",
+            "type": "graph"
+          },
+          {
+            "alert": {
+              "conditions": [
+                {
+                  "evaluator": { "params": [80], "type": "gt" },
+                  "operator": { "type": "and" },
+                  "query": { "params": ["A", "5m", "now"] },
+                  "reducer": { "params": [], "type": "avg" },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Neo4j High Memory Usage alert",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": { "type": "prometheus", "uid": "prometheus" },
+            "fill": 1,
+            "gridPos": { "h": 8, "w": 12, "x": 0, "y": 18 },
+            "id": 41,
+            "legend": { "avg": false, "current": false, "max": false, "min": false, "show": true, "total": false, "values": false },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": { "alertThreshold": true },
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "renderer": "flot",
+            "targets": [
+              {
+                "expr": "100 * sum by (pod) (container_memory_working_set_bytes{namespace=\"{{ .Release.Namespace }}\", pod=~\"{{ .Release.Name }}-.*\"}) / sum by (pod) (kube_pod_container_resource_limits{namespace=\"{{ .Release.Namespace }}\", pod=~\"{{ .Release.Name }}-.*\", resource=\"memory\"})",
+                "legendFormat": {{ `"{{pod}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              { "colorMode": "critical", "fill": true, "line": true, "op": "gt", "value": 80, "visible": true }
+            ],
+            "title": "Neo4j High Memory Usage (%)",
+            "type": "graph"
+          },
+          {
+            "alert": {
+              "conditions": [
+                {
+                  "evaluator": { "params": [80], "type": "gt" },
+                  "operator": { "type": "and" },
+                  "query": { "params": ["A", "5m", "now"] },
+                  "reducer": { "params": [], "type": "avg" },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Persistent Disk Usage High",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": { "type": "prometheus", "uid": "prometheus" },
+            "fill": 1,
+            "gridPos": { "h": 8, "w": 12, "x": 12, "y": 18 },
+            "id": 42,
+            "legend": { "avg": false, "current": false, "max": false, "min": false, "show": true, "total": false, "values": false },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": { "alertThreshold": true },
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "renderer": "flot",
+            "targets": [
+              {
+                "expr": "100 * (kubelet_volume_stats_used_bytes{namespace=\"{{ .Release.Namespace }}\"} / on(persistentvolumeclaim) group_left() (kubelet_volume_stats_capacity_bytes{namespace=\"{{ .Release.Namespace }}\"}))",
+                "legendFormat": "{{`"persistentvolumeclaim"`}}",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              { "colorMode": "critical", "fill": true, "line": true, "op": "gt", "value": 80, "visible": true }
+            ],
+            "title": "Persistent Disk Usage High (%)",
+            "type": "graph"
+          },
+
+          {
+            "collapsed": false,
+            "datasource": null,
+            "gridPos": { "h": 1, "w": 24, "x": 0, "y": 26 },
+            "id": 200,
+            "panels": [],
+            "title": "Neo4j Page Cache & Transaction Health",
+            "type": "row"
+          },
+          {
+            "alert": {
+              "conditions": [
+                {
+                  "evaluator": { "params": [80], "type": "gt" },
+                  "operator": { "type": "and" },
+                  "query": { "params": ["A", "5m", "now"] },
+                  "reducer": { "params": [], "type": "last" },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Neo4j Page Cache Usage Ratio High",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": { "type": "prometheus", "uid": "prometheus" },
+            "fill": 1,
+            "gridPos": { "h": 8, "w": 12, "x": 0, "y": 27 },
+            "id": 50,
+            "legend": { "show": true },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": { "alertThreshold": true },
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "renderer": "flot",
+            "targets": [
+              {
+                "expr": "100 * neo4j_dbms_page_cache_usage_ratio{namespace=\"{{ .Release.Namespace }}\", job=~\"{{ .Release.Name }}.*\"}",
+                "legendFormat": "{{`"instance"`}}",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              { "colorMode": "critical", "fill": true, "line": true, "op": "gt", "value": 80, "visible": true }
+            ],
+            "title": "Page Cache Usage Ratio High (%)",
+            "type": "graph"
+          },
+          {
+            "alert": {
+              "conditions": [
+                {
+                  "evaluator": { "params": [98], "type": "lt" },
+                  "operator": { "type": "and" },
+                  "query": { "params": ["A", "5m", "now"] },
+                  "reducer": { "params": [], "type": "last" },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Neo4j Page Cache Hit Ratio Low",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": { "type": "prometheus", "uid": "prometheus" },
+            "fill": 1,
+            "gridPos": { "h": 8, "w": 12, "x": 12, "y": 27 },
+            "id": 51,
+            "legend": { "show": true },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": { "alertThreshold": true },
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "renderer": "flot",
+            "targets": [
+              {
+                "expr": "100 * neo4j_dbms_page_cache_hit_ratio{namespace=\"{{ .Release.Namespace }}\", job=~\"{{ .Release.Name }}.*\"}",
+                "legendFormat": "{{`"instance"`}}",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              { "colorMode": "critical", "fill": true, "line": true, "op": "lt", "value": 98, "visible": true }
+            ],
+            "title": "Page Cache Hit Ratio Low (%)",
+            "type": "graph"
+          },
+          {
+            "alert": {
+              "conditions": [
+                {
+                  "evaluator": { "params": [100], "type": "gt" },
+                  "operator": { "type": "and" },
+                  "query": { "params": ["A", "5m", "now"] },
+                  "reducer": { "params": [], "type": "increase" },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Neo4j Page Faults High",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": { "type": "prometheus", "uid": "prometheus" },
+            "fill": 1,
+            "gridPos": { "h": 8, "w": 12, "x": 0, "y": 35 },
+            "id": 52,
+            "legend": { "show": true },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": { "alertThreshold": true },
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "renderer": "flot",
+            "targets": [
+              {
+                "expr": "increase(neo4j_dbms_page_cache_page_faults_total{namespace=\"{{ .Release.Namespace }}\", job=~\"{{ .Release.Name }}.*\"}[5m])",
+                "legendFormat": "{{`"instance"`}}",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              { "colorMode": "critical", "fill": true, "line": true, "op": "gt", "value": 100, "visible": true }
+            ],
+            "title": "Page Faults High (5m increase)",
+            "type": "graph"
+          },
+          {
+            "alert": {
+              "conditions": [
+                {
+                  "evaluator": { "params": [50], "type": "gt" },
+                  "operator": { "type": "and" },
+                  "query": { "params": ["A", "5m", "now"] },
+                  "reducer": { "params": [], "type": "increase" },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Neo4j Page Evictions High",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": { "type": "prometheus", "uid": "prometheus" },
+            "fill": 1,
+            "gridPos": { "h": 8, "w": 12, "x": 12, "y": 35 },
+            "id": 53,
+            "legend": { "show": true },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": { "alertThreshold": true },
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "renderer": "flot",
+            "targets": [
+              {
+                "expr": "increase(neo4j_dbms_page_cache_evictions_total{namespace=\"{{ .Release.Namespace }}\", job=~\"{{ .Release.Name }}.*\"}[5m])",
+                "legendFormat": "{{`"instance"`}}",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              { "colorMode": "critical", "fill": true, "line": true, "op": "gt", "value": 50, "visible": true }
+            ],
+            "title": "Page Evictions High (5m increase)",
+            "type": "graph"
+          },
+          {
+            "alert": {
+              "conditions": [
+                {
+                  "evaluator": { "params": [30], "type": "gt" },
+                  "operator": { "type": "and" },
+                  "query": { "params": ["A", "5m", "now"] },
+                  "reducer": { "params": [], "type": "increase" },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Neo4j Cooperative Evictions High",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": { "type": "prometheus", "uid": "prometheus" },
+            "fill": 1,
+            "gridPos": { "h": 8, "w": 12, "x": 0, "y": 43 },
+            "id": 54,
+            "legend": { "show": true },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": { "alertThreshold": true },
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "renderer": "flot",
+            "targets": [
+              {
+                "expr": "increase(neo4j_dbms_page_cache_evictions_cooperative_total{namespace=\"{{ .Release.Namespace }}\", job=~\"{{ .Release.Name }}.*\"}[5m])",
+                "legendFormat": "{{`"instance"`}}",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              { "colorMode": "critical", "fill": true, "line": true, "op": "gt", "value": 30, "visible": true }
+            ],
+            "title": "Cooperative Evictions High (5m increase)",
+            "type": "graph"
+          },
+          {
+            "alert": {
+              "conditions": [
+                {
+                  "evaluator": { "params": [1], "type": "gt" },
+                  "operator": { "type": "and" },
+                  "query": { "params": ["A", "5m", "now"] },
+                  "reducer": { "params": [], "type": "increase" },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Neo4j Page Fault Failures High",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": { "type": "prometheus", "uid": "prometheus" },
+            "fill": 1,
+            "gridPos": { "h": 8, "w": 12, "x": 12, "y": 43 },
+            "id": 55,
+            "legend": { "show": true },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": { "alertThreshold": true },
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "renderer": "flot",
+            "targets": [
+              {
+                "expr": "increase(neo4j_dbms_page_cache_page_fault_failures_total{namespace=\"{{ .Release.Namespace }}\", job=~\"{{ .Release.Name }}.*\"}[5m])",
+                "legendFormat": "{{`"instance"`}}",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              { "colorMode": "critical", "fill": true, "line": true, "op": "gt", "value": 1, "visible": true }
+            ],
+            "title": "Page Fault Failures High (critical)",
+            "type": "graph"
+          },
+          {
+            "alert": {
+              "conditions": [
+                {
+                  "evaluator": { "params": [10], "type": "gt" },
+                  "operator": { "type": "and" },
+                  "query": { "params": ["A", "5m", "now"] },
+                  "reducer": { "params": [], "type": "sum" },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Neo4j Transaction Failures High",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": { "type": "prometheus", "uid": "prometheus" },
+            "fill": 1,
+            "gridPos": { "h": 8, "w": 12, "x": 0, "y": 51 },
+            "id": 43,
+            "legend": { "show": true },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": { "alertThreshold": true },
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "renderer": "flot",
+            "targets": [
+              {
+                "expr": "increase(neo4j_dbms_transactions_failed_total{namespace=\"{{ .Release.Namespace }}\", job=~\"{{ .Release.Name }}-.*\"}[5m])",
+                "legendFormat": "{{`"instance"`}}",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              { "colorMode": "critical", "fill": true, "line": true, "op": "gt", "value": 10, "visible": true }
+            ],
+            "title": "Neo4j Transaction Failures High",
+            "type": "graph"
+          }
+        ],
+        "refresh": "30s",
+        "schemaVersion": 36,
+        "style": "dark",
+        "tags": ["neo4j", "kubedb"],
+        "templating": { "list": [] },
+        "time": { "from": "now-30m", "to": "now" },
+        "timepicker": {},
+        "timezone": "",
+        "title": "Neo4j - {{ .Release.Namespace }} / {{ .Release.Name }}",
+        "uid": "neo4j-{{ .Release.Name }}",
+        "version": 1
+      },
+      "folderId": 0,
+      "overwrite": true
+    }
+  {{- end }}

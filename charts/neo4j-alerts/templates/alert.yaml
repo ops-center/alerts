@@ -21,51 +21,6 @@ spec:
     {{- if (include "neo4j-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) }}
     - name: neo4j.database.{{ $.Release.Namespace }}.{{ $app }}.rules
       rules:
-        {{- if (include "neo4j-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.neo4jDown.enabled .rules.neo4jDown.severity)) }}
-        - alert: Neo4jDown
-          expr: kubedb_com_neo4j_status_phase{app="{{ $app }}", namespace="{{ $.Release.Namespace }}",phase="NotReady"} >= 1
-          for: {{ .rules.neo4jDown.duration }}
-          labels:
-            severity: {{ .rules.neo4jDown.severity }}
-            {{- include "neo4j-alerts.alertLabels" $ | nindent 12 }}
-          annotations:
-            summary: Neo4j database is in NotReady state (instance {{`{{`}} $labels.instance {{`}}`}})
-            description: |
-              Database in NotReady state, database read/write is failing.
-              VALUE = {{`{{`}} $value {{`}}`}}
-              LABELS = {{`{{`}} $labels {{`}}`}}
-        {{- end }}
-
-        {{- if (include "neo4j-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.neo4jPhaseCritical.enabled .rules.neo4jPhaseCritical.severity)) }}
-        - alert: Neo4jPhaseCritical
-          expr: kubedb_com_neo4j_status_phase{app="{{ $app }}", namespace="{{ $.Release.Namespace }}",phase="Critical"} >= 1
-          for: {{ .rules.neo4jPhaseCritical.duration }}
-          labels:
-            severity: {{ .rules.neo4jPhaseCritical.severity }}
-            {{- include "neo4j-alerts.alertLabels" $ | nindent 12 }}
-          annotations:
-            summary: Neo4j database is in Critical state (instance {{`{{`}} $labels.instance {{`}}`}})
-            description: |
-              Database in Critical state, one or more database nodes are not working properly.
-              VALUE = {{`{{`}} $value {{`}}`}}
-              LABELS = {{`{{`}} $labels {{`}}`}}
-        {{- end }}
-
-        {{- if (include "neo4j-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.neo4jRestarted.enabled .rules.neo4jRestarted.severity)) }}
-        - alert: Neo4jRestarted
-          expr: increase(kube_pod_container_status_restarts_total{pod=~"{{ $.Release.Name }}-.+$",namespace=~"{{ $.Release.Namespace }}"}[5m]) > {{ .rules.neo4jRestarted.val }}
-          for: {{ .rules.neo4jRestarted.duration }}
-          labels:
-            severity: {{ .rules.neo4jRestarted.severity }}
-            {{- include "neo4j-alerts.alertLabels" $ | nindent 12 }}
-          annotations:
-            summary: Neo4j pod restarted (instance {{`{{`}} $labels.instance {{`}}`}})
-            description: |
-              Pod restarts detected.
-              VALUE = {{`{{`}} $value {{`}}`}}
-              LABELS = {{`{{`}} $labels {{`}}`}}
-        {{- end }}
-
         {{- if (include "neo4j-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.neo4jHighCPUUsage.enabled .rules.neo4jHighCPUUsage.severity)) }}
         - alert: Neo4jHighCPUUsage
           expr: avg(irate(container_cpu_usage_seconds_total{container!="",pod=~"{{ $.Release.Name }}-.+$",namespace=~"{{ $.Release.Namespace }}"}[5m])) by (pod) * 100 > {{ .rules.neo4jHighCPUUsage.val }}
@@ -98,7 +53,7 @@ spec:
 
         {{- if (include "neo4j-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.neo4jPageCacheUsageRatioHigh.enabled .rules.neo4jPageCacheUsageRatioHigh.severity)) }}
         - alert: Neo4jPageCacheUsageRatioHigh
-          expr: neo4j_dbms_page_cache_usage_ratio{instance=~"{{ $.Release.Name }}.*",namespace="{{ $.Release.Namespace }}"} > {{ .rules.neo4jPageCacheUsageRatioHigh.val }}
+          expr: neo4j_dbms_page_cache_usage_ratio{container=~"{{ $.Release.Name }}.*",namespace="{{ $.Release.Namespace }}"} > {{ .rules.neo4jPageCacheUsageRatioHigh.val }}
           for: {{ .rules.neo4jPageCacheUsageRatioHigh.duration }}
           labels:
             severity: {{ .rules.neo4jPageCacheUsageRatioHigh.severity }}
@@ -115,7 +70,7 @@ spec:
 
         {{- if (include "neo4j-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.neo4jPageCacheHitRatioLow.enabled .rules.neo4jPageCacheHitRatioLow.severity)) }}
         - alert: Neo4jPageCacheHitRatioLow
-          expr: neo4j_dbms_page_cache_hit_ratio{instance=~"{{ $.Release.Name }}.*",namespace="{{ $.Release.Namespace }}"} < {{ .rules.neo4jPageCacheHitRatioLow.val }}
+          expr: neo4j_dbms_page_cache_hit_ratio{container=~"{{ $.Release.Name }}.*",namespace="{{ $.Release.Namespace }}"} < {{ .rules.neo4jPageCacheHitRatioLow.val }}
           for: {{ .rules.neo4jPageCacheHitRatioLow.duration }}
           labels:
             severity: {{ .rules.neo4jPageCacheHitRatioLow.severity }}
@@ -132,7 +87,7 @@ spec:
 
         {{- if (include "neo4j-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.neo4jPageFaultsHigh.enabled .rules.neo4jPageFaultsHigh.severity)) }}
         - alert: Neo4jPageFaultsHigh
-          expr: increase(neo4j_dbms_page_cache_page_faults_total{instance=~"{{ $.Release.Name }}.*",namespace="{{ $.Release.Namespace }}"}[5m]) > {{ .rules.neo4jPageFaultsHigh.val }}
+          expr: increase(neo4j_dbms_page_cache_page_faults_total{container=~"{{ $.Release.Name }}.*",namespace="{{ $.Release.Namespace }}"}[5m]) > {{ .rules.neo4jPageFaultsHigh.val }}
           for: {{ .rules.neo4jPageFaultsHigh.duration }}
           labels:
             severity: {{ .rules.neo4jPageFaultsHigh.severity }}
@@ -147,43 +102,9 @@ spec:
               LABELS = {{`{{`}} $labels {{`}}`}}
         {{- end }}
 
-        {{- if (include "neo4j-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.neo4jPageEvictionsHigh.enabled .rules.neo4jPageEvictionsHigh.severity)) }}
-        - alert: Neo4jPageEvictionsHigh
-          expr: increase(neo4j_dbms_page_cache_evictions_total{instance=~"{{ $.Release.Name }}.*",namespace="{{ $.Release.Namespace }}"}[5m]) > {{ .rules.neo4jPageEvictionsHigh.val }}
-          for: {{ .rules.neo4jPageEvictionsHigh.duration }}
-          labels:
-            severity: {{ .rules.neo4jPageEvictionsHigh.severity }}
-            {{- include "neo4j-alerts.alertLabels" $ | nindent 12 }}
-          annotations:
-            summary: Neo4j page evictions are high (instance {{`{{`}} $labels.instance {{`}}`}})
-            description: |
-              Page evictions in the last 5 minutes: {{`{{`}} $value {{`}}`}}.
-              High evictions indicate that the page cache is under pressure.
-              Consider allocating more RAM to page cache.
-              VALUE = {{`{{`}} $value {{`}}`}}
-              LABELS = {{`{{`}} $labels {{`}}`}}
-        {{- end }}
-
-        {{- if (include "neo4j-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.neo4jCooperativeEvictionsHigh.enabled .rules.neo4jCooperativeEvictionsHigh.severity)) }}
-        - alert: Neo4jCooperativeEvictionsHigh
-          expr: increase(neo4j_dbms_page_cache_evictions_cooperative_total{instance=~"{{ $.Release.Name }}.*",namespace="{{ $.Release.Namespace }}"}[5m]) > {{ .rules.neo4jCooperativeEvictionsHigh.val }}
-          for: {{ .rules.neo4jCooperativeEvictionsHigh.duration }}
-          labels:
-            severity: {{ .rules.neo4jCooperativeEvictionsHigh.severity }}
-            {{- include "neo4j-alerts.alertLabels" $ | nindent 12 }}
-          annotations:
-            summary: Neo4j cooperative page evictions are high (instance {{`{{`}} $labels.instance {{`}}`}})
-            description: |
-              Cooperative page evictions in the last 5 minutes: {{`{{`}} $value {{`}}`}}.
-              High cooperative evictions indicate low available pages in the cache.
-              The system is aggressively freeing memory. Consider allocating more RAM.
-              VALUE = {{`{{`}} $value {{`}}`}}
-              LABELS = {{`{{`}} $labels {{`}}`}}
-        {{- end }}
-
         {{- if (include "neo4j-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.neo4jPageFaultFailuresHigh.enabled .rules.neo4jPageFaultFailuresHigh.severity)) }}
         - alert: Neo4jPageFaultFailuresHigh
-          expr: increase(neo4j_dbms_page_cache_page_fault_failures{instance=~"{{ $.Release.Name }}.*",namespace="{{ $.Release.Namespace }}"}[5m]) > {{ .rules.neo4jPageFaultFailuresHigh.val }}
+          expr: increase(neo4j_dbms_page_cache_page_fault_failures_total{container=~"{{ $.Release.Name }}.*",namespace="{{ $.Release.Namespace }}"}[5m]) > {{ .rules.neo4jPageFaultFailuresHigh.val }}
           for: {{ .rules.neo4jPageFaultFailuresHigh.duration }}
           labels:
             severity: {{ .rules.neo4jPageFaultFailuresHigh.severity }}

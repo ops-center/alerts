@@ -69,14 +69,10 @@ type Neo4jDatabaseAlert struct {
 }
 
 type Neo4jDatabaseAlertRules struct {
-	Neo4jDown                     FixedAlert  `json:"neo4jDown"`
-	Neo4jPhaseCritical            FixedAlert  `json:"neo4jPhaseCritical"`
-	Neo4jRestarted                IntValAlert `json:"neo4jRestarted"`
 	Neo4jHighCPUUsage             IntValAlert `json:"neo4jHighCPUUsage"`
 	Neo4jHighMemoryUsage          IntValAlert `json:"neo4jHighMemoryUsage"`
 	Neo4jPageCacheUsageRatioHigh  IntValAlert `json:"neo4jPageCacheUsageRatioHigh"`
 	Neo4jPageCacheHitRatioLow     IntValAlert `json:"neo4jPageCacheHitRatioLow"`
-	Neo4jTransactionFailures      IntValAlert `json:"neo4jTransactionFailures"`
 	Neo4jPageFaultsHigh           IntValAlert `json:"neo4jPageFaultsHigh"`
 	Neo4jPageEvictionsHigh        IntValAlert `json:"neo4jPageEvictionsHigh"`
 	Neo4jCooperativeEvictionsHigh IntValAlert `json:"neo4jCooperativeEvictionsHigh"`

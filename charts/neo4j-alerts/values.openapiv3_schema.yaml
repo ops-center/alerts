@@ -91,23 +91,6 @@ properties:
                         - severity
                         - val
                         type: object
-                      neo4jDown:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        type: object
                       neo4jHighCPUUsage:
                         properties:
                           duration:
@@ -248,68 +231,10 @@ properties:
                         - severity
                         - val
                         type: object
-                      neo4jPhaseCritical:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        type: object
-                      neo4jRestarted:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      neo4jTransactionFailures:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
                     required:
                     - diskAlmostFull
                     - diskUsageHigh
                     - neo4jCooperativeEvictionsHigh
-                    - neo4jDown
                     - neo4jHighCPUUsage
                     - neo4jHighMemoryUsage
                     - neo4jPageCacheHitRatioLow
@@ -317,9 +242,6 @@ properties:
                     - neo4jPageEvictionsHigh
                     - neo4jPageFaultFailuresHigh
                     - neo4jPageFaultsHigh
-                    - neo4jPhaseCritical
-                    - neo4jRestarted
-                    - neo4jTransactionFailures
                     type: object
                 required:
                 - enabled

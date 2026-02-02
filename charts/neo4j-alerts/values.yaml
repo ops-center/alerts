@@ -30,23 +30,6 @@ form:
       database:
         enabled: warning
         rules:
-          # Database status alerts
-          neo4jDown:
-            enabled: true
-            duration: "30s"
-            severity: critical
-
-          neo4jPhaseCritical:
-            enabled: true
-            duration: "1m"
-            severity: warning
-
-          neo4jRestarted:
-            enabled: true
-            duration: "1m"
-            severity: warning
-            val: 0
-
           # Resource usage alerts
           neo4jHighCPUUsage:
             enabled: true
@@ -84,22 +67,6 @@ form:
             duration: "5m"
             severity: warning
             val: 5000
-
-          # evictions: The total number of page evictions executed by the page cache.
-          # High evictions indicate the page cache is under pressure.
-          neo4jPageEvictionsHigh:
-            enabled: true
-            duration: "5m"
-            severity: warning
-            val: 1000
-
-          # evictions.cooperative: Cooperative page evictions due to low available pages.
-          # High cooperative evictions indicate the system is aggressively freeing memory.
-          neo4jCooperativeEvictionsHigh:
-            enabled: true
-            duration: "5m"
-            severity: warning
-            val: 500
 
           # page_fault_failures: Failed page faults in the page cache.
           # This indicates potential disk I/O issues or corruption.
@@ -142,5 +109,4 @@ grafana:
   # URL of Grafana instance where the dashboard will be imported
   # Example: http://grafana.monitoring:3000
   url: ""
-  #Create API key in Grafana with 'Admin' role and provide the key here
   apikey: ""

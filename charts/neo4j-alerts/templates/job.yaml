@@ -15,7 +15,7 @@ spec:
             name: {{ include "neo4j-alerts.fullname" . }}-configmap
       containers:
           - name: post-json-container
-            image: ghcr.io/fr-sarker/curlimages
+            image: curlimages/curl:latest
             command: ["curl"]
             args:
               - "-X"

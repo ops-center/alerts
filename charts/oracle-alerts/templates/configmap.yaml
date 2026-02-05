@@ -707,7 +707,7 @@ data:
             "targets": [
               {
                 "exemplar": true,
-                "expr": "min by (service) (mssql_uptime_seconds{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"})",
+                "expr": "min by (service) (oracledb_uptime_uptime_seconds{job=\"{{ .Values.grafana.jobName }}\",namespace=\"{{ .Release.Namespace }}\",service=\"{{ .Release.Name }}-stats\"})",
                 "interval": "",
                 "legendFormat": "",
                 "refId": "A"

@@ -3581,7 +3581,7 @@ func (in *OracleDatabaseAlert) DeepCopy() *OracleDatabaseAlert {
 func (in *OracleDatabaseAlertRules) DeepCopyInto(out *OracleDatabaseAlertRules) {
 	*out = *in
 	out.OracleInstanceDown = in.OracleInstanceDown
-	out.MSSSQLServerServiceDown = in.MSSSQLServerServiceDown
+	out.OracleServiceDown = in.OracleServiceDown
 	out.OracleRestarted = in.OracleRestarted
 	out.OracleTooManyConnections = in.OracleTooManyConnections
 	out.DiskUsageHigh = in.DiskUsageHigh

@@ -1,0 +1,93 @@
+metadata:
+  resource:
+    group: kubedb.com
+    kind: Oracle
+    name: oracles
+    scope: Namespaced
+    version: v1alpha2
+  release:
+    # Release name
+    name: "oracle"
+    # Release namespace
+    namespace: "exporter"
+
+form:
+  alert:
+    ## Enable PrometheusRule alerts
+    enabled: warning
+
+    ## Labels for default rules
+    labels: # +doc-gen:break
+      release: prometheus
+
+    ## Annotations for default rules
+    annotations: {}
+
+    ## Additional labels for PrometheusRule alerts
+    additionalRuleLabels: {}
+
+    ## Prefix for runbook URLs. Use this to override the first part of the runbookURLs that is common to all rules.
+    # runbookUrl: "https://runbooks.prometheus-operator.dev/runbooks"
+
+    groups:
+      database:
+        enabled: warning
+        rules:
+          oracleInstanceDown:
+            enabled: true
+            duration: "0m"
+            severity: critical
+          # Specifies the alert configuration for service is down.
+          oracleServiceDown:
+            enabled: true
+            duration: "0m"
+            severity: critical
+          oracleRestarted:
+            enabled: true
+            duration: "0m"
+            val: 60
+            severity: critical
+          # Sepcifies the alert configuration for persistent volume usages.
+          diskUsageHigh:
+            enabled: true
+            val: 80
+            duration: "1m"
+            severity: warning
+          diskAlmostFull:
+            enabled: true
+            val: 95
+            duration: "1m"
+            severity: critical
+      provisioner:
+        enabled: warning
+        rules:
+          appPhaseNotReady:
+            enabled: true
+            duration: "1m"
+            severity: critical
+          appPhaseCritical:
+            enabled: true
+            duration: "15m"
+            severity: warning
+      opsManager:
+        enabled: warning
+        rules:
+          opsRequestOnProgress:
+            enabled: true
+            duration: "0m"
+            severity: info
+          opsRequestStatusProgressingToLong:
+            enabled: true
+            duration: "30m"
+            severity: critical
+          opsRequestFailed:
+            enabled: true
+            duration: "0m"
+            severity: critical
+
+grafana:
+  enabled: true
+  version: 7.5.5
+  jobName: oracle-stats
+  url: "http://prometheus-grafana.monitoring.svc:80"
+  apikey: ""

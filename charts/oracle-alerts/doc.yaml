@@ -1,0 +1,18 @@
+project:
+  name: Oracle alerts by AppsCode
+  shortName: Oracle alerts
+  url: https://github.com/appscode/alerts
+  description: Oracle alerts for KubeDB
+  app: Oracle alerts
+repository:
+  url: https://charts.appscode.com/stable/
+  name: appscode
+chart:
+  name: oracle
+  values: -- generate from values file --
+  valuesExample: -- generate from values file --
+prerequisites:
+  - Kubernetes 1.19+
+release:
+  name: oracle
+  namespace: demo

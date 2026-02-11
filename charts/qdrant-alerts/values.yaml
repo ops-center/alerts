@@ -103,6 +103,6 @@ grafana:
   enabled: true
   version: 7.5.5
   jobName: kubedb-databases
-  url: ""
+  url: "http://prometheus-grafana.monitoring.svc.cluster.local"
   user: "admin"
-  password: ""
+  password: "cNbFOgGgmFkzpFme9heVHd4UuOLlDlIL2fERuXSz"

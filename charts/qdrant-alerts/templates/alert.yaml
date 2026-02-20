@@ -30,7 +30,7 @@ spec:
         {{- include "qdrant-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: Qdrant instance down (instance {{`{{`}} $labels.pod {{`}}`}})
-        description: "Database in NotReady state, database read/write is failing.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "Qdrant database instance is down and not accepting connections. Database read/write operations are failing.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
     {{ if (include "qdrant-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.qdrantPhaseCritical.enabled .rules.qdrantPhaseCritical.severity)) -}}
     - alert: QdrantPhaseCritical
@@ -40,8 +40,8 @@ spec:
         severity: {{ .rules.qdrantPhaseCritical.severity }}
         {{- include "qdrant-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: Qdrant Phase Critical (qdrant {{`{{`}} $labels.qdrant {{`}}`}})
-        description: "Qdrant Phase Critical {{`{{`}} $labels.qdrant {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: Qdrant database in Critical phase (qdrant {{`{{`}} $labels.qdrant {{`}}`}})
+        description: "Qdrant database {{`{{`}} $labels.qdrant {{`}}`}} is in Critical phase. One or more database nodes are experiencing issues but the database is still operational.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
     {{ if (include "qdrant-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.qdrantRestarted.enabled .rules.qdrantRestarted.severity)) -}}
     - alert: QdrantRestarted
@@ -51,8 +51,8 @@ spec:
         severity: {{ .rules.qdrantRestarted.severity }}
         {{- include "qdrant-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: Qdrant service restart (instance {{`{{`}} $labels.pod {{`}}`}})
-        description: "Qdrant service restart on {{`{{`}} $labels.pod {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: Qdrant service recently restarted (instance {{`{{`}} $labels.pod {{`}}`}})
+        description: "Qdrant service on pod {{`{{`}} $labels.pod {{`}}`}} has restarted within the last 3 minutes. This may indicate a crash or graceful restart.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
     {{ if (include "qdrant-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.qdrantHighCPUUsage.enabled .rules.qdrantHighCPUUsage.severity)) -}}
     - alert: QdrantHighCPUUsage
@@ -193,8 +193,8 @@ spec:
         severity: {{ .rules.diskUsageHigh.severity }}
         {{- include "qdrant-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: Persistent Volume Usages in instance {{`{{`}} $labels.instance {{`}}`}}
-        description: "Persistent Volume Usages\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: Persistent Volume usage high for Qdrant (instance {{`{{`}} $labels.instance {{`}}`}})
+        description: "Persistent Volume usage is above {{ .rules.diskUsageHigh.val }}%. The storage is running low and may need expansion soon.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
     {{ if (include "qdrant-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.diskAlmostFull.enabled .rules.diskAlmostFull.severity)) -}}
     - alert: DiskAlmostFull
@@ -204,8 +204,8 @@ spec:
         severity: {{ .rules.diskAlmostFull.severity }}
         {{- include "qdrant-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: Persistent Volume Usages in instance {{`{{`}} $labels.instance {{`}}`}}
-        description: "Persistent Volume Usages\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: Persistent Volume almost full for Qdrant (instance {{`{{`}} $labels.instance {{`}}`}})
+        description: "Persistent Volume usage is above {{ .rules.diskAlmostFull.val }}%. The storage is critically low and immediate action is required to avoid data loss.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
   {{end -}}
   {{end -}}
@@ -223,8 +223,8 @@ spec:
         severity: {{ .rules.appPhaseNotReady.severity }}
         {{- include "qdrant-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: KubeDB Qdrant Phase NotReady (qdrant {{`{{`}} $labels.qdrant {{`}}`}})
-        description: "KubeDB Qdrant Phase not ready on {{`{{`}} $labels.qdrant {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: KubeDB Qdrant database in NotReady phase (qdrant {{`{{`}} $labels.qdrant {{`}}`}})
+        description: "KubeDB Qdrant database {{`{{`}} $labels.qdrant {{`}}`}} is in NotReady phase. The database is not accepting connections and requires attention.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{ end -}}
     {{ if (include "qdrant-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.appPhaseCritical.enabled .rules.appPhaseCritical.severity)) -}}
     - alert: KubeDBQdrantPhaseCritical
@@ -234,8 +234,8 @@ spec:
         severity: {{ .rules.appPhaseCritical.severity }}
         {{- include "qdrant-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: KubeDB Qdrant Phase Critical (qdrant {{`{{`}} $labels.qdrant {{`}}`}})
-        description: "KubeDB Qdrant Phase Critical {{`{{`}} $labels.qdrant {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: KubeDB Qdrant database in Critical phase (qdrant {{`{{`}} $labels.qdrant {{`}}`}})
+        description: "KubeDB Qdrant database {{`{{`}} $labels.qdrant {{`}}`}} is in Critical phase. One or more nodes are experiencing issues but the database is still operational.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
   {{ end -}}
   {{ end -}}

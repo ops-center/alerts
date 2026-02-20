@@ -44,24 +44,6 @@ data:
         "links": [],
         "panels": [
           {
-            "collapsed": false,
-            "datasource": {
-              "type": "prometheus",
-              "uid": "prometheus"
-            },
-            "gridPos": {
-              "h": 1,
-              "w": 24,
-              "x": 0,
-              "y": 0
-            },
-            "id": 28,
-            "panels": [],
-            "title": "Qdrant Phase",
-            "type": "row"
-          },
-
-          {
             "alert": {
               "alertRuleTags": {},
               "conditions": [
@@ -139,9 +121,9 @@ data:
             "targets": [
               {
                 "exemplar": true,
-                "expr": "up{service=\"{{ $.Release.Name }}+-stats",namespace="{{$.Release.Namespace}}"} == 0",
+                "expr": "up{job=\"{{ $.Release.Name }}-stats\", namespace=\"{{ $.Release.Namespace }}\"}",
                 "interval": "",
-                "legendFormat": "",
+                "legendFormat": {{ `"{{pod}}"` }},
                 "refId": "A"
               }
             ],
@@ -268,9 +250,9 @@ data:
             "targets": [
               {
                 "exemplar": true,
-                "expr": "kubedb_com_qdrant_status_phase{app=\"{{ .Release.Name }}\",namespace=\"{{ .Release.Namespace }}\",phase=\"Critical\"}",
+                "expr": "kubedb_com_qdrant_status_phase{phase=\"Critical\",app=\"{{ $.Release.Name }}\",namespace=\"{{ $.Release.Namespace }}\"}",
                 "interval": "",
-                "legendFormat": "",
+                "legendFormat": {{ `"{{qdrant}}"` }},
                 "refId": "A"
               }
             ],
@@ -392,7 +374,7 @@ data:
             "targets": [
               {
                 "expr": "time() - min(kube_pod_start_time{namespace=\"{{ $.Release.Namespace }}\", pod=~\"{{ $.Release.Name }}-.*\"})",
-                "legendFormat": "",
+                "legendFormat": {{ `"{{pod}}"` }},
                 "interval": "",
                 "exemplar": true,
                 "datasource": {
@@ -499,7 +481,7 @@ data:
             },
             "aliasColors": {},
             "dashLength": 10,
-            "description": "80% of available TCP sockets are in use. More channels, fewer connections or a more even spread across the cluster will help.",
+            "description": "Qdrant pod CPU usage is above 80 percent. High CPU usage may indicate heavy query load or indexing operations.",
             "fieldConfig": {
               "defaults": {},
               "overrides": []
@@ -825,7 +807,7 @@ data:
                   "uid": "prometheus"
                 },
                 "exemplar": true,
-                "expr": "(kubelet_volume_stats_used_bytes{service=\"kubernetes\"} / kubelet_volume_stats_capacity_bytes{service=\"kubernetes\"}) * on(persistentvolumeclaim) group_left(pod) kube_pod_spec_volumes_persistentvolumeclaims_info{pod=~\"{{ $.Release.Name }}-.+$\",namespace=\"{{ $.Release.Namespace }}\"} * 100",
+                "expr": "(kubelet_volume_stats_used_bytes{job=\"kubelet\", metrics_path=\"/metrics\"} / kubelet_volume_stats_capacity_bytes{job=\"kubelet\", metrics_path=\"/metrics\"}) * on(persistentvolumeclaim) group_left(pod) kube_pod_spec_volumes_persistentvolumeclaims_info{pod=~\"{{ $.Release.Name }}-.+$\",namespace=\"{{ $.Release.Namespace }}\"} * 100",
                 "interval": "",
                 "legendFormat": {{ `"{{pod}}"` }},
                 "refId": "A"
@@ -1125,6 +1107,147 @@ data:
             ],
             "timeRegions": [],
             "title": "Qdrant gRPC Responses Fail High",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": 0,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            },
+            "bars": false,
+            "dashes": false,
+            "fillGradient": 0,
+            "hiddenSeries": false,
+            "percentage": false,
+            "points": false,
+            "stack": false,
+            "steppedLine": false,
+            "timeFrom": null,
+            "timeShift": null,
+            "datasource": null
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [10],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Qdrant REST Fails High",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "dashLength": 10,
+            "description": "Number of failed REST responses in the last 5 minutes (increase over 5m). Spikes indicate errors in search/indexing requests or API issues.",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 33
+            },
+            "id": 45,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "exemplar": true,
+                "expr": "sum by (pod) (increase(rest_responses_fail_total{job=~\"{{ $.Release.Name }}-stats\", namespace=\"{{ $.Release.Namespace }}\", pod=~\"^{{ $.Release.Name }}.*\"}[5m]))",
+                "interval": "",
+                "legendFormat": {{ `"{{pod}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "value": 10,
+                "op": "gt",
+                "visible": true,
+                "fill": true,
+                "line": true,
+                "colorMode": "critical"
+              }
+            ],
+            "timeRegions": [],
+            "title": "Qdrant REST Responses Fail High",
             "tooltip": {
               "shared": true,
               "sort": 0,

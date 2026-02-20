@@ -59,9 +59,9 @@ The following table lists the configurable parameters of the `qdrant-alerts` cha
 | form.alert.annotations                                                | # Annotations for default rules               | <code>{}</code>                                                       |
 | form.alert.additionalRuleLabels                                       | # Additional labels for PrometheusRule alerts | <code>{}</code>                                                       |
 | form.alert.groups.database.enabled                                    |                                               | <code>warning</code>                                                  |
-| form.alert.groups.database.rules.qdrantDown.enabled                   |                                               | <code>true</code>                                                     |
-| form.alert.groups.database.rules.qdrantDown.duration                  |                                               | <code>"30s"</code>                                                    |
-| form.alert.groups.database.rules.qdrantDown.severity                  |                                               | <code>critical</code>                                                 |
+| form.alert.groups.database.rules.qdrantInstanceDown.enabled           |                                               | <code>true</code>                                                     |
+| form.alert.groups.database.rules.qdrantInstanceDown.duration          |                                               | <code>"30s"</code>                                                    |
+| form.alert.groups.database.rules.qdrantInstanceDown.severity          |                                               | <code>critical</code>                                                 |
 | form.alert.groups.database.rules.qdrantPhaseCritical.enabled          |                                               | <code>true</code>                                                     |
 | form.alert.groups.database.rules.qdrantPhaseCritical.duration         |                                               | <code>"1m"</code>                                                     |
 | form.alert.groups.database.rules.qdrantPhaseCritical.severity         |                                               | <code>warning</code>                                                  |
@@ -88,11 +88,15 @@ The following table lists the configurable parameters of the `qdrant-alerts` cha
 | form.alert.groups.database.rules.qdrantHighPendingOperations.enabled  |                                               | <code>true</code>                                                     |
 | form.alert.groups.database.rules.qdrantHighPendingOperations.val      |                                               | <code>10</code>                                                       |
 | form.alert.groups.database.rules.qdrantHighPendingOperations.duration |                                               | <code>"5m"</code>                                                     |
-| form.alert.groups.database.rules.qdrantHighPendingOperations.severity |                                               | <code>warning</code>                                                  |
+| form.alert.groups.database.rules.qdrantHighPendingOperations.severity |                                               | <code>critical</code>                                                 |
 | form.alert.groups.database.rules.qdrantGrpcResponsesFailHigh.enabled  |                                               | <code>true</code>                                                     |
 | form.alert.groups.database.rules.qdrantGrpcResponsesFailHigh.val      |                                               | <code>5</code>                                                        |
 | form.alert.groups.database.rules.qdrantGrpcResponsesFailHigh.duration |                                               | <code>"5m"</code>                                                     |
 | form.alert.groups.database.rules.qdrantGrpcResponsesFailHigh.severity |                                               | <code>critical</code>                                                 |
+| form.alert.groups.database.rules.qdrantRestResponsesFailHigh.enabled  |                                               | <code>true</code>                                                     |
+| form.alert.groups.database.rules.qdrantRestResponsesFailHigh.val      |                                               | <code>5</code>                                                        |
+| form.alert.groups.database.rules.qdrantRestResponsesFailHigh.duration |                                               | <code>"5m"</code>                                                     |
+| form.alert.groups.database.rules.qdrantRestResponsesFailHigh.severity |                                               | <code>critical</code>                                                 |
 | form.alert.groups.provisioner.enabled                                 |                                               | <code>warning</code>                                                  |
 | form.alert.groups.provisioner.rules.appPhaseNotReady.enabled          |                                               | <code>true</code>                                                     |
 | form.alert.groups.provisioner.rules.appPhaseNotReady.duration         |                                               | <code>"1m"</code>                                                     |

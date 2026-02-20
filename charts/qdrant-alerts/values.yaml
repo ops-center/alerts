@@ -33,16 +33,16 @@ form:
         enabled: warning
         rules:
           # Specifies the alert configuration for database is in NotReady phase, that means the database is not accepting connections, read/write are hampered.
-          qdrantDown:
+          qdrantInstanceDown:
             enabled: true
             duration: "30s"
             severity: critical
-          # Specifies the alert configuration for database is in Critical phase, that means one or more of the nodes are down but the database read/write are not hampered.
+          # Specifies the alert configuration for database is in Critical phase, that means one or more database nodes are experiencing issues but the database is still operational.
           qdrantPhaseCritical:
             enabled: true
             duration: "1m"
             severity: warning
-          # Specifies the alert configuration for database is in Critical phase, that means one or more of the nodes are down but the database read/write are not hampered.
+          # Specifies the alert configuration for database service restarts, indicating the database service has been restarted recently.
           qdrantRestarted:
             enabled: true
             duration: "1m"
@@ -60,7 +60,7 @@ form:
             duration: "1m"
             severity: warning
             val: 80
-          # Sepcifies the alert configuration for persistent volume usages.
+          # Specifies the alert configuration for persistent volume usage, indicating when storage usage exceeds the defined threshold.
           diskUsageHigh:
             enabled: true
             val: 80
@@ -72,16 +72,22 @@ form:
             duration: "1m"
             severity: critical
 
-          # Qdrant-specific operational alerts
-          # Pending operations backlog (instant count threshold)
+# Specifies the alert configuration for pending operations backlog, indicating when the number of pending operations exceeds the threshold.
           qdrantHighPendingOperations:
             enabled: true
             val: 10
             duration: "5m"
-            severity: warning
+            severity: critical
 
-          # gRPC failed responses count over lookback window (increase over 5m)
+# Specifies the alert configuration for gRPC response failures, indicating when the number of failed gRPC responses exceeds the threshold.
           qdrantGrpcResponsesFailHigh:
+            enabled: true
+            val: 5
+            duration: "5m"
+            severity: critical
+
+# Specifies the alert configuration for REST response failures, indicating when the number of failed REST responses exceeds the threshold.
+          qdrantRestResponsesFailHigh:
             enabled: true
             val: 5
             duration: "5m"

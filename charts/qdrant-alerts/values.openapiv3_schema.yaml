@@ -71,23 +71,6 @@ properties:
                         - severity
                         - val
                         type: object
-                      qdrantDown:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        type: object
                       qdrantGrpcResponsesFailHigh:
                         properties:
                           duration:
@@ -168,6 +151,23 @@ properties:
                         - severity
                         - val
                         type: object
+                      qdrantInstanceDown:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        type: object
                       qdrantPhaseCritical:
                         properties:
                           duration:
@@ -184,6 +184,26 @@ properties:
                         - duration
                         - enabled
                         - severity
+                        type: object
+                      qdrantRestResponsesFailHigh:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                          val:
+                            type: integer
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        - val
                         type: object
                       qdrantRestarted:
                         properties:
@@ -208,12 +228,13 @@ properties:
                     required:
                     - diskAlmostFull
                     - diskUsageHigh
-                    - qdrantDown
                     - qdrantGrpcResponsesFailHigh
                     - qdrantHighCPUUsage
                     - qdrantHighMemoryUsage
                     - qdrantHighPendingOperations
+                    - qdrantInstanceDown
                     - qdrantPhaseCritical
+                    - qdrantRestResponsesFailHigh
                     - qdrantRestarted
                     type: object
                 required:

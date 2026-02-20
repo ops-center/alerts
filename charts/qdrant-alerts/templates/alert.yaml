@@ -21,31 +21,31 @@ spec:
   {{ if (include "qdrant-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
   - name: qdrant.database.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
-    {{ if (include "qdrant-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.qdrantDown.enabled .rules.qdrantDown.severity)) -}}
-    - alert: QdrantDown
-      expr: kubedb_com_qdrant_status_phase{app="{{ $app }}", namespace="{{ $.Release.Namespace }}",phase="NotReady"} >= 1
-      for: {{ .rules.qdrantDown.duration }}
+    {{ if (include "qdrant-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.qdrantInstanceDown.enabled .rules.qdrantInstanceDown.severity)) -}}
+    - alert: QdrantInstanceDown
+      expr: up{job="{{- $app -}}-stats",namespace="{{ $.Release.Namespace }}"} == 0
+      for: {{ .rules.qdrantInstanceDown.duration }}
       labels:
-        severity: {{ .rules.qdrantDown.severity }}
+        severity: {{ .rules.qdrantInstanceDown.severity }}
         {{- include "qdrant-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: Qdrant database is in NotReady state (instance {{`{{`}} $labels.instance {{`}}`}})
+        summary: Qdrant instance down (instance {{`{{`}} $labels.pod {{`}}`}})
         description: "Database in NotReady state, database read/write is failing.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
     {{ if (include "qdrant-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.qdrantPhaseCritical.enabled .rules.qdrantPhaseCritical.severity)) -}}
     - alert: QdrantPhaseCritical
-      expr: kubedb_com_qdrant_status_phase{app="{{ $app }}", namespace="{{ $.Release.Namespace }}",phase="Critical"} >= 1
+      expr: kubedb_com_qdrant_status_phase{phase="Critical",app="{{ $.Release.Name }}",namespace="{{ $.Release.Namespace }}"} == 1
       for: {{ .rules.qdrantPhaseCritical.duration }}
       labels:
         severity: {{ .rules.qdrantPhaseCritical.severity }}
         {{- include "qdrant-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: Qdrant database is in Critical state (instance {{`{{`}} $labels.instance {{`}}`}})
-        description: "Database in Critical state, one or more database nodes are not working properly.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: Qdrant Phase Critical (qdrant {{`{{`}} $labels.qdrant {{`}}`}})
+        description: "Qdrant Phase Critical {{`{{`}} $labels.qdrant {{`}}`}}\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
     {{ if (include "qdrant-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.qdrantRestarted.enabled .rules.qdrantRestarted.severity)) -}}
     - alert: QdrantRestarted
-      expr: (time() - min(kube_pod_start_time{ namespace="{{ $.Release.Namespace }}", pod=~"{{ $app }}-.*"})) < {{.rules.qdrantRestarted.val}}
+      expr: (time() - min(kube_pod_start_time{ namespace="{{ $.Release.Namespace }}", pod=~"{{ $.Release.Name }}-.*"})) < {{.rules.qdrantRestarted.val}}
       for: {{ .rules.qdrantRestarted.duration }}
       labels:
         severity: {{ .rules.qdrantRestarted.severity }}
@@ -64,7 +64,7 @@ spec:
               job="kubelet",
               metrics_path="/metrics/cadvisor",
               namespace="{{ $.Release.Namespace }}",
-              pod=~"^{{ $app }}.*"
+              pod=~"^{{ $.Release.Name }}.*"
             }[5m])
           )
         )
@@ -72,7 +72,7 @@ spec:
         sum by (pod) (
           kube_pod_container_resource_requests{
             namespace="{{ $.Release.Namespace }}",
-            pod=~"^{{ $app }}.*",
+            pod=~"^{{ $.Release.Name }}.*",
             resource="cpu"
           }
         ) * 100
@@ -92,7 +92,7 @@ spec:
           sum by (pod) (
             container_memory_working_set_bytes{
               namespace="{{ $.Release.Namespace }}",
-              pod=~"^{{ $app }}.*",
+              pod=~"^{{ $.Release.Name }}.*",
               container!="",
               image!=""
             }
@@ -102,7 +102,7 @@ spec:
         sum by (pod) (
           kube_pod_container_resource_limits{
             namespace="{{ $.Release.Namespace }}",
-            pod=~"^{{ $app }}.*",
+            pod=~"^{{ $.Release.Name }}.*",
             resource="memory"
           }
         ) * 100
@@ -121,9 +121,9 @@ spec:
       expr: |
         sum by (pod) (
           cluster_pending_operations_total{
-            job=~"{{ $app }}-stats",
+            job=~"{{ $.Release.Name }}-stats",
             namespace="{{ $.Release.Namespace }}",
-            pod=~"^{{ $app }}.*"
+            pod=~"^{{ $.Release.Name }}.*"
           }
         ) > {{ .rules.qdrantHighPendingOperations.val }}
       for: {{ .rules.qdrantHighPendingOperations.duration }}
@@ -144,9 +144,9 @@ spec:
         sum by (pod) (
           increase(
             grpc_responses_fail_total{
-              job=~"{{ $app }}-stats",
+              job=~"{{ $.Release.Name }}-stats",
               namespace="{{ $.Release.Namespace }}",
-              pod=~"^{{ $app }}.*"
+              pod=~"^{{ $.Release.Name }}.*"
             }[5m]
           )
         ) > {{ .rules.qdrantGrpcResponsesFailHigh.val }}
@@ -158,6 +158,30 @@ spec:
         summary: Qdrant gRPC fails high on pod {{`{{`}} $labels.pod {{`}}`}}
         description: |
           The number of failed gRPC responses for this pod in the last 5m exceeds threshold.
+          VALUE = {{`{{`}} $value {{`}}`}}
+          LABELS = {{`{{`}} $labels {{`}}`}}
+    {{- end }}
+
+    {{ if (include "qdrant-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.qdrantRestResponsesFailHigh.enabled .rules.qdrantRestResponsesFailHigh.severity)) -}}
+    - alert: QdrantRestResponsesFailHigh
+      expr: |
+        sum by (pod) (
+          increase(
+            rest_responses_fail_total{
+              job=~"{{ $.Release.Name }}-stats",
+              namespace="{{ $.Release.Namespace }}",
+              pod=~"^{{ $.Release.Name }}.*"
+            }[5m]
+          )
+        ) > {{ .rules.qdrantRestResponsesFailHigh.val }}
+      for: {{ .rules.qdrantRestResponsesFailHigh.duration }}
+      labels:
+        severity: {{ .rules.qdrantRestResponsesFailHigh.severity }}
+        {{- include "qdrant-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: Qdrant REST fails high on pod {{`{{`}} $labels.pod {{`}}`}}
+        description: |
+          The number of failed REST responses for this pod in the last 5m exceeds threshold.
           VALUE = {{`{{`}} $value {{`}}`}}
           LABELS = {{`{{`}} $labels {{`}}`}}
     {{- end }}
@@ -193,7 +217,7 @@ spec:
     rules:
     {{ if (include "qdrant-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.appPhaseNotReady.enabled .rules.appPhaseNotReady.severity)) -}}
     - alert: KubeDBQdrantPhaseNotReady
-      expr: kubedb_com_qdrant_status_phase{phase="NotReady",app="{{ $app }}",namespace="{{ $.Release.Namespace }}"} == 1
+      expr: kubedb_com_qdrant_status_phase{phase="NotReady",app="{{ $.Release.Name }}",namespace="{{ $.Release.Namespace }}"} == 1
       for: {{ .rules.appPhaseNotReady.duration }}
       labels:
         severity: {{ .rules.appPhaseNotReady.severity }}
@@ -204,7 +228,7 @@ spec:
     {{ end -}}
     {{ if (include "qdrant-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.appPhaseCritical.enabled .rules.appPhaseCritical.severity)) -}}
     - alert: KubeDBQdrantPhaseCritical
-      expr: kubedb_com_qdrant_status_phase{phase="Critical",app="{{ $app }}",namespace="{{ $.Release.Namespace }}"} == 1
+      expr: kubedb_com_qdrant_status_phase{phase="Critical",app="{{ $.Release.Name }}",namespace="{{ $.Release.Namespace }}"} == 1
       for: {{ .rules.appPhaseCritical.duration }}
       labels:
         severity: {{ .rules.appPhaseCritical.severity }}

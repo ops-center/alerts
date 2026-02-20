@@ -139,7 +139,7 @@ data:
             "targets": [
               {
                 "exemplar": true,
-                "expr": "kubedb_com_qdrant_status_phase{app=\"{{ .Release.Name }}\",namespace=\"{{ .Release.Namespace }}\",phase=\"NotReady\"}",
+                "expr": "up{service=\"{{ $.Release.Name }}+-stats",namespace="{{$.Release.Namespace}}"} == 0",
                 "interval": "",
                 "legendFormat": "",
                 "refId": "A"
@@ -636,13 +636,13 @@ data:
               "for": "5m",
               "frequency": "1m",
               "handler": 1,
-              "name": "Qdrant High CPU Usage alert",
+              "name": "Qdrant High Memory Usage alert",
               "noDataState": "no_data",
               "notifications": []
             },
             "aliasColors": {},
             "dashLength": 10,
-            "description": "80% of available TCP sockets are in use. More channels, fewer connections or a more even spread across the cluster will help.",
+            "description": "Qdrant pod memory usage is above 80 percent.",
             "fieldConfig": {
               "defaults": {},
               "overrides": []
@@ -1124,7 +1124,7 @@ data:
               }
             ],
             "timeRegions": [],
-            "title": "Qdrant gRPC Reponses Fail High",
+            "title": "Qdrant gRPC Responses Fail High",
             "tooltip": {
               "shared": true,
               "sort": 0,

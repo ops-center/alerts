@@ -72,13 +72,14 @@ type QdrantDatabaseAlert struct {
 }
 
 type QdrantDatabaseAlertRules struct {
-	QdrantDown                  FixedAlert  `json:"qdrantDown"`
+	QdrantInstanceDown          FixedAlert  `json:"qdrantInstanceDown"`
 	QdrantPhaseCritical         FixedAlert  `json:"qdrantPhaseCritical"`
 	QdrantRestarted             IntValAlert `json:"qdrantRestarted"`
 	QdrantHighCPUUsage          IntValAlert `json:"qdrantHighCPUUsage"`
 	QdrantHighMemoryUsage       IntValAlert `json:"qdrantHighMemoryUsage"`
 	QdrantHighPendingOperations IntValAlert `json:"qdrantHighPendingOperations"`
 	QdrantGrpcResponsesFailHigh IntValAlert `json:"qdrantGrpcResponsesFailHigh"`
+	QdrantRestResponsesFailHigh IntValAlert `json:"qdrantRestResponsesFailHigh"`
 	DiskUsageHigh               IntValAlert `json:"diskUsageHigh"`
 	DiskAlmostFull              IntValAlert `json:"diskAlmostFull"`
 }

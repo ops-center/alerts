@@ -215,7 +215,7 @@ spec:
     {{ end -}}
     {{ if (include "redis-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.repositoryCorrupted.enabled .rules.repositoryCorrupted.severity)) -}}
     - alert: RedisStashRepositoryCorrupted
-      expr: stash_repository_integrity * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_appscode_com_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ $.Release.Namespace }}"}
+      expr: stash_repository_integrity * on(invoker_name, invoker_kind) group_left(target_name, target_kind, repository) stash_appscode_com_backupconfiguration_info{target_name="{{ $app }}", target_kind="AppBinding", namespace="{{ $.Release.Namespace }}"}==0
       for: {{ .rules.repositoryCorrupted.duration }}
       labels:
         severity: {{ .rules.repositoryCorrupted.severity }}

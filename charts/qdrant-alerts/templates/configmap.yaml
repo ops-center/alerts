@@ -1,0 +1,1319 @@
+{{- if .Values.grafana.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "qdrant-alerts.fullname" . }}-configmap
+  labels:
+    {{- include "qdrant-alerts.labels" . | nindent 4 }}
+data:
+  grafana-json.json: |-
+    {
+      "dashboard": {
+        "__inputs": [],
+        "__requires": [
+          {
+            "type": "grafana",
+            "id": "grafana",
+            "name": "Grafana",
+            "version": "{{ .Values.grafana.version }}"
+          },
+          {
+            "type": "panel",
+            "id": "graph",
+            "name": "Graph",
+            "version": ""
+          }
+        ],
+        "annotations": {
+          "list": [
+            {
+              "builtIn": 1,
+              "datasource": "-- Grafana --",
+              "enable": true,
+              "hide": true,
+              "iconColor": "rgba(0, 211, 255, 1)",
+              "name": "Annotations & Alerts",
+              "type": "dashboard"
+            }
+          ]
+        },
+        "editable": true,
+        "gnetId": null,
+        "graphTooltip": 0,
+        "id": null,
+        "links": [],
+        "panels": [
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      0
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "1h",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "10s",
+              "frequency": "10s",
+              "handler": 1,
+              "name": "Qdrant Down alert",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 1
+            },
+            "hiddenSeries": false,
+            "id": 14,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "up{job=\"{{ $.Release.Name }}-stats\", namespace=\"{{ $.Release.Namespace }}\"}",
+                "interval": "",
+                "legendFormat": {{ `"{{pod}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": true,
+                "line": true,
+                "op": "gt",
+                "value": 0,
+                "visible": true
+              }
+            ],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Qdrant Down",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              },
+              {
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false
+            }
+          },
+          {
+            "alert": {
+              "alertRuleTags": {
+                "kdb": ""
+              },
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      0
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "1h",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "10s",
+              "frequency": "10s",
+              "handler": 1,
+              "name": "QdrantPhaseCritical",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 1
+            },
+            "hiddenSeries": false,
+            "id": 2,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "kubedb_com_qdrant_status_phase{phase=\"Critical\",app=\"{{ $.Release.Name }}\",namespace=\"{{ $.Release.Namespace }}\"}",
+                "interval": "",
+                "legendFormat": {{ `"{{qdrant}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": true,
+                "line": true,
+                "op": "gt",
+                "value": 0,
+                "visible": true
+              }
+            ],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Qdrant Critical Phase",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              },
+              {
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false
+            }
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      180
+                    ],
+                    "type": "lt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Qdrant Restarted Alert",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "dashLength": 10,
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 9
+            },
+            "id": 36,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "expr": "time() - min(kube_pod_start_time{namespace=\"{{ $.Release.Namespace }}\", pod=~\"{{ $.Release.Name }}-.*\"})",
+                "legendFormat": {{ `"{{pod}}"` }},
+                "interval": "",
+                "exemplar": true,
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "value": 180,
+                "op": "lt",
+                "visible": true,
+                "fill": true,
+                "line": true,
+                "colorMode": "critical"
+              }
+            ],
+            "timeRegions": [],
+            "title": "Qdrant Restarted",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            },
+            "bars": false,
+            "dashes": false,
+            "fillGradient": 0,
+            "hiddenSeries": false,
+            "percentage": false,
+            "points": false,
+            "stack": false,
+            "steppedLine": false,
+            "timeFrom": null,
+            "timeShift": null,
+            "datasource": null
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      80
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "10s",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "avg"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Qdrant High CPU Usage alert",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "dashLength": 10,
+            "description": "Qdrant pod CPU usage is above 80 percent. High CPU usage may indicate heavy query load or indexing operations.",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 9
+            },
+            "id": 40,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "exemplar": true,
+                "expr": "sum by (pod) (irate(container_cpu_usage_seconds_total{image!=\"\", job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=\"{{ $.Release.Namespace }}\", pod=~\"^{{ $.Release.Name }}.*\"}[5m])) / sum by (pod) (kube_pod_container_resource_requests{namespace=\"{{ $.Release.Namespace }}\", pod=~\"^{{ $.Release.Name }}.*\", resource=\"cpu\"}) * 100",
+                "interval": "",
+                "legendFormat": {{ `"{{pod}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "value": 80,
+                "op": "gt",
+                "visible": true,
+                "fill": true,
+                "line": true,
+                "colorMode": "critical"
+              }
+            ],
+            "timeRegions": [],
+            "title": "Qdrant High CPU Load",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            },
+            "bars": false,
+            "dashes": false,
+            "fillGradient": 0,
+            "hiddenSeries": false,
+            "percentage": false,
+            "points": false,
+            "stack": false,
+            "steppedLine": false,
+            "timeFrom": null,
+            "timeShift": null,
+            "datasource": null
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      80
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "10s",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "avg"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Qdrant High Memory Usage alert",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "dashLength": 10,
+            "description": "Qdrant pod memory usage is above 80 percent.",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 17
+            },
+            "id": 41,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "exemplar": true,
+                "expr": "sum by (pod) (container_memory_working_set_bytes{namespace=\"{{ $.Release.Namespace }}\", pod=~\"^{{ $.Release.Name }}.*\", container!=\"\", image!=\"\"}) / sum by (pod) (kube_pod_container_resource_limits{namespace=\"{{ $.Release.Namespace }}\", pod=~\"^{{ $.Release.Name }}.*\", resource=\"memory\"}) * 100",
+                "interval": "",
+                "legendFormat": {{ `"{{pod}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "value": 80,
+                "op": "gt",
+                "visible": true,
+                "fill": true,
+                "line": true,
+                "colorMode": "critical"
+              }
+            ],
+            "timeRegions": [],
+            "title": "Qdrant High Memory Load",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            },
+            "bars": false,
+            "dashes": false,
+            "fillGradient": 0,
+            "hiddenSeries": false,
+            "percentage": false,
+            "points": false,
+            "stack": false,
+            "steppedLine": false,
+            "timeFrom": null,
+            "timeShift": null,
+            "datasource": null
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      80
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "10s",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "avg"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Persistent Disk Usage High",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "dashLength": 10,
+            "description": "Percentage of persistent volume capacity currently used by the pods.",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 17
+            },
+            "id": 42,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "exemplar": true,
+                "expr": "(kubelet_volume_stats_used_bytes{job=\"kubelet\", metrics_path=\"/metrics\"} / kubelet_volume_stats_capacity_bytes{job=\"kubelet\", metrics_path=\"/metrics\"}) * on(persistentvolumeclaim) group_left(pod) kube_pod_spec_volumes_persistentvolumeclaims_info{pod=~\"{{ $.Release.Name }}-.+$\",namespace=\"{{ $.Release.Namespace }}\"} * 100",
+                "interval": "",
+                "legendFormat": {{ `"{{pod}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "value": 80,
+                "op": "gt",
+                "visible": true,
+                "fill": true,
+                "line": true,
+                "colorMode": "critical"
+              }
+            ],
+            "timeRegions": [],
+            "title": "Disk Usage High",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "percent",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": 0,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            },
+            "bars": false,
+            "dashes": false,
+            "fillGradient": 0,
+            "hiddenSeries": false,
+            "percentage": false,
+            "points": false,
+            "stack": false,
+            "steppedLine": false,
+            "timeFrom": null,
+            "timeShift": null,
+            "datasource": null
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [10],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Qdrant Pending Operations High",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "dashLength": 10,
+            "description": "Number of operations waiting to be processed in Qdrant. High values may indicate overload or slow disk.",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 25
+            },
+            "id": 43,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "exemplar": true,
+                "expr": "sum by (pod) (cluster_pending_operations_total{job=~\"{{ $.Release.Name }}-stats\", namespace=\"{{ $.Release.Namespace }}\", pod=~\"^{{ $.Release.Name }}.*\"})",
+                "interval": "",
+                "legendFormat": {{ `"{{pod}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "value": 10,
+                "op": "gt",
+                "visible": true,
+                "fill": true,
+                "line": true,
+                "colorMode": "critical"
+              }
+            ],
+            "timeRegions": [],
+            "title": "Qdrant High Pending Operations",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": 0,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            },
+            "bars": false,
+            "dashes": false,
+            "fillGradient": 0,
+            "hiddenSeries": false,
+            "percentage": false,
+            "points": false,
+            "stack": false,
+            "steppedLine": false,
+            "timeFrom": null,
+            "timeShift": null,
+            "datasource": null
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [10],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Qdrant gRPC Fails High",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "dashLength": 10,
+            "description": "Number of failed gRPC responses in the last 5 minutes (increase over 5m). Spikes indicate errors in search/indexing requests.",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 25
+            },
+            "id": 44,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "exemplar": true,
+                "expr": "sum by (pod) (increase(grpc_responses_fail_total{job=~\"{{ $.Release.Name }}-stats\", namespace=\"{{ $.Release.Namespace }}\", pod=~\"^{{ $.Release.Name }}.*\"}[5m]))",
+                "interval": "",
+                "legendFormat": {{ `"{{pod}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "value": 10,
+                "op": "gt",
+                "visible": true,
+                "fill": true,
+                "line": true,
+                "colorMode": "critical"
+              }
+            ],
+            "timeRegions": [],
+            "title": "Qdrant gRPC Responses Fail High",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": 0,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            },
+            "bars": false,
+            "dashes": false,
+            "fillGradient": 0,
+            "hiddenSeries": false,
+            "percentage": false,
+            "points": false,
+            "stack": false,
+            "steppedLine": false,
+            "timeFrom": null,
+            "timeShift": null,
+            "datasource": null
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [10],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Qdrant REST Fails High",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "dashLength": 10,
+            "description": "Number of failed REST responses in the last 5 minutes (increase over 5m). Spikes indicate errors in search/indexing requests or API issues.",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 33
+            },
+            "id": 45,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "exemplar": true,
+                "expr": "sum by (pod) (increase(rest_responses_fail_total{job=~\"{{ $.Release.Name }}-stats\", namespace=\"{{ $.Release.Namespace }}\", pod=~\"^{{ $.Release.Name }}.*\"}[5m]))",
+                "interval": "",
+                "legendFormat": {{ `"{{pod}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "value": 10,
+                "op": "gt",
+                "visible": true,
+                "fill": true,
+                "line": true,
+                "colorMode": "critical"
+              }
+            ],
+            "timeRegions": [],
+            "title": "Qdrant REST Responses Fail High",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": 0,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            },
+            "bars": false,
+            "dashes": false,
+            "fillGradient": 0,
+            "hiddenSeries": false,
+            "percentage": false,
+            "points": false,
+            "stack": false,
+            "steppedLine": false,
+            "timeFrom": null,
+            "timeShift": null,
+            "datasource": null
+          }
+        ],
+        "refresh": "5s",
+        "schemaVersion": 27,
+        "style": "dark",
+        "tags": [],
+        "templating": {
+          "list": []
+        },
+        "time": {
+          "from": "now-15m",
+          "to": "now"
+        },
+        "timepicker": {},
+        "timezone": "",
+        "title": "{{ .Values.metadata.resource.group }} / {{ .Values.metadata.resource.kind }} / {{ .Release.Namespace }} / {{ .Release.Name }}",
+        "uid": null,
+        "version": 23
+      },
+      "folderId": 0,
+      "overwrite": false
+    }
+{{- end }}

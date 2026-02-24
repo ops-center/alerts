@@ -106,9 +106,8 @@ form:
             severity: warning
 
 grafana:
-  enabled: true
+  enabled: false
   version: 7.5.5
   jobName: kubedb-databases
-  url: "http://prometheus-grafana.monitoring.svc.cluster.local"
-  user: "admin"
-  password: "cNbFOgGgmFkzpFme9heVHd4UuOLlDlIL2fERuXSz"
+  url: ""
+  apikey: ""

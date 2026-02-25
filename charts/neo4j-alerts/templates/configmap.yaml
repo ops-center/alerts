@@ -614,7 +614,7 @@ data:
             "targets": [
               {
                 "datasource": {"type": "prometheus", "uid": "prometheus"},
-                "expr": "increase(neo4j_dbms_page_cache_page_fault_failures_total{namespace=\"{{ $.Release.Namespace }}\", job=~\"{{ .Release.Name }}.*\"}[5m])",
+                "expr": "increase(neo4j_dbms_page_cache_page_faults_total{namespace=\"{{ $.Release.Namespace }}\", job=~\"{{ .Release.Name }}.*\"}[5m])",
                 "legendFormat": {{ `"{{job}}"` }},
                 "refId": "A"
               }

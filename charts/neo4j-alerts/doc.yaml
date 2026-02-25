@@ -1,0 +1,222 @@
+project:
+  name: Neo4j alerts by AppsCode
+  shortName: Neo4j alerts
+  url: https://github.com/appscode/alerts
+  description: Neo4j alerts for KubeDB
+  app: Neo4j alerts
+
+repository:
+  url: https://charts.appscode.com/stable/
+  name: appscode
+
+chart:
+  name: neo4j-alerts
+  values: |
+    metadata:
+      resource:
+        group: kubedb.com
+        kind: Neo4j
+        name: neo4js
+        scope: Namespaced
+        version: v1alpha2
+      release:
+        name: ""
+        namespace: ""
+
+    form:
+      alert:
+        ## Enable PrometheusRule alerts
+        enabled: warning
+
+        ## Labels for default rules
+        labels:
+          release: prometheus
+
+        ## Annotations for default rules
+        annotations: {}
+
+        ## Additional labels for PrometheusRule alerts
+        additionalRuleLabels: {}
+
+        groups:
+          database:
+            enabled: warning
+            rules:
+              neo4jDown:
+                enabled: true
+                duration: "30s"
+                severity: critical
+
+              neo4jPhaseCritical:
+                enabled: true
+                duration: "1m"
+                severity: warning
+
+              neo4jRestarted:
+                enabled: true
+                duration: "1m"
+                severity: warning
+                val: 0
+
+              neo4jHighCPUUsage:
+                enabled: true
+                duration: "1m"
+                severity: warning
+                val: 80
+
+              neo4jHighMemoryUsage:
+                enabled: true
+                duration: "1m"
+                severity: warning
+                val: 80
+
+              neo4jHighPageCacheUsage:
+                enabled: true
+                duration: "1m"
+                severity: warning
+                val: 80
+
+              neo4jTransactionFailures:
+                enabled: true
+                duration: "5m"
+                severity: critical
+                val: 5
+
+              diskUsageHigh:
+                enabled: true
+                val: 80
+                duration: "1m"
+                severity: warning
+
+              diskAlmostFull:
+                enabled: true
+                val: 95
+                duration: "1m"
+                severity: critical
+
+          provisioner:
+            enabled: warning
+            rules:
+              appPhaseNotReady:
+                enabled: true
+                duration: "1m"
+                severity: critical
+
+              appPhaseCritical:
+                enabled: true
+                duration: "15m"
+                severity: warning
+
+    grafana:
+      enabled: true
+      version: 7.5.5
+      jobName: kubedb-databases
+      url: ""
+      user: "admin"
+      password: ""
+
+  valuesExample: |
+    metadata:
+      resource:
+        group: kubedb.com
+        kind: Neo4j
+        name: neo4js
+        scope: Namespaced
+        version: v1alpha2
+      release:
+        name: neo4j
+        namespace: demo
+
+    form:
+      alert:
+        enabled: warning
+        labels:
+          release: prometheus
+        annotations: {}
+
+        groups:
+          database:
+            enabled: true
+            rules:
+              neo4jDown:
+                enabled: true
+                duration: "30s"
+                severity: critical
+
+              neo4jPhaseCritical:
+                enabled: true
+                duration: "1m"
+                severity: warning
+
+              neo4jRestarted:
+                enabled: true
+                duration: "1m"
+                severity: warning
+                val: 0
+
+              neo4jHighCPUUsage:
+                enabled: true
+                duration: "1m"
+                severity: warning
+                val: 80
+
+              neo4jHighMemoryUsage:
+                enabled: true
+                duration: "1m"
+                severity: warning
+                val: 80
+
+              neo4jHighPageCacheUsage:
+                enabled: true
+                duration: "1m"
+                severity: warning
+                val: 80
+
+              neo4jTransactionFailures:
+                enabled: true
+                duration: "5m"
+                severity: critical
+                val: 5
+
+              diskUsageHigh:
+                enabled: true
+                val: 80
+                duration: "1m"
+                severity: warning
+
+              diskAlmostFull:
+                enabled: true
+                val: 95
+                duration: "1m"
+                severity: critical
+
+          provisioner:
+            enabled: true
+            rules:
+              appPhaseNotReady:
+                enabled: true
+                duration: "1m"
+                severity: critical
+
+              appPhaseCritical:
+                enabled: true
+                duration: "15m"
+                severity: warning
+
+    grafana:
+      enabled: true
+      version: 7.5.5
+      jobName: kubedb-databases
+      url: "http://grafana.monitoring:3000"
+      user: "admin"
+      password: "your-password"
+
+prerequisites:
+  - Kubernetes 1.19+
+  - Prometheus Operator 0.40+
+  - Grafana 7.0+ (optional, for dashboard visualization)
+  - KubeDB operator installed
+
+release:
+  name: neo4j-alerts
+  namespace: kubedb

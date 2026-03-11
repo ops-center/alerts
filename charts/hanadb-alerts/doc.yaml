@@ -1,0 +1,18 @@
+project:
+  name: HanaDB alerts by AppsCode
+  shortName: HanaDB alerts
+  url: https://github.com/appscode/alerts
+  description: HanaDB alerts for KubeDB
+  app: HanaDB alerts
+repository:
+  url: oci://ghcr.io/appscode-charts
+  name: appscode
+chart:
+  name: hanadb
+  values: -- generate from values file --
+  valuesExample: -- generate from values file --
+prerequisites:
+- Kubernetes 1.19+
+release:
+  name: hana-cluster
+  namespace: demo

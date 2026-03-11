@@ -62,6 +62,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&ConnectClusterAlertsList{},
 		&ElasticsearchAlerts{},
 		&ElasticsearchAlertsList{},
+		&HanaDBAlerts{},
+		&HanaDBAlertsList{},
 		&IgniteAlerts{},
 		&IgniteAlertsList{},
 		&KafkaAlerts{},

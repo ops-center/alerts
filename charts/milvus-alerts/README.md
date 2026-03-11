@@ -8,7 +8,7 @@
 $ helm repo add appscode https://charts.appscode.com/stable/
 $ helm repo update
 $ helm search repo appscode/milvus-alerts --version=v2025.6.30
-$ helm upgrade -i milvus milvus-alerts -n kubedb --create-namespace --version=v2025.6.30
+$ helm upgrade -i milvus appscode/milvus-alerts -n kubedb --create-namespace --version=v2025.6.30
 ```
 
 ## Introduction
@@ -24,7 +24,7 @@ This chart deploys Milvus alerts on a [Kubernetes](http://kubernetes.io) cluster
 To install/upgrade the chart with the release name `milvus`:
 
 ```bash
-$ helm upgrade -i milvus milvus-alerts -n kubedb --create-namespace --version=v2025.6.30
+$ helm upgrade -i milvus appscode/milvus-alerts -n kubedb --create-namespace --version=v2025.6.30
 ```
 
 The command deploys Milvus alerts on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -82,22 +82,22 @@ The following table lists the configurable parameters of the `milvus-alerts` cha
 | form.alert.groups.database.rules.milvusRestarted.duration              |                                               | <code>"1m"</code>                     |
 | form.alert.groups.database.rules.milvusRestarted.severity              |                                               | <code>warning</code>                  |
 | form.alert.groups.database.rules.milvusRestarted.val                   |                                               | <code>180</code>                      |
-| form.alert.groups.database.rules.MilvusHighProcessMemoryUsage.enabled  |                                               | <code>true</code>                     |
-| form.alert.groups.database.rules.MilvusHighProcessMemoryUsage.duration |                                               | <code>"1m"</code>                     |
-| form.alert.groups.database.rules.MilvusHighProcessMemoryUsage.severity |                                               | <code>warning</code>                  |
-| form.alert.groups.database.rules.MilvusHighProcessMemoryUsage.val      |                                               | <code>500000000</code>                |
-| form.alert.groups.database.rules.MilvusGoroutinesExplosion.enabled     |                                               | <code>true</code>                     |
-| form.alert.groups.database.rules.MilvusGoroutinesExplosion.duration    |                                               | <code>"1m"</code>                     |
-| form.alert.groups.database.rules.MilvusGoroutinesExplosion.severity    |                                               | <code>warning</code>                  |
-| form.alert.groups.database.rules.MilvusGoroutinesExplosion.val         |                                               | <code>700</code>                      |
-| form.alert.groups.database.rules.MilvusHighThreadPressure.enabled      |                                               | <code>true</code>                     |
-| form.alert.groups.database.rules.MilvusHighThreadPressure.duration     |                                               | <code>"1m"</code>                     |
-| form.alert.groups.database.rules.MilvusHighThreadPressure.severity     |                                               | <code>warning</code>                  |
-| form.alert.groups.database.rules.MilvusHighThreadPressure.val          |                                               | <code>30</code>                       |
-| form.alert.groups.database.rules.MilvusHighFDsUsage.enabled            |                                               | <code>true</code>                     |
-| form.alert.groups.database.rules.MilvusHighFDsUsage.duration           |                                               | <code>"1m"</code>                     |
-| form.alert.groups.database.rules.MilvusHighFDsUsage.severity           |                                               | <code>warning</code>                  |
-| form.alert.groups.database.rules.MilvusHighFDsUsage.val                |                                               | <code>110</code>                      |
+| form.alert.groups.database.rules.milvusHighProcessMemoryUsage.enabled  |                                               | <code>true</code>                     |
+| form.alert.groups.database.rules.milvusHighProcessMemoryUsage.duration |                                               | <code>"1m"</code>                     |
+| form.alert.groups.database.rules.milvusHighProcessMemoryUsage.severity |                                               | <code>warning</code>                  |
+| form.alert.groups.database.rules.milvusHighProcessMemoryUsage.val      |                                               | <code>800000000</code>                |
+| form.alert.groups.database.rules.milvusGoroutinesExplosion.enabled     |                                               | <code>true</code>                     |
+| form.alert.groups.database.rules.milvusGoroutinesExplosion.duration    |                                               | <code>"1m"</code>                     |
+| form.alert.groups.database.rules.milvusGoroutinesExplosion.severity    |                                               | <code>warning</code>                  |
+| form.alert.groups.database.rules.milvusGoroutinesExplosion.val         |                                               | <code>1000</code>                     |
+| form.alert.groups.database.rules.milvusHighThreadPressure.enabled      |                                               | <code>true</code>                     |
+| form.alert.groups.database.rules.milvusHighThreadPressure.duration     |                                               | <code>"1m"</code>                     |
+| form.alert.groups.database.rules.milvusHighThreadPressure.severity     |                                               | <code>warning</code>                  |
+| form.alert.groups.database.rules.milvusHighThreadPressure.val          |                                               | <code>60</code>                       |
+| form.alert.groups.database.rules.milvusHighFDsUsage.enabled            |                                               | <code>true</code>                     |
+| form.alert.groups.database.rules.milvusHighFDsUsage.duration           |                                               | <code>"1m"</code>                     |
+| form.alert.groups.database.rules.milvusHighFDsUsage.severity           |                                               | <code>warning</code>                  |
+| form.alert.groups.database.rules.milvusHighFDsUsage.val                |                                               | <code>110</code>                      |
 | form.alert.groups.provisioner.enabled                                  |                                               | <code>warning</code>                  |
 | form.alert.groups.provisioner.rules.appPhaseNotReady.enabled           |                                               | <code>true</code>                     |
 | form.alert.groups.provisioner.rules.appPhaseNotReady.duration          |                                               | <code>"1m"</code>                     |
@@ -115,12 +115,12 @@ The following table lists the configurable parameters of the `milvus-alerts` cha
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm upgrade -i`. For example:
 
 ```bash
-$ helm upgrade -i milvus milvus-alerts -n kubedb --create-namespace --version=v2025.6.30 --set metadata.resource.group=kubedb.com
+$ helm upgrade -i milvus appscode/milvus-alerts -n kubedb --create-namespace --version=v2025.6.30 --set metadata.resource.group=kubedb.com
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while
 installing the chart. For example:
 
 ```bash
-$ helm upgrade -i milvus milvus-alerts -n kubedb --create-namespace --version=v2025.6.30 --values values.yaml
+$ helm upgrade -i milvus appscode/milvus-alerts -n kubedb --create-namespace --version=v2025.6.30 --values values.yaml
 ```

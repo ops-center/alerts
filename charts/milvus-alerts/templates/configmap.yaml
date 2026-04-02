@@ -1,0 +1,1608 @@
+{{- if .Values.grafana.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "milvus-alerts.fullname" . }}-configmap
+  labels:
+    {{- include "milvus-alerts.labels" . | nindent 4 }}
+data:
+  grafana-json.json: |-
+    {
+      "dashboard": {
+        "__inputs": [],
+        "__requires": [
+          {
+            "type": "grafana",
+            "id": "grafana",
+            "name": "Grafana",
+            "version": "{{ .Values.grafana.version }}"
+          },
+          {
+            "type": "panel",
+            "id": "graph",
+            "name": "Graph",
+            "version": ""
+          }
+        ],
+        "annotations": {
+          "list": [
+            {
+              "builtIn": 1,
+              "datasource": "-- Grafana --",
+              "enable": true,
+              "hide": true,
+              "iconColor": "rgba(0, 211, 255, 1)",
+              "name": "Annotations & Alerts",
+              "type": "dashboard"
+            }
+          ]
+        },
+        "editable": true,
+        "gnetId": null,
+        "graphTooltip": 0,
+        "id": null,
+        "links": [],
+        "panels": [
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      0
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "1h",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "10s",
+              "frequency": "10s",
+              "handler": 1,
+              "name": "Milvus Not Ready alert",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 1
+            },
+            "hiddenSeries": false,
+            "id": 14,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "exemplar": true,
+                "expr": "kubedb_com_milvus_status_phase{app=\"{{ .Release.Name }}\", app_namespace=\"{{ $.Release.Namespace }}\", phase=\"NotReady\"}",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": true,
+                "line": true,
+                "op": "gt",
+                "value": 0,
+                "visible": true
+              }
+            ],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Milvus Not Ready",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              },
+              {
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false
+            }
+          },
+          {
+            "alert": {
+              "alertRuleTags": {
+                "kdb": ""
+              },
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      0
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "1h",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "10s",
+              "frequency": "10s",
+              "handler": 1,
+              "name": "Milvus Phase Critical Alert",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 1
+            },
+            "hiddenSeries": false,
+            "id": 2,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "kubedb_com_milvus_status_phase{app=\"{{ .Release.Name }}\", app_namespace=\"{{ $.Release.Namespace }}\", phase=\"Critical\"}",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A",
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                }
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": true,
+                "line": true,
+                "op": "gt",
+                "value": 0,
+                "visible": true
+              }
+            ],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Milvus Phase Critical",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              },
+              {
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false
+            }
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      180
+                    ],
+                    "type": "lt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Milvus Instance Down Alert",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "dashLength": 10,
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 9
+            },
+            "id": 36,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "expr": "up{job=\"{{ $.Release.Name }}-stats\", namespace=\"{{ $.Release.Namespace }}\"}",
+                "legendFormat": "{{`{{pod}}`}}",
+                "interval": "",
+                "exemplar": true,
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "value": 180,
+                "op": "lt",
+                "visible": true,
+                "fill": true,
+                "line": true,
+                "colorMode": "critical"
+              }
+            ],
+            "timeRegions": [],
+            "title": "Milvus Instance Down",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            },
+            "bars": false,
+            "dashes": false,
+            "fillGradient": 0,
+            "hiddenSeries": false,
+            "percentage": false,
+            "points": false,
+            "stack": false,
+            "steppedLine": false,
+            "timeFrom": null,
+            "timeShift": null,
+            "datasource": null
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      80
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "10s",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "avg"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Milvus Restarted alert",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "dashLength": 10,
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 9
+            },
+            "id": 40,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "exemplar": true,
+                "expr": "time() - min(kube_pod_start_time{namespace=\"{{ $.Release.Namespace }}\", pod=~\"{{ $.Release.Name }}.*\"})",
+                "interval": "",
+                "legendFormat": "{{`{{pod}}`}}",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "value": 80,
+                "op": "gt",
+                "visible": true,
+                "fill": true,
+                "line": true,
+                "colorMode": "critical"
+              }
+            ],
+            "timeRegions": [],
+            "title": "Milvus Restarted",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            },
+            "bars": false,
+            "dashes": false,
+            "fillGradient": 0,
+            "hiddenSeries": false,
+            "percentage": false,
+            "points": false,
+            "stack": false,
+            "steppedLine": false,
+            "timeFrom": null,
+            "timeShift": null,
+            "datasource": null
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      80
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "10s",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "avg"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Milvus High CPU Usage alert",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "dashLength": 10,
+            "description": "CPU usage is above 80%. Performance may be degraded.",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 17
+            },
+            "id": 41,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "exemplar": true,
+                "expr": "avg(irate(container_cpu_usage_seconds_total{namespace=\"{{ $.Release.Namespace }}\", pod=~\"{{ .Release.Name }}.*\"}[5m])) by (pod) * 100 ",
+                "interval": "",
+                "legendFormat": "{{`{{pod}}`}}",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "value": 80,
+                "op": "gt",
+                "visible": true,
+                "fill": true,
+                "line": true,
+                "colorMode": "critical"
+              }
+            ],
+            "timeRegions": [],
+            "title": "Milvus High CPU Usage",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            },
+            "bars": false,
+            "dashes": false,
+            "fillGradient": 0,
+            "hiddenSeries": false,
+            "percentage": false,
+            "points": false,
+            "stack": false,
+            "steppedLine": false,
+            "timeFrom": null,
+            "timeShift": null,
+            "datasource": null
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      80
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "10s",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "avg"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Milvus High Memory Usage alert",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "dashLength": 10,
+            "description": "Memory usage is above 80%. More RAM may be needed.",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 17
+            },
+            "id": 42,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "exemplar": true,
+                "expr": "(kubelet_volume_stats_used_bytes{job=\"kubelet\", metrics_path=\"/metrics\"} / kubelet_volume_stats_capacity_bytes{job=\"kubelet\", metrics_path=\"/metrics\"}) * on(persistentvolumeclaim) group_left(pod) kube_pod_spec_volumes_persistentvolumeclaims_info{pod=~\"{{ $.Release.Name }}-.+$\",namespace=\"{{ $.Release.Namespace }}\"} * 100",
+                "interval": "",
+                "legendFormat": "{{`{{pod}}`}}",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "value": 80,
+                "op": "gt",
+                "visible": true,
+                "fill": true,
+                "line": true,
+                "colorMode": "critical"
+              }
+            ],
+            "timeRegions": [],
+            "title": "Milvus High Memory Usage",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "percent",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": 0,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            },
+            "bars": false,
+            "dashes": false,
+            "fillGradient": 0,
+            "hiddenSeries": false,
+            "percentage": false,
+            "points": false,
+            "stack": false,
+            "steppedLine": false,
+            "timeFrom": null,
+            "timeShift": null,
+            "datasource": null
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [10],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Milvus High Disk Usage alert",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "dashLength": 10,
+            "description": "Disk usage is above 80%. Free up space or expand disk.",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 25
+            },
+            "id": 43,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "exemplar": true,
+                "expr": "100 * (kubelet_volume_stats_used_bytes{namespace=\"{{ $.Release.Namespace }}\"} / on(persistentvolumeclaim, namespace) group_left(pod) (kubelet_volume_stats_capacity_bytes{namespace=\"{{ $.Release.Namespace }}\"}))",
+                "interval": "",
+                "legendFormat": "pvc",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "value": 10,
+                "op": "gt",
+                "visible": true,
+                "fill": true,
+                "line": true,
+                "colorMode": "critical"
+              }
+            ],
+            "timeRegions": [],
+            "title": "Milvus High Disk Usage",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": 0,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            },
+            "bars": false,
+            "dashes": false,
+            "fillGradient": 0,
+            "hiddenSeries": false,
+            "percentage": false,
+            "points": false,
+            "stack": false,
+            "steppedLine": false,
+            "timeFrom": null,
+            "timeShift": null,
+            "datasource": null
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [10],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Milvus High Process Memory Usage alert",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "dashLength": 10,
+            "description": "Specifies the alert configuration for Milvus process memory usage (resident memory of the process).",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 25
+            },
+            "id": 44,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "exemplar": true,
+                "expr": "process_resident_memory_bytes{namespace=\"{{ $.Release.Namespace }}\", pod=~\"{{ .Release.Name }}.*\"}",
+                "interval": "",
+                "legendFormat": "{{`{{pod}}`}}",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "value": 10,
+                "op": "gt",
+                "visible": true,
+                "fill": true,
+                "line": true,
+                "colorMode": "critical"
+              }
+            ],
+            "timeRegions": [],
+            "title": "Milvus High Process Memory Usage",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": 0,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            },
+            "bars": false,
+            "dashes": false,
+            "fillGradient": 0,
+            "hiddenSeries": false,
+            "percentage": false,
+            "points": false,
+            "stack": false,
+            "steppedLine": false,
+            "timeFrom": null,
+            "timeShift": null,
+            "datasource": null
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [10],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Milvus Goroutines Explosion alert",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "dashLength": 10,
+            "description": "Specifies the alert configuration for Milvus goroutines total, indicating a sudden explosion of goroutines which could indicate leaks or overload.",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 33
+            },
+            "id": 45,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "exemplar": true,
+                "expr": "go_goroutines{namespace=\"{{ $.Release.Namespace }}\", pod=~\"{{ .Release.Name }}.*\"}",
+                "interval": "",
+                "legendFormat": "{{`{{pod}}`}}",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "value": 10,
+                "op": "gt",
+                "visible": true,
+                "fill": true,
+                "line": true,
+                "colorMode": "critical"
+              }
+            ],
+            "timeRegions": [],
+            "title": "Milvus Goroutines Explosion",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": 0,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            },
+            "bars": false,
+            "dashes": false,
+            "fillGradient": 0,
+            "hiddenSeries": false,
+            "percentage": false,
+            "points": false,
+            "stack": false,
+            "steppedLine": false,
+            "timeFrom": null,
+            "timeShift": null,
+            "datasource": null
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [10],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Milvus High Thread Pressure alert",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "dashLength": 10,
+            "description": "Specifies the alert configuration for Milvus threads total, indicating high thread pressure which may affect performance.",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 33
+            },
+            "id": 46,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "exemplar": true,
+                "expr": "go_threads{namespace=\"{{ $.Release.Namespace }}\", pod=~\"{{ .Release.Name }}.*\"}",
+                "interval": "",
+                "legendFormat": "{{`{{pod}}`}}",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "value": 10,
+                "op": "gt",
+                "visible": true,
+                "fill": true,
+                "line": true,
+                "colorMode": "critical"
+              }
+            ],
+            "timeRegions": [],
+            "title": "Milvus High Thread Pressure",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": 0,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            },
+            "bars": false,
+            "dashes": false,
+            "fillGradient": 0,
+            "hiddenSeries": false,
+            "percentage": false,
+            "points": false,
+            "stack": false,
+            "steppedLine": false,
+            "timeFrom": null,
+            "timeShift": null,
+            "datasource": null
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [10],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "5m",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Milvus High FDs Usage alert",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "dashLength": 10,
+            "description": "Specifies the alert configuration for Milvus open file descriptors usage, indicating high FD usage that may exhaust system resources.",
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 41
+            },
+            "id": 47,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "pluginVersion": "7.5.5",
+            "pointradius": 2,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "targets": [
+              {
+                "datasource": {
+                  "type": "prometheus",
+                  "uid": "prometheus"
+                },
+                "exemplar": true,
+                "expr": "process_open_fds{namespace=\"{{ $.Release.Namespace }}\", pod=~\"{{ .Release.Name }}.*\"}",
+                "interval": "",
+                "legendFormat": "{{`{{pod}}`}}",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "value": 10,
+                "op": "gt",
+                "visible": true,
+                "fill": true,
+                "line": true,
+                "colorMode": "critical"
+              }
+            ],
+            "timeRegions": [],
+            "title": "Milvus High FDs Usage",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": 0,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            },
+            "bars": false,
+            "dashes": false,
+            "fillGradient": 0,
+            "hiddenSeries": false,
+            "percentage": false,
+            "points": false,
+            "stack": false,
+            "steppedLine": false,
+            "timeFrom": null,
+            "timeShift": null,
+            "datasource": null
+          }
+        ],
+        "refresh": "5s",
+        "schemaVersion": 27,
+        "style": "dark",
+        "tags": [],
+        "templating": {
+          "list": []
+        },
+        "time": {
+          "from": "now-15m",
+          "to": "now"
+        },
+        "timepicker": {},
+        "timezone": "",
+        "title": "{{ .Values.metadata.resource.group }} / {{ .Values.metadata.resource.kind }} / {{ .Release.Namespace }} / {{ .Release.Name }}",
+        "uid": null,
+        "version": 23
+      },
+      "folderId": 0,
+      "overwrite": false
+    }
+{{- end }}

@@ -37,16 +37,16 @@ const (
 type HanaDBAlerts struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              HanaDBAlertsSpec `json:"spec,omitempty"`
+	Spec              HanadbAlertsSpec `json:"spec,omitempty"`
 }
 
-type HanaDBAlertsSpec struct {
+type HanadbAlertsSpec struct {
 	api.Metadata `json:"metadata,omitempty"`
-	Form         HanaDBAlertsSpecForm `json:"form"`
+	Form         HanadbAlertsSpecForm `json:"form"`
 	Grafana      Grafana              `json:"grafana"`
 }
 
-type HanaDBAlertsSpecForm struct {
+type HanadbAlertsSpecForm struct {
 	Alert HanaDBAlert `json:"alert"`
 }
 
@@ -57,24 +57,28 @@ type HanaDBAlert struct {
 	Annotations map[string]string `json:"annotations"`
 	// +optional
 	AdditionalRuleLabels map[string]string `json:"additionalRuleLabels"`
-	Groups               HanaDBAlertGroups `json:"groups"`
+	Groups               HanadbAlertGroups `json:"groups"`
 }
 
-type HanaDBAlertGroups struct {
-	Database    HanaDBDatabaseAlert `json:"database"`
+type HanadbAlertGroups struct {
+	Database    HanadbDatabaseAlert `json:"database"`
 	Provisioner ProvisionerAlert    `json:"provisioner"`
 }
 
-type HanaDBDatabaseAlert struct {
+type HanadbDatabaseAlert struct {
 	Enabled mona.SeverityFlag        `json:"enabled"`
-	Rules   HanaDBDatabaseAlertRules `json:"rules"`
+	Rules   HanadbDatabaseAlertRules `json:"rules"`
 }
 
-type HanaDBDatabaseAlertRules struct {
-	HanaDBInstanceDown FixedAlert  `json:"hanadbInstanceDown"`
-	HanaDBServiceDown  FixedAlert  `json:"hanadbServiceDown"`
-	DiskUsageHigh      IntValAlert `json:"diskUsageHigh"`
-	DiskAlmostFull     IntValAlert `json:"diskAlmostFull"`
+type HanadbDatabaseAlertRules struct {
+	HanaDBInstanceDown         FixedAlert  `json:"hanadbInstanceDown"`
+	HanaDBServiceDown          FixedAlert  `json:"hanadbServiceDown"`
+	HanaDBRestarted            IntValAlert `json:"hanadbRestarted"`
+	HanaDBHighCPUUsage         IntValAlert `json:"hanadbHighCPUUsage"`
+	HanaDBHighMemoryUsage      IntValAlert `json:"hanadbHighMemoryUsage"`
+	HanaDBReplicationNotActive FixedAlert  `json:"hanadbReplicationNotActive"`
+	DiskUsageHigh              IntValAlert `json:"diskUsageHigh"`
+	DiskAlmostFull             IntValAlert `json:"diskAlmostFull"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

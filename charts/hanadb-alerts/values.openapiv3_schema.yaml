@@ -71,6 +71,46 @@ properties:
                         - severity
                         - val
                         type: object
+                      hanadbHighCPUUsage:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                          val:
+                            type: integer
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        - val
+                        type: object
+                      hanadbHighMemoryUsage:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                          val:
+                            type: integer
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        - val
+                        type: object
                       hanadbInstanceDown:
                         properties:
                           duration:
@@ -87,6 +127,43 @@ properties:
                         - duration
                         - enabled
                         - severity
+                        type: object
+                      hanadbReplicationNotActive:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        type: object
+                      hanadbRestarted:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                          val:
+                            type: integer
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        - val
                         type: object
                       hanadbServiceDown:
                         properties:
@@ -108,7 +185,11 @@ properties:
                     required:
                     - diskAlmostFull
                     - diskUsageHigh
+                    - hanadbHighCPUUsage
+                    - hanadbHighMemoryUsage
                     - hanadbInstanceDown
+                    - hanadbReplicationNotActive
+                    - hanadbRestarted
                     - hanadbServiceDown
                     type: object
                 required:

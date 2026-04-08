@@ -66,7 +66,7 @@ The following table lists the configurable parameters of the `hanadb-alerts` cha
 | form.alert.groups.database.rules.hanadbServiceDown.duration          |             | <code>"0m"</code>                  |
 | form.alert.groups.database.rules.hanadbServiceDown.severity          |             | <code>critical</code>              |
 | form.alert.groups.database.rules.hanadbRestarted.enabled             |             | <code>true</code>                  |
-| form.alert.groups.database.rules.hanadbRestarted.duration            |             | <code>"10m"</code>                 |
+| form.alert.groups.database.rules.hanadbRestarted.duration            |             | <code>"1m"</code>                  |
 | form.alert.groups.database.rules.hanadbRestarted.severity            |             | <code>warning</code>               |
 | form.alert.groups.database.rules.hanadbRestarted.val                 |             | <code>180</code>                   |
 | form.alert.groups.database.rules.hanadbHighCPUUsage.enabled          |             | <code>true</code>                  |
@@ -74,11 +74,11 @@ The following table lists the configurable parameters of the `hanadb-alerts` cha
 | form.alert.groups.database.rules.hanadbHighCPUUsage.severity         |             | <code>warning</code>               |
 | form.alert.groups.database.rules.hanadbHighCPUUsage.val              |             | <code>80</code>                    |
 | form.alert.groups.database.rules.hanadbHighMemoryUsage.enabled       |             | <code>true</code>                  |
-| form.alert.groups.database.rules.hanadbHighMemoryUsage.duration      |             | <code>"10m"</code>                 |
+| form.alert.groups.database.rules.hanadbHighMemoryUsage.duration      |             | <code>"5m"</code>                  |
 | form.alert.groups.database.rules.hanadbHighMemoryUsage.severity      |             | <code>warning</code>               |
 | form.alert.groups.database.rules.hanadbHighMemoryUsage.val           |             | <code>80</code>                    |
 | form.alert.groups.database.rules.hanadbReplicationNotActive.enabled  |             | <code>true</code>                  |
-| form.alert.groups.database.rules.hanadbReplicationNotActive.duration |             | <code>"15m"</code>                 |
+| form.alert.groups.database.rules.hanadbReplicationNotActive.duration |             | <code>"2m"</code>                  |
 | form.alert.groups.database.rules.hanadbReplicationNotActive.severity |             | <code>critical</code>              |
 | form.alert.groups.database.rules.diskUsageHigh.enabled               |             | <code>true</code>                  |
 | form.alert.groups.database.rules.diskUsageHigh.val                   |             | <code>80</code>                    |

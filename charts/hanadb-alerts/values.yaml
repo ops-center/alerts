@@ -30,7 +30,7 @@ form:
             severity: critical
           hanadbRestarted:
             enabled: true
-            duration: "10m"
+            duration: "1m"
             severity: warning
             val: 180
           hanadbHighCPUUsage:
@@ -40,12 +40,12 @@ form:
             val: 80
           hanadbHighMemoryUsage:
             enabled: true
-            duration: "10m"
+            duration: "5m"
             severity: warning
             val: 80
           hanadbReplicationNotActive:
             enabled: true
-            duration: "15m"
+            duration: "2m"
             severity: critical
           diskUsageHigh:
             enabled: true

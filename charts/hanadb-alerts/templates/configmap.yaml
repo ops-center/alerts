@@ -1,0 +1,1352 @@
+{{- if .Values.grafana.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "hanadb-alerts.fullname" . }}-configmap
+  labels:
+    {{- include "hanadb-alerts.labels" . | nindent 4 }}
+data:
+  grafana-json.json: |-
+    {
+      "dashboard": {
+        "__inputs": [],
+        "__requires": [
+          {
+            "type": "grafana",
+            "id": "grafana",
+            "name": "Grafana",
+            "version": "{{ .Values.grafana.version }}"
+          },
+          {
+            "type": "panel",
+            "id": "graph",
+            "name": "Graph",
+            "version": ""
+          }
+        ],
+        "annotations": {
+          "list": [
+            {
+              "builtIn": 1,
+              "datasource": "-- Grafana --",
+              "enable": true,
+              "hide": true,
+              "iconColor": "rgba(0, 211, 255, 1)",
+              "name": "Annotations & Alerts",
+              "type": "dashboard"
+            }
+          ]
+        },
+        "editable": true,
+        "gnetId": null,
+        "graphTooltip": 0,
+        "id": null,
+        "links": [],
+        "panels": [
+          {
+            "collapsed": false,
+            "datasource": null,
+            "gridPos": {
+              "h": 1,
+              "w": 24,
+              "x": 0,
+              "y": 0
+            },
+            "id": 1,
+            "panels": [],
+            "title": "Database Alerts",
+            "type": "row"
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      0
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "1h",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "{{ .Values.form.alert.groups.database.rules.hanadbInstanceDown.duration }}",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "HanaDB Instance Down",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 1
+            },
+            "hiddenSeries": false,
+            "id": 2,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "up{job=\"{{ $.Release.Name }}-stats\",namespace=\"{{ $.Release.Namespace }}\"} < bool 1",
+                "interval": "",
+                "legendFormat": {{ `"{{pod}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": false,
+                "line": true,
+                "op": "gt",
+                "value": 0,
+                "visible": true
+              }
+            ],
+            "title": "HanaDB Instance Down",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              },
+              {
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false
+            }
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      0
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "1h",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "{{ .Values.form.alert.groups.database.rules.hanadbServiceDown.duration }}",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "HanaDB Service Down",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 1
+            },
+            "hiddenSeries": false,
+            "id": 3,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "sum by (service) (up{job=\"{{ $.Release.Name }}-stats\",namespace=\"{{ $.Release.Namespace }}\"}) < bool 1",
+                "interval": "",
+                "legendFormat": {{ `"{{service}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": false,
+                "line": true,
+                "op": "gt",
+                "value": 0,
+                "visible": true
+              }
+            ],
+            "title": "HanaDB Service Down",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              },
+              {
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false
+            }
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      {{ .Values.form.alert.groups.database.rules.hanadbRestarted.val }}
+                    ],
+                    "type": "lt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "{{ .Values.form.alert.groups.database.rules.hanadbRestarted.duration }}",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "HanaDB Restarted",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 9
+            },
+            "hiddenSeries": false,
+            "id": 4,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "time() - min(kube_pod_start_time{namespace=\"{{ $.Release.Namespace }}\", pod=~\"{{ $.Release.Name }}(-arbiter)?-.+\"})",
+                "interval": "",
+                "legendFormat": {{ `"{{pod}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": false,
+                "line": true,
+                "op": "lt",
+                "value": {{ .Values.form.alert.groups.database.rules.hanadbRestarted.val }},
+                "visible": true
+              }
+            ],
+            "title": "HanaDB Restarted",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "s",
+                "logBase": 1,
+                "show": true
+              },
+              {
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false
+            }
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      {{ .Values.form.alert.groups.database.rules.hanadbHighCPUUsage.val }}
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "avg"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "{{ .Values.form.alert.groups.database.rules.hanadbHighCPUUsage.duration }}",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "HanaDB High CPU Usage",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 9
+            },
+            "hiddenSeries": false,
+            "id": 5,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "sum by (pod) (rate(container_cpu_usage_seconds_total{namespace=\"{{ $.Release.Namespace }}\",pod=~\"{{ $.Release.Name }}.*\",container!=\"\",container!=\"POD\"}[5m])) * 100",
+                "interval": "",
+                "legendFormat": {{ `"{{pod}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": false,
+                "line": true,
+                "op": "gt",
+                "value": {{ .Values.form.alert.groups.database.rules.hanadbHighCPUUsage.val }},
+                "visible": true
+              }
+            ],
+            "title": "HanaDB High CPU Usage",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "percent",
+                "logBase": 1,
+                "show": true
+              },
+              {
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false
+            }
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      {{ .Values.form.alert.groups.database.rules.hanadbHighMemoryUsage.val }}
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "avg"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "{{ .Values.form.alert.groups.database.rules.hanadbHighMemoryUsage.duration }}",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "HanaDB High Memory Usage",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 17
+            },
+            "hiddenSeries": false,
+            "id": 6,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "100 * (sum by (pod) (hanadb_host_memory_used_total_mb{job=\"{{ $.Release.Name }}-stats\",namespace=\"{{ $.Release.Namespace }}\"}) / clamp_min(sum by (pod) (hanadb_host_memory_alloc_limit_mb{job=\"{{ $.Release.Name }}-stats\",namespace=\"{{ $.Release.Namespace }}\"}), 1))",
+                "interval": "",
+                "legendFormat": {{ `"{{pod}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": false,
+                "line": true,
+                "op": "gt",
+                "value": {{ .Values.form.alert.groups.database.rules.hanadbHighMemoryUsage.val }},
+                "visible": true
+              }
+            ],
+            "title": "HanaDB High Memory Usage",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "percent",
+                "logBase": 1,
+                "show": true
+              },
+              {
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false
+            }
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      0
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "{{ .Values.form.alert.groups.database.rules.hanadbReplicationNotActive.duration }}",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "HanaDB Replication Not Active",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 17
+            },
+            "hiddenSeries": false,
+            "id": 7,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "max by (pod) (hanadb_sr_replication_status{job=\"{{ $.Release.Name }}-stats\",namespace=\"{{ $.Release.Namespace }}\"})",
+                "interval": "",
+                "legendFormat": {{ `"{{pod}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": false,
+                "line": true,
+                "op": "gt",
+                "value": 0,
+                "visible": true
+              }
+            ],
+            "title": "HanaDB Replication Not Active",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              },
+              {
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false
+            }
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      {{ .Values.form.alert.groups.database.rules.diskUsageHigh.val }}
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "avg"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "{{ .Values.form.alert.groups.database.rules.diskUsageHigh.duration }}",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Disk Usage High",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 25
+            },
+            "hiddenSeries": false,
+            "id": 8,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "100 * (((kubelet_volume_stats_used_bytes{job=\"kubelet\",namespace=~\"{{ $.Release.Namespace }}\"} / on(namespace,persistentvolumeclaim) kubelet_volume_stats_capacity_bytes{job=\"kubelet\",namespace=~\"{{ $.Release.Namespace }}\"}) * on(namespace,persistentvolumeclaim) group_left(pod) max by(namespace,persistentvolumeclaim,pod) (kube_pod_spec_volumes_persistentvolumeclaims_info{pod=~\"{{ $.Release.Name }}(-arbiter)?-.+$\",namespace=~\"{{ $.Release.Namespace }}\"})))",
+                "interval": "",
+                "legendFormat": {{ `"{{pod}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": false,
+                "line": true,
+                "op": "gt",
+                "value": {{ .Values.form.alert.groups.database.rules.diskUsageHigh.val }},
+                "visible": true
+              }
+            ],
+            "title": "Disk Usage High",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "percent",
+                "logBase": 1,
+                "show": true
+              },
+              {
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false
+            }
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      {{ .Values.form.alert.groups.database.rules.diskAlmostFull.val }}
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "avg"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "{{ .Values.form.alert.groups.database.rules.diskAlmostFull.duration }}",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "Disk Almost Full",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 25
+            },
+            "hiddenSeries": false,
+            "id": 9,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "100 * (((kubelet_volume_stats_used_bytes{job=\"kubelet\",namespace=~\"{{ $.Release.Namespace }}\"} / on(namespace,persistentvolumeclaim) kubelet_volume_stats_capacity_bytes{job=\"kubelet\",namespace=~\"{{ $.Release.Namespace }}\"}) * on(namespace,persistentvolumeclaim) group_left(pod) max by(namespace,persistentvolumeclaim,pod) (kube_pod_spec_volumes_persistentvolumeclaims_info{pod=~\"{{ $.Release.Name }}(-arbiter)?-.+$\",namespace=~\"{{ $.Release.Namespace }}\"})))",
+                "interval": "",
+                "legendFormat": {{ `"{{pod}}"` }},
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": false,
+                "line": true,
+                "op": "gt",
+                "value": {{ .Values.form.alert.groups.database.rules.diskAlmostFull.val }},
+                "visible": true
+              }
+            ],
+            "title": "Disk Almost Full",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "percent",
+                "logBase": 1,
+                "show": true
+              },
+              {
+                "format": "short",
+                "logBase": 1,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false
+            }
+          },
+          {
+            "collapsed": false,
+            "datasource": null,
+            "gridPos": {
+              "h": 1,
+              "w": 24,
+              "x": 0,
+              "y": 33
+            },
+            "id": 10,
+            "panels": [],
+            "title": "KubeDB Phase",
+            "type": "row"
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      0
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "{{ .Values.form.alert.groups.provisioner.rules.appPhaseNotReady.duration }}",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "KubeDB HanaDB Phase Not Ready",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 0,
+              "y": 34
+            },
+            "hiddenSeries": false,
+            "id": 11,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "kubedb_com_hanadb_status_phase{app=\"{{ $.Release.Name }}\",namespace=\"{{ $.Release.Namespace }}\",phase=\"NotReady\"}",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": false,
+                "line": true,
+                "op": "gt",
+                "value": 0,
+                "visible": true
+              }
+            ],
+            "title": "KubeDB HanaDB Phase Not Ready",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          },
+          {
+            "alert": {
+              "alertRuleTags": {},
+              "conditions": [
+                {
+                  "evaluator": {
+                    "params": [
+                      0
+                    ],
+                    "type": "gt"
+                  },
+                  "operator": {
+                    "type": "and"
+                  },
+                  "query": {
+                    "params": [
+                      "A",
+                      "5m",
+                      "now"
+                    ]
+                  },
+                  "reducer": {
+                    "params": [],
+                    "type": "last"
+                  },
+                  "type": "query"
+                }
+              ],
+              "executionErrorState": "alerting",
+              "for": "{{ .Values.form.alert.groups.provisioner.rules.appPhaseCritical.duration }}",
+              "frequency": "1m",
+              "handler": 1,
+              "name": "KubeDB HanaDB Phase Critical",
+              "noDataState": "no_data",
+              "notifications": []
+            },
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": null,
+            "fieldConfig": {
+              "defaults": {},
+              "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+              "h": 8,
+              "w": 12,
+              "x": 12,
+              "y": 34
+            },
+            "hiddenSeries": false,
+            "id": 12,
+            "legend": {
+              "avg": false,
+              "current": false,
+              "max": false,
+              "min": false,
+              "show": true,
+              "total": false,
+              "values": false
+            },
+            "lines": true,
+            "linewidth": 1,
+            "nullPointMode": "null",
+            "options": {
+              "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "{{ .Values.grafana.version }}",
+            "pointradius": 2,
+            "points": false,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+              {
+                "exemplar": true,
+                "expr": "kubedb_com_hanadb_status_phase{app=\"{{ $.Release.Name }}\",namespace=\"{{ $.Release.Namespace }}\",phase=\"Critical\"}",
+                "interval": "",
+                "legendFormat": "",
+                "refId": "A"
+              }
+            ],
+            "thresholds": [
+              {
+                "colorMode": "critical",
+                "fill": false,
+                "line": true,
+                "op": "gt",
+                "value": 0,
+                "visible": true
+              }
+            ],
+            "title": "KubeDB HanaDB Phase Critical",
+            "tooltip": {
+              "shared": true,
+              "sort": 0,
+              "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+              "buckets": null,
+              "mode": "time",
+              "name": null,
+              "show": true,
+              "values": []
+            },
+            "yaxes": [
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              },
+              {
+                "format": "short",
+                "label": null,
+                "logBase": 1,
+                "max": null,
+                "min": null,
+                "show": true
+              }
+            ],
+            "yaxis": {
+              "align": false,
+              "alignLevel": null
+            }
+          }
+        ],
+        "schemaVersion": 27,
+        "style": "dark",
+        "tags": [],
+        "templating": {
+          "list": []
+        },
+        "time": {
+          "from": "now-30m",
+          "to": "now"
+        },
+        "title": "HanaDB Alerts",
+        "version": 2
+      },
+      "overwrite": true
+    }
+{{- end }}

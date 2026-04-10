@@ -31,6 +31,7 @@ func TestDefaultValues(t *testing.T) {
 		sc.TestCase{Obj: v1alpha1.ConnectClusterAlertsSpec{}},
 		sc.TestCase{Obj: v1alpha1.DruidAlertsSpec{}},
 		sc.TestCase{Obj: v1alpha1.ElasticsearchAlertsSpec{}},
+		sc.TestCase{Obj: v1alpha1.HanadbAlertsSpec{}},
 		sc.TestCase{Obj: v1alpha1.KafkaAlertsSpec{}},
 		sc.TestCase{Obj: v1alpha1.MariadbAlertsSpec{}},
 		sc.TestCase{Obj: v1alpha1.MemcachedAlertsSpec{}},

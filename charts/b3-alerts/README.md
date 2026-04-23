@@ -49,11 +49,11 @@ The following table lists the configurable parameters of the `b3-alerts` chart a
 
 |                                  Parameter                                  | Description |                      Default                       |
 |-----------------------------------------------------------------------------|-------------|----------------------------------------------------|
-| metadata.resource.group                                                     |             | <code>alerts.appscode.com</code>                   |
-| metadata.resource.kind                                                      |             | <code>B3Alerts</code>                              |
-| metadata.resource.name                                                      |             | <code>b3alerts</code>                              |
+| metadata.resource.group                                                     |             | <code>apps</code>                                  |
+| metadata.resource.kind                                                      |             | <code>StatefulSet</code>                           |
+| metadata.resource.name                                                      |             | <code>statefulsets</code>                          |
 | metadata.resource.scope                                                     |             | <code>Namespaced</code>                            |
-| metadata.resource.version                                                   |             | <code>v1alpha2</code>                              |
+| metadata.resource.version                                                   |             | <code>v1</code>                                    |
 | metadata.release.name                                                       |             | <code>""</code>                                    |
 | metadata.release.namespace                                                  |             | <code>""</code>                                    |
 | form.alert.enabled                                                          |             | <code>warning</code>                               |
@@ -163,7 +163,7 @@ The following table lists the configurable parameters of the `b3-alerts` chart a
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm upgrade -i`. For example:
 
 ```bash
-$ helm upgrade -i b3-alerts appscode/b3-alerts -n monitoring --create-namespace --version=v2025.6.30 --set metadata.resource.group=alerts.appscode.com
+$ helm upgrade -i b3-alerts appscode/b3-alerts -n monitoring --create-namespace --version=v2025.6.30 --set metadata.resource.group=apps
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while

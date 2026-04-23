@@ -48,11 +48,11 @@ The following table lists the configurable parameters of the `nats-alerts` chart
 
 |                                     Parameter                                     |                  Description                  |                     Default                      |
 |-----------------------------------------------------------------------------------|-----------------------------------------------|--------------------------------------------------|
-| metadata.resource.group                                                           |                                               | <code>alerts.appscode.com</code>                 |
-| metadata.resource.kind                                                            |                                               | <code>NATSAlerts</code>                          |
-| metadata.resource.name                                                            |                                               | <code>natsalerts</code>                          |
+| metadata.resource.group                                                           |                                               | <code>apps</code>                                |
+| metadata.resource.kind                                                            |                                               | <code>StatefulSet</code>                         |
+| metadata.resource.name                                                            |                                               | <code>statefulsets</code>                        |
 | metadata.resource.scope                                                           |                                               | <code>Namespaced</code>                          |
-| metadata.resource.version                                                         |                                               | <code>v1alpha2</code>                            |
+| metadata.resource.version                                                         |                                               | <code>v1</code>                                  |
 | metadata.release.name                                                             | Release name                                  | <code>""</code>                                  |
 | metadata.release.namespace                                                        | Release namespace                             | <code>""</code>                                  |
 | form.alert.enabled                                                                | # Enable PrometheusRule alerts                | <code>warning</code>                             |
@@ -205,7 +205,7 @@ The following table lists the configurable parameters of the `nats-alerts` chart
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm upgrade -i`. For example:
 
 ```bash
-$ helm upgrade -i nats-alerts appscode/nats-alerts -n monitoring --create-namespace --version=v2025.6.30 --set metadata.resource.group=alerts.appscode.com
+$ helm upgrade -i nats-alerts appscode/nats-alerts -n monitoring --create-namespace --version=v2025.6.30 --set metadata.resource.group=apps
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while

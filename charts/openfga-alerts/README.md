@@ -59,6 +59,9 @@ The following table lists the configurable parameters of the `openfga-alerts` ch
 | form.alert.annotations                                          |             | <code>{}</code>                    |
 | form.alert.additionalRuleLabels                                 |             | <code>{}</code>                    |
 | form.alert.groups.database.enabled                              |             | <code>warning</code>               |
+| form.alert.groups.database.rules.down.enabled                   |             | <code>true</code>                  |
+| form.alert.groups.database.rules.down.duration                  |             | <code>"2m"</code>                  |
+| form.alert.groups.database.rules.down.severity                  |             | <code>critical</code>              |
 | form.alert.groups.database.rules.highRequestLatency.enabled     |             | <code>true</code>                  |
 | form.alert.groups.database.rules.highRequestLatency.duration    |             | <code>"5m"</code>                  |
 | form.alert.groups.database.rules.highRequestLatency.val         |             | <code>1.0</code>                   |
@@ -75,22 +78,6 @@ The following table lists the configurable parameters of the `openfga-alerts` ch
 | form.alert.groups.database.rules.highSQLConnections.duration    |             | <code>"5m"</code>                  |
 | form.alert.groups.database.rules.highSQLConnections.val         |             | <code>80</code>                    |
 | form.alert.groups.database.rules.highSQLConnections.severity    |             | <code>critical</code>              |
-| form.alert.groups.database.rules.highGoroutines.enabled         |             | <code>true</code>                  |
-| form.alert.groups.database.rules.highGoroutines.duration        |             | <code>"5m"</code>                  |
-| form.alert.groups.database.rules.highGoroutines.val             |             | <code>10000</code>                 |
-| form.alert.groups.database.rules.highGoroutines.severity        |             | <code>warning</code>               |
-| form.alert.groups.database.rules.highGCDuration.enabled         |             | <code>true</code>                  |
-| form.alert.groups.database.rules.highGCDuration.duration        |             | <code>"5m"</code>                  |
-| form.alert.groups.database.rules.highGCDuration.val             |             | <code>1.0</code>                   |
-| form.alert.groups.database.rules.highGCDuration.severity        |             | <code>warning</code>               |
-| form.alert.groups.database.rules.highHeapMemory.enabled         |             | <code>true</code>                  |
-| form.alert.groups.database.rules.highHeapMemory.duration        |             | <code>"5m"</code>                  |
-| form.alert.groups.database.rules.highHeapMemory.val             |             | <code>4294967296 # 4GB</code>      |
-| form.alert.groups.database.rules.highHeapMemory.severity        |             | <code>warning</code>               |
-| form.alert.groups.database.rules.highAllocationRate.enabled     |             | <code>true</code>                  |
-| form.alert.groups.database.rules.highAllocationRate.duration    |             | <code>"2m"</code>                  |
-| form.alert.groups.database.rules.highAllocationRate.val         |             | <code>104857600 # 100MB/s</code>   |
-| form.alert.groups.database.rules.highAllocationRate.severity    |             | <code>warning</code>               |
 | grafana.enabled                                                 |             | <code>false</code>                 |
 | grafana.version                                                 |             | <code>8.2.3</code>                 |
 | grafana.jobName                                                 |             | <code>openfga</code>               |

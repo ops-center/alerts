@@ -31,7 +31,7 @@ properties:
                     type: string
                   rules:
                     properties:
-                      highAllocationRate:
+                      down:
                         properties:
                           duration:
                             type: string
@@ -43,13 +43,10 @@ properties:
                             - warning
                             - info
                             type: string
-                          val:
-                            type: integer
                         required:
                         - duration
                         - enabled
                         - severity
-                        - val
                         type: object
                       highErrorRate:
                         properties:
@@ -66,67 +63,6 @@ properties:
                           val:
                             format: double
                             type: number
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      highGCDuration:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            format: double
-                            type: number
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      highGoroutines:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      highHeapMemory:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
                         required:
                         - duration
                         - enabled
@@ -197,11 +133,8 @@ properties:
                         - val
                         type: object
                     required:
-                    - highAllocationRate
+                    - down
                     - highErrorRate
-                    - highGCDuration
-                    - highGoroutines
-                    - highHeapMemory
                     - highRequestLatency
                     - highSQLConnections
                     - lowCheckCacheHitRatio

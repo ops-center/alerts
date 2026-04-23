@@ -165,7 +165,8 @@ properties:
                             - info
                             type: string
                           val:
-                            type: integer
+                            format: double
+                            type: number
                         required:
                         - duration
                         - enabled
@@ -247,7 +248,8 @@ properties:
                             - info
                             type: string
                           val:
-                            type: integer
+                            format: double
+                            type: number
                         required:
                         - duration
                         - enabled
@@ -275,7 +277,7 @@ properties:
                     type: string
                   rules:
                     properties:
-                      b3CpuRunaway:
+                      b3Down:
                         properties:
                           duration:
                             type: string
@@ -287,75 +289,10 @@ properties:
                             - warning
                             - info
                             type: string
-                          val:
-                            format: double
-                            type: number
                         required:
                         - duration
                         - enabled
                         - severity
-                        - val
-                        type: object
-                      b3CpuSpike:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      b3GoroutineLeak:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            format: double
-                            type: number
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      b3GoroutineSpike:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
                         type: object
                       b3HighFileDescriptorUsage:
                         properties:
@@ -418,74 +355,11 @@ properties:
                         - severity
                         - val
                         type: object
-                      b3MemoryLeak:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      b3MemorySpike:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      b3ProcessRestarted:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        type: object
                     required:
-                    - b3CpuRunaway
-                    - b3CpuSpike
-                    - b3GoroutineLeak
-                    - b3GoroutineSpike
+                    - b3Down
                     - b3HighFileDescriptorUsage
                     - b3HighGcPauseDuration
                     - b3HighGoroutineCount
-                    - b3MemoryLeak
-                    - b3MemorySpike
-                    - b3ProcessRestarted
                     type: object
                 required:
                 - enabled
@@ -536,7 +410,8 @@ properties:
                             - info
                             type: string
                           val:
-                            type: integer
+                            format: double
+                            type: number
                         required:
                         - duration
                         - enabled

@@ -60,6 +60,9 @@ The following table lists the configurable parameters of the `nats-alerts` chart
 | form.alert.annotations                                                            | # Annotations for default rules               | <code>{}</code>                                  |
 | form.alert.additionalRuleLabels                                                   | # Additional labels for PrometheusRule alerts | <code>{}</code>                                  |
 | form.alert.groups.database.enabled                                                |                                               | <code>warning</code>                             |
+| form.alert.groups.database.rules.natsDown.enabled                                 |                                               | <code>true</code>                                |
+| form.alert.groups.database.rules.natsDown.duration                                |                                               | <code>"2m"</code>                                |
+| form.alert.groups.database.rules.natsDown.severity                                |                                               | <code>critical</code>                            |
 | form.alert.groups.database.rules.natsJetStreamHighMemoryUsage.enabled             |                                               | <code>true</code>                                |
 | form.alert.groups.database.rules.natsJetStreamHighMemoryUsage.duration            |                                               | <code>"5m"</code>                                |
 | form.alert.groups.database.rules.natsJetStreamHighMemoryUsage.severity            |                                               | <code>critical</code>                            |
@@ -80,20 +83,30 @@ The following table lists the configurable parameters of the `nats-alerts` chart
 | form.alert.groups.database.rules.natsJetStreamHighAckPending.duration             |                                               | <code>"10m"</code>                               |
 | form.alert.groups.database.rules.natsJetStreamHighAckPending.severity             |                                               | <code>critical</code>                            |
 | form.alert.groups.database.rules.natsJetStreamHighAckPending.val                  |                                               | <code>2000</code>                                |
-| form.alert.groups.database.rules.natsJetStreamConsumerStalled.enabled             |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.natsJetStreamConsumerStalled.duration            |                                               | <code>"15m"</code>                               |
-| form.alert.groups.database.rules.natsJetStreamConsumerStalled.severity            |                                               | <code>warning</code>                             |
-| form.alert.groups.database.rules.natsJetStreamHighMessageCount.enabled            |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.natsJetStreamHighMessageCount.duration           |                                               | <code>"15m"</code>                               |
-| form.alert.groups.database.rules.natsJetStreamHighMessageCount.severity           |                                               | <code>warning</code>                             |
-| form.alert.groups.database.rules.natsJetStreamHighMessageCount.val                |                                               | <code>1000000</code>                             |
-| form.alert.groups.database.rules.natsJetStreamHighStreamSize.enabled              |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.natsJetStreamHighStreamSize.duration             |                                               | <code>"15m"</code>                               |
-| form.alert.groups.database.rules.natsJetStreamHighStreamSize.severity             |                                               | <code>warning</code>                             |
-| form.alert.groups.database.rules.natsJetStreamHighStreamSize.val                  |                                               | <code>10737418240 # 10GB</code>                  |
-| form.alert.groups.database.rules.natsJetStreamNoIngestion.enabled                 |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.natsJetStreamNoIngestion.duration                |                                               | <code>"15m"</code>                               |
-| form.alert.groups.database.rules.natsJetStreamNoIngestion.severity                |                                               | <code>warning</code>                             |
+| form.alert.groups.database.rules.natsJetStreamBacklogNoProgress.enabled           |                                               | <code>true</code>                                |
+| form.alert.groups.database.rules.natsJetStreamBacklogNoProgress.duration          |                                               | <code>"15m"</code>                               |
+| form.alert.groups.database.rules.natsJetStreamBacklogNoProgress.severity          |                                               | <code>warning</code>                             |
+| form.alert.groups.database.rules.natsJetStreamBacklogNoProgress.val               |                                               | <code>100</code>                                 |
+| form.alert.groups.database.rules.natsJetStreamNearMessageLimit.enabled            |                                               | <code>true</code>                                |
+| form.alert.groups.database.rules.natsJetStreamNearMessageLimit.duration           |                                               | <code>"15m"</code>                               |
+| form.alert.groups.database.rules.natsJetStreamNearMessageLimit.severity           |                                               | <code>warning</code>                             |
+| form.alert.groups.database.rules.natsJetStreamNearMessageLimit.val                |                                               | <code>80</code>                                  |
+| form.alert.groups.database.rules.natsJetStreamNearByteLimit.enabled               |                                               | <code>true</code>                                |
+| form.alert.groups.database.rules.natsJetStreamNearByteLimit.duration              |                                               | <code>"15m"</code>                               |
+| form.alert.groups.database.rules.natsJetStreamNearByteLimit.severity              |                                               | <code>warning</code>                             |
+| form.alert.groups.database.rules.natsJetStreamNearByteLimit.val                   |                                               | <code>80</code>                                  |
+| form.alert.groups.database.rules.natsJetStreamDisabled.enabled                    |                                               | <code>true</code>                                |
+| form.alert.groups.database.rules.natsJetStreamDisabled.duration                   |                                               | <code>"2m"</code>                                |
+| form.alert.groups.database.rules.natsJetStreamDisabled.severity                   |                                               | <code>critical</code>                            |
+| form.alert.groups.database.rules.natsSlowConsumers.enabled                        |                                               | <code>true</code>                                |
+| form.alert.groups.database.rules.natsSlowConsumers.duration                       |                                               | <code>"5m"</code>                                |
+| form.alert.groups.database.rules.natsSlowConsumers.severity                       |                                               | <code>warning</code>                             |
+| form.alert.groups.database.rules.natsStalledClients.enabled                       |                                               | <code>true</code>                                |
+| form.alert.groups.database.rules.natsStalledClients.duration                      |                                               | <code>"5m"</code>                                |
+| form.alert.groups.database.rules.natsStalledClients.severity                      |                                               | <code>warning</code>                             |
+| form.alert.groups.database.rules.natsStaleConnections.enabled                     |                                               | <code>true</code>                                |
+| form.alert.groups.database.rules.natsStaleConnections.duration                    |                                               | <code>"10m"</code>                               |
+| form.alert.groups.database.rules.natsStaleConnections.severity                    |                                               | <code>warning</code>                             |
 | form.alert.groups.database.rules.natsSuddenConnectionDrop.enabled                 |                                               | <code>true</code>                                |
 | form.alert.groups.database.rules.natsSuddenConnectionDrop.duration                |                                               | <code>"5m"</code>                                |
 | form.alert.groups.database.rules.natsSuddenConnectionDrop.severity                |                                               | <code>warning</code>                             |

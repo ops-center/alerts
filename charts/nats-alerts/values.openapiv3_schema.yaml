@@ -31,6 +31,23 @@ properties:
                     type: string
                   rules:
                     properties:
+                      natsDown:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        type: object
                       natsHighActiveConnections:
                         properties:
                           duration:
@@ -71,7 +88,27 @@ properties:
                         - severity
                         - val
                         type: object
-                      natsJetStreamConsumerStalled:
+                      natsJetStreamBacklogNoProgress:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                          val:
+                            type: integer
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        - val
+                        type: object
+                      natsJetStreamDisabled:
                         properties:
                           duration:
                             type: string
@@ -109,26 +146,6 @@ properties:
                         - val
                         type: object
                       natsJetStreamHighMemoryUsage:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      natsJetStreamHighMessageCount:
                         properties:
                           duration:
                             type: string
@@ -208,7 +225,7 @@ properties:
                         - severity
                         - val
                         type: object
-                      natsJetStreamHighStreamSize:
+                      natsJetStreamNearByteLimit:
                         properties:
                           duration:
                             type: string
@@ -228,7 +245,61 @@ properties:
                         - severity
                         - val
                         type: object
-                      natsJetStreamNoIngestion:
+                      natsJetStreamNearMessageLimit:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                          val:
+                            type: integer
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        - val
+                        type: object
+                      natsSlowConsumers:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        type: object
+                      natsStaleConnections:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        type: object
+                      natsStalledClients:
                         properties:
                           duration:
                             type: string
@@ -286,17 +357,21 @@ properties:
                         - val
                         type: object
                     required:
+                    - natsDown
                     - natsHighActiveConnections
                     - natsHighTotalConsumers
-                    - natsJetStreamConsumerStalled
+                    - natsJetStreamBacklogNoProgress
+                    - natsJetStreamDisabled
                     - natsJetStreamHighAckPending
                     - natsJetStreamHighMemoryUsage
-                    - natsJetStreamHighMessageCount
                     - natsJetStreamHighPendingMessages
                     - natsJetStreamHighPendingMessagesWarning
                     - natsJetStreamHighStorageUsage
-                    - natsJetStreamHighStreamSize
-                    - natsJetStreamNoIngestion
+                    - natsJetStreamNearByteLimit
+                    - natsJetStreamNearMessageLimit
+                    - natsSlowConsumers
+                    - natsStaleConnections
+                    - natsStalledClients
                     - natsSuddenConnectionDrop
                     - natsSuddenConsumerDrop
                     type: object

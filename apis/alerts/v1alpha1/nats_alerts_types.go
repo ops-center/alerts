@@ -76,18 +76,22 @@ type NATSDatabaseAlert struct {
 }
 
 type NATSDatabaseAlertRules struct {
+	NatsDown                      FixedAlert  `json:"natsDown"`
 	NatsJetStreamHighMemoryUsage  IntValAlert `json:"natsJetStreamHighMemoryUsage"`
 	NatsJetStreamHighStorageUsage IntValAlert `json:"natsJetStreamHighStorageUsage"`
 
 	NatsJetStreamHighPendingMessages        IntValAlert `json:"natsJetStreamHighPendingMessages"`
 	NatsJetStreamHighPendingMessagesWarning IntValAlert `json:"natsJetStreamHighPendingMessagesWarning"`
 	NatsJetStreamHighAckPending             IntValAlert `json:"natsJetStreamHighAckPending"`
-	NatsJetStreamConsumerStalled            FixedAlert  `json:"natsJetStreamConsumerStalled"`
+	NatsJetStreamBacklogNoProgress          IntValAlert `json:"natsJetStreamBacklogNoProgress"`
 
-	NatsJetStreamHighMessageCount IntValAlert `json:"natsJetStreamHighMessageCount"`
-	NatsJetStreamHighStreamSize   IntValAlert `json:"natsJetStreamHighStreamSize"`
-	NatsJetStreamNoIngestion      FixedAlert  `json:"natsJetStreamNoIngestion"`
+	NatsJetStreamNearMessageLimit IntValAlert `json:"natsJetStreamNearMessageLimit"`
+	NatsJetStreamNearByteLimit    IntValAlert `json:"natsJetStreamNearByteLimit"`
 
+	NatsJetStreamDisabled     FixedAlert  `json:"natsJetStreamDisabled"`
+	NatsSlowConsumers         FixedAlert  `json:"natsSlowConsumers"`
+	NatsStalledClients        FixedAlert  `json:"natsStalledClients"`
+	NatsStaleConnections      FixedAlert  `json:"natsStaleConnections"`
 	NatsSuddenConnectionDrop  IntValAlert `json:"natsSuddenConnectionDrop"`
 	NatsHighActiveConnections IntValAlert `json:"natsHighActiveConnections"`
 

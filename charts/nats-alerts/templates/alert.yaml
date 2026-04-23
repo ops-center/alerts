@@ -31,7 +31,7 @@ spec:
         {{- include "nats-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: "NATS is down or not being scraped in namespace {{`{{`}} $labels.namespace {{`}}`}}"
-        description: "Prometheus has not seen a healthy NATS scrape target in the last 5 minutes for job {{`{{`}} $labels.job {{`}}`}}. This catches pod/process outages and scrape disappearance, not just JetStream-level failures.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "Prometheus has not seen a healthy NATS scrape target in the last 2 minutes for job {{`{{`}} $labels.job {{`}}`}}. This catches pod/process outages and scrape disappearance, not just JetStream-level failures.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
 {{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamHighMemoryUsage.enabled .rules.natsJetStreamHighMemoryUsage.severity)) }}
     - alert: NatsJetStreamHighMemoryUsage

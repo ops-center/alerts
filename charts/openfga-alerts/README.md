@@ -47,11 +47,11 @@ The following table lists the configurable parameters of the `openfga-alerts` ch
 
 |                            Parameter                            | Description |              Default               |
 |-----------------------------------------------------------------|-------------|------------------------------------|
-| metadata.resource.group                                         |             | <code>alerts.appscode.com</code>   |
-| metadata.resource.kind                                          |             | <code>OpenFGAAlerts</code>         |
-| metadata.resource.name                                          |             | <code>openfgaalerts</code>         |
+| metadata.resource.group                                         |             | <code>apps</code>                  |
+| metadata.resource.kind                                          |             | <code>Deployment</code>            |
+| metadata.resource.name                                          |             | <code>deployments</code>           |
 | metadata.resource.scope                                         |             | <code>Namespaced</code>            |
-| metadata.resource.version                                       |             | <code>v1alpha1</code>              |
+| metadata.resource.version                                       |             | <code>v1</code>                    |
 | metadata.release.name                                           |             | <code>""</code>                    |
 | metadata.release.namespace                                      |             | <code>""</code>                    |
 | form.alert.enabled                                              |             | <code>warning</code>               |
@@ -101,7 +101,7 @@ The following table lists the configurable parameters of the `openfga-alerts` ch
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm upgrade -i`. For example:
 
 ```bash
-$ helm upgrade -i openfga appscode/openfga-alerts -n demo --create-namespace --version=v2025.6.30 --set metadata.resource.group=alerts.appscode.com
+$ helm upgrade -i openfga appscode/openfga-alerts -n demo --create-namespace --version=v2025.6.30 --set metadata.resource.group=apps
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while

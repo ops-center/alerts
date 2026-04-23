@@ -4,11 +4,11 @@
 
 metadata:
   resource:
-    group: alerts.appscode.com
-    kind: NATSAlerts
-    name: natsalerts
+    group: apps
+    kind: StatefulSet
+    name: statefulsets
     scope: Namespaced
-    version: v1alpha2
+    version: v1
   release:
     # Release name
     name: ""

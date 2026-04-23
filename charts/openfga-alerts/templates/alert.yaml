@@ -31,7 +31,7 @@ spec:
         {{- include "openfga-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: OpenFGA is down or not being scraped in namespace {{`{{`}} $labels.namespace {{`}}`}}
-        description: "Prometheus has not seen a healthy OpenFGA scrape target in the last 2 minutes for job {{`{{`}} $labels.job {{`}}`}}. This catches pod/process outages and scrape disappearance.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "Prometheus has not observed a healthy OpenFGA scrape target for job {{`{{`}} $labels.job {{`}}`}}. Scrape disappearance is detected after 2 minutes of absence and must persist for the configured alert duration before firing.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
     {{ if (include "openfga-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.highRequestLatency.enabled .rules.highRequestLatency.severity)) -}}
     - alert: OpenFGAHighRequestLatency
@@ -58,7 +58,7 @@ spec:
     {{ if (include "openfga-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.lowCheckCacheHitRatio.enabled .rules.lowCheckCacheHitRatio.severity)) -}}
     - alert: OpenFGALowCheckCacheHitRatio
       expr: |
-        openfga_check_cache_total_count{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} > 0
+        sum(rate(openfga_check_cache_total_count{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[1m])) > 0
         and
         (sum(rate(openfga_check_cache_hit_count{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[1m])) / sum(rate(openfga_check_cache_total_count{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[1m]))) * 100 < {{ .rules.lowCheckCacheHitRatio.val }}
       for: {{ .rules.lowCheckCacheHitRatio.duration }}

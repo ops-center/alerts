@@ -31,7 +31,7 @@ spec:
         {{- include "nats-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: "NATS is down or not being scraped in namespace {{`{{`}} $labels.namespace {{`}}`}}"
-        description: "Prometheus has not seen a healthy NATS scrape target in the last 2 minutes for job {{`{{`}} $labels.job {{`}}`}}. This catches pod/process outages and scrape disappearance, not just JetStream-level failures.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "Prometheus has not observed a healthy NATS scrape target for job {{`{{`}} $labels.job {{`}}`}}. Scrape disappearance is detected after 2 minutes of absence and must persist for the configured alert duration before firing.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
 {{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamHighMemoryUsage.enabled .rules.natsJetStreamHighMemoryUsage.severity)) }}
     - alert: NatsJetStreamHighMemoryUsage
@@ -69,7 +69,7 @@ spec:
 {{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamHighPendingMessagesWarning.enabled .rules.natsJetStreamHighPendingMessagesWarning.severity)) }}
     - alert: NatsJetStreamHighPendingMessagesWarning
-      expr: nats_consumer_num_pending{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} > {{ .rules.natsJetStreamHighPendingMessagesWarning.val }}
+      expr: nats_consumer_num_pending{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} > {{ .rules.natsJetStreamHighPendingMessagesWarning.val }} and nats_consumer_num_pending{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} <= {{ .rules.natsJetStreamHighPendingMessages.val }}
       for: {{ .rules.natsJetStreamHighPendingMessagesWarning.duration }}
       labels:
         severity: {{ .rules.natsJetStreamHighPendingMessagesWarning.severity }}

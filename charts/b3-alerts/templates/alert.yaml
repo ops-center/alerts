@@ -34,9 +34,7 @@ spec:
         {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: "B3 is down or not being scraped in namespace {{`{{`}} $labels.namespace {{`}}`}}"
-        description: "Prometheus has not seen a healthy B3 scrape target in the last 2 minutes for job {{`{{`}} $labels.job {{`}}`}}. This catches pod/process outages and scrape disappearance.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-{{- end }}
-{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3ProcessRestarted.enabled .rules.b3ProcessRestarted.severity)) }}
+        description: "Prometheus has not observed a healthy B3 scrape target for job {{`{{`}} $labels.job {{`}}`}}. Scrape disappearance is detected after 2 minutes of absence and must persist for the configured alert duration before firing.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
 {{- end }}
 {{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3HighGoroutineCount.enabled .rules.b3HighGoroutineCount.severity)) }}
     - alert: B3HighGoroutineCount
@@ -51,7 +49,7 @@ spec:
 {{- end }}
 {{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3HighGcPauseDuration.enabled .rules.b3HighGcPauseDuration.severity)) }}
     - alert: B3HighGcPauseDuration
-      expr: max(go_gc_duration_seconds{job="{{ $job }}",namespace="{{ $.Release.Namespace }}",quantile=~"1|1.0"}) > {{ .rules.b3HighGcPauseDuration.val }}
+      expr: max by (pod) (go_gc_duration_seconds{job="{{ $job }}",namespace="{{ $.Release.Namespace }}",quantile=~"1|1.0"}) > {{ .rules.b3HighGcPauseDuration.val }}
       for: {{ .rules.b3HighGcPauseDuration.duration }}
       labels:
         severity: {{ .rules.b3HighGcPauseDuration.severity }}

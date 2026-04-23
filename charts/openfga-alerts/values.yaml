@@ -1,10 +1,10 @@
 metadata:
   resource:
-    group: alerts.appscode.com
-    kind: OpenFGAAlerts
-    name: openfgaalerts
+    group: apps
+    kind: Deployment
+    name: deployments
     scope: Namespaced
-    version: v1alpha1
+    version: v1
   release:
     name: ""
     namespace: ""

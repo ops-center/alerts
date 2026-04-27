@@ -140,7 +140,7 @@ spec:
         {{- include "nats-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: "Consumer backlog is not draining for {{`{{`}} $labels.consumer_name {{`}}`}} on stream {{`{{`}} $labels.stream_name {{`}}`}}"
-        description: "Consumer {{`{{`}} $labels.consumer_name {{`}}`}} on stream {{`{{`}} $labels.stream_name {{`}}`}} has {{`{{`}} $value {{`}}`}} pending messages and no delivery progress over the last 10 minutes. This indicates blocked consumption rather than an idle consumer.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "Consumer {{`{{`}} $labels.consumer_name {{`}}`}} on stream {{`{{`}} $labels.stream_name {{`}}`}} has {{`{{`}} $value {{`}}`}} pending messages and no delivery progress over the last 10 minutes.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
 {{- end }}
 
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamNearMessageLimit.enabled .rules.natsJetStreamNearMessageLimit.severity)) }}
@@ -155,7 +155,7 @@ spec:
         {{- include "nats-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: "Stream {{`{{`}} $labels.stream_name {{`}}`}} is nearing its message limit"
-        description: "Stream {{`{{`}} $labels.stream_name {{`}}`}} is at {{`{{`}} $value | printf \"%.2f\" {{`}}`}}% of its configured message limit. This is more actionable than a raw message-count threshold because it respects per-stream limits.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "Stream {{`{{`}} $labels.stream_name {{`}}`}} is at {{`{{`}} $value | printf \"%.2f\" {{`}}`}}% of its configured message limit.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
 {{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamNearByteLimit.enabled .rules.natsJetStreamNearByteLimit.severity)) }}
     - alert: NatsJetStreamNearByteLimit
@@ -169,7 +169,7 @@ spec:
         {{- include "nats-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: "Stream {{`{{`}} $labels.stream_name {{`}}`}} is nearing its byte limit"
-        description: "Stream {{`{{`}} $labels.stream_name {{`}}`}} is at {{`{{`}} $value | printf \"%.2f\" {{`}}`}}% of its configured byte limit. This is more actionable than a raw stream-size threshold because it respects per-stream limits.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "Stream {{`{{`}} $labels.stream_name {{`}}`}} is at {{`{{`}} $value | printf \"%.2f\" {{`}}`}}% of its configured byte limit.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
 {{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamDisabled.enabled .rules.natsJetStreamDisabled.severity)) }}
     - alert: NatsJetStreamDisabled

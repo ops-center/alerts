@@ -27,39 +27,39 @@ spec:
     - record: nats:jetstream_consumer_num_pending:max
       expr: >-
         max by ({{ $natsConsumerLabels }}) (
-          nats_consumer_num_pending{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}
+          nats_consumer_num_pending{job="{{ $job }}",namespace="{{ $.Release.Namespace }}",is_consumer_leader="true"}
         )
     - record: nats:jetstream_consumer_num_ack_pending:max
       expr: >-
         max by ({{ $natsConsumerLabels }}) (
-          nats_consumer_num_ack_pending{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}
+          nats_consumer_num_ack_pending{job="{{ $job }}",namespace="{{ $.Release.Namespace }}",is_consumer_leader="true"}
         )
     - record: nats:jetstream_consumer_delivered_progress_10m:max
       expr: >-
         max by ({{ $natsConsumerLabels }}) (
-          max_over_time(nats_consumer_delivered_consumer_seq{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[10m])
+          max_over_time(nats_consumer_delivered_consumer_seq{job="{{ $job }}",namespace="{{ $.Release.Namespace }}",is_consumer_leader="true"}[10m])
           -
-          min_over_time(nats_consumer_delivered_consumer_seq{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[10m])
+          min_over_time(nats_consumer_delivered_consumer_seq{job="{{ $job }}",namespace="{{ $.Release.Namespace }}",is_consumer_leader="true"}[10m])
         )
     - record: nats:jetstream_stream_total_messages:max
       expr: >-
         max by ({{ $natsStreamLabels }}) (
-          nats_stream_total_messages{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}
+          nats_stream_total_messages{job="{{ $job }}",namespace="{{ $.Release.Namespace }}",is_stream_leader="true"}
         )
     - record: nats:jetstream_stream_limit_messages:max
       expr: >-
         max by ({{ $natsStreamLabels }}) (
-          nats_stream_limit_messages{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}
+          nats_stream_limit_messages{job="{{ $job }}",namespace="{{ $.Release.Namespace }}",is_stream_leader="true"}
         )
     - record: nats:jetstream_stream_total_bytes:max
       expr: >-
         max by ({{ $natsStreamLabels }}) (
-          nats_stream_total_bytes{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}
+          nats_stream_total_bytes{job="{{ $job }}",namespace="{{ $.Release.Namespace }}",is_stream_leader="true"}
         )
     - record: nats:jetstream_stream_limit_bytes:max
       expr: >-
         max by ({{ $natsStreamLabels }}) (
-          nats_stream_limit_bytes{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}
+          nats_stream_limit_bytes{job="{{ $job }}",namespace="{{ $.Release.Namespace }}",is_stream_leader="true"}
         )
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsDown.enabled .rules.natsDown.severity)) }}
     - alert: NatsDown

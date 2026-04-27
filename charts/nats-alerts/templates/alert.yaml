@@ -34,6 +34,10 @@ spec:
         max by ({{ $natsConsumerLabels }}) (
           nats_consumer_num_ack_pending{job="{{ $job }}",namespace="{{ $.Release.Namespace }}",is_consumer_leader="true"}
         )
+    - record: nats:jetstream_consumer_num_pending:max_2m
+      expr: max_over_time(nats:jetstream_consumer_num_pending:max[2m])
+    - record: nats:jetstream_consumer_num_ack_pending:max_2m
+      expr: max_over_time(nats:jetstream_consumer_num_ack_pending:max[2m])
     - record: nats:jetstream_consumer_delivered_progress_10m:max
       expr: >-
         max by ({{ $natsConsumerLabels }}) (
@@ -41,6 +45,8 @@ spec:
           -
           min_over_time(nats_consumer_delivered_consumer_seq{job="{{ $job }}",namespace="{{ $.Release.Namespace }}",is_consumer_leader="true"}[10m])
         )
+    - record: nats:jetstream_consumer_delivered_progress_10m:max_2m
+      expr: max_over_time(nats:jetstream_consumer_delivered_progress_10m:max[2m])
     - record: nats:jetstream_stream_total_messages:max
       expr: >-
         max by ({{ $natsStreamLabels }}) (
@@ -51,6 +57,10 @@ spec:
         max by ({{ $natsStreamLabels }}) (
           nats_stream_limit_messages{job="{{ $job }}",namespace="{{ $.Release.Namespace }}",is_stream_leader="true"}
         )
+    - record: nats:jetstream_stream_total_messages:max_2m
+      expr: max_over_time(nats:jetstream_stream_total_messages:max[2m])
+    - record: nats:jetstream_stream_limit_messages:max_2m
+      expr: max_over_time(nats:jetstream_stream_limit_messages:max[2m])
     - record: nats:jetstream_stream_total_bytes:max
       expr: >-
         max by ({{ $natsStreamLabels }}) (
@@ -61,6 +71,17 @@ spec:
         max by ({{ $natsStreamLabels }}) (
           nats_stream_limit_bytes{job="{{ $job }}",namespace="{{ $.Release.Namespace }}",is_stream_leader="true"}
         )
+    - record: nats:jetstream_stream_total_bytes:max_2m
+      expr: max_over_time(nats:jetstream_stream_total_bytes:max[2m])
+    - record: nats:jetstream_stream_limit_bytes:max_2m
+      expr: max_over_time(nats:jetstream_stream_limit_bytes:max[2m])
+    - record: nats:server_total_consumers:max
+      expr: >-
+        max by (namespace, job) (
+          nats_server_total_consumers{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}
+        )
+    - record: nats:server_total_consumers:max_2m
+      expr: max_over_time(nats:server_total_consumers:max[2m])
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsDown.enabled .rules.natsDown.severity)) }}
     - alert: NatsDown
       expr: up{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} == 0 or absent_over_time(up{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[2m])
@@ -97,7 +118,7 @@ spec:
 
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamHighPendingMessages.enabled .rules.natsJetStreamHighPendingMessages.severity)) }}
     - alert: NatsJetStreamHighPendingMessages
-      expr: nats:jetstream_consumer_num_pending:max > {{ .rules.natsJetStreamHighPendingMessages.val }}
+      expr: nats:jetstream_consumer_num_pending:max_2m > {{ .rules.natsJetStreamHighPendingMessages.val }}
       for: {{ .rules.natsJetStreamHighPendingMessages.duration }}
       labels:
         severity: {{ .rules.natsJetStreamHighPendingMessages.severity }}
@@ -108,7 +129,7 @@ spec:
 {{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamHighPendingMessagesWarning.enabled .rules.natsJetStreamHighPendingMessagesWarning.severity)) }}
     - alert: NatsJetStreamHighPendingMessagesWarning
-      expr: nats:jetstream_consumer_num_pending:max > {{ .rules.natsJetStreamHighPendingMessagesWarning.val }} and nats:jetstream_consumer_num_pending:max <= {{ .rules.natsJetStreamHighPendingMessages.val }}
+      expr: nats:jetstream_consumer_num_pending:max_2m > {{ .rules.natsJetStreamHighPendingMessagesWarning.val }} and nats:jetstream_consumer_num_pending:max_2m <= {{ .rules.natsJetStreamHighPendingMessages.val }}
       for: {{ .rules.natsJetStreamHighPendingMessagesWarning.duration }}
       labels:
         severity: {{ .rules.natsJetStreamHighPendingMessagesWarning.severity }}
@@ -119,7 +140,7 @@ spec:
 {{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamHighAckPending.enabled .rules.natsJetStreamHighAckPending.severity)) }}
     - alert: NatsJetStreamHighAckPending
-      expr: nats:jetstream_consumer_num_ack_pending:max > {{ .rules.natsJetStreamHighAckPending.val }}
+      expr: nats:jetstream_consumer_num_ack_pending:max_2m > {{ .rules.natsJetStreamHighAckPending.val }}
       for: {{ .rules.natsJetStreamHighAckPending.duration }}
       labels:
         severity: {{ .rules.natsJetStreamHighAckPending.severity }}
@@ -131,9 +152,9 @@ spec:
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamBacklogNoProgress.enabled .rules.natsJetStreamBacklogNoProgress.severity)) }}
     - alert: NatsJetStreamBacklogNoProgress
       expr: >-
-        nats:jetstream_consumer_num_pending:max > {{ .rules.natsJetStreamBacklogNoProgress.val }}
+        nats:jetstream_consumer_num_pending:max_2m > {{ .rules.natsJetStreamBacklogNoProgress.val }}
         and on ({{ $natsConsumerLabels }})
-        nats:jetstream_consumer_delivered_progress_10m:max == 0
+        nats:jetstream_consumer_delivered_progress_10m:max_2m == 0
       for: {{ .rules.natsJetStreamBacklogNoProgress.duration }}
       labels:
         severity: {{ .rules.natsJetStreamBacklogNoProgress.severity }}
@@ -146,9 +167,9 @@ spec:
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamNearMessageLimit.enabled .rules.natsJetStreamNearMessageLimit.severity)) }}
     - alert: NatsJetStreamNearMessageLimit
       expr: >-
-        ((nats:jetstream_stream_total_messages:max / nats:jetstream_stream_limit_messages:max) * 100) > {{ .rules.natsJetStreamNearMessageLimit.val }}
+        ((nats:jetstream_stream_total_messages:max_2m / nats:jetstream_stream_limit_messages:max_2m) * 100) > {{ .rules.natsJetStreamNearMessageLimit.val }}
         and on ({{ $natsStreamLabels }})
-        nats:jetstream_stream_limit_messages:max > 0
+        nats:jetstream_stream_limit_messages:max_2m > 0
       for: {{ .rules.natsJetStreamNearMessageLimit.duration }}
       labels:
         severity: {{ .rules.natsJetStreamNearMessageLimit.severity }}
@@ -160,9 +181,9 @@ spec:
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamNearByteLimit.enabled .rules.natsJetStreamNearByteLimit.severity)) }}
     - alert: NatsJetStreamNearByteLimit
       expr: >-
-        ((nats:jetstream_stream_total_bytes:max / nats:jetstream_stream_limit_bytes:max) * 100) > {{ .rules.natsJetStreamNearByteLimit.val }}
+        ((nats:jetstream_stream_total_bytes:max_2m / nats:jetstream_stream_limit_bytes:max_2m) * 100) > {{ .rules.natsJetStreamNearByteLimit.val }}
         and on ({{ $natsStreamLabels }})
-        nats:jetstream_stream_limit_bytes:max > 0
+        nats:jetstream_stream_limit_bytes:max_2m > 0
       for: {{ .rules.natsJetStreamNearByteLimit.duration }}
       labels:
         severity: {{ .rules.natsJetStreamNearByteLimit.severity }}
@@ -252,7 +273,7 @@ spec:
 {{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsHighTotalConsumers.enabled .rules.natsHighTotalConsumers.severity)) }}
     - alert: NatsHighTotalConsumers
-      expr: nats_server_total_consumers{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} > {{ .rules.natsHighTotalConsumers.val }}
+      expr: nats:server_total_consumers:max_2m > {{ .rules.natsHighTotalConsumers.val }}
       for: {{ .rules.natsHighTotalConsumers.duration }}
       labels:
         severity: {{ .rules.natsHighTotalConsumers.severity }}

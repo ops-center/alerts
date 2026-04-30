@@ -310,6 +310,7 @@ func (in *B3ProcessAlert) DeepCopy() *B3ProcessAlert {
 func (in *B3ProcessAlertRules) DeepCopyInto(out *B3ProcessAlertRules) {
 	*out = *in
 	out.B3Down = in.B3Down
+	out.B3ReplicasNotReady = in.B3ReplicasNotReady
 	out.B3HighGoroutineCount = in.B3HighGoroutineCount
 	out.B3HighGcPauseDuration = in.B3HighGcPauseDuration
 	out.B3HighFileDescriptorUsage = in.B3HighFileDescriptorUsage
@@ -3536,6 +3537,7 @@ func (in *NATSDatabaseAlert) DeepCopy() *NATSDatabaseAlert {
 func (in *NATSDatabaseAlertRules) DeepCopyInto(out *NATSDatabaseAlertRules) {
 	*out = *in
 	out.NatsDown = in.NatsDown
+	out.NatsReplicasNotReady = in.NatsReplicasNotReady
 	out.NatsJetStreamHighMemoryUsage = in.NatsJetStreamHighMemoryUsage
 	out.NatsJetStreamHighStorageUsage = in.NatsJetStreamHighStorageUsage
 	out.NatsJetStreamHighPendingMessages = in.NatsJetStreamHighPendingMessages

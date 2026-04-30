@@ -93,6 +93,20 @@ spec:
         summary: "NATS is down or not being scraped in namespace {{`{{`}} $labels.namespace {{`}}`}}"
         description: "Prometheus has not observed a healthy NATS scrape target for job {{`{{`}} $labels.job {{`}}`}}. Scrape disappearance is detected after 2 minutes of absence and must persist for the configured alert duration before firing.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
 {{- end }}
+{{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsReplicasNotReady.enabled .rules.natsReplicasNotReady.severity)) }}
+    - alert: NatsReplicasNotReady
+      expr: >-
+        max(kube_statefulset_status_replicas_ready{namespace="{{ $.Release.Namespace }}",statefulset="{{ $app }}"})
+        <
+        max(kube_statefulset_replicas{namespace="{{ $.Release.Namespace }}",statefulset="{{ $app }}"})
+      for: {{ .rules.natsReplicasNotReady.duration }}
+      labels:
+        severity: {{ .rules.natsReplicasNotReady.severity }}
+        {{- include "nats-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: "NATS StatefulSet has fewer ready replicas than desired"
+        description: "The NATS StatefulSet {{ $app }} has fewer ready replicas than its desired replica count according to kube-state-metrics. This detects degraded pod availability even when some NATS scrape targets remain healthy.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+{{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamHighMemoryUsage.enabled .rules.natsJetStreamHighMemoryUsage.severity)) }}
     - alert: NatsJetStreamHighMemoryUsage
       expr: (nats_varz_jetstream_stats_memory{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} / nats_varz_jetstream_config_max_memory{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} * 100) > {{ .rules.natsJetStreamHighMemoryUsage.val }}

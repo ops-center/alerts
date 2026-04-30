@@ -63,6 +63,9 @@ The following table lists the configurable parameters of the `nats-alerts` chart
 | form.alert.groups.database.rules.natsDown.enabled                                 |                                               | <code>true</code>                                |
 | form.alert.groups.database.rules.natsDown.duration                                |                                               | <code>"2m"</code>                                |
 | form.alert.groups.database.rules.natsDown.severity                                |                                               | <code>critical</code>                            |
+| form.alert.groups.database.rules.natsReplicasNotReady.enabled                     |                                               | <code>true</code>                                |
+| form.alert.groups.database.rules.natsReplicasNotReady.duration                    |                                               | <code>"2m"</code>                                |
+| form.alert.groups.database.rules.natsReplicasNotReady.severity                    |                                               | <code>critical</code>                            |
 | form.alert.groups.database.rules.natsJetStreamHighMemoryUsage.enabled             |                                               | <code>true</code>                                |
 | form.alert.groups.database.rules.natsJetStreamHighMemoryUsage.duration            |                                               | <code>"5m"</code>                                |
 | form.alert.groups.database.rules.natsJetStreamHighMemoryUsage.severity            |                                               | <code>critical</code>                            |

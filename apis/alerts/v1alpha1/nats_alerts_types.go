@@ -77,6 +77,7 @@ type NATSDatabaseAlert struct {
 
 type NATSDatabaseAlertRules struct {
 	NatsDown                      FixedAlert  `json:"natsDown"`
+	NatsReplicasNotReady          FixedAlert  `json:"natsReplicasNotReady"`
 	NatsJetStreamHighMemoryUsage  IntValAlert `json:"natsJetStreamHighMemoryUsage"`
 	NatsJetStreamHighStorageUsage IntValAlert `json:"natsJetStreamHighStorageUsage"`
 

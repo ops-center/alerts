@@ -355,11 +355,29 @@ properties:
                         - severity
                         - val
                         type: object
+                      b3ReplicasNotReady:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        type: object
                     required:
                     - b3Down
                     - b3HighFileDescriptorUsage
                     - b3HighGcPauseDuration
                     - b3HighGoroutineCount
+                    - b3ReplicasNotReady
                     type: object
                 required:
                 - enabled

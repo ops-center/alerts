@@ -41,6 +41,10 @@ form:
             enabled: true
             duration: "2m"
             severity: critical
+          natsReplicasNotReady:
+            enabled: true
+            duration: "2m"
+            severity: critical
 
           # Resource Utilization (Most Critical)
           natsJetStreamHighMemoryUsage:

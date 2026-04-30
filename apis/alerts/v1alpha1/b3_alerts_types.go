@@ -78,6 +78,7 @@ type B3ProcessAlert struct {
 
 type B3ProcessAlertRules struct {
 	B3Down                    FixedAlert          `json:"b3Down"`
+	B3ReplicasNotReady        FixedAlert          `json:"b3ReplicasNotReady"`
 	B3HighGoroutineCount      IntValAlert         `json:"b3HighGoroutineCount"`
 	B3HighGcPauseDuration     FloatValAlertConfig `json:"b3HighGcPauseDuration"`
 	B3HighFileDescriptorUsage IntValAlert         `json:"b3HighFileDescriptorUsage"`

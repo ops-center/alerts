@@ -265,6 +265,23 @@ properties:
                         - severity
                         - val
                         type: object
+                      natsReplicasNotReady:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        type: object
                       natsSlowConsumers:
                         properties:
                           duration:
@@ -369,6 +386,7 @@ properties:
                     - natsJetStreamHighStorageUsage
                     - natsJetStreamNearByteLimit
                     - natsJetStreamNearMessageLimit
+                    - natsReplicasNotReady
                     - natsSlowConsumers
                     - natsStaleConnections
                     - natsStalledClients

@@ -25,6 +25,10 @@ form:
             enabled: true
             duration: "2m"
             severity: critical
+          b3ReplicasNotReady:
+            enabled: true
+            duration: "2m"
+            severity: critical
           b3HighGoroutineCount:
             enabled: true
             duration: "10m"

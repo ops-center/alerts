@@ -37,6 +37,20 @@ spec:
         summary: "B3 target is down or not being scraped in namespace {{`{{`}} $labels.namespace {{`}}`}}"
         description: "Prometheus has not observed a healthy B3 scrape target for job {{`{{`}} $labels.job {{`}}`}}. This alert now fires per failing target rather than at a job-level aggregate. Scrape disappearance is detected after 2 minutes of absence and must persist for the configured alert duration before firing.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
 {{- end }}
+{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3ReplicasNotReady.enabled .rules.b3ReplicasNotReady.severity)) }}
+    - alert: B3ReplicasNotReady
+      expr: >-
+        max(kube_statefulset_status_replicas_ready{namespace="{{ $.Release.Namespace }}",statefulset="{{ $app }}"})
+        <
+        max(kube_statefulset_replicas{namespace="{{ $.Release.Namespace }}",statefulset="{{ $app }}"})
+      for: {{ .rules.b3ReplicasNotReady.duration }}
+      labels:
+        severity: {{ .rules.b3ReplicasNotReady.severity }}
+        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: "B3 StatefulSet has fewer ready replicas than desired"
+        description: "The B3 StatefulSet {{ $app }} has fewer ready replicas than its desired replica count according to kube-state-metrics. This detects degraded pod availability even when some B3 scrape targets remain healthy.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+{{- end }}
 {{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3HighGoroutineCount.enabled .rules.b3HighGoroutineCount.severity)) }}
     - alert: B3HighGoroutineCount
       expr: >-

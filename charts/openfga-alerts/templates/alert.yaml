@@ -22,6 +22,17 @@ spec:
   {{ if (include "openfga-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
   - name: openfga.database.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
+    {{ if (include "openfga-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.down.enabled .rules.down.severity)) -}}
+    - alert: OpenFGADown
+      expr: up{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} == 0 or absent_over_time(up{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[2m])
+      for: {{ .rules.down.duration }}
+      labels:
+        severity: {{ .rules.down.severity }}
+        {{- include "openfga-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: OpenFGA is down or not being scraped in namespace {{`{{`}} $labels.namespace {{`}}`}}
+        description: "Prometheus has not observed a healthy OpenFGA scrape target for job {{`{{`}} $labels.job {{`}}`}}. Scrape disappearance is detected after 2 minutes of absence and must persist for the configured alert duration before firing.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+    {{- end }}
     {{ if (include "openfga-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.highRequestLatency.enabled .rules.highRequestLatency.severity)) -}}
     - alert: OpenFGAHighRequestLatency
       expr: histogram_quantile(0.99, sum(rate(grpc_server_handling_seconds_bucket{job="{{ $job }}",namespace="{{ $.Release.Namespace }}",grpc_service="openfga.v1.OpenFGAService"}[5m])) by (grpc_method, le)) > {{ .rules.highRequestLatency.val }}
@@ -47,7 +58,7 @@ spec:
     {{ if (include "openfga-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.lowCheckCacheHitRatio.enabled .rules.lowCheckCacheHitRatio.severity)) -}}
     - alert: OpenFGALowCheckCacheHitRatio
       expr: |
-        openfga_check_cache_total_count{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} > 0
+        sum(rate(openfga_check_cache_total_count{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[1m])) > 0
         and
         (sum(rate(openfga_check_cache_hit_count{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[1m])) / sum(rate(openfga_check_cache_total_count{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[1m]))) * 100 < {{ .rules.lowCheckCacheHitRatio.val }}
       for: {{ .rules.lowCheckCacheHitRatio.duration }}
@@ -71,50 +82,6 @@ spec:
       annotations:
         summary: SQL connections nearing exhaustion in OpenFGA
         description: "Open connections >{{ .rules.highSQLConnections.val }}% of max (current: {{`{{`}} $value {{`}}`}}%). Risk of connection failures.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-    {{- end }}
-    {{ if (include "openfga-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.highGoroutines.enabled .rules.highGoroutines.severity)) -}}
-    - alert: OpenFGAHighGoroutines
-      expr: go_goroutines{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} > {{ .rules.highGoroutines.val }}
-      for: {{ .rules.highGoroutines.duration }}
-      labels:
-        severity: {{ .rules.highGoroutines.severity }}
-        {{- include "openfga-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: High number of goroutines in OpenFGA
-        description: "Goroutines exceed {{ .rules.highGoroutines.val }} (current: {{`{{`}} $value {{`}}`}}). Possible concurrency issues or leaks.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-    {{- end }}
-    {{ if (include "openfga-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.highGCDuration.enabled .rules.highGCDuration.severity)) -}}
-    - alert: OpenFGAHighGCDuration
-      expr: go_gc_duration_seconds{job="{{ $job }}",namespace="{{ $.Release.Namespace }}",quantile="0.99"} > {{ .rules.highGCDuration.val }}
-      for: {{ .rules.highGCDuration.duration }}
-      labels:
-        severity: {{ .rules.highGCDuration.severity }}
-        {{- include "openfga-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: High GC duration in OpenFGA
-        description: "p99 GC duration >{{ .rules.highGCDuration.val }}s (current: {{`{{`}} $value {{`}}`}}s). May cause pauses and latency spikes.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-    {{- end }}
-    {{ if (include "openfga-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.highHeapMemory.enabled .rules.highHeapMemory.severity)) -}}
-    - alert: OpenFGAHighHeapMemory
-      expr: go_memstats_heap_alloc_bytes{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} > {{ .rules.highHeapMemory.val }}
-      for: {{ .rules.highHeapMemory.duration }}
-      labels:
-        severity: {{ .rules.highHeapMemory.severity }}
-        {{- include "openfga-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: High heap memory usage in OpenFGA
-        description: "Heap memory usage >{{ .rules.highHeapMemory.val }} bytes (current: {{`{{`}} $value | humanize {{`}}`}}). May lead to OOM or frequent GC.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-    {{- end }}
-    {{ if (include "openfga-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.highAllocationRate.enabled .rules.highAllocationRate.severity)) -}}
-    - alert: OpenFGAHighAllocationRate
-      expr: rate(go_memstats_alloc_bytes_total{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[2m]) > {{ .rules.highAllocationRate.val }}
-      for: {{ .rules.highAllocationRate.duration }}
-      labels:
-        severity: {{ .rules.highAllocationRate.severity }}
-        {{- include "openfga-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: High memory allocation rate in OpenFGA
-        description: "Memory allocation rate >{{ .rules.highAllocationRate.val }} bytes/sec (current: {{`{{`}} $value | humanize {{`}}`}}/sec). May indicate memory churn or leaks.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
   {{ end -}}
   {{ end -}}

@@ -68,14 +68,11 @@ type OpenFGADatabaseAlert struct {
 }
 
 type OpenFGADatabaseAlertRules struct {
+	Down                  FixedAlert          `json:"down"`
 	HighRequestLatency    FloatValAlertConfig `json:"highRequestLatency"`
 	HighErrorRate         FloatValAlertConfig `json:"highErrorRate"`
 	LowCheckCacheHitRatio FloatValAlertConfig `json:"lowCheckCacheHitRatio"`
 	HighSQLConnections    FloatValAlertConfig `json:"highSQLConnections"`
-	HighGoroutines        IntValAlert         `json:"highGoroutines"`
-	HighGCDuration        FloatValAlertConfig `json:"highGCDuration"`
-	HighHeapMemory        IntValAlert         `json:"highHeapMemory"`
-	HighAllocationRate    IntValAlert         `json:"highAllocationRate"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

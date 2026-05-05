@@ -59,15 +59,15 @@ type OpenFGAAlert struct {
 }
 
 type OpenFGAAlertGroups struct {
-	Database OpenFGADatabaseAlert `json:"database"`
+	Core OpenFGACoreAlert `json:"core"`
 }
 
-type OpenFGADatabaseAlert struct {
-	Enabled mona.SeverityFlag         `json:"enabled"`
-	Rules   OpenFGADatabaseAlertRules `json:"rules"`
+type OpenFGACoreAlert struct {
+	Enabled mona.SeverityFlag     `json:"enabled"`
+	Rules   OpenFGACoreAlertRules `json:"rules"`
 }
 
-type OpenFGADatabaseAlertRules struct {
+type OpenFGACoreAlertRules struct {
 	Down                  FixedAlert          `json:"down"`
 	HighRequestLatency    FloatValAlertConfig `json:"highRequestLatency"`
 	HighErrorRate         FloatValAlertConfig `json:"highErrorRate"`

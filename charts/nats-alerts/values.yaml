@@ -34,7 +34,7 @@ form:
     # runbookUrl: "https://runbooks.prometheus-operator.dev/runbooks"
 
     groups:
-      database:
+      core:
         enabled: warning
         rules:
           natsDown:
@@ -46,7 +46,9 @@ form:
             duration: "2m"
             severity: critical
 
-          # Resource Utilization (Most Critical)
+      resourceUtilization:
+        enabled: warning
+        rules:
           natsJetStreamHighMemoryUsage:
             enabled: true
             duration: "5m"
@@ -57,8 +59,10 @@ form:
             duration: "5m"
             severity: critical
             val: 90
-          
-          # Consumer Health (Critical for Operations)
+
+      consumerHealth:
+        enabled: warning
+        rules:
           natsJetStreamHighPendingMessages:
             enabled: true
             duration: "10m"
@@ -79,8 +83,10 @@ form:
             duration: "15m"
             severity: warning
             val: 100
-          
-          # Stream Performance
+
+      streamPerformance:
+        enabled: warning
+        rules:
           natsJetStreamNearMessageLimit:
             enabled: true
             duration: "15m"
@@ -91,8 +97,10 @@ form:
             duration: "15m"
             severity: warning
             val: 80
-          
-          # Connectivity
+
+      connectivity:
+        enabled: warning
+        rules:
           natsJetStreamDisabled:
             enabled: true
             duration: "2m"
@@ -119,8 +127,10 @@ form:
             duration: "5m"
             severity: warning
             val: 1000
-          
-          # Consumer Management
+
+      consumerManagement:
+        enabled: warning
+        rules:
           natsSuddenConsumerDrop:
             enabled: true
             duration: "5m"
@@ -131,127 +141,6 @@ form:
             duration: "5m"
             severity: warning
             val: 100
-      
-      # Backup and operations alerts (inherited from ops-center pattern)
-      provisioner:
-        enabled: warning
-        rules:
-          appPhaseNotReady:
-            enabled: true
-            duration: "1m"
-            severity: critical
-          appPhaseCritical:
-            enabled: true
-            duration: "15m"
-            severity: critical
-      opsManager:
-        enabled: warning
-        rules:
-          opsRequestOnProgress:
-            enabled: true
-            duration: "0m"
-            severity: info
-          opsRequestStatusProgressingToLong:
-            enabled: true
-            duration: "30m"
-            severity: critical
-          opsRequestFailed:
-            enabled: true
-            duration: "0m"
-            severity: critical
-      stash:
-        enabled: warning
-        rules:
-          backupSessionFailed:
-            enabled: true
-            duration: "0m"
-            severity: critical
-          restoreSessionFailed:
-            enabled: true
-            duration: "0m"
-            severity: critical
-          noBackupSessionForTooLong:
-            enabled: true
-            duration: "0m"
-            severity: warning
-            val: 18000
-          repositoryCorrupted:
-            enabled: true
-            duration: "5m"
-            severity: critical
-          repositoryStorageRunningLow:
-            enabled: true
-            duration: "5m"
-            severity: warning
-            val: 10737418240 # 10GB
-          backupSessionPeriodTooLong:
-            enabled: true
-            duration: "0m"
-            severity: warning
-            val: 1800 # 30 minute
-          restoreSessionPeriodTooLong:
-            enabled: true
-            duration: "0m"
-            severity: warning
-            val: 1800 # 30 minute
-      kubeStash:
-        enabled: warning
-        rules:
-          backupSessionFailed:
-            enabled: true
-            duration: "0m"
-            severity: critical
-          restoreSessionFailed:
-            enabled: true
-            duration: "0m"
-            severity: critical
-          noBackupSessionForTooLong:
-            enabled: true
-            duration: "0m"
-            severity: warning
-            val: 18000
-          repositoryCorrupted:
-            enabled: true
-            duration: "5m"
-            severity: critical
-          repositoryStorageRunningLow:
-            enabled: true
-            duration: "5m"
-            severity: warning
-            val: 10737418240 # 10GB
-          backupSessionPeriodTooLong:
-            enabled: true
-            duration: "0m"
-            severity: warning
-            val: 1800 # 30 minute
-          restoreSessionPeriodTooLong:
-            enabled: true
-            duration: "0m"
-            severity: warning
-            val: 1800 # 30 minute
-      schemaManager:
-        enabled: warning
-        rules:
-          schemaPendingForTooLong:
-            enabled: true
-            duration: "30m"
-            severity: warning
-          schemaInProgressForTooLong:
-            enabled: true
-            duration: "30m"
-            severity: warning
-          schemaTerminatingForTooLong:
-            enabled: true
-            duration: "30m"
-            severity: warning
-          schemaFailed:
-            enabled: true
-            duration: "0m"
-            severity: warning
-          schemaExpired:
-            enabled: true
-            duration: "0m"
-            severity: warning
 
 grafana:
   enabled: false

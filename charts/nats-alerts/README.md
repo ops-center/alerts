@@ -46,176 +46,96 @@ The command removes all the Kubernetes components associated with the chart and 
 
 The following table lists the configurable parameters of the `nats-alerts` chart and their default values.
 
-|                                     Parameter                                     |                  Description                  |                     Default                      |
-|-----------------------------------------------------------------------------------|-----------------------------------------------|--------------------------------------------------|
-| metadata.resource.group                                                           |                                               | <code>apps</code>                                |
-| metadata.resource.kind                                                            |                                               | <code>StatefulSet</code>                         |
-| metadata.resource.name                                                            |                                               | <code>statefulsets</code>                        |
-| metadata.resource.scope                                                           |                                               | <code>Namespaced</code>                          |
-| metadata.resource.version                                                         |                                               | <code>v1</code>                                  |
-| metadata.release.name                                                             | Release name                                  | <code>""</code>                                  |
-| metadata.release.namespace                                                        | Release namespace                             | <code>""</code>                                  |
-| form.alert.enabled                                                                | # Enable PrometheusRule alerts                | <code>warning</code>                             |
-| form.alert.labels                                                                 | # Labels for default rules                    | <code>{"release":"kube-prometheus-stack"}</code> |
-| form.alert.annotations                                                            | # Annotations for default rules               | <code>{}</code>                                  |
-| form.alert.additionalRuleLabels                                                   | # Additional labels for PrometheusRule alerts | <code>{}</code>                                  |
-| form.alert.groups.database.enabled                                                |                                               | <code>warning</code>                             |
-| form.alert.groups.database.rules.natsDown.enabled                                 |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.natsDown.duration                                |                                               | <code>"2m"</code>                                |
-| form.alert.groups.database.rules.natsDown.severity                                |                                               | <code>critical</code>                            |
-| form.alert.groups.database.rules.natsReplicasNotReady.enabled                     |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.natsReplicasNotReady.duration                    |                                               | <code>"2m"</code>                                |
-| form.alert.groups.database.rules.natsReplicasNotReady.severity                    |                                               | <code>critical</code>                            |
-| form.alert.groups.database.rules.natsJetStreamHighMemoryUsage.enabled             |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.natsJetStreamHighMemoryUsage.duration            |                                               | <code>"5m"</code>                                |
-| form.alert.groups.database.rules.natsJetStreamHighMemoryUsage.severity            |                                               | <code>critical</code>                            |
-| form.alert.groups.database.rules.natsJetStreamHighMemoryUsage.val                 |                                               | <code>90</code>                                  |
-| form.alert.groups.database.rules.natsJetStreamHighStorageUsage.enabled            |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.natsJetStreamHighStorageUsage.duration           |                                               | <code>"5m"</code>                                |
-| form.alert.groups.database.rules.natsJetStreamHighStorageUsage.severity           |                                               | <code>critical</code>                            |
-| form.alert.groups.database.rules.natsJetStreamHighStorageUsage.val                |                                               | <code>90</code>                                  |
-| form.alert.groups.database.rules.natsJetStreamHighPendingMessages.enabled         |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.natsJetStreamHighPendingMessages.duration        |                                               | <code>"10m"</code>                               |
-| form.alert.groups.database.rules.natsJetStreamHighPendingMessages.severity        |                                               | <code>critical</code>                            |
-| form.alert.groups.database.rules.natsJetStreamHighPendingMessages.val             |                                               | <code>5000</code>                                |
-| form.alert.groups.database.rules.natsJetStreamHighPendingMessagesWarning.enabled  |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.natsJetStreamHighPendingMessagesWarning.duration |                                               | <code>"10m"</code>                               |
-| form.alert.groups.database.rules.natsJetStreamHighPendingMessagesWarning.severity |                                               | <code>warning</code>                             |
-| form.alert.groups.database.rules.natsJetStreamHighPendingMessagesWarning.val      |                                               | <code>2000</code>                                |
-| form.alert.groups.database.rules.natsJetStreamHighAckPending.enabled              |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.natsJetStreamHighAckPending.duration             |                                               | <code>"10m"</code>                               |
-| form.alert.groups.database.rules.natsJetStreamHighAckPending.severity             |                                               | <code>critical</code>                            |
-| form.alert.groups.database.rules.natsJetStreamHighAckPending.val                  |                                               | <code>2000</code>                                |
-| form.alert.groups.database.rules.natsJetStreamBacklogNoProgress.enabled           |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.natsJetStreamBacklogNoProgress.duration          |                                               | <code>"15m"</code>                               |
-| form.alert.groups.database.rules.natsJetStreamBacklogNoProgress.severity          |                                               | <code>warning</code>                             |
-| form.alert.groups.database.rules.natsJetStreamBacklogNoProgress.val               |                                               | <code>100</code>                                 |
-| form.alert.groups.database.rules.natsJetStreamNearMessageLimit.enabled            |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.natsJetStreamNearMessageLimit.duration           |                                               | <code>"15m"</code>                               |
-| form.alert.groups.database.rules.natsJetStreamNearMessageLimit.severity           |                                               | <code>warning</code>                             |
-| form.alert.groups.database.rules.natsJetStreamNearMessageLimit.val                |                                               | <code>80</code>                                  |
-| form.alert.groups.database.rules.natsJetStreamNearByteLimit.enabled               |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.natsJetStreamNearByteLimit.duration              |                                               | <code>"15m"</code>                               |
-| form.alert.groups.database.rules.natsJetStreamNearByteLimit.severity              |                                               | <code>warning</code>                             |
-| form.alert.groups.database.rules.natsJetStreamNearByteLimit.val                   |                                               | <code>80</code>                                  |
-| form.alert.groups.database.rules.natsJetStreamDisabled.enabled                    |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.natsJetStreamDisabled.duration                   |                                               | <code>"2m"</code>                                |
-| form.alert.groups.database.rules.natsJetStreamDisabled.severity                   |                                               | <code>critical</code>                            |
-| form.alert.groups.database.rules.natsSlowConsumers.enabled                        |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.natsSlowConsumers.duration                       |                                               | <code>"5m"</code>                                |
-| form.alert.groups.database.rules.natsSlowConsumers.severity                       |                                               | <code>warning</code>                             |
-| form.alert.groups.database.rules.natsStalledClients.enabled                       |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.natsStalledClients.duration                      |                                               | <code>"5m"</code>                                |
-| form.alert.groups.database.rules.natsStalledClients.severity                      |                                               | <code>warning</code>                             |
-| form.alert.groups.database.rules.natsStaleConnections.enabled                     |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.natsStaleConnections.duration                    |                                               | <code>"10m"</code>                               |
-| form.alert.groups.database.rules.natsStaleConnections.severity                    |                                               | <code>warning</code>                             |
-| form.alert.groups.database.rules.natsSuddenConnectionDrop.enabled                 |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.natsSuddenConnectionDrop.duration                |                                               | <code>"5m"</code>                                |
-| form.alert.groups.database.rules.natsSuddenConnectionDrop.severity                |                                               | <code>warning</code>                             |
-| form.alert.groups.database.rules.natsSuddenConnectionDrop.val                     |                                               | <code>5</code>                                   |
-| form.alert.groups.database.rules.natsHighActiveConnections.enabled                |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.natsHighActiveConnections.duration               |                                               | <code>"5m"</code>                                |
-| form.alert.groups.database.rules.natsHighActiveConnections.severity               |                                               | <code>warning</code>                             |
-| form.alert.groups.database.rules.natsHighActiveConnections.val                    |                                               | <code>1000</code>                                |
-| form.alert.groups.database.rules.natsSuddenConsumerDrop.enabled                   |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.natsSuddenConsumerDrop.duration                  |                                               | <code>"5m"</code>                                |
-| form.alert.groups.database.rules.natsSuddenConsumerDrop.severity                  |                                               | <code>warning</code>                             |
-| form.alert.groups.database.rules.natsSuddenConsumerDrop.val                       |                                               | <code>2</code>                                   |
-| form.alert.groups.database.rules.natsHighTotalConsumers.enabled                   |                                               | <code>true</code>                                |
-| form.alert.groups.database.rules.natsHighTotalConsumers.duration                  |                                               | <code>"5m"</code>                                |
-| form.alert.groups.database.rules.natsHighTotalConsumers.severity                  |                                               | <code>warning</code>                             |
-| form.alert.groups.database.rules.natsHighTotalConsumers.val                       |                                               | <code>100</code>                                 |
-| form.alert.groups.provisioner.enabled                                             |                                               | <code>warning</code>                             |
-| form.alert.groups.provisioner.rules.appPhaseNotReady.enabled                      |                                               | <code>true</code>                                |
-| form.alert.groups.provisioner.rules.appPhaseNotReady.duration                     |                                               | <code>"1m"</code>                                |
-| form.alert.groups.provisioner.rules.appPhaseNotReady.severity                     |                                               | <code>critical</code>                            |
-| form.alert.groups.provisioner.rules.appPhaseCritical.enabled                      |                                               | <code>true</code>                                |
-| form.alert.groups.provisioner.rules.appPhaseCritical.duration                     |                                               | <code>"15m"</code>                               |
-| form.alert.groups.provisioner.rules.appPhaseCritical.severity                     |                                               | <code>critical</code>                            |
-| form.alert.groups.opsManager.enabled                                              |                                               | <code>warning</code>                             |
-| form.alert.groups.opsManager.rules.opsRequestOnProgress.enabled                   |                                               | <code>true</code>                                |
-| form.alert.groups.opsManager.rules.opsRequestOnProgress.duration                  |                                               | <code>"0m"</code>                                |
-| form.alert.groups.opsManager.rules.opsRequestOnProgress.severity                  |                                               | <code>info</code>                                |
-| form.alert.groups.opsManager.rules.opsRequestStatusProgressingToLong.enabled      |                                               | <code>true</code>                                |
-| form.alert.groups.opsManager.rules.opsRequestStatusProgressingToLong.duration     |                                               | <code>"30m"</code>                               |
-| form.alert.groups.opsManager.rules.opsRequestStatusProgressingToLong.severity     |                                               | <code>critical</code>                            |
-| form.alert.groups.opsManager.rules.opsRequestFailed.enabled                       |                                               | <code>true</code>                                |
-| form.alert.groups.opsManager.rules.opsRequestFailed.duration                      |                                               | <code>"0m"</code>                                |
-| form.alert.groups.opsManager.rules.opsRequestFailed.severity                      |                                               | <code>critical</code>                            |
-| form.alert.groups.stash.enabled                                                   |                                               | <code>warning</code>                             |
-| form.alert.groups.stash.rules.backupSessionFailed.enabled                         |                                               | <code>true</code>                                |
-| form.alert.groups.stash.rules.backupSessionFailed.duration                        |                                               | <code>"0m"</code>                                |
-| form.alert.groups.stash.rules.backupSessionFailed.severity                        |                                               | <code>critical</code>                            |
-| form.alert.groups.stash.rules.restoreSessionFailed.enabled                        |                                               | <code>true</code>                                |
-| form.alert.groups.stash.rules.restoreSessionFailed.duration                       |                                               | <code>"0m"</code>                                |
-| form.alert.groups.stash.rules.restoreSessionFailed.severity                       |                                               | <code>critical</code>                            |
-| form.alert.groups.stash.rules.noBackupSessionForTooLong.enabled                   |                                               | <code>true</code>                                |
-| form.alert.groups.stash.rules.noBackupSessionForTooLong.duration                  |                                               | <code>"0m"</code>                                |
-| form.alert.groups.stash.rules.noBackupSessionForTooLong.severity                  |                                               | <code>warning</code>                             |
-| form.alert.groups.stash.rules.noBackupSessionForTooLong.val                       |                                               | <code>18000</code>                               |
-| form.alert.groups.stash.rules.repositoryCorrupted.enabled                         |                                               | <code>true</code>                                |
-| form.alert.groups.stash.rules.repositoryCorrupted.duration                        |                                               | <code>"5m"</code>                                |
-| form.alert.groups.stash.rules.repositoryCorrupted.severity                        |                                               | <code>critical</code>                            |
-| form.alert.groups.stash.rules.repositoryStorageRunningLow.enabled                 |                                               | <code>true</code>                                |
-| form.alert.groups.stash.rules.repositoryStorageRunningLow.duration                |                                               | <code>"5m"</code>                                |
-| form.alert.groups.stash.rules.repositoryStorageRunningLow.severity                |                                               | <code>warning</code>                             |
-| form.alert.groups.stash.rules.repositoryStorageRunningLow.val                     |                                               | <code>10737418240 # 10GB</code>                  |
-| form.alert.groups.stash.rules.backupSessionPeriodTooLong.enabled                  |                                               | <code>true</code>                                |
-| form.alert.groups.stash.rules.backupSessionPeriodTooLong.duration                 |                                               | <code>"0m"</code>                                |
-| form.alert.groups.stash.rules.backupSessionPeriodTooLong.severity                 |                                               | <code>warning</code>                             |
-| form.alert.groups.stash.rules.backupSessionPeriodTooLong.val                      |                                               | <code>1800 # 30 minute</code>                    |
-| form.alert.groups.stash.rules.restoreSessionPeriodTooLong.enabled                 |                                               | <code>true</code>                                |
-| form.alert.groups.stash.rules.restoreSessionPeriodTooLong.duration                |                                               | <code>"0m"</code>                                |
-| form.alert.groups.stash.rules.restoreSessionPeriodTooLong.severity                |                                               | <code>warning</code>                             |
-| form.alert.groups.stash.rules.restoreSessionPeriodTooLong.val                     |                                               | <code>1800 # 30 minute</code>                    |
-| form.alert.groups.kubeStash.enabled                                               |                                               | <code>warning</code>                             |
-| form.alert.groups.kubeStash.rules.backupSessionFailed.enabled                     |                                               | <code>true</code>                                |
-| form.alert.groups.kubeStash.rules.backupSessionFailed.duration                    |                                               | <code>"0m"</code>                                |
-| form.alert.groups.kubeStash.rules.backupSessionFailed.severity                    |                                               | <code>critical</code>                            |
-| form.alert.groups.kubeStash.rules.restoreSessionFailed.enabled                    |                                               | <code>true</code>                                |
-| form.alert.groups.kubeStash.rules.restoreSessionFailed.duration                   |                                               | <code>"0m"</code>                                |
-| form.alert.groups.kubeStash.rules.restoreSessionFailed.severity                   |                                               | <code>critical</code>                            |
-| form.alert.groups.kubeStash.rules.noBackupSessionForTooLong.enabled               |                                               | <code>true</code>                                |
-| form.alert.groups.kubeStash.rules.noBackupSessionForTooLong.duration              |                                               | <code>"0m"</code>                                |
-| form.alert.groups.kubeStash.rules.noBackupSessionForTooLong.severity              |                                               | <code>warning</code>                             |
-| form.alert.groups.kubeStash.rules.noBackupSessionForTooLong.val                   |                                               | <code>18000</code>                               |
-| form.alert.groups.kubeStash.rules.repositoryCorrupted.enabled                     |                                               | <code>true</code>                                |
-| form.alert.groups.kubeStash.rules.repositoryCorrupted.duration                    |                                               | <code>"5m"</code>                                |
-| form.alert.groups.kubeStash.rules.repositoryCorrupted.severity                    |                                               | <code>critical</code>                            |
-| form.alert.groups.kubeStash.rules.repositoryStorageRunningLow.enabled             |                                               | <code>true</code>                                |
-| form.alert.groups.kubeStash.rules.repositoryStorageRunningLow.duration            |                                               | <code>"5m"</code>                                |
-| form.alert.groups.kubeStash.rules.repositoryStorageRunningLow.severity            |                                               | <code>warning</code>                             |
-| form.alert.groups.kubeStash.rules.repositoryStorageRunningLow.val                 |                                               | <code>10737418240 # 10GB</code>                  |
-| form.alert.groups.kubeStash.rules.backupSessionPeriodTooLong.enabled              |                                               | <code>true</code>                                |
-| form.alert.groups.kubeStash.rules.backupSessionPeriodTooLong.duration             |                                               | <code>"0m"</code>                                |
-| form.alert.groups.kubeStash.rules.backupSessionPeriodTooLong.severity             |                                               | <code>warning</code>                             |
-| form.alert.groups.kubeStash.rules.backupSessionPeriodTooLong.val                  |                                               | <code>1800 # 30 minute</code>                    |
-| form.alert.groups.kubeStash.rules.restoreSessionPeriodTooLong.enabled             |                                               | <code>true</code>                                |
-| form.alert.groups.kubeStash.rules.restoreSessionPeriodTooLong.duration            |                                               | <code>"0m"</code>                                |
-| form.alert.groups.kubeStash.rules.restoreSessionPeriodTooLong.severity            |                                               | <code>warning</code>                             |
-| form.alert.groups.kubeStash.rules.restoreSessionPeriodTooLong.val                 |                                               | <code>1800 # 30 minute</code>                    |
-| form.alert.groups.schemaManager.enabled                                           |                                               | <code>warning</code>                             |
-| form.alert.groups.schemaManager.rules.schemaPendingForTooLong.enabled             |                                               | <code>true</code>                                |
-| form.alert.groups.schemaManager.rules.schemaPendingForTooLong.duration            |                                               | <code>"30m"</code>                               |
-| form.alert.groups.schemaManager.rules.schemaPendingForTooLong.severity            |                                               | <code>warning</code>                             |
-| form.alert.groups.schemaManager.rules.schemaInProgressForTooLong.enabled          |                                               | <code>true</code>                                |
-| form.alert.groups.schemaManager.rules.schemaInProgressForTooLong.duration         |                                               | <code>"30m"</code>                               |
-| form.alert.groups.schemaManager.rules.schemaInProgressForTooLong.severity         |                                               | <code>warning</code>                             |
-| form.alert.groups.schemaManager.rules.schemaTerminatingForTooLong.enabled         |                                               | <code>true</code>                                |
-| form.alert.groups.schemaManager.rules.schemaTerminatingForTooLong.duration        |                                               | <code>"30m"</code>                               |
-| form.alert.groups.schemaManager.rules.schemaTerminatingForTooLong.severity        |                                               | <code>warning</code>                             |
-| form.alert.groups.schemaManager.rules.schemaFailed.enabled                        |                                               | <code>true</code>                                |
-| form.alert.groups.schemaManager.rules.schemaFailed.duration                       |                                               | <code>"0m"</code>                                |
-| form.alert.groups.schemaManager.rules.schemaFailed.severity                       |                                               | <code>warning</code>                             |
-| form.alert.groups.schemaManager.rules.schemaExpired.enabled                       |                                               | <code>true</code>                                |
-| form.alert.groups.schemaManager.rules.schemaExpired.duration                      |                                               | <code>"0m"</code>                                |
-| form.alert.groups.schemaManager.rules.schemaExpired.severity                      |                                               | <code>warning</code>                             |
-| grafana.enabled                                                                   |                                               | <code>false</code>                               |
-| grafana.version                                                                   |                                               | <code>8.2.3</code>                               |
-| grafana.jobName                                                                   |                                               | <code>nats</code>                                |
-| grafana.url                                                                       |                                               | <code>""</code>                                  |
-| grafana.apikey                                                                    |                                               | <code>""</code>                                  |
+|                                        Parameter                                        |                  Description                  |                     Default                      |
+|-----------------------------------------------------------------------------------------|-----------------------------------------------|--------------------------------------------------|
+| metadata.resource.group                                                                 |                                               | <code>apps</code>                                |
+| metadata.resource.kind                                                                  |                                               | <code>StatefulSet</code>                         |
+| metadata.resource.name                                                                  |                                               | <code>statefulsets</code>                        |
+| metadata.resource.scope                                                                 |                                               | <code>Namespaced</code>                          |
+| metadata.resource.version                                                               |                                               | <code>v1</code>                                  |
+| metadata.release.name                                                                   | Release name                                  | <code>""</code>                                  |
+| metadata.release.namespace                                                              | Release namespace                             | <code>""</code>                                  |
+| form.alert.enabled                                                                      | # Enable PrometheusRule alerts                | <code>warning</code>                             |
+| form.alert.labels                                                                       | # Labels for default rules                    | <code>{"release":"kube-prometheus-stack"}</code> |
+| form.alert.annotations                                                                  | # Annotations for default rules               | <code>{}</code>                                  |
+| form.alert.additionalRuleLabels                                                         | # Additional labels for PrometheusRule alerts | <code>{}</code>                                  |
+| form.alert.groups.core.enabled                                                          |                                               | <code>warning</code>                             |
+| form.alert.groups.core.rules.natsDown.enabled                                           |                                               | <code>true</code>                                |
+| form.alert.groups.core.rules.natsDown.duration                                          |                                               | <code>"2m"</code>                                |
+| form.alert.groups.core.rules.natsDown.severity                                          |                                               | <code>critical</code>                            |
+| form.alert.groups.core.rules.natsReplicasNotReady.enabled                               |                                               | <code>true</code>                                |
+| form.alert.groups.core.rules.natsReplicasNotReady.duration                              |                                               | <code>"2m"</code>                                |
+| form.alert.groups.core.rules.natsReplicasNotReady.severity                              |                                               | <code>critical</code>                            |
+| form.alert.groups.resourceUtilization.enabled                                           |                                               | <code>warning</code>                             |
+| form.alert.groups.resourceUtilization.rules.natsJetStreamHighMemoryUsage.enabled        |                                               | <code>true</code>                                |
+| form.alert.groups.resourceUtilization.rules.natsJetStreamHighMemoryUsage.duration       |                                               | <code>"5m"</code>                                |
+| form.alert.groups.resourceUtilization.rules.natsJetStreamHighMemoryUsage.severity       |                                               | <code>critical</code>                            |
+| form.alert.groups.resourceUtilization.rules.natsJetStreamHighMemoryUsage.val            |                                               | <code>90</code>                                  |
+| form.alert.groups.resourceUtilization.rules.natsJetStreamHighStorageUsage.enabled       |                                               | <code>true</code>                                |
+| form.alert.groups.resourceUtilization.rules.natsJetStreamHighStorageUsage.duration      |                                               | <code>"5m"</code>                                |
+| form.alert.groups.resourceUtilization.rules.natsJetStreamHighStorageUsage.severity      |                                               | <code>critical</code>                            |
+| form.alert.groups.resourceUtilization.rules.natsJetStreamHighStorageUsage.val           |                                               | <code>90</code>                                  |
+| form.alert.groups.consumerHealth.enabled                                                |                                               | <code>warning</code>                             |
+| form.alert.groups.consumerHealth.rules.natsJetStreamHighPendingMessages.enabled         |                                               | <code>true</code>                                |
+| form.alert.groups.consumerHealth.rules.natsJetStreamHighPendingMessages.duration        |                                               | <code>"10m"</code>                               |
+| form.alert.groups.consumerHealth.rules.natsJetStreamHighPendingMessages.severity        |                                               | <code>critical</code>                            |
+| form.alert.groups.consumerHealth.rules.natsJetStreamHighPendingMessages.val             |                                               | <code>5000</code>                                |
+| form.alert.groups.consumerHealth.rules.natsJetStreamHighPendingMessagesWarning.enabled  |                                               | <code>true</code>                                |
+| form.alert.groups.consumerHealth.rules.natsJetStreamHighPendingMessagesWarning.duration |                                               | <code>"10m"</code>                               |
+| form.alert.groups.consumerHealth.rules.natsJetStreamHighPendingMessagesWarning.severity |                                               | <code>warning</code>                             |
+| form.alert.groups.consumerHealth.rules.natsJetStreamHighPendingMessagesWarning.val      |                                               | <code>2000</code>                                |
+| form.alert.groups.consumerHealth.rules.natsJetStreamHighAckPending.enabled              |                                               | <code>true</code>                                |
+| form.alert.groups.consumerHealth.rules.natsJetStreamHighAckPending.duration             |                                               | <code>"10m"</code>                               |
+| form.alert.groups.consumerHealth.rules.natsJetStreamHighAckPending.severity             |                                               | <code>critical</code>                            |
+| form.alert.groups.consumerHealth.rules.natsJetStreamHighAckPending.val                  |                                               | <code>2000</code>                                |
+| form.alert.groups.consumerHealth.rules.natsJetStreamBacklogNoProgress.enabled           |                                               | <code>true</code>                                |
+| form.alert.groups.consumerHealth.rules.natsJetStreamBacklogNoProgress.duration          |                                               | <code>"15m"</code>                               |
+| form.alert.groups.consumerHealth.rules.natsJetStreamBacklogNoProgress.severity          |                                               | <code>warning</code>                             |
+| form.alert.groups.consumerHealth.rules.natsJetStreamBacklogNoProgress.val               |                                               | <code>100</code>                                 |
+| form.alert.groups.streamPerformance.enabled                                             |                                               | <code>warning</code>                             |
+| form.alert.groups.streamPerformance.rules.natsJetStreamNearMessageLimit.enabled         |                                               | <code>true</code>                                |
+| form.alert.groups.streamPerformance.rules.natsJetStreamNearMessageLimit.duration        |                                               | <code>"15m"</code>                               |
+| form.alert.groups.streamPerformance.rules.natsJetStreamNearMessageLimit.severity        |                                               | <code>warning</code>                             |
+| form.alert.groups.streamPerformance.rules.natsJetStreamNearMessageLimit.val             |                                               | <code>80</code>                                  |
+| form.alert.groups.streamPerformance.rules.natsJetStreamNearByteLimit.enabled            |                                               | <code>true</code>                                |
+| form.alert.groups.streamPerformance.rules.natsJetStreamNearByteLimit.duration           |                                               | <code>"15m"</code>                               |
+| form.alert.groups.streamPerformance.rules.natsJetStreamNearByteLimit.severity           |                                               | <code>warning</code>                             |
+| form.alert.groups.streamPerformance.rules.natsJetStreamNearByteLimit.val                |                                               | <code>80</code>                                  |
+| form.alert.groups.connectivity.enabled                                                  |                                               | <code>warning</code>                             |
+| form.alert.groups.connectivity.rules.natsJetStreamDisabled.enabled                      |                                               | <code>true</code>                                |
+| form.alert.groups.connectivity.rules.natsJetStreamDisabled.duration                     |                                               | <code>"2m"</code>                                |
+| form.alert.groups.connectivity.rules.natsJetStreamDisabled.severity                     |                                               | <code>critical</code>                            |
+| form.alert.groups.connectivity.rules.natsSlowConsumers.enabled                          |                                               | <code>true</code>                                |
+| form.alert.groups.connectivity.rules.natsSlowConsumers.duration                         |                                               | <code>"5m"</code>                                |
+| form.alert.groups.connectivity.rules.natsSlowConsumers.severity                         |                                               | <code>warning</code>                             |
+| form.alert.groups.connectivity.rules.natsStalledClients.enabled                         |                                               | <code>true</code>                                |
+| form.alert.groups.connectivity.rules.natsStalledClients.duration                        |                                               | <code>"5m"</code>                                |
+| form.alert.groups.connectivity.rules.natsStalledClients.severity                        |                                               | <code>warning</code>                             |
+| form.alert.groups.connectivity.rules.natsStaleConnections.enabled                       |                                               | <code>true</code>                                |
+| form.alert.groups.connectivity.rules.natsStaleConnections.duration                      |                                               | <code>"10m"</code>                               |
+| form.alert.groups.connectivity.rules.natsStaleConnections.severity                      |                                               | <code>warning</code>                             |
+| form.alert.groups.connectivity.rules.natsSuddenConnectionDrop.enabled                   |                                               | <code>true</code>                                |
+| form.alert.groups.connectivity.rules.natsSuddenConnectionDrop.duration                  |                                               | <code>"5m"</code>                                |
+| form.alert.groups.connectivity.rules.natsSuddenConnectionDrop.severity                  |                                               | <code>warning</code>                             |
+| form.alert.groups.connectivity.rules.natsSuddenConnectionDrop.val                       |                                               | <code>5</code>                                   |
+| form.alert.groups.connectivity.rules.natsHighActiveConnections.enabled                  |                                               | <code>true</code>                                |
+| form.alert.groups.connectivity.rules.natsHighActiveConnections.duration                 |                                               | <code>"5m"</code>                                |
+| form.alert.groups.connectivity.rules.natsHighActiveConnections.severity                 |                                               | <code>warning</code>                             |
+| form.alert.groups.connectivity.rules.natsHighActiveConnections.val                      |                                               | <code>1000</code>                                |
+| form.alert.groups.consumerManagement.enabled                                            |                                               | <code>warning</code>                             |
+| form.alert.groups.consumerManagement.rules.natsSuddenConsumerDrop.enabled               |                                               | <code>true</code>                                |
+| form.alert.groups.consumerManagement.rules.natsSuddenConsumerDrop.duration              |                                               | <code>"5m"</code>                                |
+| form.alert.groups.consumerManagement.rules.natsSuddenConsumerDrop.severity              |                                               | <code>warning</code>                             |
+| form.alert.groups.consumerManagement.rules.natsSuddenConsumerDrop.val                   |                                               | <code>2</code>                                   |
+| form.alert.groups.consumerManagement.rules.natsHighTotalConsumers.enabled               |                                               | <code>true</code>                                |
+| form.alert.groups.consumerManagement.rules.natsHighTotalConsumers.duration              |                                               | <code>"5m"</code>                                |
+| form.alert.groups.consumerManagement.rules.natsHighTotalConsumers.severity              |                                               | <code>warning</code>                             |
+| form.alert.groups.consumerManagement.rules.natsHighTotalConsumers.val                   |                                               | <code>100</code>                                 |
+| grafana.enabled                                                                         |                                               | <code>false</code>                               |
+| grafana.version                                                                         |                                               | <code>8.2.3</code>                               |
+| grafana.jobName                                                                         |                                               | <code>nats</code>                                |
+| grafana.url                                                                             |                                               | <code>""</code>                                  |
+| grafana.apikey                                                                          |                                               | <code>""</code>                                  |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm upgrade -i`. For example:

@@ -62,40 +62,76 @@ type NATSAlert struct {
 }
 
 type NATSAlertGroups struct {
-	Database      NATSDatabaseAlert  `json:"database"`
-	Provisioner   ProvisionerAlert   `json:"provisioner"`
-	OpsManager    OpsManagerAlert    `json:"opsManager"`
-	Stash         StashAlert         `json:"stash"`
-	KubeStash     KubeStashAlert     `json:"kubeStash"`
-	SchemaManager SchemaManagerAlert `json:"schemaManager"`
+	Core                NATSCoreAlert                `json:"core"`
+	ResourceUtilization NATSResourceUtilizationAlert `json:"resourceUtilization"`
+	ConsumerHealth      NATSConsumerHealthAlert      `json:"consumerHealth"`
+	StreamPerformance   NATSStreamPerformanceAlert   `json:"streamPerformance"`
+	Connectivity        NATSConnectivityAlert        `json:"connectivity"`
+	ConsumerManagement  NATSConsumerManagementAlert  `json:"consumerManagement"`
 }
 
-type NATSDatabaseAlert struct {
-	Enabled mona.SeverityFlag      `json:"enabled"`
-	Rules   NATSDatabaseAlertRules `json:"rules"`
+type NATSCoreAlert struct {
+	Enabled mona.SeverityFlag  `json:"enabled"`
+	Rules   NATSCoreAlertRules `json:"rules"`
 }
 
-type NATSDatabaseAlertRules struct {
-	NatsDown                      FixedAlert  `json:"natsDown"`
-	NatsReplicasNotReady          FixedAlert  `json:"natsReplicasNotReady"`
+type NATSCoreAlertRules struct {
+	NatsDown             FixedAlert `json:"natsDown"`
+	NatsReplicasNotReady FixedAlert `json:"natsReplicasNotReady"`
+}
+
+type NATSResourceUtilizationAlert struct {
+	Enabled mona.SeverityFlag                 `json:"enabled"`
+	Rules   NATSResourceUtilizationAlertRules `json:"rules"`
+}
+
+type NATSResourceUtilizationAlertRules struct {
 	NatsJetStreamHighMemoryUsage  IntValAlert `json:"natsJetStreamHighMemoryUsage"`
 	NatsJetStreamHighStorageUsage IntValAlert `json:"natsJetStreamHighStorageUsage"`
+}
 
+type NATSConsumerHealthAlert struct {
+	Enabled mona.SeverityFlag            `json:"enabled"`
+	Rules   NATSConsumerHealthAlertRules `json:"rules"`
+}
+
+type NATSConsumerHealthAlertRules struct {
 	NatsJetStreamHighPendingMessages        IntValAlert `json:"natsJetStreamHighPendingMessages"`
 	NatsJetStreamHighPendingMessagesWarning IntValAlert `json:"natsJetStreamHighPendingMessagesWarning"`
 	NatsJetStreamHighAckPending             IntValAlert `json:"natsJetStreamHighAckPending"`
 	NatsJetStreamBacklogNoProgress          IntValAlert `json:"natsJetStreamBacklogNoProgress"`
+}
 
+type NATSStreamPerformanceAlert struct {
+	Enabled mona.SeverityFlag               `json:"enabled"`
+	Rules   NATSStreamPerformanceAlertRules `json:"rules"`
+}
+
+type NATSStreamPerformanceAlertRules struct {
 	NatsJetStreamNearMessageLimit IntValAlert `json:"natsJetStreamNearMessageLimit"`
 	NatsJetStreamNearByteLimit    IntValAlert `json:"natsJetStreamNearByteLimit"`
+}
 
+type NATSConnectivityAlert struct {
+	Enabled mona.SeverityFlag          `json:"enabled"`
+	Rules   NATSConnectivityAlertRules `json:"rules"`
+}
+
+type NATSConnectivityAlertRules struct {
 	NatsJetStreamDisabled     FixedAlert  `json:"natsJetStreamDisabled"`
 	NatsSlowConsumers         FixedAlert  `json:"natsSlowConsumers"`
 	NatsStalledClients        FixedAlert  `json:"natsStalledClients"`
 	NatsStaleConnections      FixedAlert  `json:"natsStaleConnections"`
 	NatsSuddenConnectionDrop  IntValAlert `json:"natsSuddenConnectionDrop"`
 	NatsHighActiveConnections IntValAlert `json:"natsHighActiveConnections"`
+}
 
+type NATSConsumerManagementAlert struct {
+	Enabled mona.SeverityFlag                `json:"enabled"`
+	Rules   NATSConsumerManagementAlertRules `json:"rules"`
+}
+
+type NATSConsumerManagementAlertRules struct {
 	NatsSuddenConsumerDrop IntValAlert `json:"natsSuddenConsumerDrop"`
 	NatsHighTotalConsumers IntValAlert `json:"natsHighTotalConsumers"`
 }

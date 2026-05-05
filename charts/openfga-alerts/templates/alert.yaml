@@ -18,9 +18,9 @@ metadata:
 {{- end }}
 spec:
   groups:
-  {{ with .Values.form.alert.groups.database -}}
+  {{ with .Values.form.alert.groups.core -}}
   {{ if (include "openfga-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) -}}
-  - name: openfga.database.{{ $.Release.Namespace }}.{{ $app }}.rules
+  - name: openfga.core.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
     {{ if (include "openfga-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.down.enabled .rules.down.severity)) -}}
     - alert: OpenFGADown
@@ -42,7 +42,7 @@ spec:
         {{- include "openfga-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: High p99 latency for OpenFGA method {{`{{`}} $labels.grpc_method {{`}}`}}
-        description: "p99 request duration exceeds {{ .rules.highRequestLatency.val }}s for method {{`{{`}} $labels.grpc_method {{`}}`}} (current: {{`{{`}} $value {{`}}`}}s). Check for database or computation issues.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "p99 request duration exceeds {{ .rules.highRequestLatency.val }}s for method {{`{{`}} $labels.grpc_method {{`}}`}} (current: {{`{{`}} $value {{`}}`}}s). Check for core or computation issues.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
     {{ if (include "openfga-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.highErrorRate.enabled .rules.highErrorRate.severity)) -}}
     - alert: OpenFGAHighErrorRate
@@ -67,7 +67,7 @@ spec:
         {{- include "openfga-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: Low cache hit ratio for OpenFGA Check API
-        description: "Cache hit ratio <{{ .rules.lowCheckCacheHitRatio.val }}% (current: {{`{{`}} $value {{`}}`}}%). May increase database load.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "Cache hit ratio <{{ .rules.lowCheckCacheHitRatio.val }}% (current: {{`{{`}} $value {{`}}`}}%). May increase core load.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
     {{- end }}
     {{ if (include "openfga-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.highSQLConnections.enabled .rules.highSQLConnections.severity)) -}}
     - alert: OpenFGAHighSQLConnections

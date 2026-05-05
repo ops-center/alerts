@@ -20,7 +20,7 @@ properties:
             type: string
           groups:
             properties:
-              database:
+              core:
                 properties:
                   enabled:
                     enum:
@@ -144,7 +144,7 @@ properties:
                 - rules
                 type: object
             required:
-            - database
+            - core
             type: object
           labels:
             additionalProperties:

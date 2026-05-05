@@ -21,7 +21,7 @@ form:
     additionalRuleLabels: {}
 
     groups:
-      database:
+      core:
         enabled: warning
         rules:
           down:

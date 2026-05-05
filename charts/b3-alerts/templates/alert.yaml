@@ -1,6 +1,5 @@
 {{ $app := (include "b3-alerts.fullname" .) }}
 {{ $job := .Values.grafana.jobName }}
-
 {{ if (include "b3-alerts.alertsEnabled" .Values.form.alert.enabled) }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
@@ -25,115 +24,68 @@ spec:
 {{- if (include "b3-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) }}
   - name: b3.process.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
-{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3ProcessRestarted.enabled .rules.b3ProcessRestarted.severity)) }}
-    - alert: B3ProcessRestarted
-      expr: changes(process_start_time_seconds{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[10m]) > 0
-      for: {{ .rules.b3ProcessRestarted.duration }}
+{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3Down.enabled .rules.b3Down.severity)) }}
+    - alert: B3Down
+      expr: >-
+        up{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} == 0
+        or absent_over_time(up{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[2m])
+      for: {{ .rules.b3Down.duration }}
       labels:
-        severity: {{ .rules.b3ProcessRestarted.severity }}
+        severity: {{ .rules.b3Down.severity }}
         {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: "B3 process restarted (instance {{`{{`}} $labels.pod {{`}}`}})"
-        description: "B3 process on pod {{`{{`}} $labels.pod {{`}}`}} has restarted in the last 10 minutes.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: "B3 target is down or not being scraped in namespace {{`{{`}} $labels.namespace {{`}}`}}"
+        description: "Prometheus has not observed a healthy B3 scrape target for job {{`{{`}} $labels.job {{`}}`}}. This alert now fires per failing target rather than at a job-level aggregate. Scrape disappearance is detected after 2 minutes of absence and must persist for the configured alert duration before firing.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+{{- end }}
+{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3ReplicasNotReady.enabled .rules.b3ReplicasNotReady.severity)) }}
+    - alert: B3ReplicasNotReady
+      expr: >-
+        max(kube_statefulset_status_replicas_ready{namespace="{{ $.Release.Namespace }}",statefulset="{{ $app }}"})
+        <
+        max(kube_statefulset_replicas{namespace="{{ $.Release.Namespace }}",statefulset="{{ $app }}"})
+      for: {{ .rules.b3ReplicasNotReady.duration }}
+      labels:
+        severity: {{ .rules.b3ReplicasNotReady.severity }}
+        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
+      annotations:
+        summary: "B3 StatefulSet has fewer ready replicas than desired"
+        description: "The B3 StatefulSet {{ $app }} has fewer ready replicas than its desired replica count according to kube-state-metrics. This detects degraded pod availability even when some B3 scrape targets remain healthy.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
 {{- end }}
 {{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3HighGoroutineCount.enabled .rules.b3HighGoroutineCount.severity)) }}
     - alert: B3HighGoroutineCount
-      expr: go_goroutines{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} > {{ .rules.b3HighGoroutineCount.val }}
+      expr: >-
+        go_goroutines{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} > {{ .rules.b3HighGoroutineCount.val }}
       for: {{ .rules.b3HighGoroutineCount.duration }}
       labels:
         severity: {{ .rules.b3HighGoroutineCount.severity }}
         {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: "B3 high goroutine count (instance {{`{{`}} $labels.pod {{`}}`}})"
-        description: "B3 pod {{`{{`}} $labels.pod {{`}}`}} has {{`{{`}} $value {{`}}`}} goroutines, exceeding {{ .rules.b3HighGoroutineCount.val }} threshold. Possible goroutine leak.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: "B3 target has high goroutine count"
+        description: "A B3 scrape target has {{`{{`}} $value {{`}}`}} goroutines, exceeding {{ .rules.b3HighGoroutineCount.val }} threshold. This alert now fires per target rather than at a job-level aggregate, which can indicate a goroutine leak on a specific instance.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
 {{- end }}
 {{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3HighGcPauseDuration.enabled .rules.b3HighGcPauseDuration.severity)) }}
     - alert: B3HighGcPauseDuration
-      expr: max(go_gc_duration_seconds{job="{{ $job }}",namespace="{{ $.Release.Namespace }}",quantile=~"1|1.0"}) > {{ .rules.b3HighGcPauseDuration.val }}
+      expr: >-
+        go_gc_duration_seconds{job="{{ $job }}",namespace="{{ $.Release.Namespace }}",quantile=~"1|1.0"} > {{ .rules.b3HighGcPauseDuration.val }}
       for: {{ .rules.b3HighGcPauseDuration.duration }}
       labels:
         severity: {{ .rules.b3HighGcPauseDuration.severity }}
         {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: "B3 high GC pause duration (instance {{`{{`}} $labels.pod {{`}}`}})"
-        description: "B3 pod {{`{{`}} $labels.pod {{`}}`}} GC pause duration is {{`{{`}} $value | printf \"%.3f\" {{`}}`}}s, exceeding {{ .rules.b3HighGcPauseDuration.val }}s threshold.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: "B3 target has high GC pause duration"
+        description: "A B3 scrape target has GC pause duration {{`{{`}} $value | printf \"%.3f\" {{`}}`}}s, exceeding {{ .rules.b3HighGcPauseDuration.val }}s threshold. This alert now fires per target rather than at a job-level aggregate.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
 {{- end }}
 {{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3HighFileDescriptorUsage.enabled .rules.b3HighFileDescriptorUsage.severity)) }}
     - alert: B3HighFileDescriptorUsage
-      expr: (process_open_fds{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} / process_max_fds{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}) * 100 > {{ .rules.b3HighFileDescriptorUsage.val }}
+      expr: >-
+        (process_open_fds{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} / process_max_fds{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}) * 100 > {{ .rules.b3HighFileDescriptorUsage.val }}
       for: {{ .rules.b3HighFileDescriptorUsage.duration }}
       labels:
         severity: {{ .rules.b3HighFileDescriptorUsage.severity }}
         {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: "B3 high file descriptor usage (instance {{`{{`}} $labels.pod {{`}}`}})"
-        description: "B3 pod {{`{{`}} $labels.pod {{`}}`}} is using {{`{{`}} $value | printf \"%.2f\" {{`}}`}}% of available file descriptors.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-{{- end }}
-{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3MemoryLeak.enabled .rules.b3MemoryLeak.severity)) }}
-    - alert: B3MemoryLeak
-      expr: deriv(process_resident_memory_bytes{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[2h]) > {{ .rules.b3MemoryLeak.val }}
-      for: {{ .rules.b3MemoryLeak.duration }}
-      labels:
-        severity: {{ .rules.b3MemoryLeak.severity }}
-        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: "B3 possible memory leak (instance {{`{{`}} $labels.pod {{`}}`}})"
-        description: "B3 pod {{`{{`}} $labels.pod {{`}}`}} memory has been steadily increasing at {{`{{`}} $value | humanize {{`}}`}}B/s for over {{ .rules.b3MemoryLeak.duration }}. Possible memory leak.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-{{- end }}
-{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3CpuRunaway.enabled .rules.b3CpuRunaway.severity)) }}
-    - alert: B3CpuRunaway
-      expr: deriv(rate(process_cpu_seconds_total{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m])[2h:1m]) > {{ .rules.b3CpuRunaway.val }}
-      for: {{ .rules.b3CpuRunaway.duration }}
-      labels:
-        severity: {{ .rules.b3CpuRunaway.severity }}
-        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: "B3 possible CPU runaway (instance {{`{{`}} $labels.pod {{`}}`}})"
-        description: "B3 pod {{`{{`}} $labels.pod {{`}}`}} CPU usage has been steadily increasing for over {{ .rules.b3CpuRunaway.duration }}. Possible runaway process or infinite loop.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-{{- end }}
-{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3GoroutineLeak.enabled .rules.b3GoroutineLeak.severity)) }}
-    - alert: B3GoroutineLeak
-      expr: deriv(go_goroutines{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[2h]) > {{ .rules.b3GoroutineLeak.val }}
-      for: {{ .rules.b3GoroutineLeak.duration }}
-      labels:
-        severity: {{ .rules.b3GoroutineLeak.severity }}
-        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: "B3 possible goroutine leak (instance {{`{{`}} $labels.pod {{`}}`}})"
-        description: "B3 pod {{`{{`}} $labels.pod {{`}}`}} goroutine count has been steadily increasing at {{`{{`}} $value | printf \"%.2f\" {{`}}`}} goroutines/sec for over {{ .rules.b3GoroutineLeak.duration }}. Possible goroutine leak.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-{{- end }}
-{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3MemorySpike.enabled .rules.b3MemorySpike.severity)) }}
-    - alert: B3MemorySpike
-      expr: increase(process_resident_memory_bytes{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[10m]) > {{ .rules.b3MemorySpike.val }}
-      for: {{ .rules.b3MemorySpike.duration }}
-      labels:
-        severity: {{ .rules.b3MemorySpike.severity }}
-        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: "B3 memory spike (instance {{`{{`}} $labels.pod {{`}}`}})"
-        description: "B3 pod {{`{{`}} $labels.pod {{`}}`}} memory increased by {{`{{`}} $value | humanize {{`}}`}}B in the last 10 minutes.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-{{- end }}
-{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3CpuSpike.enabled .rules.b3CpuSpike.severity)) }}
-    - alert: B3CpuSpike
-      expr: rate(process_cpu_seconds_total{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m]) > {{ .rules.b3CpuSpike.val }}
-      for: {{ .rules.b3CpuSpike.duration }}
-      labels:
-        severity: {{ .rules.b3CpuSpike.severity }}
-        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: "B3 CPU spike (instance {{`{{`}} $labels.pod {{`}}`}})"
-        description: "B3 pod {{`{{`}} $labels.pod {{`}}`}} is using {{`{{`}} $value | printf \"%.2f\" {{`}}`}} CPU cores, exceeding {{ .rules.b3CpuSpike.val }} threshold.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
-{{- end }}
-{{- if (include "b3-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.b3GoroutineSpike.enabled .rules.b3GoroutineSpike.severity)) }}
-    - alert: B3GoroutineSpike
-      expr: increase(go_goroutines{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[10m]) > {{ .rules.b3GoroutineSpike.val }}
-      for: {{ .rules.b3GoroutineSpike.duration }}
-      labels:
-        severity: {{ .rules.b3GoroutineSpike.severity }}
-        {{- include "b3-alerts.alertLabels" $ | nindent 8 }}
-      annotations:
-        summary: "B3 goroutine spike (instance {{`{{`}} $labels.pod {{`}}`}})"
-        description: "B3 pod {{`{{`}} $labels.pod {{`}}`}} goroutine count increased by {{`{{`}} $value | printf \"%.0f\" {{`}}`}} in the last 10 minutes.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: "B3 target has high file descriptor usage"
+        description: "A B3 scrape target is using {{`{{`}} $value | printf \"%.2f\" {{`}}`}}% of available file descriptors. This alert now fires per target rather than at a job-level aggregate.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
 {{- end }}
 {{- end }}
 {{- end }}

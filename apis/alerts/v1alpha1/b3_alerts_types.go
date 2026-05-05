@@ -77,16 +77,11 @@ type B3ProcessAlert struct {
 }
 
 type B3ProcessAlertRules struct {
-	B3ProcessRestarted        FixedAlert          `json:"b3ProcessRestarted"`
+	B3Down                    FixedAlert          `json:"b3Down"`
+	B3ReplicasNotReady        FixedAlert          `json:"b3ReplicasNotReady"`
 	B3HighGoroutineCount      IntValAlert         `json:"b3HighGoroutineCount"`
 	B3HighGcPauseDuration     FloatValAlertConfig `json:"b3HighGcPauseDuration"`
 	B3HighFileDescriptorUsage IntValAlert         `json:"b3HighFileDescriptorUsage"`
-	B3MemoryLeak              IntValAlert         `json:"b3MemoryLeak"`
-	B3CpuRunaway              FloatValAlertConfig `json:"b3CpuRunaway"`
-	B3GoroutineLeak           FloatValAlertConfig `json:"b3GoroutineLeak"`
-	B3MemorySpike             IntValAlert         `json:"b3MemorySpike"`
-	B3CpuSpike                IntValAlert         `json:"b3CpuSpike"`
-	B3GoroutineSpike          IntValAlert         `json:"b3GoroutineSpike"`
 }
 
 // HTTP Server alerts
@@ -96,9 +91,9 @@ type B3HTTPAlert struct {
 }
 
 type B3HTTPAlertRules struct {
-	B3HighHttpErrorRate  IntValAlert `json:"b3HighHttpErrorRate"`
-	B3HighHttpLatency    IntValAlert `json:"b3HighHttpLatency"`
-	B3HighActiveRequests IntValAlert `json:"b3HighActiveRequests"`
+	B3HighHttpErrorRate  IntValAlert         `json:"b3HighHttpErrorRate"`
+	B3HighHttpLatency    FloatValAlertConfig `json:"b3HighHttpLatency"`
+	B3HighActiveRequests IntValAlert         `json:"b3HighActiveRequests"`
 }
 
 // Database alerts
@@ -108,10 +103,10 @@ type B3DatabaseAlert struct {
 }
 
 type B3DatabaseAlertRules struct {
-	B3HighDatabaseErrorRate           IntValAlert `json:"b3HighDatabaseErrorRate"`
-	B3HighDatabaseLatency             IntValAlert `json:"b3HighDatabaseLatency"`
-	B3DatabaseConnectionErrors        IntValAlert `json:"b3DatabaseConnectionErrors"`
-	B3HighDatabaseConnectionPoolUsage IntValAlert `json:"b3HighDatabaseConnectionPoolUsage"`
+	B3HighDatabaseErrorRate           IntValAlert         `json:"b3HighDatabaseErrorRate"`
+	B3HighDatabaseLatency             FloatValAlertConfig `json:"b3HighDatabaseLatency"`
+	B3DatabaseConnectionErrors        IntValAlert         `json:"b3DatabaseConnectionErrors"`
+	B3HighDatabaseConnectionPoolUsage IntValAlert         `json:"b3HighDatabaseConnectionPoolUsage"`
 }
 
 // Authentication/Authorization alerts
@@ -142,8 +137,8 @@ type B3ProxyAlert struct {
 }
 
 type B3ProxyAlertRules struct {
-	B3HighProxyErrorRate IntValAlert `json:"b3HighProxyErrorRate"`
-	B3HighProxyLatency   IntValAlert `json:"b3HighProxyLatency"`
+	B3HighProxyErrorRate IntValAlert         `json:"b3HighProxyErrorRate"`
+	B3HighProxyLatency   FloatValAlertConfig `json:"b3HighProxyLatency"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

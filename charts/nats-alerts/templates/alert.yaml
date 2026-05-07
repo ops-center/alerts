@@ -20,9 +20,9 @@ metadata:
 {{- end }}
 spec:
   groups:
-{{- with .Values.form.alert.groups.database }}
+{{- with .Values.form.alert.groups.core }}
 {{- if (include "nats-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) }}
-  - name: nats.database.{{ $.Release.Namespace }}.{{ $app }}.rules
+  - name: nats.core.{{ $.Release.Namespace }}.{{ $app }}.rules
     rules:
     - record: nats:jetstream_consumer_num_pending:max
       expr: >-
@@ -107,6 +107,12 @@ spec:
         summary: "NATS StatefulSet has fewer ready replicas than desired"
         description: "The NATS StatefulSet {{ $app }} has fewer ready replicas than its desired replica count according to kube-state-metrics. This detects degraded pod availability even when some NATS scrape targets remain healthy.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
 {{- end }}
+{{- end }}
+{{- end }}
+{{- with .Values.form.alert.groups.resourceUtilization }}
+{{- if (include "nats-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) }}
+  - name: nats.resourceUtilization.{{ $.Release.Namespace }}.{{ $app }}.rules
+    rules:
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamHighMemoryUsage.enabled .rules.natsJetStreamHighMemoryUsage.severity)) }}
     - alert: NatsJetStreamHighMemoryUsage
       expr: (nats_varz_jetstream_stats_memory{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} / nats_varz_jetstream_config_max_memory{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} * 100) > {{ .rules.natsJetStreamHighMemoryUsage.val }}
@@ -129,7 +135,12 @@ spec:
         summary: "NATS JetStream high storage usage (instance {{`{{`}} $labels.server_id {{`}}`}})"
         description: "JetStream storage usage is at {{`{{`}} $value | printf \"%.2f\" {{`}}`}}%, which is above the {{ .rules.natsJetStreamHighStorageUsage.val }}% threshold.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
 {{- end }}
-
+{{- end }}
+{{- end }}
+{{- with .Values.form.alert.groups.consumerHealth }}
+{{- if (include "nats-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) }}
+  - name: nats.consumerHealth.{{ $.Release.Namespace }}.{{ $app }}.rules
+    rules:
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamHighPendingMessages.enabled .rules.natsJetStreamHighPendingMessages.severity)) }}
     - alert: NatsJetStreamHighPendingMessages
       expr: nats:jetstream_consumer_num_pending:max_2m > {{ .rules.natsJetStreamHighPendingMessages.val }}
@@ -177,7 +188,12 @@ spec:
         summary: "Consumer backlog is not draining for {{`{{`}} $labels.consumer_name {{`}}`}} on stream {{`{{`}} $labels.stream_name {{`}}`}}"
         description: "Consumer {{`{{`}} $labels.consumer_name {{`}}`}} on stream {{`{{`}} $labels.stream_name {{`}}`}} has {{`{{`}} $value {{`}}`}} pending messages and no delivery progress over the last 10 minutes.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
 {{- end }}
-
+{{- end }}
+{{- end }}
+{{- with .Values.form.alert.groups.streamPerformance }}
+{{- if (include "nats-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) }}
+  - name: nats.streamPerformance.{{ $.Release.Namespace }}.{{ $app }}.rules
+    rules:
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamNearMessageLimit.enabled .rules.natsJetStreamNearMessageLimit.severity)) }}
     - alert: NatsJetStreamNearMessageLimit
       expr: >-
@@ -206,6 +222,12 @@ spec:
         summary: "Stream {{`{{`}} $labels.stream_name {{`}}`}} is nearing its byte limit"
         description: "Stream {{`{{`}} $labels.stream_name {{`}}`}} is at {{`{{`}} $value | printf \"%.2f\" {{`}}`}}% of its configured byte limit.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
 {{- end }}
+{{- end }}
+{{- end }}
+{{- with .Values.form.alert.groups.connectivity }}
+{{- if (include "nats-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) }}
+  - name: nats.connectivity.{{ $.Release.Namespace }}.{{ $app }}.rules
+    rules:
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamDisabled.enabled .rules.natsJetStreamDisabled.severity)) }}
     - alert: NatsJetStreamDisabled
       expr: nats_server_jetstream_disabled{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"} == 1
@@ -250,7 +272,6 @@ spec:
         summary: "NATS server {{`{{`}} $labels.server_name {{`}}`}} has stale connections"
         description: "NATS server {{`{{`}} $labels.server_name {{`}}`}} reports {{`{{`}} $value {{`}}`}} stale connections. This suggests client connectivity churn or unhealthy networking.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
 {{- end }}
-
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsSuddenConnectionDrop.enabled .rules.natsSuddenConnectionDrop.severity)) }}
     - alert: NatsSuddenConnectionDrop
       expr: changes(nats_varz_connections{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m]) > {{ .rules.natsSuddenConnectionDrop.val }} AND deriv(nats_varz_connections{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m]) < 0
@@ -273,7 +294,12 @@ spec:
         summary: "High active connections"
         description: "Active connections exceed {{ .rules.natsHighActiveConnections.val }}: {{`{{`}} $value {{`}}`}}. Monitor for load spikes or connection leaks."
 {{- end }}
-
+{{- end }}
+{{- end }}
+{{- with .Values.form.alert.groups.consumerManagement }}
+{{- if (include "nats-alerts.alertGroupEnabled" (list $.Values.form.alert.enabled .)) }}
+  - name: nats.consumerManagement.{{ $.Release.Namespace }}.{{ $app }}.rules
+    rules:
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsSuddenConsumerDrop.enabled .rules.natsSuddenConsumerDrop.severity)) }}
     - alert: NatsSuddenConsumerDrop
       expr: changes(nats_server_total_consumers{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m]) > {{ .rules.natsSuddenConsumerDrop.val }} AND deriv(nats_server_total_consumers{job="{{ $job }}",namespace="{{ $.Release.Namespace }}"}[5m]) < 0

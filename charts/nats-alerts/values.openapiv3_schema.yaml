@@ -20,7 +20,7 @@ properties:
             type: string
           groups:
             properties:
-              database:
+              connectivity:
                 properties:
                   enabled:
                     enum:
@@ -31,23 +31,6 @@ properties:
                     type: string
                   rules:
                     properties:
-                      natsDown:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        type: object
                       natsHighActiveConnections:
                         properties:
                           duration:
@@ -68,204 +51,7 @@ properties:
                         - severity
                         - val
                         type: object
-                      natsHighTotalConsumers:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      natsJetStreamBacklogNoProgress:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
                       natsJetStreamDisabled:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        type: object
-                      natsJetStreamHighAckPending:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      natsJetStreamHighMemoryUsage:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      natsJetStreamHighPendingMessages:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      natsJetStreamHighPendingMessagesWarning:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      natsJetStreamHighStorageUsage:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      natsJetStreamNearByteLimit:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      natsJetStreamNearMessageLimit:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      natsReplicasNotReady:
                         properties:
                           duration:
                             type: string
@@ -353,6 +139,150 @@ properties:
                         - severity
                         - val
                         type: object
+                    required:
+                    - natsHighActiveConnections
+                    - natsJetStreamDisabled
+                    - natsSlowConsumers
+                    - natsStaleConnections
+                    - natsStalledClients
+                    - natsSuddenConnectionDrop
+                    type: object
+                required:
+                - enabled
+                - rules
+                type: object
+              consumerHealth:
+                properties:
+                  enabled:
+                    enum:
+                    - none
+                    - critical
+                    - warning
+                    - info
+                    type: string
+                  rules:
+                    properties:
+                      natsJetStreamBacklogNoProgress:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                          val:
+                            type: integer
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        - val
+                        type: object
+                      natsJetStreamHighAckPending:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                          val:
+                            type: integer
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        - val
+                        type: object
+                      natsJetStreamHighPendingMessages:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                          val:
+                            type: integer
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        - val
+                        type: object
+                      natsJetStreamHighPendingMessagesWarning:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                          val:
+                            type: integer
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        - val
+                        type: object
+                    required:
+                    - natsJetStreamBacklogNoProgress
+                    - natsJetStreamHighAckPending
+                    - natsJetStreamHighPendingMessages
+                    - natsJetStreamHighPendingMessagesWarning
+                    type: object
+                required:
+                - enabled
+                - rules
+                type: object
+              consumerManagement:
+                properties:
+                  enabled:
+                    enum:
+                    - none
+                    - critical
+                    - warning
+                    - info
+                    type: string
+                  rules:
+                    properties:
+                      natsHighTotalConsumers:
+                        properties:
+                          duration:
+                            type: string
+                          enabled:
+                            type: boolean
+                          severity:
+                            enum:
+                            - critical
+                            - warning
+                            - info
+                            type: string
+                          val:
+                            type: integer
+                        required:
+                        - duration
+                        - enabled
+                        - severity
+                        - val
+                        type: object
                       natsSuddenConsumerDrop:
                         properties:
                           duration:
@@ -374,30 +304,14 @@ properties:
                         - val
                         type: object
                     required:
-                    - natsDown
-                    - natsHighActiveConnections
                     - natsHighTotalConsumers
-                    - natsJetStreamBacklogNoProgress
-                    - natsJetStreamDisabled
-                    - natsJetStreamHighAckPending
-                    - natsJetStreamHighMemoryUsage
-                    - natsJetStreamHighPendingMessages
-                    - natsJetStreamHighPendingMessagesWarning
-                    - natsJetStreamHighStorageUsage
-                    - natsJetStreamNearByteLimit
-                    - natsJetStreamNearMessageLimit
-                    - natsReplicasNotReady
-                    - natsSlowConsumers
-                    - natsStaleConnections
-                    - natsStalledClients
-                    - natsSuddenConnectionDrop
                     - natsSuddenConsumerDrop
                     type: object
                 required:
                 - enabled
                 - rules
                 type: object
-              kubeStash:
+              core:
                 properties:
                   enabled:
                     enum:
@@ -408,7 +322,7 @@ properties:
                     type: string
                   rules:
                     properties:
-                      backupSessionFailed:
+                      natsDown:
                         properties:
                           duration:
                             type: string
@@ -425,47 +339,7 @@ properties:
                         - enabled
                         - severity
                         type: object
-                      backupSessionPeriodTooLong:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      noBackupSessionForTooLong:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      repositoryCorrupted:
+                      natsReplicasNotReady:
                         properties:
                           duration:
                             type: string
@@ -481,78 +355,16 @@ properties:
                         - duration
                         - enabled
                         - severity
-                        type: object
-                      repositoryStorageRunningLow:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      restoreSessionFailed:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        type: object
-                      restoreSessionPeriodTooLong:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
                         type: object
                     required:
-                    - backupSessionFailed
-                    - backupSessionPeriodTooLong
-                    - noBackupSessionForTooLong
-                    - repositoryCorrupted
-                    - repositoryStorageRunningLow
-                    - restoreSessionFailed
-                    - restoreSessionPeriodTooLong
+                    - natsDown
+                    - natsReplicasNotReady
                     type: object
                 required:
                 - enabled
                 - rules
                 type: object
-              opsManager:
+              resourceUtilization:
                 properties:
                   enabled:
                     enum:
@@ -563,7 +375,7 @@ properties:
                     type: string
                   rules:
                     properties:
-                      opsRequestFailed:
+                      natsJetStreamHighMemoryUsage:
                         properties:
                           duration:
                             type: string
@@ -575,12 +387,15 @@ properties:
                             - warning
                             - info
                             type: string
+                          val:
+                            type: integer
                         required:
                         - duration
                         - enabled
                         - severity
+                        - val
                         type: object
-                      opsRequestOnProgress:
+                      natsJetStreamHighStorageUsage:
                         properties:
                           duration:
                             type: string
@@ -592,38 +407,23 @@ properties:
                             - warning
                             - info
                             type: string
+                          val:
+                            type: integer
                         required:
                         - duration
                         - enabled
                         - severity
-                        type: object
-                      opsRequestStatusProgressingToLong:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                        required:
-                        - duration
-                        - enabled
-                        - severity
+                        - val
                         type: object
                     required:
-                    - opsRequestFailed
-                    - opsRequestOnProgress
-                    - opsRequestStatusProgressingToLong
+                    - natsJetStreamHighMemoryUsage
+                    - natsJetStreamHighStorageUsage
                     type: object
                 required:
                 - enabled
                 - rules
                 type: object
-              provisioner:
+              streamPerformance:
                 properties:
                   enabled:
                     enum:
@@ -634,184 +434,7 @@ properties:
                     type: string
                   rules:
                     properties:
-                      appPhaseCritical:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        type: object
-                      appPhaseNotReady:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        type: object
-                    required:
-                    - appPhaseCritical
-                    - appPhaseNotReady
-                    type: object
-                required:
-                - enabled
-                - rules
-                type: object
-              schemaManager:
-                properties:
-                  enabled:
-                    enum:
-                    - none
-                    - critical
-                    - warning
-                    - info
-                    type: string
-                  rules:
-                    properties:
-                      schemaExpired:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        type: object
-                      schemaFailed:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        type: object
-                      schemaInProgressForTooLong:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        type: object
-                      schemaPendingForTooLong:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        type: object
-                      schemaTerminatingForTooLong:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        type: object
-                    required:
-                    - schemaExpired
-                    - schemaFailed
-                    - schemaInProgressForTooLong
-                    - schemaPendingForTooLong
-                    - schemaTerminatingForTooLong
-                    type: object
-                required:
-                - enabled
-                - rules
-                type: object
-              stash:
-                properties:
-                  enabled:
-                    enum:
-                    - none
-                    - critical
-                    - warning
-                    - info
-                    type: string
-                  rules:
-                    properties:
-                      backupSessionFailed:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        type: object
-                      backupSessionPeriodTooLong:
+                      natsJetStreamNearByteLimit:
                         properties:
                           duration:
                             type: string
@@ -831,81 +454,7 @@ properties:
                         - severity
                         - val
                         type: object
-                      noBackupSessionForTooLong:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      repositoryCorrupted:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        type: object
-                      repositoryStorageRunningLow:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                          val:
-                            type: integer
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        - val
-                        type: object
-                      restoreSessionFailed:
-                        properties:
-                          duration:
-                            type: string
-                          enabled:
-                            type: boolean
-                          severity:
-                            enum:
-                            - critical
-                            - warning
-                            - info
-                            type: string
-                        required:
-                        - duration
-                        - enabled
-                        - severity
-                        type: object
-                      restoreSessionPeriodTooLong:
+                      natsJetStreamNearMessageLimit:
                         properties:
                           duration:
                             type: string
@@ -926,25 +475,20 @@ properties:
                         - val
                         type: object
                     required:
-                    - backupSessionFailed
-                    - backupSessionPeriodTooLong
-                    - noBackupSessionForTooLong
-                    - repositoryCorrupted
-                    - repositoryStorageRunningLow
-                    - restoreSessionFailed
-                    - restoreSessionPeriodTooLong
+                    - natsJetStreamNearByteLimit
+                    - natsJetStreamNearMessageLimit
                     type: object
                 required:
                 - enabled
                 - rules
                 type: object
             required:
-            - database
-            - kubeStash
-            - opsManager
-            - provisioner
-            - schemaManager
-            - stash
+            - connectivity
+            - consumerHealth
+            - consumerManagement
+            - core
+            - resourceUtilization
+            - streamPerformance
             type: object
           labels:
             additionalProperties:

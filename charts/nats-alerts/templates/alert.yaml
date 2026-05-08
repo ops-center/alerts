@@ -90,8 +90,8 @@ spec:
         severity: {{ .rules.natsDown.severity }}
         {{- include "nats-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: "NATS is down or not being scraped in namespace {{`{{`}} $labels.namespace {{`}}`}}"
-        description: "Prometheus has not observed a healthy NATS scrape target for job {{`{{`}} $labels.job {{`}}`}}. Scrape disappearance is detected after 2 minutes of absence and must persist for the configured alert duration before firing.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: "NATS target is down or missing from Prometheus scrapes"
+        description: "Prometheus has not observed a healthy NATS scrape target for job {{`{{`}} $labels.job {{`}}`}} in namespace {{`{{`}} $labels.namespace {{`}}`}}."
 {{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsReplicasNotReady.enabled .rules.natsReplicasNotReady.severity)) }}
     - alert: NatsReplicasNotReady
@@ -105,7 +105,7 @@ spec:
         {{- include "nats-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: "NATS StatefulSet has fewer ready replicas than desired"
-        description: "The NATS StatefulSet {{ $app }} has fewer ready replicas than its desired replica count according to kube-state-metrics. This detects degraded pod availability even when some NATS scrape targets remain healthy.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "The NATS StatefulSet {{ $app }} has fewer ready replicas than desired in namespace {{ $.Release.Namespace }}."
 {{- end }}
 {{- end }}
 {{- end }}
@@ -122,7 +122,7 @@ spec:
         {{- include "nats-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: "NATS JetStream high memory usage (instance {{`{{`}} $labels.server_id {{`}}`}})"
-        description: "JetStream memory usage is at {{`{{`}} $value | printf \"%.2f\" {{`}}`}}%, which is above the {{ .rules.natsJetStreamHighMemoryUsage.val }}% threshold.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "JetStream memory usage is above {{ .rules.natsJetStreamHighMemoryUsage.val }}%."
 {{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamHighStorageUsage.enabled .rules.natsJetStreamHighStorageUsage.severity)) }}
     - alert: NatsJetStreamHighStorageUsage
@@ -133,7 +133,7 @@ spec:
         {{- include "nats-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: "NATS JetStream high storage usage (instance {{`{{`}} $labels.server_id {{`}}`}})"
-        description: "JetStream storage usage is at {{`{{`}} $value | printf \"%.2f\" {{`}}`}}%, which is above the {{ .rules.natsJetStreamHighStorageUsage.val }}% threshold.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "JetStream storage usage is above {{ .rules.natsJetStreamHighStorageUsage.val }}%."
 {{- end }}
 {{- end }}
 {{- end }}
@@ -150,7 +150,7 @@ spec:
         {{- include "nats-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: "High number of pending messages for consumer {{`{{`}} $labels.consumer_name {{`}}`}} on stream {{`{{`}} $labels.stream_name {{`}}`}}"
-        description: "Consumer {{`{{`}} $labels.consumer_name {{`}}`}} on stream {{`{{`}} $labels.stream_name {{`}}`}} has {{`{{`}} $value {{`}}`}} pending messages, exceeding the {{ .rules.natsJetStreamHighPendingMessages.val }} threshold. The consumer may be slow or down.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "Consumer {{`{{`}} $labels.consumer_name {{`}}`}} on stream {{`{{`}} $labels.stream_name {{`}}`}} has more than {{ .rules.natsJetStreamHighPendingMessages.val }} pending messages."
 {{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamHighPendingMessagesWarning.enabled .rules.natsJetStreamHighPendingMessagesWarning.severity)) }}
     - alert: NatsJetStreamHighPendingMessagesWarning
@@ -161,7 +161,7 @@ spec:
         {{- include "nats-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: "Warning: High number of pending messages for consumer {{`{{`}} $labels.consumer_name {{`}}`}} on stream {{`{{`}} $labels.stream_name {{`}}`}}"
-        description: "Consumer {{`{{`}} $labels.consumer_name {{`}}`}} on stream {{`{{`}} $labels.stream_name {{`}}`}} has {{`{{`}} $value {{`}}`}} pending messages, exceeding the {{ .rules.natsJetStreamHighPendingMessagesWarning.val }} warning threshold.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "Consumer {{`{{`}} $labels.consumer_name {{`}}`}} on stream {{`{{`}} $labels.stream_name {{`}}`}} has more than {{ .rules.natsJetStreamHighPendingMessagesWarning.val }} pending messages."
 {{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamHighAckPending.enabled .rules.natsJetStreamHighAckPending.severity)) }}
     - alert: NatsJetStreamHighAckPending
@@ -172,7 +172,7 @@ spec:
         {{- include "nats-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: "High number of unacknowledged messages for consumer {{`{{`}} $labels.consumer_name {{`}}`}} on stream {{`{{`}} $labels.stream_name {{`}}`}}"
-        description: "Consumer {{`{{`}} $labels.consumer_name {{`}}`}} on stream {{`{{`}} $labels.stream_name {{`}}`}} has {{`{{`}} $value {{`}}`}} messages pending acknowledgement (ack), exceeding the {{ .rules.natsJetStreamHighAckPending.val }} threshold. This could indicate a processing issue.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "Consumer {{`{{`}} $labels.consumer_name {{`}}`}} on stream {{`{{`}} $labels.stream_name {{`}}`}} has more than {{ .rules.natsJetStreamHighAckPending.val }} messages pending acknowledgement."
 {{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamBacklogNoProgress.enabled .rules.natsJetStreamBacklogNoProgress.severity)) }}
     - alert: NatsJetStreamBacklogNoProgress
@@ -186,7 +186,7 @@ spec:
         {{- include "nats-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: "Consumer backlog is not draining for {{`{{`}} $labels.consumer_name {{`}}`}} on stream {{`{{`}} $labels.stream_name {{`}}`}}"
-        description: "Consumer {{`{{`}} $labels.consumer_name {{`}}`}} on stream {{`{{`}} $labels.stream_name {{`}}`}} has {{`{{`}} $value {{`}}`}} pending messages and no delivery progress over the last 10 minutes.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "Consumer {{`{{`}} $labels.consumer_name {{`}}`}} on stream {{`{{`}} $labels.stream_name {{`}}`}} has more than {{ .rules.natsJetStreamBacklogNoProgress.val }} pending messages and no delivery progress over the last 10 minutes."
 {{- end }}
 {{- end }}
 {{- end }}
@@ -206,7 +206,7 @@ spec:
         {{- include "nats-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: "Stream {{`{{`}} $labels.stream_name {{`}}`}} is nearing its message limit"
-        description: "Stream {{`{{`}} $labels.stream_name {{`}}`}} is at {{`{{`}} $value | printf \"%.2f\" {{`}}`}}% of its configured message limit.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "Stream {{`{{`}} $labels.stream_name {{`}}`}} is above {{ .rules.natsJetStreamNearMessageLimit.val }}% of its configured message limit."
 {{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsJetStreamNearByteLimit.enabled .rules.natsJetStreamNearByteLimit.severity)) }}
     - alert: NatsJetStreamNearByteLimit
@@ -220,7 +220,7 @@ spec:
         {{- include "nats-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: "Stream {{`{{`}} $labels.stream_name {{`}}`}} is nearing its byte limit"
-        description: "Stream {{`{{`}} $labels.stream_name {{`}}`}} is at {{`{{`}} $value | printf \"%.2f\" {{`}}`}}% of its configured byte limit.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "Stream {{`{{`}} $labels.stream_name {{`}}`}} is above {{ .rules.natsJetStreamNearByteLimit.val }}% of its configured byte limit."
 {{- end }}
 {{- end }}
 {{- end }}
@@ -237,7 +237,7 @@ spec:
         {{- include "nats-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: "JetStream is disabled on NATS server {{`{{`}} $labels.server_name {{`}}`}}"
-        description: "JetStream is disabled on server {{`{{`}} $labels.server_name {{`}}`}}. Streams and consumers will not function correctly until JetStream is restored.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "JetStream is disabled on server {{`{{`}} $labels.server_name {{`}}`}}."
 {{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsSlowConsumers.enabled .rules.natsSlowConsumers.severity)) }}
     - alert: NatsSlowConsumers
@@ -248,7 +248,7 @@ spec:
         {{- include "nats-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: "NATS server {{`{{`}} $labels.server_name {{`}}`}} is seeing slow consumers"
-        description: "NATS server {{`{{`}} $labels.server_name {{`}}`}} reports {{`{{`}} $value {{`}}`}} slow consumers. This usually indicates downstream clients are not keeping up with delivery.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "NATS server {{`{{`}} $labels.server_name {{`}}`}} reports slow consumers."
 {{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsStalledClients.enabled .rules.natsStalledClients.severity)) }}
     - alert: NatsStalledClients
@@ -259,7 +259,7 @@ spec:
         {{- include "nats-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: "NATS server {{`{{`}} $labels.server_name {{`}}`}} has stalled clients"
-        description: "NATS server {{`{{`}} $labels.server_name {{`}}`}} reports {{`{{`}} $value {{`}}`}} stalled clients. This points to client-side backpressure or connectivity issues that can affect message flow.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "NATS server {{`{{`}} $labels.server_name {{`}}`}} reports stalled clients."
 {{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsStaleConnections.enabled .rules.natsStaleConnections.severity)) }}
     - alert: NatsStaleConnections
@@ -270,7 +270,7 @@ spec:
         {{- include "nats-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: "NATS server {{`{{`}} $labels.server_name {{`}}`}} has stale connections"
-        description: "NATS server {{`{{`}} $labels.server_name {{`}}`}} reports {{`{{`}} $value {{`}}`}} stale connections. This suggests client connectivity churn or unhealthy networking.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "NATS server {{`{{`}} $labels.server_name {{`}}`}} reports stale connections."
 {{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsSuddenConnectionDrop.enabled .rules.natsSuddenConnectionDrop.severity)) }}
     - alert: NatsSuddenConnectionDrop
@@ -281,7 +281,7 @@ spec:
         {{- include "nats-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: "Sudden drop in NATS connections (instance {{`{{`}} $labels.server_id {{`}}`}})"
-        description: "The number of active connections to NATS server {{`{{`}} $labels.server_id {{`}}`}} has dropped significantly over the last 5 minutes. This could indicate a client-side issue or network problem.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "Active connections on NATS server {{`{{`}} $labels.server_id {{`}}`}} changed more than {{ .rules.natsSuddenConnectionDrop.val }} times over 5 minutes and the overall trend is downward."
 {{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsHighActiveConnections.enabled .rules.natsHighActiveConnections.severity)) }}
     - alert: NatsHighActiveConnections
@@ -292,7 +292,7 @@ spec:
         {{- include "nats-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: "High active connections"
-        description: "Active connections exceed {{ .rules.natsHighActiveConnections.val }}: {{`{{`}} $value {{`}}`}}. Monitor for load spikes or connection leaks."
+        description: "Active connections are above {{ .rules.natsHighActiveConnections.val }}."
 {{- end }}
 {{- end }}
 {{- end }}
@@ -309,7 +309,7 @@ spec:
         {{- include "nats-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: "Sudden drop in total NATS consumers (instance {{`{{`}} $labels.server_id {{`}}`}})"
-        description: "The total number of consumers on NATS server {{`{{`}} $labels.server_id {{`}}`}} has dropped significantly. This might indicate a deployment or application failure.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "Total consumers on NATS server {{`{{`}} $labels.server_id {{`}}`}} changed more than {{ .rules.natsSuddenConsumerDrop.val }} times over 5 minutes and the overall trend is downward."
 {{- end }}
 {{- if (include "nats-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.natsHighTotalConsumers.enabled .rules.natsHighTotalConsumers.severity)) }}
     - alert: NatsHighTotalConsumers
@@ -320,7 +320,7 @@ spec:
         {{- include "nats-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: "High total consumers"
-        description: "Total consumers exceed {{ .rules.natsHighTotalConsumers.val }}: {{`{{`}} $value {{`}}`}}. Review resource allocation and consumer scaling."
+        description: "Total consumers are above {{ .rules.natsHighTotalConsumers.val }}."
 {{- end }}
 {{- end }}
 {{- end }}

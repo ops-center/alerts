@@ -30,8 +30,8 @@ spec:
         severity: {{ .rules.down.severity }}
         {{- include "openfga-alerts.alertLabels" $ | nindent 8 }}
       annotations:
-        summary: OpenFGA is down or not being scraped in namespace {{`{{`}} $labels.namespace {{`}}`}}
-        description: "Prometheus has not observed a healthy OpenFGA scrape target for job {{`{{`}} $labels.job {{`}}`}}. Scrape disappearance is detected after 2 minutes of absence and must persist for the configured alert duration before firing.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        summary: OpenFGA target is down or missing from Prometheus scrapes
+        description: "Prometheus has not observed a healthy OpenFGA scrape target for job {{`{{`}} $labels.job {{`}}`}} in namespace {{`{{`}} $labels.namespace {{`}}`}}."
     {{- end }}
     {{ if (include "openfga-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.highRequestLatency.enabled .rules.highRequestLatency.severity)) -}}
     - alert: OpenFGAHighRequestLatency
@@ -42,7 +42,7 @@ spec:
         {{- include "openfga-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: High p99 latency for OpenFGA method {{`{{`}} $labels.grpc_method {{`}}`}}
-        description: "p99 request duration exceeds {{ .rules.highRequestLatency.val }}s for method {{`{{`}} $labels.grpc_method {{`}}`}} (current: {{`{{`}} $value {{`}}`}}s). Check for core or computation issues.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "OpenFGA p99 request latency for method {{`{{`}} $labels.grpc_method {{`}}`}} is above {{ .rules.highRequestLatency.val }}s."
     {{- end }}
     {{ if (include "openfga-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.highErrorRate.enabled .rules.highErrorRate.severity)) -}}
     - alert: OpenFGAHighErrorRate
@@ -53,7 +53,7 @@ spec:
         {{- include "openfga-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: High error rate in OpenFGA requests
-        description: "Error rate >{{ .rules.highErrorRate.val }}% (current: {{`{{`}} $value {{`}}`}}%). Investigate gRPC codes for failures.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "OpenFGA gRPC error rate is above {{ .rules.highErrorRate.val }}%."
     {{- end }}
     {{ if (include "openfga-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.lowCheckCacheHitRatio.enabled .rules.lowCheckCacheHitRatio.severity)) -}}
     - alert: OpenFGALowCheckCacheHitRatio
@@ -67,7 +67,7 @@ spec:
         {{- include "openfga-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: Low cache hit ratio for OpenFGA Check API
-        description: "Cache hit ratio <{{ .rules.lowCheckCacheHitRatio.val }}% (current: {{`{{`}} $value {{`}}`}}%). May increase core load.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "OpenFGA Check API cache hit ratio is below {{ .rules.lowCheckCacheHitRatio.val }}%."
     {{- end }}
     {{ if (include "openfga-alerts.alertEnabled" (list $.Values.form.alert.enabled .enabled .rules.highSQLConnections.enabled .rules.highSQLConnections.severity)) -}}
     - alert: OpenFGAHighSQLConnections
@@ -81,7 +81,7 @@ spec:
         {{- include "openfga-alerts.alertLabels" $ | nindent 8 }}
       annotations:
         summary: SQL connections nearing exhaustion in OpenFGA
-        description: "Open connections >{{ .rules.highSQLConnections.val }}% of max (current: {{`{{`}} $value {{`}}`}}%). Risk of connection failures.\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}"
+        description: "OpenFGA SQL open connections are above {{ .rules.highSQLConnections.val }}% of the configured maximum."
     {{- end }}
   {{ end -}}
   {{ end -}}

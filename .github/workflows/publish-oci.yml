@@ -42,7 +42,7 @@ jobs:
         env:
           GITHUB_USER: 1gtm
           GITHUB_TOKEN: ${{ secrets.LGTM_GITHUB_TOKEN }}
-          CHART_REPOSITORY: github.com/appscode/charts
+          CHART_REPOSITORY: ${{ secrets.CHART_REPOSITORY }}
         run: |
           url="https://${GITHUB_USER}:${GITHUB_TOKEN}@${CHART_REPOSITORY}.git"
           cd $RUNNER_WORKSPACE
@@ -55,7 +55,7 @@ jobs:
         env:
           GITHUB_USER: 1gtm
           GITHUB_TOKEN: ${{ secrets.LGTM_GITHUB_TOKEN }}
-          CHART_REPOSITORY: github.com/appscode/charts
+          CHART_REPOSITORY: ${{ secrets.CHART_REPOSITORY }}
         run: |
           export REGISTRY_0=oci://ghcr.io/appscode-charts
           ./hack/scripts/update-chart-dependencies.sh
